@@ -119,6 +119,8 @@ After Bob's MUA sends out the mail, Alice's and Carol's ``process_incoming`` wil
 Open issues / notes
 -------------------------
 
+- Instead of transporting keysdata through INBOME headers we could also add attachments, e.g. application/pgp-keys ones and put INBOME headers into it.
+
 - Generation and maintenance of secret decryption keys is not handled/discussed yet.  One idea from the Summit/Conf discussions is to use self-sent messages to transfer private key material (which should be encrypted with a backup code so that provider can not obtain the private key)
 
 - multi-device support: idea is to use self-sent messages to pair devices and synchronize both encryption and decryption key material between them.
@@ -129,6 +131,13 @@ Open issues / notes
 
 - We allow peers to gossip keys for all participating parties in an email conversation to speed up key discovery among them.  If a peer got two different keys for a target address (which can happen because of group gossiping and upgraded/regenerated keys) the peer shall encrypt to both keys if possible and request a key from the peer so that it can resolve the conflict.
 
-- Instead of transporting keysdata through INBOME headers we could also add attachments, e.g. application/pgp-keys ones and put INBOME headers into it.
-
 - We assume that a MUA only sends a key to a peer if the peer's last message indicated IBAME abilities/requests.  If a peer has sent a non IBAME mail, a MUA shall by default send a cleartext mail (unless explicitely requested by its user to continue sending encrypted).
+
+- how does INBOME interact with today's mailing list managers?
+
+- under what circumstances precisely do you downgrade from encryption to
+  cleartext?  Could we consider the ``USER-AGENT`` header which often will indicate if the other side is using multiple devices/MUAs?  can we otherwise practically distinguish different MUAs from parsing messages/headers?
+
+- how to deal with spammers downgrade encryption by using a fake from?
+  (it's not their intention, just a side effect).  How much can we rely on DKIM?
+
