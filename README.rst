@@ -122,10 +122,17 @@ Alice's ``process_outgoing`` will add::
 As Bob's MUA now has Alice's encryption key, both Alice and Bob can
 from now on send encrypted mails to each other.  The initial two mails
 (Alice->Bob, Bob->Alice) were sent in the clear.  In any subsequent
-mail exchange the MUAs must add a "happy encryption" header:
+mail exchange the MUAs must add a "happy encryption" header::
 
     INBOME: encrypted
 
+
+FIXME: what is the point of the "happy encryption" INBOME: encrypted
+header?  if the mail is encrypted, isn't that sufficient knowledge?
+If one party of an established connection chooses to send a cleartext
+message (e.g. they are cc'ing someone who does not use INBOME), what
+happens to the state?
+    
 If one side stops sending an INBOME header the other side must stop
 sending encrypted mails. This automatic downgrade is neccessary to
 accomodate user scenarios such as the following:
