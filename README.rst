@@ -37,8 +37,8 @@ exchanged some messages subsequent messages will be end-to-end
 encrypted, i.e. mails can not be read by your providers or any
 entities which have access to your provider's data. Conversely, INBOME
 concedes that the first mails (and mails exchanged with people who are
-not also using INBOME clients) may not be encrypted which is
-consistent with Opportunistic Security perspectives.
+not also using an INBOME-supporting MUA) may not be encrypted.  This
+is consistent with Opportunistic Security perspectives.
 
 Basic protocol flow
 ---------------------------------
@@ -46,21 +46,27 @@ Basic protocol flow
 Establishing encryption is reminiscent of TLS/STARTTLS handshakes and
 roughly works like this:
 
-- A MUA will send an INBOME request header along with each mail it
-  sends out to a peer for which it doesn't have an encryption key.
+- INBOME-supporting MUAs are expected to keep some amount of state
+  about the peers that they communicate with.  Roughly, this state
+  includes whether the peer uses INBOME, and what key the peer uses.
 
-- A MUA which sends a mail to an address from where it earlier saw an
+- An MUA will send an INBOME request header along with each mail it
+  sends out to a peer for which it has no encryption key.
+
+- An MUA which sends a mail to an address from where it earlier saw an
   INBOME request will add an appropriate encryption key.
 
-- A MUA which sees an INBOME encryption key in an incoming messsage
-  will store it for later use.
+- An MUA which sees an INBOME encryption key in an incoming messsage
+  will store it for later use with that peer.
 
-
+- When sending an e-mail to a peer who has established a key in this
+  fashion, the e-mail will be automatically encrypted.
+  
 INBOME basic operations
 -------------------------------
 
 MUAs maintain INBOME state by parsing incoming and amending outgoing
-messages. The state holding object provides the following conceptual
+messages. The state-holding object provides the following conceptual
 operations:
 
 - ``process_incoming(mime_cleartext_mail)``: analyze incoming mail and
@@ -73,7 +79,7 @@ operations:
   headers and attachments added.
 
 Note that these INBOME operations do not perform any encryption or
-decryption but rather handle key distribution.
+decryption but rather handle key management.
 
 The ``get_encrypt_key`` operation should be used at mail composition
 time.  If a MUA can obtain encryption keys this way for all
@@ -113,7 +119,7 @@ Alice's ``process_outgoing`` will add::
 
     INBOME: provide;adr=alice@a.example;keydata=<encoded_encryption_key_of_alice>
 
-As Bob's MUA now got Alice's encryption key, both Alice and Bob can
+As Bob's MUA now has Alice's encryption key, both Alice and Bob can
 from now on send encrypted mails to each other.  The initial two mails
 (Alice->Bob, Bob->Alice) were sent in the clear.  In any subsequent
 mail exchange the MUAs must add a "happy encryption" header:
@@ -130,8 +136,8 @@ accomodate user scenarios such as the following:
 - Alice might have a second device and discover that it doesn't
   support INBOME yet and rather prefer to read mails on both devices.
 
-- Alice might loose her device and start over from some webmail abvdef
-  account which does not support INBOME
+- Alice might lose her device and start over from some webmail account
+  which does not support INBOME
 
 
 Happy path example: 1:N communication
@@ -156,13 +162,18 @@ the ``INBOME`` request headers.  When Bob now sends a mail back to
 Alice, ``process_outgoing`` adds two headers like in the 1:1 case::
 
     INBOME: provide=bob@b.example;keydata=<encoded_encryption_key_of_bob>
-    INBOME: request=alice@b.example
+    INBOME: request=alice@a.example
 
-After Bob's MUA sends out the mail, Alice's and Carol's
-``process_incoming`` will parse INBOME headers and store Bob's
-encryption key.  Both Alice and Carol can subsequently reply encrypted
-and still need to provide their own key for bob to allow him to
-perform encryption.
+After Bob's MUA sends out the mail, Alice's ``process_incoming`` will
+parse INBOME headers and store Bob's encryption key.
+
+FIXME: but if Bob replies to both Alice and Carol, and Carol has not
+sent Bob an INBOME: request, does Bob send her an INBOME: provide
+anyway?
+
+Ideally, both Alice and Carol can subsequently reply encrypted and
+still need to provide their own key for Bob to allow him to perform
+encryption.
 
 
 A note on INBOME and existing spam infrastructure
@@ -212,30 +223,41 @@ Open issues / notes
 
 - is INBOME a good name? :)
 
-- The actual encryption/signing steps are not defined by IBAME.  For
-  now we assume the practical implementation uses GPG keys and either
-  a separate or the default user's keyrings to store keys coming over
-  INBOME.
+- We don't currently address signatures at all -- how does INBOME
+  interact with message signing?
+
+- The actual encryption/signing mechanism are not defined by INBOME.
+  For now we assume the practical implementation uses OpenPGP keys and
+  either a separate or the default user's keyrings to store keys
+  coming over INBOME.
 
 - We allow peers to gossip keys for all participating parties in an
   email conversation to speed up key discovery among them.  If a peer
   got two different keys for a target address (which can happen
   because of group gossiping and upgraded/regenerated keys) the peer
   shall encrypt to both keys if possible and request a key from the
-  peer so that it can resolve the conflict.
+  peer so that it can resolve the conflict.  FIXME: how are we
+  encouraging key gossip in a group?
 
-- We assume that a MUA only sends a key to a peer if the peer's last
-  message indicated IBAME abilities/requests.  If a peer has sent a
-  non IBAME mail, a MUA shall by default send a cleartext mail (unless
-  explicitely requested by its user to continue sending encrypted).
+- We assume that an MUA only sends a key to a peer if the peer's last
+  message indicated INBOME abilities/requests.  If a peer has sent a
+  non INBOME mail, an MUA shall by default send a cleartext mail
+  (unless explicitly requested by its user to continue sending
+  encrypted).
 
-- how does INBOME interact with today's mailing list managers?
+- how does INBOME interact with today's mailing list managers?  This
+  might not be relevant except for encrypted mailing lists.
 
 - under what circumstances precisely do you downgrade from encryption
-  to cleartext?  Could we consider the ``USER-AGENT`` header which
+  to cleartext?  Could we consider the ``User-Agent`` header which
   often will indicate if the other side is using multiple
   devices/MUAs?  can we otherwise practically distinguish different
-  MUAs from parsing messages/headers?
+  MUAs from parsing messages/headers?  There's an ongoing push to drop
+  User-Agent headers from most MUAs, in an attempt to minimize
+  published metadata, so relying on User-Agent isn't a reasonable
+  approach.  However, each MUA could select and publish a UUID as part
+  of its INBOME header, if we find it's important for one peer to know
+  when the other is using multiple clients.
 
 - how to deal with spammers downgrade encryption by using a fake from?
   (it's not their intention, just a side effect).  How much can we
