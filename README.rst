@@ -14,7 +14,7 @@ only requires support from MUAs.  **No changes are required from MTAs
 and providers**. It thus tries to avoid the social and technical
 complexities arising from requiring changes on both MUAs and MTAs.
 
-INBOME shares the perspectives and ideas layed out in RFC4535
+INBOME shares the perspectives and ideas laid out in RFC4535
 ("Opportunistic Security"), in particular, it:
 
 - aims to be safe against passive eavesdropping attacks (network and
@@ -32,40 +32,13 @@ some of those attacks at the cost of requiring more UI
 interactions. In all cases, MUAs MUST provide a clear indication at
 mail composition time if encryption is active.
 
-The rough message of INBOME supporting MUAs to users is: after you
+The rough message of INBOME-supporting MUAs to users is: after you
 exchanged some messages subsequent messages will be end-to-end
 encrypted, i.e. mails can not be read by your providers or any
 entities which have access to your provider's data. Conversely, INBOME
-concedes that the first mails are not encrypted which is consistent
-with Opportunistic Security perspectives.
-
-A note on INBOME and existing spam infrastructure
-----------------------------------------------------------
-
-Mike Hearn raised some fundamental concerns in his `Modern anti-spam
-and E2E crypto post on the modern crypto mailing list
-<https://moderncrypto.org/mail-archive/messaging/2014/000780.html>`_
-on how end-to-end encrypted mails and spam infrastructure possibly
-interfere.  While it's conceivable to imagine new ways to fight spam
-in an E2E setting by increased DKIM usage and additional measures and
-policies the topic is a serious one as adoption of more encrypted
-mails could be seriously hampered if encryption can bypass current
-anti-spam technology.
-
-INBOME works well with existing provider Anti-Spam infrastructures
-because they can continue to check the initial cleartext mails for
-suspicious content. Only if a user replies to a (likely non-spam) mail
-will INBOME make a MUA send an encryption key.  Without being able to
-get sufficiently many replies from users it will likely be to
-massively harvest encryption keys; there is no central registery for
-key-mail address relations.  Massive collection of key/mailaddress
-associations would require co-operation from or compromise of big mail
-providers which is unlikely given they have been fighting unsolicited
-mails for decades and their business models depend on it. But even if
-a user's encryption key becomes public the worst outcome are increased
-numbers of unsoliticed mails arriving at the MUA side. Upgrading to a
-new key can mitigate the problem and is supported by INBOME.
-
+concedes that the first mails (and mails exchanged with people who are
+not also using INBOME clients) may not be encrypted which is
+consistent with Opportunistic Security perspectives.
 
 Basic protocol flow
 ---------------------------------
@@ -113,13 +86,13 @@ encrypted.
 Consider a blank state and a first outgoing message from Alice to
 Bob::
 
-    From: alice@a.org
-    To: bob@b.org
+    From: alice@a.example
+    To: bob@b.example
     ...
 
 ``process_outgoing()`` will add an INBOME header::
 
-    INBOME: request;adr=bob@b.org
+    INBOME: request;adr=bob@b.example
 
 after which the MUA sends the complete message out in cleartext.
 Bob's INBOME implementation will in its ``process_incoming`` detect
@@ -128,17 +101,17 @@ INBOME-capable and in state "requesting".  When Bob now sends a mail
 back to Alice, its ``process_outgoing`` will provide the requested
 key::
 
-    INBOME: provide=bob@b.org;keydata=<encoded_encryption_key_bob>
+    INBOME: provide=bob@b.example;keydata=<encoded_encryption_key_bob>
 
 and another header to itself request a key from Alice::
 
-    INBOME: request;adr=alice@a.org
+    INBOME: request;adr=alice@a.example
 
 After Bob's MUA sends out the mail, Alice's ``process_incoming`` will
 parse the message and store Bob's encryption key.  On sending a mail,
 Alice's ``process_outgoing`` will add::
 
-    INBOME: provide;adr=alice@a.org;keydata=<encoded_encryption_key_of_alice>
+    INBOME: provide;adr=alice@a.example;keydata=<encoded_encryption_key_of_alice>
 
 As Bob's MUA now got Alice's encryption key, both Alice and Bob can
 from now on send encrypted mails to each other.  The initial two mails
@@ -167,29 +140,57 @@ Happy path example: 1:N communication
 Consider a blank state and a first outgoing message from Alice to Bob
 and Carol::
 
-    From: alice@a.org
-    To: bob@b.org, carol@c.org
+    From: alice@a.example
+    To: bob@b.example, carol@c.example
 
     ...
 
 ``process_outgoing()`` will add two INBOME request headers with
 explicit addresses::
 
-    INBOME: request;adr=bob@b.org
-    INBOME: request;adr=carol@c.org
+    INBOME: request;adr=bob@b.example
+    INBOME: request;adr=carol@c.example
 
 Bob's INBOME implementation will in its ``process_incoming`` detect
 the ``INBOME`` request headers.  When Bob now sends a mail back to
 Alice, ``process_outgoing`` adds two headers like in the 1:1 case::
 
-    INBOME: provide=bob@b.org;keydata=<encoded_encryption_key_of_bob>
-    INBOME: request=alice@b.org
+    INBOME: provide=bob@b.example;keydata=<encoded_encryption_key_of_bob>
+    INBOME: request=alice@b.example
 
 After Bob's MUA sends out the mail, Alice's and Carol's
 ``process_incoming`` will parse INBOME headers and store Bob's
 encryption key.  Both Alice and Carol can subsequently reply encrypted
 and still need to provide their own key for bob to allow him to
 perform encryption.
+
+
+A note on INBOME and existing spam infrastructure
+----------------------------------------------------------
+
+Mike Hearn raised some fundamental concerns in his `Modern anti-spam
+and E2E crypto post on the modern crypto mailing list
+<https://moderncrypto.org/mail-archive/messaging/2014/000780.html>`_
+on how end-to-end encrypted mails and spam infrastructure possibly
+interfere.  While it's conceivable to imagine new ways to fight spam
+in an E2E setting by increased DKIM usage and additional measures and
+policies the topic is a serious one as adoption of more encrypted
+mails could be seriously hampered if encryption can bypass current
+anti-spam technology.
+
+INBOME works well with existing provider Anti-Spam infrastructures
+because they can continue to check the initial cleartext mails for
+suspicious content. Only if a user replies to a (likely non-spam) mail
+will INBOME make a MUA send an encryption key.  Without being able to
+get sufficiently many replies from users it will likely be to
+massively harvest encryption keys; there is no central registery for
+key-mail address relations.  Massive collection of key/mailaddress
+associations would require co-operation from or compromise of big mail
+providers which is unlikely given they have been fighting unsolicited
+mails for decades and their business models depend on it. But even if
+a user's encryption key becomes public the worst outcome are increased
+numbers of unsoliticed mails arriving at the MUA side. Upgrading to a
+new key can mitigate the problem and is supported by INBOME.
 
 
 Open issues / notes
