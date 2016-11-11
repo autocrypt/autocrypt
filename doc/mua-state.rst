@@ -1,5 +1,8 @@
 Internal state for MUA
-----------------------
+======================
+
+.. contents::
+
 
 INBOME assumes that every communicating MUA has some structured
 internal state about the peers that the user communicates with.

@@ -1,6 +1,8 @@
 Multi-device sharing with INBOME
 --------------------------------
 
+.. contents::
+
 We expect users to have multiple devices connected to the same
 account, because that's a common use case today.
 

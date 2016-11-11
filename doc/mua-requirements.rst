@@ -1,5 +1,7 @@
 MUA requirements
-----------------
+=================
+
+
 
 INBOME works for people who use INBOME-aware MUAs.  We expect the MUAs
 to have the following capabilities:
