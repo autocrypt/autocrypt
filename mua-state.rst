@@ -30,14 +30,14 @@ For each peer, an INBOME-aware MUA will store:
 - timestamp of most recent INBOME request: header received from peer
 
 - most recent INBOME provide: header received from peer
- - timestamp of most recent receipt
- - number of times this exact header was received from this peer
- - timestamp of first receipt of this exact header
+  - timestamp of most recent receipt
+  - number of times this exact header was received from this peer
+  - timestamp of first receipt of this exact header
 
 - most recent INBOME provide: header sent 
- - timestamp of most recent send
- - number of times this exact header was sent to this peer
- - timestamp of first send of this exact header
+  - timestamp of most recent send
+  - number of times this exact header was sent to this peer
+  - timestamp of first send of this exact header
 
 - timestamp of most recent mail received from peer
 
