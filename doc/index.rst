@@ -1,8 +1,8 @@
 
-INBOME - in-band opportunistic mail encryption  (0.1)
+INBOME - in-band opportunistic mail encryption  (WIP)
 -----------------------------------------------------
 
-**STATUS: to be discussed before and at the `AME2016 meetup in Berlin Dec 14-18th <https://github.com/mailencrypt/ame2016>`_**
+**STATUS of all docs here**: early stages, under discussion before and at the `AME2016 meetup in Berlin Dec 14-18th <https://github.com/mailencrypt/ame2016>`_
 
 Email has been declared dead many times but refuses to die. It remains the largest open federated identity and messaging system, anchors the web and mobile phones and continues to relay sensitive information between citizens and organisations.  However, bringing pervasive end-to-end encryption to this infrastructure has failed so far. The INBOME effort aims to develop opportunistic mail encryption drafts and working code. To ease adoption, it restricts itself to only require changes from mail programs (MUAs) but no changes whatsoever from mail providers. It follows recommendations from RFC7435 "Opportunistic security" and specifically avoids talking to users about keys without them having asked for it first. **The overall goal of INBOME is to help massively increase the overall number of encrypted mails world wide**.  
 
