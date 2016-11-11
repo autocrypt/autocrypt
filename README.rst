@@ -1,6 +1,8 @@
 
 
-Currently contains a ``doc <doc>`` directory with docs using the ``sphinx`` system, see `install sphinx <http://www.sphinx-doc.org/en/stable/install.html>`_ and then run ``make html`` in the ``doc`` directory.  You can also watch the current state of generated docs here:
+Please see here for automatically regenerated docs from this repository:
 
     https://inbome.readthedocs.org/
+
+and checkout the `doc <doc>`_ directory which contains a ``sphinx`` documentation project.  You can `install sphinx <http://www.sphinx-doc.org/en/stable/install.html>`_ and then run ``make html`` in the ``doc`` directory to regenerate it locally.
 
