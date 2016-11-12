@@ -9,7 +9,7 @@ Basic protocol flow
 Establishing encryption is reminiscent of TLS/STARTTLS handshakes and
 roughly works like this:
 
-- INBOME-supporting MUAs are expected to keep `state <mua-state>`_ 
+- INBOME-supporting MUAs are expected to keep :doc:`state <mua-state>`
   about the peers that they negotiate encryption with.
 
 - An MUA will send an INBOME request header along with each mail it
@@ -21,7 +21,7 @@ roughly works like this:
 - An MUA which sees an INBOME encryption key in an incoming messsage
   will store it for later use with that peer.
 
-- When sending an e-mail to a peer who has established a key in this
+- When sending an e-mail to a peer for which we have established a key in this
   fashion, the e-mail will be automatically encrypted.
   
 INBOME basic operations
@@ -109,11 +109,11 @@ accomodate user scenarios such as the following:
   which does not support INBOME
 
 
-Happy path example: 1:N communication
+Happy path example: group communication
 ------------------------------------------
 
 Consider a blank state and a first outgoing message from Alice to Bob
-and Carol::
+and Carol, all of which we presume to support INBOME::
 
     From: alice@a.example
     To: bob@b.example, carol@c.example
@@ -128,22 +128,32 @@ explicit addresses::
 
 Bob's INBOME implementation will in its ``process_incoming`` detect
 the ``INBOME`` request headers.  When Bob now sends a mail back to
-Alice, ``process_outgoing`` adds two headers like in the 1:1 case::
+Alice, ``process_outgoing`` adds headers like this::
 
     INBOME: provide=bob@b.example;keydata=<encoded_encryption_key_of_bob>
     INBOME: request=alice@a.example
+    INBOME: request=carol@a.example
 
 After Bob's MUA sends out the mail, Alice's ``process_incoming`` will
-parse INBOME headers and store Bob's encryption key.
+parse INBOME headers and store Bob's encryption key. Carols ``process_incoming`` 
+will also see and store Bob's encryption key.
 
-FIXME: but if Bob replies to both Alice and Carol, and Carol has not
-sent Bob an INBOME: request, does Bob send her an INBOME: provide
-anyway?
+After Alice and Carol each sent a mail to the others all three MUAs have the other's encryption keys can each send encrypted mails between each other.
 
-Ideally, both Alice and Carol can subsequently reply encrypted and
-still need to provide their own key for Bob to allow him to perform
-encryption.
+.. todo::
 
+   but if Bob replies to both Alice and Carol, and Carol has not
+   sent Bob an INBOME: request, does Bob send her an INBOME: provide
+   anyway?
+
+.. todo::
+
+   What about privacy implications?  Through the request/provide headers
+   individual participants in a group leak information about the fact that
+   had prior communication with individuals in the group.  If we try to hide
+   this information key discovery becomes less efficient, keys are redundantly
+   sent and it takes longer to establish encrypted group communication for
+   everyone.
 
 A note on INBOME and existing spam infrastructure
 ----------------------------------------------------------
