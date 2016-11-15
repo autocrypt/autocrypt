@@ -29,7 +29,7 @@ serializes its secret key material into a message encrypted by the the
 backup code.  This message is given a custom header and is sent to the
 account in question::
 
-    INBOME: backup;adr=alice@example.net
+    INBOME: backup;key_backup_data=<encrypted_secret_key>
     From: alice@example.net
     To: alice@example
 

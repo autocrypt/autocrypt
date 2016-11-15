@@ -41,7 +41,7 @@ operations:
   headers and attachments added.
 
 Note that these INBOME operations do not perform any encryption or
-decryption but rather handle key management.
+decryption but rather implement key discovery.
 
 The ``get_encrypt_key`` operation should be used at mail composition
 time.  If a MUA can obtain encryption keys this way for all
@@ -51,56 +51,43 @@ encrypted.
 "Happy path" example: 1:1 communication
 ------------------------------------------
 
-Consider a blank state and a first outgoing message from Alice to
-Bob::
+Consider a blank state and a first outgoing message from Alice to Bob::
 
     From: alice@a.example
     To: bob@b.example
     ...
 
-``process_outgoing()`` will add an INBOME header::
+``process_outgoing()`` will add an INBOME request header::
 
-    INBOME: request;adr=bob@b.example
+    INBOME: request
 
 after which the MUA sends the complete message out in cleartext.
 Bob's INBOME implementation will in its ``process_incoming`` detect
 the ``INBOME`` request header, internally mark the from-address as
 INBOME-capable and in state "requesting".  When Bob now sends a mail
-back to Alice, its ``process_outgoing`` will provide the requested
-key::
+back to Alice, its ``process_outgoing`` will provide the requested key::
 
-    INBOME: provide=bob@b.example;keydata=<encoded_encryption_key_bob>
+    INBOME: provide;keydata=<encoded_encryption_key_bob>
 
 and another header to itself request a key from Alice::
 
-    INBOME: request;adr=alice@a.example
+    INBOME: request
 
 After Bob's MUA sends out the mail, Alice's ``process_incoming`` will
 parse the message and store Bob's encryption key.  On sending a mail,
-Alice's ``process_outgoing`` will add::
+Alice's ``process_outgoing`` will then add::
 
-    INBOME: provide;adr=alice@a.example;keydata=<encoded_encryption_key_of_alice>
+    INBOME: provide;keydata=<encoded_encryption_key_of_alice>
 
 As Bob's MUA now has Alice's encryption key, both Alice and Bob can
 from now on send encrypted mails to each other.  The initial two mails
-(Alice->Bob, Bob->Alice) were sent in the clear.  In any subsequent
-mail exchange the MUAs must add a "happy encryption" header::
+(Alice->Bob, Bob->Alice) were sent in the clear.  
 
-    INBOME: encrypted
+If one side stops sending encrypted mail and does not include an INBOME header 
+the other side must stop sending encrypted mails. This automatic downgrade is 
+neccessary to accomodate user scenarios such as the following:
 
-
-FIXME: what is the point of the "happy encryption" INBOME: encrypted
-header?  if the mail is encrypted, isn't that sufficient knowledge?
-If one party of an established connection chooses to send a cleartext
-message (e.g. they are cc'ing someone who does not use INBOME), what
-happens to the state?
-    
-If one side stops sending an INBOME header the other side must stop
-sending encrypted mails. This automatic downgrade is neccessary to
-accomodate user scenarios such as the following:
-
-- Alice might choose to not use INBOME or an INBOME supporting MUA
-  because it is buggy
+- Alice might choose to not use an INBOME supporting MUA anymore
 
 - Alice might have a second device and discover that it doesn't
   support INBOME yet and rather prefer to read mails on both devices.
@@ -120,25 +107,22 @@ and Carol, all of which we presume to support INBOME::
 
     ...
 
-``process_outgoing()`` will add two INBOME request headers with
-explicit addresses::
+``process_outgoing()`` will add an INBOME request header::
 
-    INBOME: request;adr=bob@b.example
-    INBOME: request;adr=carol@c.example
+    INBOME: request
 
 Bob's INBOME implementation will in its ``process_incoming`` detect
-the ``INBOME`` request headers.  When Bob now sends a mail back to
-Alice, ``process_outgoing`` adds headers like this::
+the ``INBOME`` request header.  When Bob now sends a mail back to
+Alice, ``process_outgoing`` adds two headers like this::
 
-    INBOME: provide=bob@b.example;keydata=<encoded_encryption_key_of_bob>
-    INBOME: request=alice@a.example
-    INBOME: request=carol@a.example
+    INBOME: provide;keydata=<encoded_encryption_key_of_bob>
+    INBOME: request
 
 After Bob's MUA sends out the mail, Alice's ``process_incoming`` will
 parse INBOME headers and store Bob's encryption key. Carols ``process_incoming`` 
 will also see and store Bob's encryption key.
 
-After Alice and Carol each sent a mail to the others all three MUAs have the other's encryption keys can each send encrypted mails between each other.
+After Alice and Carol each sent another mail to the others all three MUAs have the other's encryption keys and now everyone can send encrypted mails to the other two.
 
 .. todo::
 
