@@ -43,18 +43,21 @@ Consider a blank state and a first outgoing message from Alice to Bob::
     To: bob@b.example
     ...
 
-``process_outgoing()`` will add an INBOME request header::
+``process_outgoing()`` will add an INBOME encryption info header::
 
     INBOME-Encryption-Info: keydata=<alice_encoded_encryption_key>
 
-after which the MUA sends the amended message out in cleartext.
+after which Alice's MUA sends the amended message out in cleartext.
 Bob's INBOME implementation will in its ``process_incoming`` detect
-the header and store the key for Alice.  When Bob at some point later composes
-a mail to Alice his MUA will encrypt the mail to Alice using a key obtained from ``get_encrypt_key('alice@a.example')``.  Also, Bob's ``process_outgoing`` will provide his own encryption info::
+the header and store the key for Alice.  
+
+When Bob now composes a mail to Alice his MUA can obtain a key from ``get_encrypt_key('alice@a.example')`` and will signal the fact that it can encrypt to Alice in the composition screen.  Also, Bob's ``process_outgoing`` will provide his own encryption info because it has not yet seen an encrypted mail from Alice::
 
     INBOME-Encryption-Info: keydata=<bob_encoded_encryption_key>
 
-After Alice has processed this mail and stored Bob's key both will now be able to send encrypted mails to each other.
+When Alice's MUA ``process_incoming`` sees Bob's mail it keeps track both of Bob MUA's key and of the fact that it got an encrypted mail from Alice.
+
+Subsequently both Alice and Bob will have their MUAs encrypt mails to each other without having to add an ``INBOME-Encryption-Info`` header.  
 
 group (1:N) mail communication
 ------------------------------------------
