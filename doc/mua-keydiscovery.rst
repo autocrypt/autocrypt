@@ -3,53 +3,39 @@ INBOME key discovery
 
 .. contents::
 
-Basic protocol flow
+Basic network protocol flow
 ---------------------------------
 
-Establishing encryption is reminiscent of TLS/STARTTLS handshakes and
-roughly works like this:
+Establishing encryption happens as a side effect when people mail each other:
 
-- INBOME-supporting MUAs are expected to keep :doc:`state <mua-state>`
-  about the peers that they negotiate encryption with.
+- An MUA will send an INBOME-Encryption-Info: header to all messages it
+  sends out which contains encryption key info.
 
-- An MUA will send an INBOME request header along with each mail it
-  sends out to a peer for which it has no encryption key.
+- An MUA which sends a mail to recipients where it earlier saw 
+  respective INBOME Encryption Info headers will encrypt the message
+  accordingly.
 
-- An MUA which sends a mail to an address from where it earlier saw an
-  INBOME request will add an appropriate encryption key.
 
-- An MUA which sees an INBOME encryption key in an incoming messsage
-  will store it for later use with that peer.
-
-- When sending an e-mail to a peer for which we have established a key in this
-  fashion, the e-mail will be automatically encrypted.
-  
-INBOME basic operations
+INBOME key discovery processing
 -------------------------------
 
-MUAs maintain INBOME state by parsing incoming and amending outgoing
-messages. The state-holding object provides the following conceptual
-operations:
+In order to better understand how MUAs process encryption info we talk about three different conceptual operations:
 
-- ``process_incoming(mime_cleartext_mail)``: analyze incoming mail and
+- ``process_incoming(mime_mail)``: analyze incoming mail and
   update local INBOME information.
 
 - ``get_encrypt_key(recipient_address)``: Return encryption key or
   None for recipient_address.
 
-- ``process_outgoing(mime_cleartext_mail)``: Return new Mime mail with
+- ``process_outgoing(mime_mail)``: Return new mime mail with
   headers and attachments added.
 
 Note that these INBOME operations do not perform any encryption or
 decryption but rather implement key discovery.
 
-The ``get_encrypt_key`` operation should be used at mail composition
-time.  If a MUA can obtain encryption keys this way for all
-recipients, it signals to the user that the mail content will be
-encrypted.
 
 "Happy path" example: 1:1 communication
-------------------------------------------
+---------------------------------------
 
 Consider a blank state and a first outgoing message from Alice to Bob::
 
@@ -59,85 +45,69 @@ Consider a blank state and a first outgoing message from Alice to Bob::
 
 ``process_outgoing()`` will add an INBOME request header::
 
-    INBOME: request
+    INBOME-Encryption-Info: keydata=<alice_encoded_encryption_key>
 
-after which the MUA sends the complete message out in cleartext.
+after which the MUA sends the amended message out in cleartext.
 Bob's INBOME implementation will in its ``process_incoming`` detect
-the ``INBOME`` request header, internally mark the from-address as
-INBOME-capable and in state "requesting".  When Bob now sends a mail
-back to Alice, its ``process_outgoing`` will provide the requested key::
+the header and store the key for Alice.  When Bob at some point later composes
+a mail to Alice his MUA will encrypt the mail to Alice using a key obtained from ``get_encrypt_key('alice@a.example')``.  Also, Bob's ``process_outgoing`` will provide his own encryption info::
 
-    INBOME: provide;keydata=<encoded_encryption_key_bob>
+    INBOME-Encryption-Info: keydata=<bob_encoded_encryption_key>
 
-and another header to itself request a key from Alice::
+After Alice has processed this mail and stored Bob's key both will now be able to send encrypted mails to each other.
 
-    INBOME: request
-
-After Bob's MUA sends out the mail, Alice's ``process_incoming`` will
-parse the message and store Bob's encryption key.  On sending a mail,
-Alice's ``process_outgoing`` will then add::
-
-    INBOME: provide;keydata=<encoded_encryption_key_of_alice>
-
-As Bob's MUA now has Alice's encryption key, both Alice and Bob can
-from now on send encrypted mails to each other.  The initial two mails
-(Alice->Bob, Bob->Alice) were sent in the clear.  
-
-If one side stops sending encrypted mail and does not include an INBOME header 
-the other side must stop sending encrypted mails. This automatic downgrade is 
-neccessary to accomodate user scenarios such as the following:
-
-- Alice might choose to not use an INBOME supporting MUA anymore
-
-- Alice might have a second device and discover that it doesn't
-  support INBOME yet and rather prefer to read mails on both devices.
-
-- Alice might lose her device and start over from some webmail account
-  which does not support INBOME
-
-
-Happy path example: group communication
+group (1:N) mail communication
 ------------------------------------------
 
-Consider a blank state and a first outgoing message from Alice to Bob
-and Carol, all of which we presume to support INBOME::
+If Alice sends mail to both Bob and Carol their MUAs will each see Alice's encryption key. If now Bob and Carol reply once, all MUAs have the other keys and everybody can then send encrypted mails to the others.  In other words, a MUA can only encrypt a mail towards multiple recipients if it previously got a message from each of its recipients which contained an encryption info.  
 
-    From: alice@a.example
-    To: bob@b.example, carol@c.example
-
-    ...
-
-``process_outgoing()`` will add an INBOME request header::
-
-    INBOME: request
-
-Bob's INBOME implementation will in its ``process_incoming`` detect
-the ``INBOME`` request header.  When Bob now sends a mail back to
-Alice, ``process_outgoing`` adds two headers like this::
-
-    INBOME: provide;keydata=<encoded_encryption_key_of_bob>
-    INBOME: request
-
-After Bob's MUA sends out the mail, Alice's ``process_incoming`` will
-parse INBOME headers and store Bob's encryption key. Carols ``process_incoming`` 
-will also see and store Bob's encryption key.
-
-After Alice and Carol each sent another mail to the others all three MUAs have the other's encryption keys and now everyone can send encrypted mails to the other two.
+If Alice mailed to both Bob and Carol and only Bob answers (CCing Carol) then Bob and Alice can nevertheless encrypt to each other if they enter a 1:1 communication.
 
 .. todo::
 
-   but if Bob replies to both Alice and Carol, and Carol has not
-   sent Bob an INBOME: request, does Bob send her an INBOME: provide
-   anyway?
+   If Alice already has Bob and Carol's encryption keys can we make Alice's MUA
+   provide these keys of Bob and Carol in the initial encrypted group mail? 
+   This would help keeping initial group conversations encrypted which is especially
+   interesting if the group communication involves many more participants.
+
+   Note that Alice can only have gotten Bob and Carol's keys if she saw a message
+   from each of them.  Socially it's thus not likely that she will want to send a 
+   message which claims wrong keys wrt to Bob and Carol.
+
+Loosing access to decryption key
+-------------------------------------------
+
+If Alice looses access to her decryption secret:
+
+- she lets her MUA generate a new key
+
+- her MUA will add an Encryption-Info header containing the new key with each mail 
+
+- receiving MUAs will replace the old key with the new key
+
+Meanwhile, if Bob sends her a mail using the old encryption key she will have to respond with a message like "Sorry Bob, i've lost my device/key/... please write again".  This social mail exchange will lead to an updated key which works.
 
 .. todo::
 
-   What about privacy implications?  Through the request/provide headers
-   individual participants in a group leak information about the fact that
-   had prior communication with individuals in the group.  If we try to hide
-   this information key discovery becomes less efficient, keys are redundantly
-   sent and it takes longer to establish encrypted group communication for
-   everyone.
+    Check if we can encrypt a mime mail such that non-decrypt-capable clients 
+    will show a message that leads Alice to reply in the suggested way.  We don't
+    want people to read handbooks before using INBOME so any guidance we can
+    "automatically" provide in case of errors is good.
+
+.. note::
+
+    Unless we can get perfect recoverability (also for device loss etc.) we will
+    always have to consider this "fatal" case of loosing a secret key and how
+    users can deal with it.
+
+
+switch to a MUA with no support for INBOME
+-------------------------------------------
+
+Alice might decide to switch to a different MUA which does not support INBOME.  
+
+In this case a MUA which previously saw an INBOME header and/or encryption from Alice now sees an unencrypted mail from Alice and no encryption header. This will disable encryption to Alice for subsequent mails.
+
 
 A note on INBOME and existing spam infrastructure
 ----------------------------------------------------------
