@@ -36,7 +36,7 @@ to have the following capabilities:
 Per-peer state
 --------------
 
-For each peer, an INBOME-aware MUA will store the timestamp and value of the ``INBOME-Encryption-Info`` header value it saw from the last message from that peer.  
+For each peer, an INBOME-aware MUA will store the timestamp and value of the ``INBOME-Encryption`` header value it saw from the last message from that peer.  
 
 Peers are distingished by canonicalized e-mail address.  If an MUA has
 an address book, it is likely to separate contacts by human identity,
@@ -48,7 +48,7 @@ storing state.
 core operations 
 ------------------
 
-For the time being, INBOME mandates that clients always add an ``INBOME-Encryption-Info`` header.
+For the time being, INBOME mandates that clients always add an ``INBOME-Encryption`` header. This makes it trivial for MUAs which receive mails to determine if the other side supports INBOME or not.
 
 In order to better understand how MUAs process and use this encryption info we talk about two conceptual core operations:
 

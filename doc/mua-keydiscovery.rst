@@ -15,7 +15,7 @@ Basic network protocol flow
 
 Establishing encryption happens as a side effect when people send each other mail:
 
-- A MUA always adds an ``INBOME-Encryption-Info:`` header to all messages it
+- A MUA always adds an ``INBOME-Encryption:`` header to all messages it
   sends out.
 
 - A MUA will scan incoming mails for encryption headers and associate
@@ -39,7 +39,7 @@ Consider a blank state and a first outgoing message from Alice to Bob::
 Upon sending this mail, Alice's MUA will add a header which contains her
 encryption key::
 
-    INBOME-Encryption-Info: keydata=<alice_encoded_encryption_key>
+    INBOME-Encryption: keydata=<alice_encoded_encryption_key>
 
 Bob's MUA will scan the incoming mail, find Alice's key and store it
 associated to the ``alice@a.example`` address.  When Bob now composes a
@@ -47,7 +47,7 @@ mail to Alice his MUA will find the key and signal to Bob that the mail
 will be encrypted and after finalization of the mail encrypt it.
 Moreover, Bob's MUA will add its own Encryption Info::
 
-    INBOME-Encryption-Info: keydata=<bob_encoded_encryption_key>
+    INBOME-Encryption: keydata=<bob_encoded_encryption_key>
 
 When Alice's MUA now scans the incoming mail from Bob it will store
 Bob's key and the fact that Bob sent an encrypted mail.  Subsequently
