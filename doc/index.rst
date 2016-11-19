@@ -8,13 +8,11 @@ Email has been declared dead many times but refuses to die. It remains the large
 
 Current work-in-progress specs:
 
-:doc:`INBOME key discovery <mua-keydiscovery>` outlines and prototypes how mail programs negotiate encryption with each other. Similar to TLS's machine to machine handshake, users first have a cleartext mail exchange where their mail programs automatically attach crypto protocol and key information. Subsequent mails will then be encrypted. Mail programs signal encryption-status at "compose-mail" time and otherwise avoid asking for decisions about keys. Passive eavesdroppers will not be able to continue reading mail content. INBOME key discovery requires changes only in mail programs and works with any existing provider, it works fully offline and is only based on the two core abilities every mail program has: sending and receiving mail.
+:doc:`INBOME key discovery <mua-keydiscovery>` presents and discusses how mail programs negotiate encryption with each other. 
 
 :doc:`INBOME multi-device management <multi-device>` discusses how to make several MUAs share secret key material, also involving questions of key backup. INBOME-supporting MUAs communicate via mail with each other in order to synchronize secrets.
 
-:doc:`INBOME MUA state <mua-state>` discusses the state MUAs need to keep in order to implement the INBOME protocols.
-
-:doc:`INBOME MUA requirements <mua-requirements>` lists what facilities MUAs must offer.
+:doc:`INBOME MUA internals <mua-internals>` discusses requirements, operations and the state MUAs need to keep in order to implement the INBOME protocols.
 
 
 .. toctree::
@@ -22,5 +20,4 @@ Current work-in-progress specs:
 
    mua-keydiscovery
    multi-device
-   mua-state
-   mua-requirements
+   mua-internals
