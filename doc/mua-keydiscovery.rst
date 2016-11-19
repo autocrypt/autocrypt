@@ -80,7 +80,7 @@ otherwise don't get in the way of users.
 Loosing access to decryption key
 -------------------------------------------
 
-If Alice looses access to her decryption secret:
+If Alice loses access to her decryption secret:
 
 - she lets her MUA generate a new key
 
