@@ -1,7 +1,7 @@
 INBOME in-band key discovery
 =============================
 
-INBOME key discovery requires support only from mail programs and works with any existing provider, it works fully offline and is only based on the two core abilities every mail program has: sending and receiving mail.
+INBOME key discovery requires support only from mail programs and works with any existing mail provider, it works fully offline and is only based on the two core abilities every mail program has: sending and receiving mail.
 
 Similar to TLS's machine to machine handshake, users first need to have a cleartext mail exchange to negotiate encryption.  INBOME-supporting MUAs add encryption key information to every mail they send out.  Subsequent mails from the receiving peer will then be encrypted. Mail programs signal encryption-status to their users at "compose-mail" time but avoid asking for decisions about keys. In fact, key exporting, importing and upgrading all happens automatically and without user intervention. In accordance with :rfc:`7435` INBOME is fine with dropping back to cleartext in some cases (see below).
 
@@ -20,12 +20,13 @@ Establishing encryption happens as a side effect when people send each other mai
 
 - A MUA will scan incoming mails for encryption headers and associate
   the info with a canonicalized version of the ``From:`` address contained
-  in the rfc822 message.
+  in the :rfc:`822` message.
 
 - A MUA will encrypt a message if it earlier saw encryption keys for all
   recipients.
 
 INBOME does not prescribe or describe encryption algorithms or key formats.  It is meant to work nicely with ordinary PGP keys, however.
+
 
 "Happy path" example: 1:1 communication
 ---------------------------------------
@@ -54,11 +55,11 @@ Bob's key and the fact that Bob sent an encrypted mail.  Subsequently
 both Alice and Bob will have their MUAs encrypt mails to each other.
 
 
-group (1:N) mail communication
+group mail communication (1:N)
 ------------------------------------------
 
 Consider a blank state and a first outgoing message from Alice to Bob
-and Carol.  Alice's MUA will add a header just like in the 1:1 case so
+and Carol.  Alice's MUA add a header just like in the 1:1 case so
 that Bob and Carol's MUA will learn Alice's key.  After Bob and Carol
 have each replied once, all MUAs will have appropriate keys for
 encrypting the group communication.  
@@ -76,6 +77,7 @@ mail to Bob and Carol but Bub will not be able to respond encrypted
 before his MUA has seen a mail from Carol.  This is fine because INBOME
 is about **opportunistic** encryption, i.e. encrypt if possible and
 otherwise don't get in the way of users.
+
 
 Loosing access to decryption key
 -------------------------------------------
