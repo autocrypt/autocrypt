@@ -32,11 +32,11 @@ Header Format
 
 The ``INBOME-Encryption:`` header MUST have the following format:
 ```
-INBOME-ENCRYPTION: prio=0; to=aaa@bbb.cc; type=(OpenPGP|...); prefer-encrypted=(yes|no); key=BASE64
+INBOME-ENCRYPTION: to=aaa@bbb.cc; [type=(OpenPGP|...);] [prefer-encrypted=(yes|no);] key=BASE64
 ```
 
 Where key includes a Base64 representation of a minimal key. For now we only support 'OpenPGP' as the type.
-The 'prio' attribute is used indicates prefered encryption methods. 'prefer-encrypted' indicates that agents should default to encrypting when composing emails.
+'prefer-encrypted' indicates that agents should default to encrypting when composing emails.
 INBOME compatible Agents MUST include one header with a key in a INBOME compatible format.
 
 "Happy path" example: 1:1 communication
@@ -51,20 +51,30 @@ Consider a blank state and a first outgoing message from Alice to Bob::
 Upon sending this mail, Alice's MUA will add a header which contains her
 encryption key::
 
-    INBOME-Encryption: keydata=<alice_encoded_encryption_key>
+    INBOME-Encryption: to=alice@a.example; type=OpenPGP; prefer-encrypted=yes; key=...
 
-Bob's MUA will scan the incoming mail, find Alice's key and store it
-associated to the ``alice@a.example`` address.  When Bob now composes a
-mail to Alice his MUA will find the key and signal to Bob that the mail
-will be encrypted and after finalization of the mail encrypt it.
+Bob's MUA will scan the incoming mail, find Alice's key and store it associated
+to the ``alice@a.example`` address taken from the ``to``-attribute.
+When Bob now composes a mail to Alice his MUA will find the key and signal to
+Bob that the mail will be encrypted and after finalization of the mail encrypt
+it.
 Moreover, Bob's MUA will add its own Encryption Info::
 
-    INBOME-Encryption: keydata=<bob_encoded_encryption_key>
+    INBOME-Encryption: to=bob@b.example; type=OpenPGP; prefer-encrypted=yes; key=...
 
 When Alice's MUA now scans the incoming mail from Bob it will store
 Bob's key and the fact that Bob sent an encrypted mail.  Subsequently
 both Alice and Bob will have their MUAs encrypt mails to each other.
 
+If ``prefer-encrypted`` is sent as 'yes' the MUA MUST default to encrypting
+the next email. If it is set as 'no' the MUA MUST default to plaintext.
+If ``prefer-encrypted`` is not sent the MUA should stick to what it was doing
+before. If the attribute has never been sent it's up to the MUA to decide. The
+save way to go about it is to default to plaintext to make sure the recipient
+can read the email.
+
+We encourage MUA developers to propose heuristics for handling the undirected
+case. We will document the best approaches to develop a shared understanding.
 
 group mail communication (1:N)
 ------------------------------------------
