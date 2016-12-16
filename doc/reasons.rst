@@ -14,3 +14,9 @@ Why are we using IMAP folders rather than self send messages for multi device?
 Self send messages end up in your inbox and might be confusing to users. They
 are likely also processed by your spam protection and might look like spam.
 
+
+Why are you using ed25519 - it's not supported by X?
+
+They give us much smaller keys that lead to smaller headers and make it easier
+to include them. You can even write them down as a backup code.
+We want to support implementation where needed.
