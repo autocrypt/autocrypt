@@ -27,6 +27,17 @@ Establishing encryption happens as a side effect when people send each other mai
 
 INBOME does not prescribe or describe encryption algorithms or key formats.  It is meant to work nicely with ordinary PGP keys, however.
 
+Header Format
+-------------
+
+The ``INBOME-Encryption:`` header MUST have the following format:
+```
+INBOME-ENCRYPTION: prio=0; to=aaa@bbb.cc; type=(OpenPGP|...); prefer-encrypted=(yes|no); key=BASE64
+```
+
+Where key includes a Base64 representation of a minimal key. For now we only support 'OpenPGP' as the type.
+The 'prio' attribute is used indicates prefered encryption methods. 'prefer-encrypted' indicates that agents
+should default to encrypting when composing emails.
 
 "Happy path" example: 1:1 communication
 ---------------------------------------
@@ -62,7 +73,7 @@ Consider a blank state and a first outgoing message from Alice to Bob
 and Carol.  Alice's MUA add a header just like in the 1:1 case so
 that Bob and Carol's MUA will learn Alice's key.  After Bob and Carol
 have each replied once, all MUAs will have appropriate keys for
-encrypting the group communication.  
+encrypting the group communication.
 
 It is possible that an encrypted mail is replied to in cleartext (unencrypted).
 For example, consider this mail flow::
@@ -86,7 +97,7 @@ If Alice loses access to her decryption secret:
 
 - she lets her MUA generate a new key
 
-- her MUA will add an Encryption-Info header containing the new key with each mail 
+- her MUA will add an Encryption-Info header containing the new key with each mail
 
 - receiving MUAs will replace the old key with the new key
 
@@ -96,7 +107,7 @@ your mail") Bob's MUA will see the new key and subsequently use it.
 
 .. todo::
 
-    Check if we can encrypt a mime mail such that non-decrypt-capable clients 
+    Check if we can encrypt a mime mail such that non-decrypt-capable clients
     will show a message that helps Alice to reply in the suggested way.  We don't
     want people to read handbooks before using INBOME so any guidance we can
     "automatically" provide in case of errors is good.
@@ -105,14 +116,14 @@ your mail") Bob's MUA will see the new key and subsequently use it.
 
     Unless we can get perfect recoverability (also for device loss etc.) we will
     always have to consider this "fatal" case of loosing a secret key and how
-    users can deal with it.  Especially in the federated email context We do 
+    users can deal with it.  Especially in the federated email context We do
     not think perfect recoverability is feasible.
 
 
 Dowgrading / switch to a MUA without INBOME support
 ------------------------------------------------------
 
-Alice might decide to switch to a different MUA which does not support INBOME.  
+Alice might decide to switch to a different MUA which does not support INBOME.
 
 A MUA which previously saw an INBOME header and/or encryption from Alice
 now sees an unencrypted mail from Alice and no encryption header. This
