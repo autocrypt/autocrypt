@@ -9,6 +9,8 @@ I'd like to receive and send (cleartext) mails without problems
 and then, after turning to use my original device/MUA again, 
 send encrypted mails without problems.
 
+**inbome only on secondary device** I use webmail most of the time. But for a small subset of my communication i want to be able to use encryption (My friend said we need this). It should not mess with my other mails though.
+
 **change to non-encrypting device**: i don't use an
 encryption-supporting MUA anymore and want to receive/send mails without
 problems with peers where messages were previously encrypted, however.
