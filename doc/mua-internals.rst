@@ -113,7 +113,7 @@ management?
 
 .. _`sma`:
 
-Shared MUA Account Messaging Archive
+Shared MUAA Messaging Archive
 ------------------------------------
 
 characteristics/requirements of of what SMAs need to provide:
@@ -194,6 +194,19 @@ The MUAA "1" will then:
     (synchronization between MUAs, "merge conflict" between state, deleting
     message might be a problem, encrypted "broadcast" to all my MUAAs)
 
+
+.. todo::
+
+    Critically consider how the multiple INBOME folders show in user interfaces.
+    It might be better to depend on sub folders.
+
+.. todo::
+
+    Crically consider end-to-end encryption for MUAA messages.
+
+.. todo::
+
+    Consider how to force remove devices through IMAP folder deletion or something.
 
 types of inter-MUAA unicast messages
 ------------------------------------
