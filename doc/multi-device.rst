@@ -33,9 +33,9 @@ account in question::
     From: alice@example.net
     To: alice@example
 
-An INBOME-aware MUA scans the incoming mail for a message with this
-INBOME header and prompts the user for their backup code if it finds
-it.
+INBOME-aware MUAs communicated via a shared mail store by storing
+messages with these INBOME header and prompts the user for their backup
+code if it finds it.
 
 Note that this mechanism doesn't require both devices to be accessible
 simultaneously.
