@@ -36,8 +36,8 @@ INBOME-ENCRYPTION: prio=0; to=aaa@bbb.cc; type=(OpenPGP|...); prefer-encrypted=(
 ```
 
 Where key includes a Base64 representation of a minimal key. For now we only support 'OpenPGP' as the type.
-The 'prio' attribute is used indicates prefered encryption methods. 'prefer-encrypted' indicates that agents
-should default to encrypting when composing emails.
+The 'prio' attribute is used indicates prefered encryption methods. 'prefer-encrypted' indicates that agents should default to encrypting when composing emails.
+INBOME compatible Agents MUST include one header with a key in a INBOME compatible format.
 
 "Happy path" example: 1:1 communication
 ---------------------------------------
