@@ -22,7 +22,7 @@ def main():
                      'Topic :: Utilities',
                      'Intended Audience :: Developers',
                      'Programming Language :: Python'],
-        py_modules = ['inbome', 'test_inbome'],
+        py_modules = ['inbome', 'test_inbome', 'inbome_gpg"],
         zip_safe=False,
     )
 
