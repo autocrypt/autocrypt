@@ -36,17 +36,22 @@ def parse_inbome_headervalue(value):
             result_dict["key"] = keydata
         elif name == "type":
             result_dict["type"] = value
-        elif name[0] != "_":
+        elif name == "prefer-encrypted":
+            result_dict["prefer-encrypted"] = value
+        elif name[0] == "_":
+            logging.warn("found non-critical %r header attribute, ignoring it", name)
+        else:
             logging.warn("found unknown critical attribute, ignoring header")
             return {}
-        else:
-            logging.warn("found non-critical %r header attribute, ignoring it", name)
     if "key" not in result_dict:
         logging.warn("found no key, ignoring header")
     elif "to" not in result_dict:
         logging.warn("found no to e-mail address, ignoring header")
     elif "type" in result_dict and result_dict["type"] != "p":
-        logging.warn("found type %r, but we only support 'p'")
+        logging.warn("found type %r, but we only support 'p'", result_dict["type"])
+    elif "prefer-encrypted" in result_dict and result_dict["prefer-encrypted"] not in ["yes", "no"]:
+        logging.warn("found prefer-encrypted %r, but we only support yes or no",
+                     result_dict["prefer-encrypted"])
     else:
         return result_dict
 
