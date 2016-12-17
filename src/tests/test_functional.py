@@ -33,3 +33,13 @@ def test_rsa2048_unknown_non_critical(datadir, gpg):
         assert "key" in d and d["key"]
 
     gpg.import_keydata(d["key"])
+
+def test_rsa2048_unknown_critical(datadir, gpg):
+    with datadir.open("rsa2048-unknown-critical.eml") as fp:
+        d = parse_inbome_header(fp)
+        assert d == {}
+
+def test_unknown_type(datadir, gpg):
+    with datadir.open("unknown-type.eml") as fp:
+        d = parse_inbome_header(fp)
+        assert d == {}

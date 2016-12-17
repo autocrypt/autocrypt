@@ -33,12 +33,19 @@ def parse_inbome_headervalue(value):
             keydata_base64 = "".join(value.split())
             keydata = base64.b64decode(keydata_base64)
             result_dict["key"] = keydata
+        elif name == "type":
+            result_dict["type"] = value
+        elif name[0] != "_":
+            logging.warn("found unknown critical attribute, ignoring header")
+            return {}
         else:
-            logging.warn("found %r header value, ignoring it", name)
+            logging.warn("found non-critical %r header attribute, ignoring it", name)
     if "key" not in result_dict:
         logging.warn("found no key, ignoring header")
     elif "to" not in result_dict:
-        logging.warn("found no to user id, ignoring header")
+        logging.warn("found no to e-mail address, ignoring header")
+    elif "type" in result_dict and result_dict["type"] != "p":
+        logging.warn("found type %r, but we only support 'p'")
     else:
         return result_dict
 
