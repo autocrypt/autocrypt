@@ -18,7 +18,8 @@ Current work-in-progress specs:
 
 :doc:`INBOME multi-device management <multi-device>` discusses how to make several MUAs share secret key material, also involving questions of key backup. INBOME-supporting MUAs communicate via mail with each other in order to synchronize secrets.
 
-:doc:`INBOME reasons <reasons>` lists reasons and frequent questions. 
+.. 
+    :doc:`INBOME reasons <reasons>` lists reasons and frequent questions. 
 
 .. toctree::
    :hidden:
@@ -28,4 +29,3 @@ Current work-in-progress specs:
    levels
    mua-internals
    multi-device
-   reasons
