@@ -64,7 +64,7 @@ def send_reply(host, port, msg):
 def main():
     gpg = GPG(os.path.expanduser("~/keyring"))
     reply_msg = generate_reply(gpg, sys.stdin)
-    return send_reply(reply_msg)
+    return send_reply('localhost',25,reply_msg)
 
 if __name__ == "__main__":
     main()
