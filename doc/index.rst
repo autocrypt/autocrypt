@@ -23,9 +23,9 @@ Current work-in-progress specs:
 .. toctree::
    :hidden:
 
-   reasons
-   levels
-   key-formats
    mua-keydiscovery
-   multi-device
+   key-formats
+   levels
    mua-internals
+   multi-device
+   reasons
