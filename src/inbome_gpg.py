@@ -14,6 +14,8 @@ class GPG:
     def import_keydata(self, keydata):
         with tempfile.NamedTemporaryFile(delete=False) as f:
             f.write(keydata)
-        assert os.path.exists(f.name)
-        self._gpg(["--import", f.name])
-        os.remove(f.name)
+        self.import_keyfile(f.name)
+
+    def import_keyfile(self, fn):
+        assert os.path.exists(fn)
+        self._gpg(["--import", fn])

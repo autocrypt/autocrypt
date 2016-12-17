@@ -4,26 +4,34 @@ from inbome import parse_inbome_header
 
 
 @pytest.fixture
-def gpg(tmpdir):
+def gpg(tmpdir, datadir):
     from inbome_gpg import GPG
     p = tmpdir.mkdir("keyring")
     p.chmod(0o700)
-    return GPG(p.strpath)
+    g = GPG(p.strpath)
+    # import RSA 2048 key for "bot@autocrypt.org"
+    g.import_keyfile(datadir.join("testbot.secretkey").strpath)
+    return g
 
 @pytest.fixture()
-def examples(request):
-    class ex:
+def datadir(request):
+    class D:
         def __init__(self, basepath):
             self.basepath = basepath
         def open(self, name):
             return self.basepath.join(name).open()
-    return ex(request.fspath.dirpath("data"))
+        def join(self, name):
+            return self.basepath.join(name)
+
+    return D(request.fspath.dirpath("data"))
 
 
-def test_example1(examples, gpg):
-    with examples.open("example1.mail") as fp:
+def test_example1(datadir, gpg):
+    with datadir.open("example1.mail") as fp:
         d = parse_inbome_header(fp)
         assert d["to"] == "dkg@fifthhorseman.net"
         assert "key" in d and d["key"]
 
     gpg.import_keydata(d["key"])
+
+
