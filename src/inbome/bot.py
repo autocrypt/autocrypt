@@ -4,7 +4,9 @@ simple bot functionality to work answering for bot@autocrypt.org
 
 """
 
+import os, sys
 from inbome.parse import extract_inbome_header, parse_message
+from inbome.gpg import GPG
 
 MY_ADR = "bot@autocrypt.org"
 KEY_ID = "9305817E"
@@ -59,3 +61,5 @@ def main():
     reply_msg = generate_reply(gpg, sys.stdin)
     return send_reply(reply_msg)
 
+if __name__ == "__main__":
+    main()

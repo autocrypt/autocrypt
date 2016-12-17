@@ -8,7 +8,7 @@ def test_generate_reply(datadir, gpg, smtpserver):
     assert reply_msg["From"] == "bot@autocrypt.org"
     assert reply_msg["INBOME"]
 
-    host, port = smtpserver.addr
+    host, port = smtpserver.addr[:2]
 
     send_reply(host, port, reply_msg)
 
