@@ -5,8 +5,13 @@ simple bot functionality to work answering for bot@autocrypt.org
 """
 
 import os, sys
+import logging
 from inbome.parse import extract_inbome_header, parse_message
 from inbome.gpg import GPG
+import email.parser
+from email.mime.text import MIMEText
+import smtplib
+
 
 MY_ADR = "bot@autocrypt.org"
 KEY_ID = "9305817E"
@@ -35,15 +40,14 @@ ikey = """\
 """
 INBOME_HEADER = "to=bot@autocrypt.org; key=\n" + ikey
 
-import email.parser
-from email.mime.text import MIMEText
-import smtplib
-
 def generate_reply(gpg, fp):
     msg = parse_message(fp)
     from_header = msg.get_all("from")
     subject = msg.get_all("subject")
     inbome_header = extract_inbome_header(msg)
+
+    logging.info("got mail: %s", msg.as_string())
+
     reply_msg = MIMEText('''Autoresponse''')
     reply_msg['Subject'] = "Re: " + msg["Subject"]
     reply_msg['From'] = MY_ADR
@@ -54,6 +58,7 @@ def generate_reply(gpg, fp):
 
 def send_reply(host, port, msg):
     smtp = smtplib.SMTP(host, port)
+    logging.info("sending reply: %s", msg.as_string())
     return smtp.sendmail(MY_ADR, msg["To"], msg.as_string())
 
 def main():
