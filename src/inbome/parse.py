@@ -9,7 +9,9 @@ def parse_message(fp):
 
 def extract_inbome_header(msg):
     inbome_headers = msg.get_all("INBOME")
-    all_results = []
+    if inbome_headers == None:
+        logging.warn("found no INBOME header")
+        return {}
     for inb in inbome_headers:
         res = parse_inbome_headervalue(inb)
         if res:
