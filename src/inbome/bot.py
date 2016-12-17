@@ -1,7 +1,5 @@
 """
-
 simple bot functionality to work answering for bot@autocrypt.org
-
 """
 
 import os, sys

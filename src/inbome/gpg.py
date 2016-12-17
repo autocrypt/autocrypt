@@ -15,7 +15,7 @@ class GPG:
 
     def _get_version_info(self):
         if self.version_info is None:
-            self.version_info = self._gpg(['--version'])
+            self.version_info = self._gpg(['--version']).decode()
         return self.version_info
 
     def get_version(self):
@@ -25,7 +25,7 @@ class GPG:
     def supports_eddsa(self):
         for l in self._get_version_info().split('\n'):
             if l.startswith('Pubkey:'):
-                return 'eddsa' in map(str.lower, map(str.strip, l.split(':', 1)[1].split(',')))
+                return 'eddsa' in map(lambda x:x.strip().lower(), l.split(':', 1)[1].split(','))
         return False
 
     def import_keydata(self, keydata):
