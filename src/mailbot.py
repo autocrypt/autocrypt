@@ -4,16 +4,12 @@ import email.parser
 from email.mime.text import MIMEText
 import smtplib
 
-import os
+def handle_message():
+    parser = email.parser.Parser()
 
-
-#bot/bot.sh
-
-def handle_message(fp, parser):
-    msg = p.parse(fp)
+    msg = p.parse(sys.stdin)
     from_header = msg.get_all("from")
     subject = msg.get_all("subject")
-    #TODO: More than 1?
     inbome_header = parse_inbome_header(fp)
     #TODO: extract key
     reply(to_address, subject)
@@ -39,11 +35,7 @@ def reply(to_address,subject):
 
 
 def main():
-    parser = email.parser.Parser()
 
-    while(1)
-        fp = environ['bot']
-        handle_message(fp,parser)
 
 
 
