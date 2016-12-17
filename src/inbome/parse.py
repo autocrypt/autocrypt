@@ -4,9 +4,10 @@ import logging
 import base64
 
 
-def parse_inbome_header(fp):
-    p = email.parser.Parser()
-    msg = p.parse(fp)
+def parse_message(fp):
+    return email.parser.Parser().parse(fp)
+
+def extract_inbome_header(msg):
     inbome_headers = msg.get_all("INBOME")
     all_results = []
     for inb in inbome_headers:
