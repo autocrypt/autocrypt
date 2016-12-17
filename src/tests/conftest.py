@@ -1,11 +1,9 @@
+
 import pytest
-
-from inbome import parse_inbome_header
-
 
 @pytest.fixture
 def gpg(tmpdir, datadir):
-    from inbome_gpg import GPG
+    from inbome.gpg import GPG
     p = tmpdir.mkdir("keyring")
     p.chmod(0o700)
     g = GPG(p.strpath)
@@ -24,14 +22,4 @@ def datadir(request):
             return self.basepath.join(name)
 
     return D(request.fspath.dirpath("data"))
-
-
-def test_example1(datadir, gpg):
-    with datadir.open("example1.mail") as fp:
-        d = parse_inbome_header(fp)
-        assert d["to"] == "dkg@fifthhorseman.net"
-        assert "key" in d and d["key"]
-
-    gpg.import_keydata(d["key"])
-
 
