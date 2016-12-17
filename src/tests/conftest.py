@@ -8,7 +8,7 @@ def gpg(tmpdir, datadir):
     p.chmod(0o700)
     g = GPG(p.strpath)
     # import RSA 2048 key for "bot@autocrypt.org"
-    g.import_keyfile(datadir.join("testbot.secretkey").strpath)
+    g.import_keyfile(datadir.join("testbot.secretkey"))
     return g
 
 @pytest.fixture()
@@ -19,7 +19,7 @@ def datadir(request):
         def open(self, name):
             return self.basepath.join(name).open()
         def join(self, name):
-            return self.basepath.join(name)
+            return self.basepath.join(name).strpath
 
     return D(request.fspath.dirpath("data"))
 
