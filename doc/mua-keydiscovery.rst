@@ -32,10 +32,10 @@ Header Format
 
 The ``INBOME-Encryption:`` header MUST have the following format:
 ```
-INBOME-ENCRYPTION: to=aaa@bbb.cc; [type=(OpenPGP|...);] [prefer-encrypted=(yes|no);] key=BASE64
+INBOME-ENCRYPTION: to=aaa@bbb.cc; [type=(p|...);] [prefer-encrypted=(yes|no);] key=BASE64
 ```
 
-Where key includes a Base64 representation of a minimal key. For now we only support 'OpenPGP' as the type.
+Where key includes a Base64 representation of a minimal key. For now we only support 'p' as the type, which represents a specific subset of OpenPGP (see key-formats.rst).
 'prefer-encrypted' indicates that agents should default to encrypting when composing emails.
 INBOME compatible Agents MUST include one header with a key in a INBOME compatible format.
 
@@ -51,7 +51,7 @@ Consider a blank state and a first outgoing message from Alice to Bob::
 Upon sending this mail, Alice's MUA will add a header which contains her
 encryption key::
 
-    INBOME-Encryption: to=alice@a.example; type=OpenPGP; prefer-encrypted=yes; key=...
+    INBOME-Encryption: to=alice@a.example; type=p; prefer-encrypted=yes; key=...
 
 Bob's MUA will scan the incoming mail, find Alice's key and store it associated
 to the ``alice@a.example`` address taken from the ``to``-attribute.
@@ -60,7 +60,7 @@ Bob that the mail will be encrypted and after finalization of the mail encrypt
 it.
 Moreover, Bob's MUA will add its own Encryption Info::
 
-    INBOME-Encryption: to=bob@b.example; type=OpenPGP; prefer-encrypted=yes; key=...
+    INBOME-Encryption: to=bob@b.example; type=p; prefer-encrypted=yes; key=...
 
 When Alice's MUA now scans the incoming mail from Bob it will store
 Bob's key and the fact that Bob sent an encrypted mail.  Subsequently
