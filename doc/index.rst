@@ -10,14 +10,22 @@ Current work-in-progress specs:
 
 :doc:`INBOME key discovery <mua-keydiscovery>` presents and discusses how mail programs negotiate encryption with each other. 
 
-:doc:`INBOME multi-device management <multi-device>` discusses how to make several MUAs share secret key material, also involving questions of key backup. INBOME-supporting MUAs communicate via mail with each other in order to synchronize secrets.
+:doc:`INBOME key format <key-formats>` discusses the precise header and key format.
+
+:doc:`INBOME levels <levels>` discusses level0 and level1 support.
 
 :doc:`INBOME MUA internals <mua-internals>` discusses requirements, operations and the state MUAs need to keep in order to implement the INBOME protocols.
 
+:doc:`INBOME multi-device management <multi-device>` discusses how to make several MUAs share secret key material, also involving questions of key backup. INBOME-supporting MUAs communicate via mail with each other in order to synchronize secrets.
+
+:doc:`INBOME reasons <reasons>` lists reasons and frequent questions. 
 
 .. toctree::
    :hidden:
 
+   reasons
+   levels
+   key-formats
    mua-keydiscovery
    multi-device
    mua-internals
