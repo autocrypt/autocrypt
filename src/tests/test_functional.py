@@ -13,8 +13,9 @@ def test_rsa2048_simple(datadir, gpg):
 
     gpg.import_keydata(d["key"])
 
-@pytest.mark.xfail
 def test_25519_simple(datadir, gpg):
+    if (not gpg.supports_eddsa()):
+        pytest.xfail("No support for EDDSA")
     with datadir.open("25519-simple.eml") as fp:
         d = parse_inbome_header(fp)
         assert d["to"] == "alice@testsuite.autocrypt.org"
