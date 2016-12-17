@@ -1,0 +1,83 @@
+From dkg@fifthhorseman.net Sat Dec 17 10:07:54 2016
+Return-Path: <dkg@fifthhorseman.net>
+Delivered-To: <hpk@merlinux.eu>
+Received: from mail.merlinux.eu
+	by mail.merlinux.eu (Dovecot) with LMTP id XbzbGWoAVVgpPgAA4rfF6Q
+	for <hpk@merlinux.eu>; Sat, 17 Dec 2016 09:07:54 +0000
+Received: by mail.merlinux.eu (Postfix, from userid 113)
+	id 5C86C100589; Sat, 17 Dec 2016 09:07:54 +0000 (UTC)
+Received: from che.mayfirst.org (che.mayfirst.org [162.247.75.118])
+	by mail.merlinux.eu (Postfix) with ESMTP id E622D100560
+	for <holger@merlinux.eu>; Sat, 17 Dec 2016 09:07:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.2.0 mail.merlinux.eu E622D100560
+Authentication-Results: mail.merlinux.eu; dmarc=none header.from=fifthhorseman.net
+Received: from fifthhorseman.net (p5DDBAF4F.dip0.t-ipconnect.de [93.219.175.79])
+	by che.mayfirst.org (Postfix) with ESMTPSA id B031DF98C;
+	Sat, 17 Dec 2016 04:07:52 -0500 (EST)
+Received: by fifthhorseman.net (Postfix, from userid 1000)
+	id CF8A72098B; Sat, 17 Dec 2016 10:07:48 +0100 (CET)
+From: Daniel Kahn Gillmor <dkg@fifthhorseman.net>
+To: holger krekel <holger@merlinux.eu>, Vincent Breitmoser <look@my.amazin.horse>, Patrick Brunschwig <patrick@enigmail.net>, Varac <varac@leap.se>
+Subject: another test (with RSA instead of 25519
+INBOME: to=dkg@fifthhorseman.net; key=
+ mQENBFhU//sBCACjHldvAW76oYt1tjTzdvRm53AmiQkPoH026RlfinGZ0AUr59J4tj1D1A/o1t3l
+ sF/puwTmtVwUjEdfb+f2MWreR7NA7e1GV25OGknngSEhjkrsF6Sl9ZLKZS968x/swSTFU7LOhnxC
+ GX7hDgBQncbcHZ7mmINLttGPf7CvuK7lXjzTRqzaYxixn9kU8FUdwqOAu44uKghEdlfl0OtfwLCq
+ clx9cugXNKll2MXDTmdNfdu1JstiBhF3gVsPJTWPsUlsd4QFZ4OQeKT2ed9nqFxURKf7yhCKe6TH
+ 1coioNjNRFpTpN1y4mGMAb4I2gUx9JZ1xypZdBu8mthjEabwZWRlABEBAAG0FWRrZ0BmaWZ0aGhv
+ cnNlbWFuLm5ldIkBTgQTAQgAOBYhBHo33if67YdTOBm6LvmVFiofB1M0BQJYVP/7AhsDBQsJCAcC
+ BhUICQoLAgQWAgMBAh4BAheAAAoJEPmVFiofB1M047sH/A4S1G19twe4ZwBsP8SqH266p4/I2v2L
+ 3sDvmxfMcpYgYuFZi6DDEgdm9q8edmOp5eYlg81fhJcRJwYeSikTgeSQJsYjTEoDlT4aP10Ty+cT
+ C7P26mVKHX+xNvOsXn+XzlwY3J3OPoC7hIEys1fS/vJOxV7N+kJcCRD+89VRHWLjiF9bplfc3mWw
+ 6i/1NYbVRYx44IGN6jImDq+CczBaaDpsgRe1N25mUhjnVsD9JtLixZmNpZQ12cEvyT8leKfXuF9b
+ 1+FlL6wypKI/djFEHSJpOxlLmJvgdVBoTR0cJtuehYF47i76Epz5WtLL4YBZo5VVTZj+QOfHFr6i
+ U8qGlPK5AQ0EWFT//QEIAMPLvGCpp/I/TnpDHnm6lxEKni/Kdc0iR0Y1m13LD0kaJw65MH/CWFW6
+ vHAkb5tvY7AdKD5mGn/GAS8dpTQKGQJtQEKIgBfxGDeWxt8Q7SO9lo24A9K9o9VIIW+q62tcI1QF
+ H+AvG3RD7SUVJCDMiA7cxGoVQmj5nrNNpi8hvBJkvAHkdMVyDuqp2YBi/1+nXKcMrB8+cNg0iCI3
+ ela+n0Uguz5KZaUH8uEunCgC+qlpzi49Ep7NdiceXUbhFaOCQ3sDAiASrl9nzG9uD+C2BqPVY+nX
+ 2fC87iGH1dryX0tSOj8x/DIbIDYLaGOjQxLKyLB/wEqFsttU+QM7MLaIbWkAEQEAAYkBNgQYAQgA
+ IBYhBHo33if67YdTOBm6LvmVFiofB1M0BQJYVP/9AhsMAAoJEPmVFiofB1M08OoH/jZaEKX76W5K
+ IxeSt1+77uN9JFpDVKi/MERmUODkjmhW3BT1+XbDuyyaP0IrPzv0RR/oXrlR4NPeLREka9A1STdW
+ cLLp0zuEx2lHqA9itPThksbqdtuO0W/HY82ag7N30GhV7LVjs0sJbc8zmNTP55zdzTCx+sYNn3L3
+ ZjmSEOSHnuYriYnr58d4Ob211Lvj1TB/eGx78hFpegMXH3gANuH7DxbOAOtF4Ukz+0BWneNBhtqt
+ +ILXWZMhRddwMjRWWKJVa8yR2vNvc7zlr8J0z4vz6jsoP1MUL4gGywZiR8tR7Epskxu49kuT5RqF
+ hLINMmUxhroEtdZSmPrEvdov13s=
+Date: Sat, 17 Dec 2016 10:07:48 +0100
+Message-ID: <87r356kjob.fsf@alice.fifthhorseman.net>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-DSPAM-Result: Whitelisted
+X-DSPAM-Processed: Sat Dec 17 09:07:54 2016
+X-DSPAM-Confidence: 0.9905
+X-DSPAM-Probability: 0.0000
+X-DSPAM-Signature: 5855006a159071396417589
+X-DSPAM-Factors: 27,
+	To*krekel+<holger, 0.00044,
+	Subject*test, 0.00432,
+	Received*che.mayfirst.org, 0.01000,
+	Received*che.mayfirst.org, 0.01000,
+	To*Vincent+Breitmoser, 0.01000,
+	To*<look, 0.01000,
+	To*<varac, 0.01000,
+	To*<patrick, 0.01000,
+	To*Patrick+Brunschwig, 0.01000,
+	Authentication-Results*dmarc=none+header.from=fifthhorseman.net, 0.01000,
+	Return-Path*fifthhorseman.net>, 0.01000,
+	To*Brunschwig+<patrick, 0.01000,
+	To*Patrick, 0.01000,
+	Received*(che.mayfirst.org+[162.247.75.118]), 0.01000,
+	Subject*instead+of, 0.01000,
+	Received*(che.mayfirst.org, 0.01000,
+	From*Gillmor, 0.01000,
+	Received*from+che.mayfirst.org, 0.01000,
+	Received*che.mayfirst.org+(che.mayfirst.org, 0.01000,
+	Return-Path*<dkg+fifthhorseman.net>, 0.01000,
+	From*Gillmor+<dkg, 0.01000,
+	Message-ID*alice.fifthhorseman.net>, 0.01000,
+	To*leap.se>, 0.01000,
+	Received*17+Dec, 0.01000,
+	Received*17+Dec, 0.01000,
+	Received*fifthhorseman.net+(Postfix, 0.01000,
+	Subject*another, 0.01000
+
+here is an RSA test
