@@ -9,6 +9,7 @@ def parse_message(fp):
 
 def extract_autocrypt_header(msg):
     autocrypt_headers = msg.get_all("Autocrypt")
+    all_results = []
     if autocrypt_headers == None:
         logging.warn("found no Autocrypt header")
         return {}
