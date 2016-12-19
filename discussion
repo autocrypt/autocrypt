@@ -14,6 +14,6 @@ Do we need a different header for that?
 Do we treat them differently?
 
 How to break the header if it is too big?
-- we discussed using Autocrypt-Encryption-1, ... and having an index. But we did
+- we discussed using Autocrypt-1, ... and having an index. But we did
   not talk about the content.
-- @valodim said there is a standard
+- @valodim said there is a standard for wrapping long attributes (RFC 2231)

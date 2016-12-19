@@ -14,8 +14,8 @@ having more end-to-end message confidentiality outweigh these
 potential risks.
 
 
-Search
-------
+Failures of Search
+------------------
 
 If Autocrypt clients are incapable of searching encrypted mail, users of
 Autocrypt-capable clients may find e-mail less useful for normal
@@ -74,3 +74,16 @@ Mitigations:
    sufficiently-plausible message (including DKIM and whatever other
    indicators the filters care about) to make it into the
    Autocrypt-capable agent's internal state storage.
+
+Killing off strong encryption
+-----------------------------
+
+Autocrypt is significantly weaker than traditional models of mail
+encryption.  In particular, it provides no resistance to an active
+attacker (an attacker who can modify and/or inject mail as it passes
+through the SMTP network).  The no-UI feature makes it so that most
+users will never properly verify each other's encryption keys.
+
+There is a concern that if opportunistically-encrypted mail becomes
+the standard, no one will bother to implement good UX for users in strong
+identity verification.

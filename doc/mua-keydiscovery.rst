@@ -15,7 +15,7 @@ Basic network protocol flow
 
 Establishing encryption happens as a side effect when people send each other mail:
 
-- A MUA always adds an ``Autocrypt-Encryption:`` header to all messages it
+- A MUA always adds an ``Autocrypt:`` header to all messages it
   sends out.
 
 - A MUA will scan incoming mails for encryption headers and associate
@@ -30,7 +30,7 @@ Autocrypt does not prescribe or describe encryption algorithms or key formats.  
 Header Format
 -------------
 
-The ``Autocrypt-Encryption:`` header MUST have the following format:
+The ``Autocrypt:`` header MUST have the following format:
 ```
 Autocrypt-ENCRYPTION: to=aaa@bbb.cc; [type=(p|...);] [prefer-encrypted=(yes|no);] key=BASE64
 ```
@@ -51,7 +51,7 @@ Consider a blank state and a first outgoing message from Alice to Bob::
 Upon sending this mail, Alice's MUA will add a header which contains her
 encryption key::
 
-    Autocrypt-Encryption: to=alice@a.example; type=p; prefer-encrypted=yes; key=...
+    Autocrypt: to=alice@a.example; type=p; prefer-encrypted=yes; key=...
 
 Bob's MUA will scan the incoming mail, find Alice's key and store it associated
 to the ``alice@a.example`` address taken from the ``to``-attribute.
@@ -60,7 +60,7 @@ Bob that the mail will be encrypted and after finalization of the mail encrypt
 it.
 Moreover, Bob's MUA will add its own Encryption Info::
 
-    Autocrypt-Encryption: to=bob@b.example; type=p; prefer-encrypted=yes; key=...
+    Autocrypt: to=bob@b.example; type=p; prefer-encrypted=yes; key=...
 
 When Alice's MUA now scans the incoming mail from Bob it will store
 Bob's key and the fact that Bob sent an encrypted mail.  Subsequently

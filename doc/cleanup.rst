@@ -17,7 +17,5 @@ glossary for technical documentation.
 
 we should use "email" or "e-mail" consistently in these docs
 
-Avoid Autocrypt-Encryption: -- should be just Autocrypt:
-
 rst markup might need cleanup.
 
