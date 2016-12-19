@@ -170,7 +170,7 @@ bytestring comparisons of `key` data instead.
 
 
 Generating an Autocrypt header upon message composition
-----------------------------------------------------
+-------------------------------------------------------
 
 During message composition where the message will be marked as `From:`
 an e-mail address that the Autocrypt-capable agent knows the secret

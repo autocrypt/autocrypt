@@ -1,5 +1,5 @@
 Potential ecosystem dangers of Autocrypt
-=====================================
+========================================
 
 This document is a place to describe particular concerns that Autocrypt
 creates for the e-mail ecosystem as a whole.  It does not address

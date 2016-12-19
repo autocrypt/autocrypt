@@ -2,7 +2,7 @@ Key Formats for Autocrypt
 =========================
 
 ``p`` - OpenPGP Based
------------------
+---------------------
 
 Autocrypt requires keys of a certain format to reduce the requirements
 for implementations.

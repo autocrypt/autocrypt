@@ -1,5 +1,5 @@
 Autocrypt in-band key discovery
-=============================
+===============================
 
 Autocrypt key discovery requires support only from mail programs and works with any existing mail provider, it works fully offline and is only based on the two core abilities every mail program has: sending and receiving mail.
 
@@ -11,7 +11,7 @@ Autocrypt key discovery is safe only against passive eavesdroppers. It is trivia
 .. contents::
 
 Basic network protocol flow
----------------------------------
+---------------------------
 
 Establishing encryption happens as a side effect when people send each other mail:
 

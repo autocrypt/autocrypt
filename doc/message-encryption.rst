@@ -1,5 +1,5 @@
 Message Encryption by Autocrypt-capable agents
-===========================================
+==============================================
 
 When a message is sent encrypted by an Autocrypt-capable agent, there are
 several details the agent should be aware of when structuring the
