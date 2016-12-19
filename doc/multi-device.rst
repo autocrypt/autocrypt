@@ -1,5 +1,5 @@
-Multi-device sharing with INBOME
-================================
+Multi-device sharing with Autocrypt
+===================================
 
 .. contents::
 
@@ -12,12 +12,12 @@ online in a reasonably-synchronized way.
 
 There are two main approaches for this: Static State, and Device
 Pairing.  In this discussion, we assume that the user has one e-mail
-account, and uses two or more INBOME-aware MUAs to connect to that
+account, and uses two or more Autocrypt-aware MUAs to connect to that
 e-mail account (for both sending and receiving mail).  We work under
-the assumption that all used MUAs are INBOME-aware.
+the assumption that all used MUAs are Autocrypt-aware.
 
 FIXME: think more clearly about the case where both devices have some
-level of independent INBOME configuration.
+level of independent Autocrypt configuration.
 
 Static State
 ------------
@@ -29,12 +29,12 @@ serializes its secret key material into a message encrypted by the the
 backup code.  This message is given a custom header and is sent to the
 account in question::
 
-    INBOME-Secret-Key-Backup: key_backup_data=<encrypted_secret_key>
+    Autocrypt-Secret-Key-Backup: key_backup_data=<encrypted_secret_key>
     From: alice@example.net
     To: alice@example
 
-INBOME-aware MUAs communicated via a shared mail store by storing
-messages with these INBOME header and prompts the user for their backup
+Autocrypt-aware MUAs communicated via a shared mail store by storing
+messages with these Autocrypt header and prompts the user for their backup
 code if it finds it.
 
 Note that this mechanism doesn't require both devices to be accessible

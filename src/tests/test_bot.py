@@ -1,12 +1,12 @@
 
-from inbome.bot import generate_reply, send_reply
+from autocrypt.bot import generate_reply, send_reply
 
 def test_generate_reply(datadir, gpg, smtpserver):
     with datadir.open("rsa2048-simple-to-bot.eml") as fp:
         reply_msg = generate_reply(gpg, fp)
     assert reply_msg["To"] == "Alice <alice@testsuite.autocrypt.org>"
     assert reply_msg["From"] == "bot@autocrypt.org"
-    assert reply_msg["INBOME"]
+    assert reply_msg["Autocrypt"]
 
     host, port = smtpserver.addr[:2]
 

@@ -1,7 +1,7 @@
 From: Alice <alice@testsuite.autocrypt.org>
 To: Bob <bob@testsuite.autocrypt.org>
 Subject: a 25519 test
-INBOME: to=alice@testsuite.autocrypt.org; key=
+Autocrypt: to=alice@testsuite.autocrypt.org; key=
  mDMEWFUX7RYJKwYBBAHaRw8BAQdACHq6FkRGsHqBMsNpD7d+Q2jtxVwTO+Y4NhBaQyHaMj+0HWFs
  aWNlQHRlc3RzdWl0ZS5hdXRvY3J5cHQub3JniJAEExYIADgWIQQmqmdR/XZoxC+kkkr8dE2p/nPD
  1AUCWFUX7QIbAwULCQgHAgYVCAkKCwIEFgIDAQIeAQIXgAAKCRD8dE2p/nPD1EqOAP0WUDKwko00
@@ -17,4 +17,4 @@ Content-Type: text/plain
 
 here is a test with a curve 25519-based key.  it's entirely possible
 that this will fail to be imported by an agent that only supports
-INBOME level 0 (if they don't implement curve 25519).
+Autocrypt level 0 (if they don't implement curve 25519).

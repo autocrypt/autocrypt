@@ -1,0 +1,12 @@
+From: Alice <alice@testsuite.autocrypt.org>
+To: Bob <bob@testsuite.autocrypt.org>
+Subject: No Autocrypt header at all 
+Date: Sat, 17 Dec 2016 10:51:48 +0100
+Message-ID: <no-autocrypt@testsuite.autocrypt.org>
+MIME-Version: 1.0
+Content-Type: text/plain
+
+This message contains no Autocrypt header
+
+An agent capable of Autocrypt level 0 should not interpret this
+message as having an Autocrypt header.

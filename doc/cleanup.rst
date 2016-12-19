@@ -7,8 +7,6 @@ should normalize.
 
 Let's use "cert" where we mean "cert" and "key" where we mean "key"
 
-"INBOME" should be replaced with to "Autocrypt"
-
 need a tight document for what is expected of level 0 clients.
 
 user-facing material probably should use "app" -- for technical
@@ -16,3 +14,10 @@ documentation, we need to settle internally on "agent" or "client" or
 "MUAA"
 
 glossary for technical documentation.
+
+we should use "email" or "e-mail" consistently in these docs
+
+Avoid Autocrypt-Encryption: -- should be just Autocrypt:
+
+rst markup might need cleanup.
+

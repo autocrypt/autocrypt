@@ -4,16 +4,16 @@ MUA internals (requirements, operations, state)
 .. contents::
 
 
-INBOME requirements for MUAs
+Autocrypt requirements for MUAs
 ---------------------------------------------------
 
-INBOME works for people who use INBOME-aware MUAs.  We expect the MUAs
+Autocrypt works for people who use Autocrypt-aware MUAs.  We expect the MUAs
 to have the following capabilities:
 
 - know what account(s) they are associated with, including the
   public-facing e-mail address associated with each account.
 
-- all INBOME state is tied to a MUA/acccount combination
+- all Autocrypt state is tied to a MUA/acccount combination
 
 - be able to fetch e-mail from the corresponding accounts
 
@@ -26,8 +26,8 @@ to have the following capabilities:
   ``bob@home.example`` and also for ``robert@work.example``, it should
   know which messages came for which address.  (Inspecting headers may
   be sufficient for this).  This is necessary because some messages
-  that affect the state of an INBOME peering don't bear INBOME headers
-  at all (e.g. messages from new, non-INBOME-capable MUAs)
+  that affect the state of an Autocrypt peering don't bear Autocrypt headers
+  at all (e.g. messages from new, non-Autocrypt-capable MUAs)
 
 - be able to store persistent state about the user's communications
   partners (see peerstate_) and about the user's other devices (see
@@ -39,34 +39,47 @@ to have the following capabilities:
 Per-peer state
 --------------
 
-For each peer, an INBOME-aware MUA will store the timestamp and value of the ``INBOME-Encryption`` header value it saw from the last message from that peer.  
+For each peer, an Autocrypt-aware MUA will store the timestamp and
+value of the ``Autocrypt`` header value it saw from the
+last message from that peer.
 
 Peers are distingished by canonicalized e-mail address.  If an MUA has
 an address book, it is likely to separate contacts by human identity,
 and each identity might have multiple e-mail addresses.
-However, INBOME-enabled MUAs treat separate e-mail addresses (even when we know
+However, Autocrypt-enabled MUAs treat separate e-mail addresses (even when we know
 they belong to the same person) as distinct for the purposes of
 storing state.
 
 core operations 
 ------------------
 
-For the time being, INBOME mandates that clients always add an ``INBOME-Encryption`` header. This makes it trivial for MUAs which receive mails to determine if the other side supports INBOME or not.
+For the time being, Autocrypt mandates that clients always add an
+``Autocrypt`` header. This makes it trivial for MUAs which
+receive mails to determine if the other side supports Autocrypt or
+not.
 
 In order to better understand how MUAs process and use this encryption info we talk about two conceptual core operations:
 
-- ``scan_incoming(mime_mail)``: update local INBOME state from incoming
+- ``scan_incoming(mime_mail)``: update local Autocrypt state from incoming
   mail.
 
 - ``get_encrypt_key(recipient_address)``: Return encryption key or
   None for recipient_address.
 
-The ``scan_incoming`` function sees the full incoming :rfc:`822` message.  It will not neccessarily see messages in the order in which they were sent.  In order to keep track of the "latest" mail from a peer it will associate a timestamp with each message.  This is computed from the Date header or, if that lies in the future, is taken to be the current time. ``scan_incoming`` will update a peer's inbome info in either one of these cases:
+The ``scan_incoming`` function sees the full incoming :rfc:`822`
+message.  It will not neccessarily see messages in the order in which
+they were sent.  In order to keep track of the "latest" mail from a
+peer it will associate a timestamp with each message.  This is
+computed from the Date header or, if that lies in the future, is taken
+to be the current time. ``scan_incoming`` will update a peer's
+Autocrypt info in either one of these cases:
 
 - it never saw an earlier mail from that peer
 - it saw a mail earlier but it's recorded timestamp preceded the current timestamp
 
-The ``get_encrypt_key`` function will return an encryption key it scanned from an earlier mail if and only if the last mail from the peer contained that info.
+The ``get_encrypt_key`` function will return an encryption key it
+scanned from an earlier mail if and only if the last mail from the
+peer contained that info.
 
 State will be stored and queried using `address canonicalization`_.
 
@@ -91,7 +104,7 @@ arbitrarily sensitive.  In practice, nearly every e-mail domain treats
 the local part of the address as a case-insensitive string.  That is,
 while it is permitted by the standards, ``John@example.org`` is very
 unlikely to deliver to a different mailbox than ``john@example.org``.
-INBOME-aware MUAs will canonicalize the local part of an e-mail
+Autocrypt-aware MUAs will canonicalize the local part of an e-mail
 address by making it all lower-case.
 
 FIXME: some people (and some e-mail domains) have known variations
@@ -101,13 +114,13 @@ addressed like ``john-whatever@example.org``.  gmail today supports
 arbitrary dot injection (e.g. ``johndoe@example.org`` delivers to the
 same mailbox as ``john.doe@example.org``).  Do we want to try to
 support these somehow?  It would be simplest to declare anyone using
-aliasing schemes like this as out-of-scope for INBOMEv1.
+aliasing schemes like this as out-of-scope for Autocryptv1.
 
 FIXME: do we want to allow sophisticated users to explicitly merge
 known shared aliases as long as the domain side stays the same?  For
 example, if i happen to know that ``jdoe@example.org`` delivers to the
 same mailbox as ``john@example.org``, can i declare that to an
-INBOME-aware MUA?  How would such an explicit merge affect state
+Autocrypt-aware MUA?  How would such an explicit merge affect state
 management?
 
 
@@ -125,8 +138,8 @@ characteristics/requirements of of what SMAs need to provide:
   happens betweens accounts managed by different MUAs.
 
 - is used to send and receive messages between MUAAs (concurrently),
-  for example pairing requests, initial INBOME setup (of first MUAA),
-  updates to received remote INBOME encryption keys.
+  for example pairing requests, initial Autocrypt setup (of first MUAA),
+  updates to received remote Autocrypt encryption keys.
 
 - A MUAA needs to be able to detect if there is any other MUAA
 
@@ -149,42 +162,42 @@ by a MUA must be deleted
 implementation on top of IMAP, pairing happy path
 +++++++++++++++++++++++++++++++++++++++++++++++++
 
-Let's suppose we have a first MUAA.  It doesn't find an ``_INBOME_SMA``
+Let's suppose we have a first MUAA.  It doesn't find an ``_Autocrypt_SMA``
 announcement folder so it will do the following:
 
 - create a random new number "1" which we call MUAA-ID. 
 
-- create an ``_INBOME_SMA`` "announcements" folder and 
+- create an ``_Autocrypt_SMA`` "announcements" folder and 
   append some MUAA description message, most notably
   the MUAA-ID
 
-- create an inbox folder ``_INBOME_SMA_1`` where other
+- create an inbox folder ``_Autocrypt_SMA_1`` where other
   MUAAs will be able to send/drop messages.
 
 If now another MUAA is added:
 
 - create a random new number "27" as MUAA-ID. 
 
-- discover the ``_INBOME_SMA`` folder exists and read all 
+- discover the ``_Autocrypt_SMA`` folder exists and read all 
   of its messages, discover that there is an ``1`` MUAA
 
-- create an inbox folder ``_INBOME_SMA_27`` where other
+- create an inbox folder ``_Autocrypt_SMA_27`` where other
   MUAAs will be able to send/drop messages.
 
-- append a new MUAA description message to ``_INBOME_SMA``
+- append a new MUAA description message to ``_Autocrypt_SMA``
 
-- append a pairing request message to the "1" inbox (``_INBOME_SMA_1``).
+- append a pairing request message to the "1" inbox (``_Autocrypt_SMA_1``).
 
 The MUAA "1" will then:
 
-- discover "27" from the new message in the announcement folder ``_INBOME_SMA``
+- discover "27" from the new message in the announcement folder ``_Autocrypt_SMA``
 
-- read the pairing request message from its own ``_INBOME_SMA_1`` inbox
+- read the pairing request message from its own ``_Autocrypt_SMA_1`` inbox
 
 - process the pairing request and send a pairing accept message to "27" by appending 
-  it to the ``_INBOME_SMA_27`` folder.  
+  it to the ``_Autocrypt_SMA_27`` folder.  
 
-- delete the pairing request message from its own ``_INBOME_SMA_1`` folder.
+- delete the pairing request message from its own ``_Autocrypt_SMA_1`` folder.
 
 .. note::
 
@@ -197,7 +210,7 @@ The MUAA "1" will then:
 
 .. todo::
 
-    Critically consider how the multiple INBOME folders show in user interfaces.
+    Critically consider how the multiple Autocrypt folders show in user interfaces.
     It might be better to depend on sub folders.
 
 .. todo::

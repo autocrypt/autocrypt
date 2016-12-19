@@ -7,23 +7,23 @@ import base64
 def parse_message(fp):
     return email.parser.Parser().parse(fp)
 
-def extract_inbome_header(msg):
-    inbome_headers = msg.get_all("INBOME")
-    if inbome_headers == None:
-        logging.warn("found no INBOME header")
+def extract_autocrypt_header(msg):
+    autocrypt_headers = msg.get_all("Autocrypt")
+    if autocrypt_headers == None:
+        logging.warn("found no Autocrypt header")
         return {}
-    for inb in inbome_headers:
-        res = parse_inbome_headervalue(inb)
+    for inb in autocrypt_headers:
+        res = parse_autocrypt_headervalue(inb)
         if res:
             all_results.append(res)
     if len(all_results) == 1:
         return all_results[0]
     if len(all_results) > 1:
-        logging.warn("found more than one INBOME header, ignoring all")
+        logging.warn("found more than one Autocrypt header, ignoring all")
     return {}
 
 
-def parse_inbome_headervalue(value):
+def parse_autocrypt_headervalue(value):
     parts = value.split(";")
     result_dict = {}
     for x in parts:

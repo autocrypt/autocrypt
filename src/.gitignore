@@ -1,4 +1,4 @@
 *.pyc
 __pycache__
-inbome.egg-info
+autocrypt.egg-info
 .cache

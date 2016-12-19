@@ -1,7 +1,7 @@
 From: Alice <alice@testsuite.autocrypt.org>
 To: Bob <bob@testsuite.autocrypt.org>
-Subject: inbome rsa2048 with correct type
-INBOME: to=alice@testsuite.autocrypt.org; type=p; key=
+Subject: Autocrypt rsa2048 with correct type
+Autocrypt: to=alice@testsuite.autocrypt.org; type=p; key=
  mQENBFhVF+ABCADu17FBUgA3mCemeKbNaBTyWe3VGxjbu7fUyHgdLK7i3tnd7IRtxQy/AEN2t6Vq
  0/xeZEAKYRInsHI/HjvmhqPeWFzipk71jRQ02WUY1pZytFjYNIrTdMk4eLYdC1N0go83PU33V4R8
  fc2fWHD8N5JPsDH2xOB6WNWkMPxgMbtGIa0QTx7TINhDif4/1/VcrX3wz1gZ6xYI+sujbC54iBZo
@@ -29,12 +29,10 @@ Message-ID: <rsa2048-explicit-type@testsuite.autocrypt.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 
-This message contains the standard INBOME header, but includes an
+This message contains the standard Autocrypt header, but includes an
 explicit "type=p" attribute.  This is the default value of type, so it
 should not be necessary to include this attribute.
 
 "p" signifies that the key value is a specialized subset of OpenPGP.
 
-This should be accepted by any agent capable of INBOME level 0.
-
-   --dkg
+This should be accepted by any agent capable of Autocrypt level 0.

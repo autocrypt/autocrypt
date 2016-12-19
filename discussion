@@ -1,10 +1,10 @@
 Do we want the header to allow people to specify a fingerprint of a key or a url?
 - This would be interesting for Mailpile as they are currently using the
-  OpenPGP header in a very INBOME like way with a fingerprint
+  OpenPGP header in a very Autocrypt-like way with a fingerprint
 - It would also be beneficial for people who want to list keys who are too
   large.
 - It would work nicely with priorities. Prio 0 may be a larger key that needs
-  to be downloaded while Prio 1 is the fallback that all INBOME Agents can use
+  to be downloaded while Prio 1 is the fallback that all Autocrypt Agents can use
 
 Own key vs. Gossip
 Do we allow gossipping key info?
@@ -14,6 +14,6 @@ Do we need a different header for that?
 Do we treat them differently?
 
 How to break the header if it is too big?
-- we discussed using INBOME-Encryption-1, ... and having an index. But we did
+- we discussed using Autocrypt-Encryption-1, ... and having an index. But we did
   not talk about the content.
 - @valodim said there is a standard

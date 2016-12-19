@@ -26,7 +26,7 @@ ikey = """\
  Y7WcrgeM31V6ZixkBeU1XoFohMcm4NdhB/zzpqxttc1LUamlXMrle/7QaY3pRRki+n3u4IFFO3bW
  jsvC6lHj97g8jmrFQpdFBl8VgHeIJfSl3b5d8K8JnA1Sfo4OxD5/zR3RPM0=
 """
-INBOME_HEADER = "to=bot@autocrypt.org; key=\n" + ikey
+AUTOCRYPT_HEADER = "to=bot@autocrypt.org; key=\n" + ikey
 MY_ADR = "holger@merlinux.eu"
 
 if __name__== "__main__":
@@ -37,7 +37,7 @@ if __name__== "__main__":
     msg['Subject'] = "test"
     msg['From'] = MY_ADR
     msg['To'] = "bot@autocrypt.org"
-    msg["INBOME"] = INBOME_HEADER
+    msg["Autocrypt"] = AUTOCRYPT_HEADER
 
     logging.info("sending mail: %s", msg.as_string())
     smtp.sendmail(MY_ADR, msg["To"], msg.as_string())

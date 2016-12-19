@@ -2,17 +2,17 @@
 Known Open questions / notes 
 -----------------------------
 
-- Instead of transporting keysdata through INBOME headers we could
-  also add attachments, e.g. application/pgp-keys ones and put INBOME
+- Instead of transporting keysdata through Autocrypt headers we could
+  also add attachments, e.g. application/pgp-keys ones and put Autocrypt
   headers into it.
 
-- We don't currently address signatures at all -- how does INBOME
+- We don't currently address signatures at all -- how does Autocrypt
   interact with message signing?
 
-- The actual encryption/signing mechanism are not defined by INBOME.
+- The actual encryption/signing mechanism are not defined by Autocrypt.
   For now we assume the practical implementation uses OpenPGP keys and
   either a separate or the default user's keyrings to store keys
-  coming over INBOME.
+  coming over Autocrypt.
 
 - We can allow peers to gossip keys for all participating parties in an
   email conversation to speed up key discovery among them.  If a peer
@@ -23,12 +23,12 @@ Known Open questions / notes
   encouraging key gossip in a group?
 
 - We assume that an MUA only sends a key to a peer if the peer's last
-  message indicated INBOME abilities/requests.  If a peer has sent a
-  non INBOME mail, an MUA shall by default send a cleartext mail
+  message indicated Autocrypt abilities/requests.  If a peer has sent a
+  non Autocrypt mail, an MUA shall by default send a cleartext mail
   (unless explicitly requested by its user to continue sending
   encrypted).
 
-- how does INBOME interact with today's mailing list managers?  This
+- how does Autocrypt interact with today's mailing list managers?  This
   might not be relevant except for encrypted mailing lists.
 
 - under what circumstances precisely do you downgrade from encryption
@@ -39,10 +39,9 @@ Known Open questions / notes
   User-Agent headers from most MUAs, in an attempt to minimize
   published metadata, so relying on User-Agent isn't a reasonable
   approach.  However, each MUA could select and publish a UUID as part
-  of its INBOME header, if we find it's important for one peer to know
+  of its Autocrypt header, if we find it's important for one peer to know
   when the other is using multiple clients.
 
 - how to deal with spammers downgrade encryption by using a fake from?
   (it's not their intention, just a side effect).  How much can we
   rely on DKIM?
-

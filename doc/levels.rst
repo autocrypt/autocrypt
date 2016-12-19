@@ -1,9 +1,12 @@
 Levels of Support
 =================
 
-We want to enable working on INBOME for projects that currently cannot support ECC right now. Therefore we define levels of support for INBOME compatible agents.
+We want to enable working on Autocrypt for projects that currently
+cannot support ECC right now.  Therefore we define levels of support
+for Autocrypt compatible agents.
 
-Here's what we expect to be mandatory to implement at a certain level of support.
+Here's what we expect to be mandatory to implement at a certain level
+of support.
 
 Level 0
 -------
@@ -24,7 +27,8 @@ Level 1
 MUST generate: 25519
 MUST accept: RSA 2048, 25519
 
-We are standardizing on eliptic curve crypto based on ed25519 for the primary key and cv25519 for the encryption-capable subkey.
+We are standardizing on eliptic curve crypto based on ed25519 for the
+primary key and cv25519 for the encryption-capable subkey.
 
 
 
@@ -32,5 +36,8 @@ We are standardizing on eliptic curve crypto based on ed25519 for the primary ke
 Critical and non-critical attributes
 ------------------------------------
 
-Attributes starting with _ are non critical and can be dropped if the agent does not understand them.
-If the agent does not understand an attribute that does not start with _ it MUST ignore the header.
+Attributes starting with _ are non critical and can be dropped if the
+agent does not understand them.
+
+If the agent does not understand an attribute that does not start with
+_ it MUST ignore the header.

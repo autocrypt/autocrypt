@@ -1,19 +1,19 @@
-Message Encryption by INBOME-capable agents
+Message Encryption by Autocrypt-capable agents
 ===========================================
 
-When a message is sent encrypted by an INBOME-capable agent, there are
+When a message is sent encrypted by an Autocrypt-capable agent, there are
 several details the agent should be aware of when structuring the
 encrypted message itself.  This document details guidance on
 construction of encrypted messages.
 
-If the sending user has disabled INBOME entirely, then the agent
+If the sending user has disabled Autocrypt entirely, then the agent
 should probably not be sending encrypted messages.
 
 Always "encrypt-to-self"
 ------------------------
 
-The INBOME-capable client SHOULD always encrypt the message to the
-sender's public key (the key specified in the outbound INBOME header)
+The Autocrypt-capable client SHOULD always encrypt the message to the
+sender's public key (the key specified in the outbound Autocrypt header)
 in addition to the recipients' public keys.
 
 This is so that the sender can read any mail stored in their outbox or

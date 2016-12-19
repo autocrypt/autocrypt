@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# INBOME documentation build configuration file, created by
+# Autocrypt documentation build configuration file, created by
 # sphinx-quickstart on Fri Nov 11 22:05:17 2016.
 #
 # This file is execfile()d with the current directory set to its
@@ -54,9 +54,9 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'INBOME'
-copyright = u'2016, hpk,dkg etc.al'
-author = u'hpk,dkg etc.al'
+project = u'Autocrypt'
+copyright = u'2016, hpk, dkg, etc.al'
+author = u'hpk, dkg etc.al'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -139,7 +139,7 @@ html_theme = 'alabaster'
 # The name for this set of Sphinx documents.
 # "<project> v<release> documentation" by default.
 #
-# html_title = u'INBOME v0.1'
+# html_title = u'Autocrypt v0.1'
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #
@@ -253,7 +253,7 @@ html_sidebars = {
 # html_search_scorer = 'scorer.js'
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'INBOMEdoc'
+htmlhelp_basename = 'Autocryptdoc'
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -279,8 +279,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'INBOME.tex', u'INBOME Documentation',
-     u'hpk,dkg etc.al', 'manual'),
+    (master_doc, 'Autocrypt.tex', u'Autocrypt Documentation',
+     u'hpk, dkg etc.al', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -321,7 +321,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'inbome', u'INBOME Documentation',
+    (master_doc, 'autocrypt', u'Autocrypt Documentation',
      [author], 1)
 ]
 
@@ -336,8 +336,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'INBOME', u'INBOME Documentation',
-     author, 'INBOME', 'One line description of project.',
+    (master_doc, 'Autocrypt', u'Autocrypt Documentation',
+     author, 'Autocrypt', 'E-Mail Encryption for Everyone.',
      'Miscellaneous'),
 ]
 

@@ -1,5 +1,5 @@
-Requirements for Mail User Agents to be Inbome compatible
-=========================================================
+Requirements for Mail User Agents to be Autocrypt compatible
+============================================================
 
 Multidevice
 -----------

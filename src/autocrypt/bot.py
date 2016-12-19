@@ -4,8 +4,8 @@ simple bot functionality to work answering for bot@autocrypt.org
 
 import os, sys
 import logging
-from inbome.parse import extract_inbome_header, parse_message
-from inbome.gpg import GPG
+from autocrypt.parse import extract_autocrypt_header, parse_message
+from autocrypt.gpg import GPG
 import email.parser
 from email.mime.text import MIMEText
 import smtplib
@@ -36,13 +36,13 @@ ikey = """\
  Y7WcrgeM31V6ZixkBeU1XoFohMcm4NdhB/zzpqxttc1LUamlXMrle/7QaY3pRRki+n3u4IFFO3bW
  jsvC6lHj97g8jmrFQpdFBl8VgHeIJfSl3b5d8K8JnA1Sfo4OxD5/zR3RPM0=
 """
-INBOME_HEADER = "to=bot@autocrypt.org; key=\n" + ikey
+AUTOCRYPT_HEADER = "to=bot@autocrypt.org; key=\n" + ikey
 
 def generate_reply(gpg, fp):
     msg = parse_message(fp)
     from_header = msg.get_all("from")
     subject = msg.get_all("subject")
-    inbome_header = extract_inbome_header(msg)
+    autocrypt_header = extract_autocrypt_header(msg)
 
     logging.info("got mail: %s", msg.as_string())
 
@@ -50,7 +50,7 @@ def generate_reply(gpg, fp):
     reply_msg['Subject'] = "Re: " + msg["Subject"]
     reply_msg['From'] = MY_ADR
     reply_msg['To'] = msg["From"]
-    reply_msg["INBOME"] = INBOME_HEADER
+    reply_msg["Autocrypt"] = AUTOCRYPT_HEADER
 
     return reply_msg
 

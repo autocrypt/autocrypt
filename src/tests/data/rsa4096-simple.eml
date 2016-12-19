@@ -1,7 +1,7 @@
 From: Alice <alice@testsuite.autocrypt.org>
 To: Bob <bob@testsuite.autocrypt.org>
-Subject: an INBOME test with RSA 4096
-INBOME: to=alice@testsuite.autocrypt.org; key=
+Subject: an Autocrypt test with RSA 4096
+Autocrypt: to=alice@testsuite.autocrypt.org; key=
  mQINBFhVF/cBEADdSN72j/cAfyjA33kO7qcfdquacMjNPkvEfjmRgoGJzBKlnfB5F+o8YGWZl1uJ
  7038UbvGT9VYDwe8C8S5AN5PbAbNz1FHA7Yj7d7HS3PbNJEHDsn5lSG1aVsTYbnzUr+6JVCIu6Ux
  dRJKtqEe46OIfi6gWJFnO/jt9BfrKeS7JyaROJ3mSc51S7qu9IJHvHwVyd7fXATsangDS1iPVyzU
@@ -47,7 +47,7 @@ Message-ID: <rsa4096-simple@testsuite.autocrypt.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 
-This message contains an INBOME header with RSA 4096-bit keys.  It's
-possible that an agent supporting INBOME level 0 cannot interpret
+This message contains an Autocrypt header with RSA 4096-bit keys.  It's
+possible that an agent supporting Autocrypt level 0 cannot interpret
 this, because the keys are larger than 2048 bits.  However, we expect
-most agents supporting INBOME level 0 to be able to import it.
+most agents supporting Autocrypt level 0 to be able to import it.

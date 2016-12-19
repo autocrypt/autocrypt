@@ -1,7 +1,7 @@
 From: Alice <alice@testsuite.autocrypt.org>
 To: Bob <bob@testsuite.autocrypt.org>
-Subject: INBOME with invalid type attribute
-INBOME: to=alice@testsuite.autocrypt.org; type=x; key=
+Subject: Autocrypt with invalid type attribute
+Autocrypt: to=alice@testsuite.autocrypt.org; type=x; key=
  mQENBFhVGA8BCADK+qTRkAfax0LtJ6RiyxzuAFyIohBTwvtcOM2sd/tRmWq1eyNif5AGDnc1+b6X
  zJ6l3BXiYM/8qXU/F04UA5BP05SgIqXjqT5I13blrydjKtUbZFchK7lJU7cyDbar+TH70DZURSQm
  MusCj0+fdx6hx8y4LSOM68rjwVeq7JXAPU78QQsYgMrbtkf5mZWUquDdb7tEoxU+PcNifvtvuHF2
@@ -29,8 +29,9 @@ Message-ID: <unknown-type@testsuite.autocrypt.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 
-This message contains an INBOME header that claims to be of type "x",
+This message contains an Autocrypt header that claims to be of type "x",
 which is not a specified type.
 
-An agent capable of INBOME level 0 should reject this inbome header
-because of this type.  (it should not try to parse it as a header).
+An agent capable of Autocrypt level 0 should reject this Autocrypt
+header because of this type.  (it should not try to parse it as a
+header).

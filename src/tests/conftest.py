@@ -3,7 +3,7 @@ import pytest
 
 @pytest.fixture
 def gpg(tmpdir, datadir):
-    from inbome.gpg import GPG
+    from autocrypt.gpg import GPG
     p = tmpdir.mkdir("keyring")
     p.chmod(0o700)
     g = GPG(p.strpath)
