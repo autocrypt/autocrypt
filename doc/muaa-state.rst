@@ -223,6 +223,9 @@ during message composition:
    the message in cleartext, and default to encryption.  Prepare the
    message as an encrypted message.
 
+NOTE: The Autocrypt recommendation should probably change depending on
+whether the mail is a reply to an encrypted e-mail or not.
+   
 Single recipient messages
 -------------------------
    
