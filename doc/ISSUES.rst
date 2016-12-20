@@ -22,12 +22,6 @@ Known Open questions / notes
   peer so that it can resolve the conflict.  FIXME: how are we
   encouraging key gossip in a group?
 
-- We assume that an MUA only sends a key to a peer if the peer's last
-  message indicated Autocrypt abilities/requests.  If a peer has sent a
-  non Autocrypt mail, an MUA shall by default send a cleartext mail
-  (unless explicitly requested by its user to continue sending
-  encrypted).
-
 - how does Autocrypt interact with today's mailing list managers?  This
   might not be relevant except for encrypted mailing lists.
 
