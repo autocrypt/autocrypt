@@ -147,8 +147,8 @@ characteristics/requirements of of what SMAs need to provide:
   regular inbox. 
 
 - probably: size of SMA should not grow linearly with number of
-  incoming/outgoing mails, for example messages that have been processed
-by a MUA must be deleted 
+  incoming/outgoing mails, for example messages that have been
+  processed by a MUA must be deleted
 
 - there should be a policy/expiry of messages for MUAAs which don't
   exist/are not alive anymore
