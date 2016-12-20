@@ -8,11 +8,8 @@ def main():
         url='https://autocrypt.org',
         license='MIT license',
         platforms=['unix', 'linux', 'osx', 'cygwin', 'win32'],
-        author='holger krekel',
-        author_email='holger at merlinux.eu',
-        entry_points={'console_scripts': [
-            'ciss = ciss:main',
-        ]},
+        author='holger krekel and the autocrypt team',
+        author_email='autocrypt at lists.mayfirst.org',
         classifiers=['Development Status :: 3 - Alpha',
                      'Intended Audience :: Developers',
                      'License :: OSI Approved :: MIT License',
