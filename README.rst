@@ -11,4 +11,3 @@ If you want to read and work on the docs locally checkout the `doc
 You can `install sphinx
 <http://www.sphinx-doc.org/en/stable/install.html>`_ and then run
 ``make html`` in the ``doc`` directory to regenerate docs locally.
-
