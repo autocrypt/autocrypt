@@ -3,13 +3,19 @@ Autocrypt - E-mail Encryption for Everyone
 
 **STATUS of all docs here**:
  needs full review after after many changes and flesh outs 
- which happened during the "automatic mail 
- encryption" unconference in Berlin Dec 14-18th <https://github.com/autocrypt/ame2016>`_
+ which happened during the "Automatic Mail 
+ Encryption" unconference in Berlin Dec 14-18th <https://github.com/autocrypt/ame2016>`_
 
 Autocrypt is a project to opportunistically replace cleartext mail
 with encrypted mail as much as humanly possible.
- 
 
+:doc:`Why Autocrypt? <rationale>`
+
+The documents here are mainly intended for software developers.  In
+particular, implementers of mail user agents who are interested in
+making their tools autocrypt-compatible.
+
+     
 Current work-in-progress specs:
 
 :doc:`Autocrypt key discovery <mua-keydiscovery>`
