@@ -69,3 +69,75 @@ keys so in case they leak to pgp keyservers they do not leak the email
 address. This would not be compatible with requiring the email address
 as the uid.
 
+How does Autocrypt interact with message signing?
+-------------------------------------------------
+
+In general, Autocrypt assumes that mail is either plaintext mail, or
+it is both encrypted and signed.  This assumption makes it possible to
+create a simpler user experience.
+
+While there are valid usecases for signed, unencrypted mail, or for
+encrypted, unsigned mail, they are not the use case targeted by
+Autocrypt.
+
+Why use OpenPGP and PGP/MIME instead of some other encryption tech?
+-------------------------------------------------------------------
+
+We picked a commonly-understood and implemented mail encryption
+technology so that implementers wouldn't need to start from scratch.
+
+Future levels of the Autocrypt specification may support different
+encryption technologies, but the main immediate goal is to get wider
+adoption, not to re-invent the encryption mechanism itself.
+
+Please see `key-formats` for more discussion.
+
+Why don't you use the ``User-Agent`` header to detect different mail apps?
+--------------------------------------------------------------------------
+
+Not all mail apps implement the ``User-Agent`` header (and there is an
+ongoing effort to discourage its use as a way to reduce metadata
+leakage).  Also, some mail apps are used only to read mail, and are
+not used to send at all, so the remote peer can't see anything about
+those specific apps.
+
+We could encourage each MUA to publish a UUID to inform the remote
+peer that multiple mail apps are in use, but it's not clear that this
+offers much benefit, and it leaks information that we don't need to
+leak.
+
+What about spammers accidentally downgrading encryption?
+--------------------------------------------------------
+
+A spammer who forges mail from a given address could potentially
+downgrade encryption for that person as a side effect.  Please see
+`level0/public-key-management` for details about expected interaction
+with spam filters.
+
+How does Autocrypt interact with today's mailing list managers?
+---------------------------------------------------------------
+
+Mailing lists that distribute cleartext (unencrypted) mail may end up
+distributing their user's public key material in the ``Autocrypt:``
+headers of the distributed mail.  For mailing lists that rewrite
+``From:`` headers, these ``Autocrypt:`` headers will be dropped by
+recipients, which is fine.  
+
+For encrypted mailing lists like `schleuder
+<http://schleuder2.nadir.org/>`_, we haven't done a full analysis yet.
+Suggestions welcome!
+
+Why don't you encourage gossiping keys of other users?
+------------------------------------------------------
+
+This is a plausible future improvement for Autocrypt.  But being
+willing to accept gossiped keys for other users presents a more
+complicated and risky public-key state management situation for the
+receiving client.  For example, what if one client gets multiple
+different keys for a target address from different gossiping peers --
+should the client encrypt to all keys or just some?  How should those
+keys interact with keys received from the end peer directly? Because
+of these complications, we're sidestepping this problem for level 0.
+
+We welcome drafts proposing sensible ways to manage key gossip in
+group e-mail communication for future levels of Autocrypt.
