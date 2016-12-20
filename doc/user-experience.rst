@@ -12,7 +12,7 @@ encrypted.
 During the initial rollout, we do not expect most e-mails to be
 encrypted.  Rather, only mails that are deliberately encrypted by the
 sender will be unreadable on webmail or non-Autocrypt clients.  In a
-near future :doc:`level of implementation<levels>`_, users will be
+near future `level of implementation <levels.html>`_, users will be
 able to read mail from *any* e-mail app that is Autocrypt-enabled, not
 just one.
 
@@ -21,5 +21,5 @@ but the most we expect a normal user to see will be a single button
 when composing outbound e-mail that allows the user to encrypt the
 existing message.  Some apps might not even have that.
 
-If you are an implementer, please see :doc:`the Level 0 UI
-guidance<level0/user-interface>`_ for more details.
+If you are an implementer, please see `the Level 0 UI
+guidance <level0/user-interface.html>`_ for more details.
