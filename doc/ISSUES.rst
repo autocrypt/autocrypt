@@ -2,10 +2,6 @@
 Known Open questions / notes 
 -----------------------------
 
-- Instead of transporting keysdata through Autocrypt headers we could
-  also add attachments, e.g. application/pgp-keys ones and put Autocrypt
-  headers into it.
-
 - We don't currently address signatures at all -- how does Autocrypt
   interact with message signing?
 

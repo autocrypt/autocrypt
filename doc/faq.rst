@@ -1,7 +1,9 @@
 Why are you using headers rather than attached keys?
 ----------------------------------------------------
 
-Attachments are visible to users of non Autocrypt compatible MUAs.
+Attachments are visible to users of non Autocrypt-compatible MUAs,
+while headers are not.  We don't want to present distracting or
+confusing material to those users.
 
 Why are you sending keys in all the mails and not just announcing capabilities?
 -------------------------------------------------------------------------------
