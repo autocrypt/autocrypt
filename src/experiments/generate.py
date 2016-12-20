@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # vim:ts=4:sw=4:expandtab 2
-"""Functions to generate GPG INBOME keys and headers"""
+"""Functions to generate Autocrypt OpenPGP keys and headers"""
 
 import logging
 import sys
@@ -173,18 +173,18 @@ def key_base64(key):
     return keybase64
 
 
-def generate_INBOME_header(key, uid):
-    """Generate INBOME header
+def generate_Autocrypt_header(key, uid):
+    """Generate Autocrypt header
 
     :param key: key (either public or private)
     :type key: PGPKey
     :param uid: email address
     :type uid: string
-    :return: INBOME header
+    :return: Autocrypt header
     :rtype: string
 
     """
     keybase64 = key_base64(key)
-    # NOTE: this is done right now in inbome.bot
-    inbome_header = "to=%s; key=\n" % (uid,) + keybase64
-    return inbome_header
+    # NOTE: this is done right now in autocrypt.bot
+    autocrypt_header = "to=%s; key=\n" % (uid,) + keybase64
+    return autocrypt_header
