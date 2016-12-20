@@ -3,7 +3,6 @@ Why are you using headers rather than attached keys?
 
 Attachments are visible to users of non Autocrypt compatible MUAs.
 
-
 Why are you sending keys in all the mails and not just announcing capabilities?
 -------------------------------------------------------------------------------
 

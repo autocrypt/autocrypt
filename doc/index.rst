@@ -8,23 +8,6 @@ Autocrypt - E-mail Encryption for Everyone
 Autocrypt is a project to opportunistically replace cleartext mail
 with encrypted mail in as many places as possible.
  
-Email has been declared dead many times but refuses to die. It remains
-the largest open federated identity and messaging system, anchors the
-web and mobile phones and continues to relay sensitive information
-between citizens and organisations.  However, bringing pervasive
-end-to-end encryption to this infrastructure has failed so far.
-
-The Autocrypt effort aims to develop opportunistic mail encryption
-drafts and working code that normal people can use a minimum of
-interruption to their everyday e-mail workflow. To ease adoption, it
-restricts itself to only require changes from mail programs (MUAs) but
-no changes whatsoever from mail providers.
-
-Autocrypt follows recommendations from RFC7435 "Opportunistic
-security" and specifically avoids talking to users about keys without
-them having asked for it first. **The overall goal of Autocrypt is to
-help massively increase the overall number of encrypted mails world
-wide**.
 
 Current work-in-progress specs:
 

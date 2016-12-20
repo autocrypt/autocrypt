@@ -87,3 +87,19 @@ users will never properly verify each other's encryption keys.
 There is a concern that if opportunistically-encrypted mail becomes
 the standard, no one will bother to implement good UX for users in strong
 identity verification.
+
+Spam and malware filtering
+--------------------------
+
+Many deployed spam and malware filtering solutions depend on
+centralized scanning.  This is likely to fail if all mail is
+end-to-end encrypted.
+
+FIXME: more descriptions of the problem here.
+
+Mitigations:
+
+ * A large part of the spam problem is sent from unknown accounts.
+   Since Autocrypt doesn't explicitly publish public keys without an
+   exchange of e-mail, spammers won't be able to encrypt their
+   messages unless the user has replied to them.

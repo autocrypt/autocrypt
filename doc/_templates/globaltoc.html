@@ -1,8 +1,47 @@
 
 <ul>
   <li><a href="{{ pathto('index') }}">Autocrypt index</a></li>
-  <li><a href="{{ pathto('mua-keydiscovery') }}">Autocrypt Key discovery</a></li>
-  <li><a href="{{ pathto('multi-device') }}">Multi-device handling</a></li>
-  <li><a href="{{ pathto('mua-internals') }}">MUA internals</a></li>
+  <li><a href="{{ pathto('rationale') }}">Why Autocrypt?</a>
+    <ul>
+      <li><a href="{{ pathto('user-experience') }}">User Experience</a></li>
+      <li><a href="{{ pathto('ecosystem-dangers') }}">Mitigating Risk</a></li>
+    </ul>
+  </li>
+  <li><a href="{{ pathto('roadmap') }}">Roadmap</a>
+    <ul>
+      <li><a href="{{ pathto('levels') }}">Levels</a>
+      <li><a href="{{ pathto('compatibility') }}">Compatibility</a>
+      <li><a href="{{ pathto('status') }}">Status of Autocrypt-enabled MUA implementations</a>
+    </ul>
+  </li>
+  <li><a href="{{ pathto('level-0') }}">Level 0 baseline requirements (for implementers</a>
+    <ul>
+      <li><a href="{{ pathto('level0/types') }}">Key and message type</a></li>
+      <li><a href="{{ pathto('level0/secret-manageent') }}">Secret key management</a></li>
+      <li><a href="{{ pathto('level0/public-key-management') }}">Public key Management</a></li>
+      <li><a href="{{ pathto('level0/account-locking') }}">One Autocrypt client per e-mail account</a></li>
+      <li><a href="{{ pathto('level0/user-interface') }}">Common User Interface</a></li>
+    </ul>
+  <li>Implementation guidance for compatible agents
+    <ul>
+      <li><a href="{{ pathto('guidance/interaction-with-existing-mail-crypto') }}">Existing encryption-capable MUAs</a></li>
+      <li><a href="{{ pathto('guidance/password-management') }}">Password Management</a></li>
+    </ul>
+  <li><a href="{{ pathto('header-specification') }}>">Bytes on the wire (the <tt>Autocrypt:</tt> header)</a></li>
+  <li><a href="{{ pathto('faq') }}">FAQ</a></li>
+  <li>Appendices
+    <ul>
+<!--      
+ * Design decisions and justification
+ * Webmail considerations
+ * Level > 0 ideas:
+   * Possible future key types
+   * Searching encrypted mail (session key caching, etc)
+   * Useful patterns for key expiry
+   * Device pairing and synchronization
+   * Heuristics for dealing with "nopreference"
+   * out-of-band peer key verification mechanisms
+   * deletable ("forward secure") encrypted mail
+  -->
+    </ul>
 </ul>
-
