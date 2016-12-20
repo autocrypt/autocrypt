@@ -67,7 +67,7 @@ but the key should not be uploaded in the first place.
 Accidental or malicious uploading of keys with associated email
 addresses should be prevented by introducing a flag at the keys that
 says that keyservers shouldn't accept it.  See `issue #7
-<https://github.com/mailencrypt/inbome/issues/7>`_.
+<https://github.com/autocrypt/inbome/issues/7>`_.
 
 
 **For current OpenPGP users**

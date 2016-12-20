@@ -4,7 +4,7 @@ Autocrypt - E-mail Encryption for Everyone
 **STATUS of all docs here**:
  needs full review after after many changes and flesh outs 
  which happened during the "automatic mail 
- encryption" unconference in Berlin Dec 14-18th <https://github.com/mailencrypt/ame2016>`_
+ encryption" unconference in Berlin Dec 14-18th <https://github.com/autocrypt/ame2016>`_
 
 Autocrypt is a project to opportunistically replace cleartext mail
 with encrypted mail as much as humanly possible.
