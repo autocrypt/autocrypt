@@ -44,7 +44,7 @@ and privacy enthusiasts.
 
 
 unsorted collection of docs and fragments
-+++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++
 
 The following docs need refinement and incorporation into
 our sorted, maintained collection.
@@ -74,30 +74,37 @@ you may:
 
 - join the `autocrypt mailing list`_
 
-- join chats at **#nextleap on freenode or matrix.org**.
+- join chats at **#autocrypt on freenode or matrix.org**.
 
 - collaborate through PRs, issues and edits on our
   `github autocrypt repo <https://github.com/autocrypt/autocrypt>`_
 
 .. _`autocrypt mailing list`: https://lists.mayfirst.org/mailman/listinfo/autocrypt
 
-
 .. _`upcoming events`:
 
 Upcoming events
 ----------------
 
-- Dec 2016: at 33c3, Hamburg, scheduled talk at the 
-  "we fix the net session" and probably a separate one.
+- Dec 2016: at `33c3`_, Hamburg, scheduled talk at the 
+  `We Fix the Net`_ session and probably a separate one.
 
 - Jan 2017: a prospective lightning talk from dkg at 
-  real-world-crypto the week after in New york
+  `RealWorldCrypto 2017`_ in New york
 
-- Mar 2017: autocrypt sessions at the Internet Freedom Festival
-  with hackers and users, several autocrypt-people there.
+- Mar 2017: Autocrypt sessions at the `Internet Freedom Festival`_
+  with hackers and users, several Autocrypt-people there.
 
-- April/May 2017: next autocrypt unconf-hackathon planned
-  roughly around DE/NL/CH
+- April/May 2017: next Autocrypt unconf-hackathon planned roughly
+  around DE/NL/CH
+
+.. _`33c3`: https://events.ccc.de/congress/2016/wiki/Main_Page
+
+.. _`We Fix the Net`: https://events.ccc.de/congress/2016/wiki/Session:We_Fix_the_Net
+  
+.. _`RealWorldCrypto 2017`: http://www.realworldcrypto.com/rwc2017
+
+.. _`Internet Freedom Festival`: https://internetfreedomfestival.org/
 
 .. 
     :doc:`Autocrypt reasons <reasons>` lists reasons and frequent questions. 
