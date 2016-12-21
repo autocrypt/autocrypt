@@ -1,3 +1,8 @@
+
+
+Interoperability with existing PGP practises
+-------------------------------------------------
+
 should Autocrypt keys appear on key servers?
 
 - no!

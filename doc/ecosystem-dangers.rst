@@ -88,12 +88,21 @@ There is a concern that if opportunistically-encrypted mail becomes
 the standard, no one will bother to implement good UX for users in strong
 identity verification.
 
+Mitigations:
+
+- make out-of-band verification of keys between users 
+  fun and thus increase the risk for attackers to get detected.
+
+- research how "level 2" autocrypt could evolve to offer
+  automated support against active attackers.
+
 Spam and malware filtering
 --------------------------
 
 Many deployed spam and malware filtering solutions depend on
 centralized scanning.  This is likely to fail if all mail is
-end-to-end encrypted.
+end-to-end encrypted and large key directories are exposed
+to spam organisations.  
 
 FIXME: more descriptions of the problem here.
 

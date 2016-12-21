@@ -5,7 +5,7 @@ Autocrypt aims to provide users with the same user experience they
 have with their normal e-mail.
 
 The main change we expect users to notice is that they will only be
-able to read any e-mail encrypted to then when using a single
+able to read any e-mail encrypted to them when using a single
 Autocrypt-enabled device or app.  However, not all mail will be
 encrypted.
 

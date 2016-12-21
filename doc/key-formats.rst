@@ -1,11 +1,14 @@
 Key Formats for Autocrypt
 =========================
 
+Autocrypt requires keys of a certain format to reduce the requirements
+for autocrypt-supporting implementations.  We try to be very specific
+about which keys we are using (currently all OpenPGP based).
+
+.. contents::
+
 ``p`` - OpenPGP Based
 ---------------------
-
-Autocrypt requires keys of a certain format to reduce the requirements
-for implementations.
 
 If OpenPGP key format is used, the message also uses OpenPGP Message
 encoding (PGP/MIME, RFC 3156)
