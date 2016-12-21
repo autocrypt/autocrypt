@@ -96,19 +96,27 @@ Mitigations:
 - research how "level 2" autocrypt could evolve to offer
   automated support against active attackers.
 
-Spam and malware filtering
---------------------------
 
-Many deployed spam and malware filtering solutions depend on
-centralized scanning.  This is likely to fail if all mail is
-end-to-end encrypted and large key directories are exposed
-to spam organisations.  
+A note on Autocrypt and provider spam/malware filters
+----------------------------------------------------------
 
-FIXME: more descriptions of the problem here.
+Mike Hearn raised some fundamental concerns in his `Modern anti-spam
+and E2E crypto post on the modern crypto mailing list
+<https://moderncrypto.org/mail-archive/messaging/2014/000780.html>`_
+on how end-to-end encrypted mails and spam infrastructure possibly
+interfere.  While we may conceive new ways to fight spam in an E2E 
+setting by increased DKIM usage and other additional measures 
+the topic is a serious one as adoption of more encrypted mails 
+could be seriously hampered if encryption can bypass current
+anti-spam technology.
 
-Mitigations:
-
- * A large part of the spam problem is sent from unknown accounts.
-   Since Autocrypt doesn't explicitly publish public keys without an
-   exchange of e-mail, spammers won't be able to encrypt their
-   messages unless the user has replied to them.
+Autocrypt works with existing provider Anti-Spam infrastructures
+because they can continue to check the initial cleartext mails for
+suspicious content. Only if a user replies to a (likely non-spam) mail
+will Autocrypt make a MUA send an encryption key.  Without being able to
+get sufficiently many replies from users it will likely be to
+massively harvest encryption keys; there is no central registery for
+key-mail address relations.  Massive collection of key/mailaddress
+associations would require co-operation from or compromise of big mail
+providers which is unlikely given they have been fighting unsolicited
+mails for decades and their business models depend on it. 

@@ -1,12 +1,9 @@
 Autocrypt in-band key discovery
 ===============================
 
-Autocrypt key discovery requires support only from mail programs and works with any existing mail provider, it works fully offline and is only based on the two core abilities every mail program has: sending and receiving mail.
-
-Similar to TLS's machine to machine handshake, users first need to have a cleartext mail exchange to negotiate encryption.  Autocrypt-supporting MUAs add encryption key information to every mail they send out.  Subsequent mails from the receiving peer will then be encrypted. Mail programs signal encryption-status to their users at "compose-mail" time but avoid asking for decisions about keys. In fact, key exporting, importing and upgrading all happens automatically and without user intervention. In accordance with :rfc:`7435` Autocrypt is fine with dropping back to cleartext in some cases (see below).
+Autocrypt key discovery happens through headers of mail messages sent between mail apps. Similar to TLS's machine to machine handshake, users first need to have a cleartext mail exchange.  Subsequent mails from the receiving peer will may then be encrypted.  Mail apps show encryptability to their users at "compose-mail" time and give them a choice of encryption or cleartext, defaulting to what the other side has specified in their header.
 
 Autocrypt key discovery is safe only against passive eavesdroppers. It is trivial for providers to perform active downgrade or man-in-the-middle attacks on Autocrypt's key discovery.  Users may, however, detect such tampering if they out-of-band verify their keys at some later point in time.  This possiblity in turn is likely to keep most providers honest or at least prevent them from performing active attacks on a massive scale.
-
 
 .. contents::
 
@@ -57,8 +54,7 @@ Bob's MUA will scan the incoming mail, find Alice's key and store it associated
 to the ``alice@a.example`` address taken from the ``to``-attribute.
 When Bob now composes a mail to Alice his MUA will find the key and signal to
 Bob that the mail will be encrypted and after finalization of the mail encrypt
-it.
-Moreover, Bob's MUA will add its own Encryption Info::
+it.  Moreover, Bob's MUA will add its own Encryption Info::
 
     Autocrypt: to=bob@b.example; type=p; prefer-encrypted=yes; key=...
 
@@ -140,31 +136,79 @@ now sees an unencrypted mail from Alice and no encryption header. This
 will disable encryption to Alice for subsequent mails.
 
 
-A note on Autocrypt and existing spam infrastructure
-----------------------------------------------------------
+``p`` OpenPGP Based Keyformat
+-----------------------------
 
-Mike Hearn raised some fundamental concerns in his `Modern anti-spam
-and E2E crypto post on the modern crypto mailing list
-<https://moderncrypto.org/mail-archive/messaging/2014/000780.html>`_
-on how end-to-end encrypted mails and spam infrastructure possibly
-interfere.  While it's conceivable to imagine new ways to fight spam
-in an E2E setting by increased DKIM usage and additional measures and
-policies the topic is a serious one as adoption of more encrypted
-mails could be seriously hampered if encryption can bypass current
-anti-spam technology.
+Autocrypt pins down key formats and algorithms to reduce the requirements
+for autocrypt-supporting implementations.  If OpenPGP key format is used, 
+the message also uses OpenPGP Message encoding (PGP/MIME, RFC 3156)
 
-Autocrypt works well with existing provider Anti-Spam infrastructures
-because they can continue to check the initial cleartext mails for
-suspicious content. Only if a user replies to a (likely non-spam) mail
-will Autocrypt make a MUA send an encryption key.  Without being able to
-get sufficiently many replies from users it will likely be to
-massively harvest encryption keys; there is no central registery for
-key-mail address relations.  Massive collection of key/mailaddress
-associations would require co-operation from or compromise of big mail
-providers which is unlikely given they have been fighting unsolicited
-mails for decades and their business models depend on it. But even if
-a user's encryption key becomes public the worst outcome are increased
-numbers of unsoliticed mails arriving at the MUA side. Upgrading to a
-new key can mitigate the problem and is supported by Autocrypt.
+**For New Users**
+
+We only include a minimum key in the headers that has:
+
+* a primary key ``Kp``
+
+  * a uid that is the email address
+  * a self signature
+
+* one encryption subkey ``Ke``
+
+  * a signature for the subkey by the primary key
+
+… and nothing else. For maximum interoperability and sanity a
+certificate sent by an Autocrypt-enabled agent MUST contain exactly
+these five OpenPGP packets.
+
+For the key algorithms used at a given level of support see levels.rst
+
+**Reasoning**
+
+*Why ed25519+cv25519*
+
+short keys for short header lines
+
+*why email address as uid*
+
+ Possibilities for uid we considered:
+
+ ======= == == == === ==
+ Option  SC BC VO RvK SR
+ ======= == == == === ==
+ no uid            x  x
+ email   x  x   x  x
+ fixed         x   x  x
+ hash    x      x   x x
+ ======= == == == === ==
+
+SC: self-claim. This was very important to us for usability
+reasons. This restricted us to either use the email directly or
+hashed.
+
+BC: backwards compatibility
+
+VO: valid OpenPGP
+
+RvK: allows revocations using keyservers
+
+SR: Spam resistant/publicly list email addresses
+
+Using a salted hash of the email address for the uid to not list them
+on keyservers would prevent the privacy issue of public mail addresses
+but the key should not be uploaded in the first place.
+
+Accidental or malicious uploading of keys with associated email
+addresses should be prevented by introducing a flag at the keys that
+says that keyservers shouldn't accept it.  See `issue #7
+<https://github.com/autocrypt/inbome/issues/7>`_.
 
 
+**For current OpenPGP users**
+
+* What about other keys, that i have been using with other properties?
+  (smart-card, RSA, ...)
+
+  * You can still create a compatible header with a tool we will
+    provide. We are targeting users who have not used pgp
+    before. Nevertheless most clients will still support other key
+    formats. But they are not required to.
