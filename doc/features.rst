@@ -15,7 +15,7 @@ from previous ones here are some of its features:
   motivation of this and the next points.
  
 - **Focus on incremental deployment**, always consider that there
-  will be both Autocrypt-enabled MUAs and traditional plain ones,
+  will be both Autocrypt-enabled mail apps and traditional plain ones,
   interacting with each other. 
 
 - **Don't ask users anything about keys, ever.** And minimize and 
@@ -30,12 +30,12 @@ from previous ones here are some of its features:
   tell each other how and when to encrypt to each other
   by attaching neccessary information along with mails.
 
-- **Implement and specify "Level 0" support in several MUAs in spring
+- **Implement and specify "Level 0" support in several mail apps in spring
   2017.** Keep Level 0 minimal enough that it's easy for developers to
   adopt it and we can start to drive efforts from real-life experiences.
   Currently involved are developers from `K9/Android`_, `Enigmail`_,
   `Mailpile`_, `Bitmask/LEAP`_ and others who are interested to add
-  support for OSX or write reference "MUA bots" in `Python`_ or `Go`_.
+  support for OSX or write reference "bots" in `Python`_ or `Go`_.
 
 .. _`K9/Android`: https://k9mail.github.io/
 .. _`Enigmail`: https://enigmail.net/
