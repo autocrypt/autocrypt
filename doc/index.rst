@@ -4,13 +4,13 @@ Autocrypt - E-mail Encryption for Everyone
 **The Autocrypt project aims to ease end-to-end email encryption 
 such that it eventually happens automatically.**
 
-E-mail has been declared dead many times but refuses to die. It remains
-the largest open federated identity and messaging system, anchors the
-web, mobiles and continues to relay sensitive information between
-citizens and organisations. And that despite the constant drag of
-apps who want to lure us into in-app-only communication.
+E-mail has been declared dead many times but refuses to die.  And that 
+despite the constant drag of apps who want to lure us to
+in-app-only communication.  E-mail remains the largest open federated 
+identity and messaging eco-system, anchors the web, mobiles and continues 
+to relay sensitive information between citizens and organisations. 
 
-The autocrypt project is driven by various mail app developers, hackers 
+The autocrypt project is driven by mail app developers, hackers 
 and researchers who are willing to take fresh approaches, learn from
 past mistakes, and collectively aim to increase the overall encryption
 of E-Mail in the net.  The group effort was born and named "autocrypt"
