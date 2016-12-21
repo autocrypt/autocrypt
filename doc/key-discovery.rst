@@ -22,8 +22,6 @@ Establishing encryption happens as a side effect when people send each other mai
 - A MUA will encrypt a message if it earlier saw encryption keys for all
   recipients.
 
-Autocrypt does not prescribe or describe encryption algorithms or key formats.  It is meant to work nicely with ordinary PGP keys, however.
-
 Header Format
 -------------
 
