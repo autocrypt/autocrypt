@@ -15,48 +15,9 @@ and researchers who are willing to take fresh approaches, learn from
 past mistakes, and collectively aim to increase the overall encryption
 of E-Mail in the net.  The group effort was born and named "autocrypt"
 on December 17th 2016 by ~20 people during a 5-day meeting at the 
-OnionSpace in berlin. It's a dynamic, fun process which is open to 
-new influences, contributions and people. No need to tweet btw but
-please do join our `autocrypt mailing list`_ :)
-
-Features of the Autocrypt effort
---------------------------------
-
-End-to-end encrypted e-mail has been around for decades, but has failed
-to see wide adoption outside of specialist communities, in large part
-because of difficulties user experience and certification models.
-To better understand how the fresh autocrypt effort is different 
-from previous ones here are some of its features:
-
-- **Protect first against passive data-collecting adversaries**,
-  resist the temptation to early-add complexity which aim to 
-  prevent active attacks.  See `RFC7435 A New Perspective
-  <https://tools.ietf.org/html/rfc7435#section-1.2>`_ for some
-  motivation of this and the next points.
- 
-- **Focus on incremental deployment**, always consider that there
-  will be both autocrypt-enabled MUAs and traditional plain ones,
-  interacting with each other. 
-
-- **Don't ask users anything about keys, ever.** And minimize and 
-  useability-test what needs to be decided by users and include 
-  resulting UI guidance in the specs.  Minimize friction for people 
-  using multiple mail apps with their accounts.
-
-- **Go for mail app changes, don't require changes from mail providers**, 
-  allowing fluid development of deployable code and specs.
-
-- **Use decentralized, in-band key discovery.**  Make mail apps
-  tell each other how and when to encrypt to each other
-  by attaching neccessary information along with mails.
-
-- **Implement and specify "level0" support in several MUAs in spring
-  2017.**  Keep level0 minimal enough that it's easy for developers to
-  adopt it and we can start to drive efforts from real-life experiences.
-  Currently involved are developers from K9/Android, Enigmail, Mailpile, 
-  Bitmask/LEAP and others who are interested to add support for OSX 
-  or write reference "MUA bots" in Python or Go.
-
+OnionSpace in Berlin. It's a dynamic, fun process which is open to 
+new people, influences and contributions. No need to tweet but
+you may join our `autocrypt mailing list`_ :)
 
 Current docs (work-in-progress)
 -------------------------------
@@ -64,15 +25,12 @@ Current docs (work-in-progress)
 The following in-progress documents are written for software developers
 and privacy enthusiasts.
 
-:doc:`Autocrypt key discovery <mua-keydiscovery>`
-     presents and discusses how mail programs negotiate encryption
-     with each other.
+:doc:`features`
+     discusses how the Autocrypt efforts is different from past 
+     e2e encryption efforts.
 
-:doc:`Autocrypt key format <key-formats>`
-     discusses the precise header and key format.
-
-:doc:`Autocrypt levels <levels>`
-     discusses level0 and level1 support.
+:doc:`Autocrypt key discovery <key-discovery>`
+     discusses how mail programs negotiate encryption with each other.
 
 :doc:`Autocrypt MUA internals <mua-internals>`
      discusses requirements, operations and the state MUAs need to
@@ -85,6 +43,11 @@ and privacy enthusiasts.
 
 unsorted collection of docs and fragments
 +++++++++++++++++++++++++++++++++++++++++++++++
+
+The following docs need refinement and incorporation into
+our sorted, maintained collection.
+
+:doc:`Autocrypt levels <levels>`
 
 :doc:`muaa-state` 
 
