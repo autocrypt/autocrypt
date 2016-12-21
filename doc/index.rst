@@ -18,7 +18,8 @@ on December 17th 2016 by ~20 people during a 5-day meeting at the
 OnionSpace in Berlin. It's a dynamic, fun process which is open to 
 new people, influences and contributions. No need to tweet but
 we have :ref:`contact channels` and :ref:`upcoming events`
-where you may talk to us.
+where you may talk with us.
+
 
 Current docs (work-in-progress)
 -------------------------------
