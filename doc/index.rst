@@ -17,7 +17,8 @@ of E-Mail in the net.  The group effort was born and named "autocrypt"
 on December 17th 2016 by ~20 people during a 5-day meeting at the 
 OnionSpace in Berlin. It's a dynamic, fun process which is open to 
 new people, influences and contributions. No need to tweet but
-you may join our `autocrypt mailing list`_ :)
+we have :ref:`contact channels` and :ref:`upcoming events`
+where you may talk to us.
 
 Current docs (work-in-progress)
 -------------------------------
@@ -62,8 +63,10 @@ our sorted, maintained collection.
 :doc:`user-experience`
 
 
-Contact points
-----------------------
+.. _`contact channels`:
+
+Channels
+--------
 
 If you want to help, including offering constructive criticism, 
 you may:
@@ -77,8 +80,11 @@ you may:
 
 .. _`autocrypt mailing list`: https://lists.mayfirst.org/mailman/listinfo/autocrypt
 
-Next events
--------------
+
+.. _`upcoming events`:
+
+Upcoming events
+----------------
 
 - Dec 2016: at 33c3, Hamburg, scheduled talk at the 
   "we fix the net session" and probably a separate one.
@@ -91,8 +97,6 @@ Next events
 
 - April/May 2017: next autocrypt unconf-hackathon planned
   roughly around DE/NL/CH
-
-
 
 .. 
     :doc:`Autocrypt reasons <reasons>` lists reasons and frequent questions. 
