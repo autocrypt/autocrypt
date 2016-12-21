@@ -18,8 +18,8 @@ should my own Autocrypt keys appear in my keyring?
 
 can I put my regular pgp keys into Autocrypt?
 
-- MUAs should not provide UI for importing keys for level1
-- allowed for level0 to get traction early on (as replacement for keyservers)
+- MUAs should not provide UI for importing keys for Level 1
+- allowed for Level 0 to get traction early on (as replacement for keyservers)
 
 can I use someone's pgp key that i have for encrypting mail to that person?
 
