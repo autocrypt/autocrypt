@@ -10,10 +10,10 @@ in-app-only communication.  E-mail remains the largest open federated
 identity and messaging eco-system, anchors the web, mobiles and continues 
 to relay sensitive information between citizens and organisations. 
 
-The autocrypt project is driven by mail app developers, hackers 
+The Autocrypt project is driven by mail app developers, hackers 
 and researchers who are willing to take fresh approaches, learn from
 past mistakes, and collectively aim to increase the overall encryption
-of E-Mail in the net.  The group effort was born and named "autocrypt"
+of E-Mail in the net.  The group effort was born and named "Autocrypt"
 on December 17th 2016 by ~20 people during a 5-day meeting at the 
 OnionSpace in Berlin. It's a dynamic, fun process which is open to 
 new people, influences and contributions. No need to tweet but
@@ -72,14 +72,15 @@ Channels
 If you want to help, including offering constructive criticism, 
 you may:
 
-- join the `autocrypt mailing list`_
+- join the `Autocrypt mailing list`_
 
 - join chats at **#autocrypt on freenode or matrix.org**.
 
 - collaborate through PRs, issues and edits on our
-  `github autocrypt repo <https://github.com/autocrypt/autocrypt>`_
+  `github Autocrypt repo`
 
-.. _`autocrypt mailing list`: https://lists.mayfirst.org/mailman/listinfo/autocrypt
+.. _`Autocrypt mailing list`: https://lists.mayfirst.org/mailman/listinfo/autocrypt
+.. _`github Autocrypt repo`: https://github.com/autocrypt/autocrypt
 
 .. _`upcoming events`:
 

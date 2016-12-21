@@ -1,9 +1,21 @@
 Autocrypt in-band key discovery
 ===============================
 
-Autocrypt key discovery happens through headers of mail messages sent between mail apps. Similar to TLS's machine to machine handshake, users first need to have a cleartext mail exchange.  Subsequent mails from the receiving peer will may then be encrypted.  Mail apps show encryptability to their users at "compose-mail" time and give them a choice of encryption or cleartext, defaulting to what the other side has specified in their header.
+Autocrypt key discovery happens through headers of mail messages sent
+between mail apps. Similar to TLS's machine to machine handshake,
+users first need to have a cleartext mail exchange.  Subsequent mails
+from the receiving peer will may then be encrypted.  Mail apps show
+encryptability to their users at "compose-mail" time and give them a
+choice of encryption or cleartext, defaulting to what the other side
+has specified in their header.
 
-Autocrypt key discovery is safe only against passive eavesdroppers. It is trivial for providers to perform active downgrade or man-in-the-middle attacks on Autocrypt's key discovery.  Users may, however, detect such tampering if they out-of-band verify their keys at some later point in time.  This possiblity in turn is likely to keep most providers honest or at least prevent them from performing active attacks on a massive scale.
+Autocrypt key discovery is safe only against passive eavesdroppers. It
+is trivial for providers to perform active downgrade or
+man-in-the-middle attacks on Autocrypt's key discovery.  Users may,
+however, detect such tampering if they out-of-band verify their keys
+at some later point in time.  This possiblity in turn is likely to
+keep most providers honest or at least prevent them from performing
+active attacks on a massive scale.
 
 .. contents::
 
@@ -26,13 +38,20 @@ Header Format
 -------------
 
 The ``Autocrypt:`` header MUST have the following format:
+
 ```
-Autocrypt-ENCRYPTION: to=aaa@bbb.cc; [type=(p|...);] [prefer-encrypted=(yes|no);] key=BASE64
+Autocrypt-ENCRYPTION: to=a@b.example; [type=(p|...);] [prefer-encrypted=(yes|no);] key=BASE64
 ```
 
-Where key includes a Base64 representation of a minimal key. For now we only support 'p' as the type, which represents a specific subset of OpenPGP (see key-formats.rst).
-'prefer-encrypted' indicates that agents should default to encrypting when composing emails.
-Autocrypt compatible Agents MUST include one header with a key in a Autocrypt compatible format.
+Where key includes a Base64 representation of a minimal key. For now
+we only support ``p`` as the type, which represents a specific subset
+of OpenPGP (see key-formats.rst).
+
+``prefer-encrypted`` indicates that agents should default to
+encrypting when composing emails to this recipient.
+
+Autocrypt compatible Agents MUST include one header with a key in a
+Autocrypt-compatible format.
 
 "Happy path" example: 1:1 communication
 ---------------------------------------
@@ -71,7 +90,7 @@ We encourage MUA developers to propose heuristics for handling the undirected
 case. We will document the best approaches to develop a shared understanding.
 
 group mail communication (1:N)
-------------------------------------------
+------------------------------
 
 Consider a blank state and a first outgoing message from Alice to Bob
 and Carol.  Alice's MUA add a header just like in the 1:1 case so
@@ -94,8 +113,8 @@ is about **opportunistic** encryption, i.e. encrypt if possible and
 otherwise don't get in the way of users.
 
 
-Loosing access to decryption key
--------------------------------------------
+Losing access to decryption key
+-------------------------------
 
 If Alice loses access to her decryption secret:
 
@@ -119,13 +138,13 @@ your mail") Bob's MUA will see the new key and subsequently use it.
 .. note::
 
     Unless we can get perfect recoverability (also for device loss etc.) we will
-    always have to consider this "fatal" case of loosing a secret key and how
+    always have to consider this "fatal" case of losing a secret key and how
     users can deal with it.  Especially in the federated email context We do
     not think perfect recoverability is feasible.
 
 
-Dowgrading / switch to a MUA without Autocrypt support
-------------------------------------------------------
+Downgrading / switch to a MUA without Autocrypt support
+-------------------------------------------------------
 
 Alice might decide to switch to a different MUA which does not support Autocrypt.
 
@@ -138,7 +157,7 @@ will disable encryption to Alice for subsequent mails.
 -----------------------------
 
 Autocrypt pins down key formats and algorithms to reduce the requirements
-for autocrypt-supporting implementations.  If OpenPGP key format is used, 
+for Autocrypt-supporting implementations.  If OpenPGP key format is used, 
 the message also uses OpenPGP Message encoding (PGP/MIME, RFC 3156)
 
 **For New Users**
@@ -197,8 +216,8 @@ but the key should not be uploaded in the first place.
 
 Accidental or malicious uploading of keys with associated email
 addresses should be prevented by introducing a flag at the keys that
-says that keyservers shouldn't accept it.  See `issue #7
-<https://github.com/autocrypt/inbome/issues/7>`_.
+says that keyservers shouldn't accept it.  See `issue #1
+<https://github.com/autocrypt/autocrypt/issues/1>`_.
 
 
 **For current OpenPGP users**

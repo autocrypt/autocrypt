@@ -93,7 +93,7 @@ Mitigations:
 - make out-of-band verification of keys between users 
   fun and thus increase the risk for attackers to get detected.
 
-- research how "level 2" autocrypt could evolve to offer
+- research how "level 2" Autocrypt could evolve to offer
   automated support against active attackers.
 
 

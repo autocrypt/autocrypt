@@ -5,7 +5,7 @@ Features of the Autocrypt effort
 End-to-end encrypted e-mail has been around for decades, but has failed
 to see wide adoption outside of specialist communities, in large part
 because of difficulties user experience and certification models.
-To better understand how the fresh autocrypt effort is different 
+To better understand how the fresh Autocrypt effort is different 
 from previous ones here are some of its features:
 
 - **Protect first against passive data-collecting adversaries**,
@@ -15,7 +15,7 @@ from previous ones here are some of its features:
   motivation of this and the next points.
  
 - **Focus on incremental deployment**, always consider that there
-  will be both autocrypt-enabled MUAs and traditional plain ones,
+  will be both Autocrypt-enabled MUAs and traditional plain ones,
   interacting with each other. 
 
 - **Don't ask users anything about keys, ever.** And minimize and 

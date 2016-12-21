@@ -55,8 +55,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Autocrypt'
-copyright = u'2016, hpk, dkg and the autocrypt team'
-author = u'hpk, dkg and the autocrypt team'
+copyright = u'2016, hpk, dkg and the Autocrypt team'
+author = u'hpk, dkg and the Autocrypt team'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
