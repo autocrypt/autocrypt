@@ -65,9 +65,10 @@ you may:
 - join chats at **#autocrypt on freenode or matrix.org**.
 
 - collaborate through PRs, issues and edits on our
-  `github Autocrypt repo`
+  `github Autocrypt repo`_
 
 .. _`Autocrypt mailing list`: https://lists.mayfirst.org/mailman/listinfo/autocrypt
+
 .. _`github Autocrypt repo`: https://github.com/autocrypt/autocrypt
 
 .. _`upcoming events`:
