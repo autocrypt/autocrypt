@@ -94,11 +94,3 @@ Upcoming events
 .. _`RealWorldCrypto 2017`: http://www.realworldcrypto.com/rwc2017
 
 .. _`Internet Freedom Festival`: https://internetfreedomfestival.org/
-
-.. 
-    :doc:`Autocrypt reasons <reasons>` lists reasons and frequent questions. 
-
-.. toctree::
-   :hidden:
-
-   multi-device
