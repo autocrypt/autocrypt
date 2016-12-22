@@ -92,52 +92,32 @@ announcement and places it in the special location.
 
    - Document the claim announcement format
    - Clarify concerns about race conditions, case-sensitivity, etc.
-   
 
-Internal state storage
-----------------------
 
-.. note::
+Header injection in outbound mail
+---------------------------------
 
-    You should be familiar with :ref:`mua-happypath` before reading the
-    following.  
+During message composition where the message will be marked as
+``From:`` an e-mail address that the Autocrypt-capable agent knows the
+secret key material for, it should always include an Autocrypt header
+with the associated public key material as the ``key=`` attribute, and
+it should include the ``to=`` attribute for recipients to match
+on. The most minimal Level 0 MUA will only include these two
+attributes.
 
-MUAs capable of Autocrypt level 0 MUST store some state about the
-capabilities of their remote peers.  Agents MAY also store additional
-information gathered for heuristic purposes, or for other
-cryptographic schemes.  However, in order to support future syncing of
-Autocrypt state between agents, it is critical that Autocrypt-capable
-agents store and update at least the exact state specified here.
+If the ``From:`` address changes during message composition (e.g. if
+the user selects a different outbound identity, the Autocrypt-capable
+client MUST change the ``Autocrypt:`` header.
 
-Conceptually, we represent this state as a table named
-``autocrypt_peer_state`` indexed by the peer's :doc:`canonicalized 
-e-mail address <address-canonicalization>` and key type.  In level 0,
-there is only one type, ``p``, so level 0 agents can implement this by
-indexing only the peer's e-mail address. 
-
-For each e-mail and type, an Agent MUST store the following
-attributes:
-
- * ``pah``: Parsed Autocrypt header, which could be ``null``
- * ``changed``: Timestamp when ``pah`` was last changed
- * `last_seen`: Most recent time that ``pah`` was confirmed
-
-Autocrypt-compatible agents SHOULD track and store in
-``autocrypt_peer_state`` a parsed interpretation ``pah``, which is not
-necessarily the literal header emitted (for the literal header, see
-next section).  The ``pah`` MUST contain the following fields:
-
- * ``key`` -- the raw key material, after base64 decoding
- * ``prefer_encrypted`` -- a tri-state: ``nopreference``, ``yes``, or ``no``
+See :ref:`mua-happypath` for examples of outbound headers and
+the following sections for header format definitions and parsing.
 
 Deriving a Parsed Autocrypt Header from a Message
 -------------------------------------------------
 
-The ``Autocrypt:`` header MUST have the following format:
+The ``Autocrypt:`` header MUST have the following format::
 
-```
-Autocrypt: to=a@b.example; [type=(p|...);] [prefer-encrypted=(yes|no);] key=BASE64
-```
+    Autocrypt: to=a@b.example.org; [type=(p|_*);] [prefer-encrypted=(yes|no);] key=BASE64
 
 Where the value of ``key`` includes a Base64 representation of a
 minimal key. For now we only support ``p`` as the type, which
@@ -166,9 +146,8 @@ list.  If the list of valid headers has more than one entry, it should
 be treated as 0 valid headers (that is, it should return ``null``).
 
 
-
 ``type=p``: OpenPGP Based key data
-----------------------------------
+++++++++++++++++++++++++++++++++++++
 
 For maximum interoperability and sanity a certificate sent by an
 Autocrypt-enabled Level 0 MUA MUST send an OpenPGP "Transferable
@@ -189,6 +168,48 @@ A Level 0 MUA MUST be capable of processing and handling 2048-bit RSA
 keys.  It SHOULD be capable of handling Curve 25519 keys (ed25519 for
 ``Kp`` and cv25519 for ``Ke``), but some underlying toolkits may not
 yet support Curve 25519.
+
+
+Internal state storage
+----------------------
+
+.. note::
+
+    You should be familiar with :ref:`mua-happypath` before reading the
+    following.  
+
+If a remote peer disables Autocrypt or drops back to using a
+non-Autocrypt MUA only we must be able to disable sending encrypted
+mails to this peer automatically.  MUAs capable of Autocrypt level 0
+therefore MUST store state about the capabilities of their remote peers.  
+
+Agents MAY also store additional
+information gathered for heuristic purposes, or for other
+cryptographic schemes.  However, in order to support future syncing of
+Autocrypt state between agents, it is critical that Autocrypt-capable
+agents maintain the state specified here.
+
+Conceptually, we represent this state as a table named
+``autocrypt_peer_state`` indexed by the peer's :doc:`canonicalized 
+e-mail address <address-canonicalization>` and key type.  In level 0,
+there is only one type, ``p``, so level 0 agents can implement this by
+indexing only the peer's e-mail address. 
+
+For each e-mail and type, an Agent MUST store the following
+attributes:
+
+ * ``pah``: Parsed Autocrypt header, which could be ``null``
+ * ``changed``: UTC Timestamp when ``pah`` was last changed
+ * ``last_seen``: Most recent UTC time that ``pah`` was confirmed
+
+Autocrypt-compatible agents SHOULD track and store in
+``autocrypt_peer_state`` a parsed interpretation ``pah``, which is not
+necessarily the literal header emitted (for the literal header, see
+next section).  The ``pah`` MUST contain the following fields:
+
+ * ``key`` -- the raw key material, after base64 decoding
+ * ``prefer_encrypted`` -- a tri-state: ``nopreference``, ``yes``, or ``no``
+
    
 Updating internal state upon message receipt
 --------------------------------------------
@@ -327,21 +348,6 @@ the MUA should follow the following ``autocrypt_update`` algorithm:
    bytestring comparisons of ``key`` data instead.
    
    
-Header injection in outbound mail
----------------------------------
-
-During message composition where the message will be marked as
-``From:`` an e-mail address that the Autocrypt-capable agent knows the
-secret key material for, it should always include an Autocrypt header
-with the associated public key material as the ``key=`` attribute, and
-it should include the ``to=`` attribute for recipients to match
-on. The most minimal Level 0 MUA will only include these two
-attributes.
-
-If the ``From:`` address changes during message composition (e.g. if
-the user selects a different outbound identity, the Autocrypt-capable
-client MUST change the ``Autocrypt:`` header.
-
 Provide a recommendation for message encryption
 -----------------------------------------------
 
