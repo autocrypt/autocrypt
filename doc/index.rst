@@ -52,15 +52,6 @@ and privacy enthusiasts.
 
 :doc:`faq`
 
-unsorted collection of docs and fragments
-+++++++++++++++++++++++++++++++++++++++++
-
-The following docs need refinement and incorporation into
-our sorted, maintained collection.
-
-:doc:`message-encryption`
-
-
 .. _`contact channels`:
 
 Channels
