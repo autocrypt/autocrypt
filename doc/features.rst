@@ -7,8 +7,8 @@ should be as simple as: use an autocrypt-enabled mail app!**
 
 End-to-end encrypted e-mail has been around for decades, but has failed
 to see wide adoption outside of specialist communities, in large part
-because of difficulties user experience and certification models.
-To better understand how the fresh Autocrypt effort is different 
+because of difficulties with user experience and certification models.
+To better understand how the Autocrypt effort is different 
 from previous ones here are some of its features:
 
 - **Protect first against passive data-collecting adversaries**,
@@ -22,7 +22,7 @@ from previous ones here are some of its features:
   interacting with each other. 
 
 - **Don't ask users anything about keys, ever.** And minimize and 
-  useability-test what needs to be decided by users and include 
+  usability-test what needs to be decided by users and include 
   resulting UI guidance in the specs.  Minimize friction for people 
   using multiple mail apps with their accounts.
 
