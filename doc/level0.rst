@@ -31,7 +31,7 @@ has credentials and capabilities to perform these network services:
 
 - Access to a special (IMAP) Shared Message Archive (SMA) folder 
   which can be accessed by all MUAs of a user's devices to co-ordinate 
-  between them.  In Level-0 this is only used for lockout_.
+  between them.  In Level 0 this is only used for lockout_.
 
 If a particular e-mail account does not expose these features
 (e.g. if it only exposes a javascript-driven web interface for message
@@ -63,7 +63,7 @@ never be sent over the wire to any other party.
 When an Autocrypt-enabled MUA configures an e-mail account, it should
 generate these keys and store them locally.  Then it should proceed to 
 try to "claim" the account to `lockout <lockout>`_ other MUAs of the
-same users.  In Level-0 only one MUA can send and receive encrypted
+same users.  In Level 0 only one MUA can send and receive encrypted
 mail through Autocrypt mechanisms.
 
 .. _lockout:
