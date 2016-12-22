@@ -52,6 +52,8 @@ and privacy enthusiasts.
 
 :doc:`faq`
 
+:doc:`glossary`
+
 .. _`contact channels`:
 
 Channels
