@@ -43,6 +43,7 @@ Establishing encryption happens as a side effect when people send each other mai
   recipients.
 
 
+.. _mua-happypath:
 
 "Happy path" example: 1:1 communication
 ---------------------------------------

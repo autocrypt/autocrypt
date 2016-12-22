@@ -14,28 +14,37 @@ to.
 
 .. contents::
 
-Requirements for E-mail Service Providers
------------------------------------------
+Requirements on MUA/E-mail Provider interactions
+------------------------------------------------
 
-Autocrypt tries to impose minimal requirements on e-mail service
-providers as possible.  We assume only that an Autocrypt-capable MUA
-has the credentials and capabilities to access two network services:
+Autocrypt tries to impose minimal requirements on how MUAs and
+e-mail services interact.  We assume that an Autocrypt-capable MUA
+has credentials and capabilities to perform these network services:
 
 - The ability to send e-mail (e.g. via SMTP or Submission) where the
   MUA can control the entire message being sent, including both
   message headers and message body.
 
-- A Shared Message Archive (SMA) accessible in a reliable way by any
-  other MUAs that might also be configured to access the same account
-  (e.g. an IMAP mailbox).
+- The ability to receive e-mail where the MUA gets access to 
+  the entire message being received, including both message 
+  headers and message body.
 
-If a particular e-mail account does not expose these two features
+- Access to a special (IMAP) Shared Message Archive (SMA) folder 
+  which can be accessed by all MUAs of a user's devices to co-ordinate 
+  between them.  In Level-0 this is only used for lockout_.
+
+If a particular e-mail account does not expose these features
 (e.g. if it only exposes a javascript-driven web interface for message
 composition that does not allow setting of e-mail headers, or if it
 only offers POP access to the incoming mail) then the e-mail account
 cannot be used with Autocrypt.  An Autocrypt-capable MUA may still
 access and control the account, but it will not be able to enable
 Autocrypt on it.
+
+.. todo::
+
+    Discuss with webmail developers how to work with, refine 
+    the interactions.
 
 Secret key generation and storage
 ---------------------------------
@@ -52,9 +61,12 @@ retains for the user's IMAP or SMTP accounts.  These secret keys MUST
 never be sent over the wire to any other party.
 
 When an Autocrypt-enabled MUA configures an e-mail account, it should
-generate these keys and store them.  Then it should proceed to try to
-"claim" the account in the account's Shared Mail Archive (SMA) to make
-it clear to other MUAs that it is using the account.
+generate these keys and store them locally.  Then it should proceed to 
+try to "claim" the account to `lockout <lockout>`_ other MUAs of the
+same users.  In Level-0 only one MUA can send and receive encrypted
+mail through Autocrypt mechanisms.
+
+.. _lockout:
 
 Claiming the Account
 --------------------
@@ -78,26 +90,28 @@ announcement and places it in the special location.
 
 .. todo::
 
-   Document the claim announcement format
-
-.. todo::
-
-   Clarify concerns about race conditions, case-sensitivity, etc.
+   - Document the claim announcement format
+   - Clarify concerns about race conditions, case-sensitivity, etc.
    
 
 Internal state storage
 ----------------------
 
+.. note::
+
+    You should be familiar with :ref:`mua-happypath` before reading the
+    following.  
+
 MUAs capable of Autocrypt level 0 MUST store some state about the
 capabilities of their remote peers.  Agents MAY also store additional
 information gathered for heuristic purposes, or for other
-cryptographic schemes.  However, In order to support future syncing of
+cryptographic schemes.  However, in order to support future syncing of
 Autocrypt state between agents, it is critical that Autocrypt-capable
 agents store and update at least the exact state specified here.
 
 Conceptually, we represent this state as a table named
-``autocrypt_peer_state`` indexed by the peer's canonicalized (see
-:doc:`address-canonicalization`) e-mail address and type.  In level 0,
+``autocrypt_peer_state`` indexed by the peer's :doc:`canonicalized 
+e-mail address <address-canonicalization>` and key type.  In level 0,
 there is only one type, ``p``, so level 0 agents can implement this by
 indexing only the peer's e-mail address. 
 
@@ -143,7 +157,8 @@ attribute, and the MUA must skip the header as invalid.
 
 If a Level 0 MUA encounters an otherwise-valid header which has
 ``type`` set to something other than ``p`` it MUST skip the header as
-invalid.
+invalid unless the type starts with an underscore (``_``) and the
+MUA has support for this experimental type.
 
 When parsing an incoming message, a Level 0 MUA MUST examine all
 headers with the name ``Autocrypt:`` and collect all valid headers in a
@@ -151,13 +166,14 @@ list.  If the list of valid headers has more than one entry, it should
 be treated as 0 valid headers (that is, it should return ``null``).
 
 
+
 ``type=p``: OpenPGP Based key data
 ----------------------------------
 
 For maximum interoperability and sanity a certificate sent by an
 Autocrypt-enabled Level 0 MUA MUST send an OpenPGP "Transferable
-Public Key" (see RFC 4880 §11.1) containing exactly these five OpenPGP
-packets:
+Public Key" (see `RFC 4880 §11.1 <https://tools.ietf.org/html/rfc4880#section-11.1>`_) 
+containing exactly these five OpenPGP packets:
 
  - a primary key ``Kp``
  - a uid that SHOULD be set to the e-mail address of the account
@@ -177,7 +193,7 @@ yet support Curve 25519.
 Updating internal state upon message receipt
 --------------------------------------------
 
-When first encountering an incoming e-mail ``M`` from a e-mail address ``A``,
+When first encountering an incoming e-mail ``M`` from an e-mail address ``A``,
 the MUA should follow the following ``autocrypt_update`` algorithm:
 
  - Set ``message_date`` to the ``Date:`` header of ``M``.
@@ -313,7 +329,6 @@ the MUA should follow the following ``autocrypt_update`` algorithm:
    
 Header injection in outbound mail
 ---------------------------------
-
 
 During message composition where the message will be marked as
 ``From:`` an e-mail address that the Autocrypt-capable agent knows the
