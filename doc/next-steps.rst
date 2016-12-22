@@ -53,3 +53,13 @@ RSA2048 to Curve 25519
 .. todo::
 
    Document change in preference for keys from RSA 2048 to Curve 25519.
+
+
+Backups
+-------
+
+see :doc:`backup`
+
+.. todo::
+
+   We need guidance on how backups might be done safely.
