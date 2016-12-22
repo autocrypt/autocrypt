@@ -143,8 +143,7 @@ attribute, and the MUA must skip the header as invalid.
 
 If a Level 0 MUA encounters an otherwise-valid header which has
 ``type`` set to something other than ``p`` it MUST skip the header as
-invalid unless the type starts with an underscore (``_``) and the
-MUA has support for this experimental type.
+invalid.
 
 When parsing an incoming message, a Level 0 MUA MUST examine all
 headers with the name ``Autocrypt:`` and collect all valid headers in a
