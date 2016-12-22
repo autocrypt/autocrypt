@@ -1,3 +1,6 @@
+Frequently Asked Questions about Autocrypt
+==========================================
+
 Why are you using headers rather than attached keys?
 ----------------------------------------------------
 
@@ -141,3 +144,100 @@ of these complications, we're sidestepping this problem for level 0.
 
 We welcome drafts proposing sensible ways to manage key gossip in
 group e-mail communication for future levels of Autocrypt.
+
+Why can only one Level 0 MUA to "claim" an e-mail account for Autocrypt?
+------------------------------------------------------------------------
+
+In the event that two Autocrypt-enabled agents operate a single
+e-mail account, they could clash and cause serious usability problems.
+In particular, if they each manage their own secret key material,
+communicating peers might arbitrarily choose one key or another to
+encrypt to, and then certain mails will be unreadable with certain
+agents, in an apparently-arbitrary pattern based on the origin of the
+remote peer's last-received message.
+
+So we need either synchronization between Autocrypt agents on a single
+account, or there needs to be only one such agent on a given account.
+
+For level 1 and higher, we aim to provide a synchronization mechanism
+so that all Autocrypt-enabled MUAs connected to a single account are
+capable of reading encrypted mail.
+
+For simplicitly, level 0 does not require or define synchronization
+mechanisms, but instead allows an Autocrypt-enable client to "lock"
+the account so that multiple Autocrypt-enabled clients don't end up
+sending different keys.
+
+.. todo::
+
+   Describe the tradeoffs and workflow for level-0 agents sharing an
+   account with future level-1 clients, or failure modes (e.g. lockout
+   by an agent you no longer use)
+
+
+Why do you clamp ``Date:`` to the current time?
+-----------------------------------------------
+
+E-mail messages with ``Date:`` in the future could destroy the ability
+to update the internal state.
+
+However, since different MUAs view messages at different times,
+future-dated e-mails could result in state de-synchronization.
+
+.. todo::
+
+   deeper analysis of this state de-sync issue with future-dated
+   e-mails, or alternate, more-stable approaches to dealing with wrong
+   ``Date:`` headers.
+
+Why do you always encrypt-to-self?
+----------------------------------
+
+Users expect to be able to read their outbox or Sent Messages folders.
+Autocrypt should not get in the way of that.
+
+
+Why did you choose the raw e-mail address for the user ID?
+----------------------------------------------------------
+
+Possibilities for uid we considered:
+
+ ======= == == == === ==
+ Option  SC BC VO RvK SR
+ ======= == == == === ==
+ no uid            x  x
+ email   x  x   x  x
+ fixed         x   x  x
+ hash    x      x   x x
+ ======= == == == === ==
+
+SC: self-claim. This was very important to us for usability
+reasons. This restricted us to either use the email directly or
+hashed.
+
+BC: backwards compatibility
+
+VO: valid OpenPGP
+
+RvK: allows revocations using keyservers
+
+SR: Spam resistant/publicly list email addresses
+
+Using a salted hash of the email address for the uid to not list them
+on keyservers would prevent the privacy issue of public mail addresses
+but the key should not be uploaded in the first place.
+
+Accidental or malicious uploading of keys with associated email
+addresses should be prevented by introducing a flag at the keys that
+says that keyservers shouldn't accept it.  See `issue #1
+<https://github.com/autocrypt/autocrypt/issues/1>`_.
+
+
+Why RSA2048 and not 25519?
+--------------------------
+
+Curve 25519 keys are shorter, cheaper to compute on, and likely to be
+stronger than RSA 2048 against non-quantum attackers.  However, we
+want level 0 to be implementable in late 2016, and more toolkits
+support RSA 2048 than 25519.  Future versions are likely to encourage
+25519 over RSA 2048.

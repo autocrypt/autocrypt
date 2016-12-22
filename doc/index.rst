@@ -31,17 +31,26 @@ and privacy enthusiasts.
      discusses how the Autocrypt efforts is different from past 
      e2e encryption efforts.
 
-:doc:`Autocrypt key discovery <key-discovery>`
-     discusses how mail programs negotiate encryption with each other.
+:doc:`examples`
+     Example data flows and MUA state transitions.  This may be the
+     easiest place to get started with the concrete ideas behind Autocrypt.
 
-:doc:`Autocrypt MUA internals <mua-internals>`
-     discusses requirements, operations and the state MUAs need to
-     keep in order to implement the Autocrypt protocols.
+:doc:`level0`
+     Minimum requirements and implementer guidance for Level 0
+     Autocrypt-capable MUAs.
+
+:doc:`other-crypto-interop`
+     Guidance for integrating Autocrypt with other e-mail encryption mechanisms
+     and UI for existing MUAs.
+
+:doc:`next-steps`
+     Future improvements for Autocrypt, beyond Level 0.
 
 :doc:`ecosystem-dangers`
-     some documented risks and dangers to the mail ecosystem,
+     Some documented risks and dangers to the mail ecosystem,
      related to Autocrypt.
 
+:doc:`faq`
 
 unsorted collection of docs and fragments
 +++++++++++++++++++++++++++++++++++++++++
@@ -49,19 +58,7 @@ unsorted collection of docs and fragments
 The following docs need refinement and incorporation into
 our sorted, maintained collection.
 
-:doc:`Autocrypt levels <levels>`
-
-:doc:`muaa-state` 
-
-:doc:`multi-device`
-
-:doc:`lockout`
-
 :doc:`message-encryption`
-
-:doc:`pgp-interop`
-
-:doc:`user-experience`
 
 
 .. _`contact channels`:
@@ -113,8 +110,4 @@ Upcoming events
 .. toctree::
    :hidden:
 
-   mua-keydiscovery
-   key-formats
-   mua-internals
-   levels
    multi-device

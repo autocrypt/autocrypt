@@ -1,5 +1,5 @@
-Autocrypt in-band key discovery
-===============================
+Example Data Flows and State Transitions
+========================================
 
 Autocrypt key discovery happens through headers of mail messages sent
 between mail apps. Similar to TLS's machine to machine handshake,
@@ -9,15 +9,23 @@ encryptability to their users at "compose-mail" time and give them a
 choice of encryption or cleartext, defaulting to what the other side
 has specified in their header.
 
-Autocrypt key discovery is safe only against passive eavesdroppers. It
-is trivial for providers to perform active downgrade or
-man-in-the-middle attacks on Autocrypt's key discovery.  Users may,
-however, detect such tampering if they out-of-band verify their keys
-at some later point in time.  This possiblity in turn is likely to
-keep most providers honest or at least prevent them from performing
-active attacks on a massive scale.
+These examples try to walk a new reader through the basic flow.
+
+.. note::
+
+   Autocrypt key discovery is safe only against passive
+   eavesdroppers. It is trivial for providers to perform active
+   downgrade or man-in-the-middle attacks on Autocrypt's key
+   discovery.  Users may, however, detect such tampering if they
+   verify their keys out-of-band at some later point in time.  We hope
+   this possiblity will keep most providers honest or at least prevent
+   them from performing active attacks on a massive scale.
+
+Please also see `src/tests/data/` for specific examples of Autocrypt
+messages.
 
 .. contents::
+
 
 Basic network protocol flow
 ---------------------------
@@ -34,24 +42,7 @@ Establishing encryption happens as a side effect when people send each other mai
 - A MUA will encrypt a message if it earlier saw encryption keys for all
   recipients.
 
-Header Format
--------------
 
-The ``Autocrypt:`` header MUST have the following format:
-
-```
-Autocrypt-ENCRYPTION: to=a@b.example; [type=(p|...);] [prefer-encrypted=(yes|no);] key=BASE64
-```
-
-Where key includes a Base64 representation of a minimal key. For now
-we only support ``p`` as the type, which represents a specific subset
-of OpenPGP (see key-formats.rst).
-
-``prefer-encrypted`` indicates that agents should default to
-encrypting when composing emails to this recipient.
-
-Autocrypt compatible Agents MUST include one header with a key in a
-Autocrypt-compatible format.
 
 "Happy path" example: 1:1 communication
 ---------------------------------------
@@ -151,81 +142,3 @@ Alice might decide to switch to a different MUA which does not support Autocrypt
 A MUA which previously saw an Autocrypt header and/or encryption from Alice
 now sees an unencrypted mail from Alice and no encryption header. This
 will disable encryption to Alice for subsequent mails.
-
-
-``p`` OpenPGP Based Keyformat
------------------------------
-
-Autocrypt pins down key formats and algorithms to reduce the requirements
-for Autocrypt-supporting implementations.  If OpenPGP key format is used, 
-the message also uses OpenPGP Message encoding (PGP/MIME, RFC 3156)
-
-**For New Users**
-
-We only include a minimum key in the headers that has:
-
-* a primary key ``Kp``
-
-  * a uid that is the email address
-  * a self signature
-
-* one encryption subkey ``Ke``
-
-  * a signature for the subkey by the primary key
-
-… and nothing else. For maximum interoperability and sanity a
-certificate sent by an Autocrypt-enabled agent MUST contain exactly
-these five OpenPGP packets.
-
-For the key algorithms used at a given level of support see levels.rst
-
-**Reasoning**
-
-*Why ed25519+cv25519*
-
-short keys for short header lines
-
-*why email address as uid*
-
- Possibilities for uid we considered:
-
- ======= == == == === ==
- Option  SC BC VO RvK SR
- ======= == == == === ==
- no uid            x  x
- email   x  x   x  x
- fixed         x   x  x
- hash    x      x   x x
- ======= == == == === ==
-
-SC: self-claim. This was very important to us for usability
-reasons. This restricted us to either use the email directly or
-hashed.
-
-BC: backwards compatibility
-
-VO: valid OpenPGP
-
-RvK: allows revocations using keyservers
-
-SR: Spam resistant/publicly list email addresses
-
-Using a salted hash of the email address for the uid to not list them
-on keyservers would prevent the privacy issue of public mail addresses
-but the key should not be uploaded in the first place.
-
-Accidental or malicious uploading of keys with associated email
-addresses should be prevented by introducing a flag at the keys that
-says that keyservers shouldn't accept it.  See `issue #1
-<https://github.com/autocrypt/autocrypt/issues/1>`_.
-
-
-**For current OpenPGP users**
-
-* What about other keys, that i have been using with other properties?
-  (smart-card, RSA, ...)
-
-  * You can still create a compatible header with a tool we will
-    provide. We are targeting users who have not used pgp
-    before. Nevertheless most clients will still support other key
-    formats. But they are not required to.
