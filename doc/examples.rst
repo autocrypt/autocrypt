@@ -1,6 +1,7 @@
 Example Data Flows and State Transitions
 ========================================
 
+
 Autocrypt key discovery happens through headers of mail messages sent
 between mail apps. Similar to TLS's machine to machine handshake,
 users first need to have a cleartext mail exchange.  Subsequent mails
@@ -21,8 +22,8 @@ These examples try to walk a new reader through the basic flow.
    this possiblity will keep most providers honest or at least prevent
    them from performing active attacks on a massive scale.
 
-Please also see `src/tests/data/` for specific examples of Autocrypt
-messages.
+Please also see https://github.com/autocrypt/autocrypt/tree/master/src/tests/data
+for specific examples of Autocrypt messages.
 
 .. contents::
 
@@ -32,15 +33,18 @@ Basic network protocol flow
 
 Establishing encryption happens as a side effect when people send each other mail:
 
-- A MUA always adds an ``Autocrypt:`` header to all messages it
+- A MUA (mail user agent) always adds an ``Autocrypt:`` header to all messages it
   sends out.
+
+  The autocrypt header contains all necessary information to allow encryption
+  (especially the key; see :ref:`autocryptheaderformat` for the format in detail).
 
 - A MUA will scan incoming mails for encryption headers and associate
   the info with a canonicalized version of the ``From:`` address contained
   in the :rfc:`822` message.
 
-- A MUA will encrypt a message if it earlier saw encryption keys for all
-  recipients.
+- A MUA will encrypt a message if it earlier saw encryption keys 
+  (and the request to encrypt) for all recipients.
 
 
 .. _mua-happypath:
@@ -81,7 +85,8 @@ can read the email.
 We encourage MUA developers to propose heuristics for handling the undirected
 case. We will document the best approaches to develop a shared understanding.
 
-group mail communication (1:N)
+
+Group mail communication (1:N)
 ------------------------------
 
 Consider a blank state and a first outgoing message from Alice to Bob
