@@ -26,8 +26,9 @@ from previous ones here are some of its features:
   resulting UI guidance in the specs.  Minimize friction for people 
   using multiple mail apps with their accounts.
 
-- **Go for mail app changes, don't require changes from mail providers**, 
-  allowing fluid development of deployable code and specs.
+- **Go for mail app changes only**, don't require changes from mail 
+  providers or depend on third party services, allowing fluid development 
+  of deployable code and specs.
 
 - **Use decentralized, in-band key discovery.**  Make mail apps
   tell each other how and when to encrypt to each other
