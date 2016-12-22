@@ -21,6 +21,26 @@ we have :ref:`contact channels` and :ref:`upcoming events`
 where you may talk with us.
 
 
+The Autocrypt Approach
+----------------------
+
+The main approach is to use the way emails are exchanged to
+exchange all necessary informations encrypt these emails if possible.
+For this, email headers shall automatically contain all necessary
+informations (such as the current key) to send emails back encrypted.
+No key management should be visible to the users.
+
+For simplicity, we want to establish this approach step-by-step
+using different "levels".
+Level 0 shall be provided and supported in spring 2017 by various mailers.
+
+Note that this is an approach to bring opportunistic email encryption to the mass.
+We want to force convenient encryption whenever possible as a better approach to send emails.
+This approach is neither perfect not safe.
+Metadata tracking (who is sending email to whom) or
+active attacks (such as man-in-the-middle) are still possible.
+
+
 Current docs (work-in-progress)
 -------------------------------
 
