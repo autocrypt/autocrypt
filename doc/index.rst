@@ -21,24 +21,32 @@ we have :ref:`contact channels` and :ref:`upcoming events`
 where you may talk with us.
 
 
-The Autocrypt Approach
+The Autocrypt approach
 ----------------------
 
-The main approach is to use the way emails are exchanged to
-exchange all necessary informations encrypt these emails if possible.
-For this, email headers shall automatically contain all necessary
-informations (such as the current key) to send emails back encrypted.
-No key management should be visible to the users.
+Autocrypt uses existing e-mail messages to transfer the necessary
+information (such as public keys) between people to make it possible
+to encrypt future messages.  Under the hood, Autocrypt uses e-mail
+headers for this information transfer.  By default, no key management
+should be visible to the users.
 
-For simplicity, we want to establish this approach step-by-step
-using different "levels".
-Level 0 shall be provided and supported in spring 2017 by various mailers.
+For simplicity, we are establishing this approach step-by-step using
+different "Levels" of implementation compliance.  We are currently
+documenting :doc:`Level 0 <level0>`, which should be supported in
+Spring of 2017 by various mailers.
 
-Note that this is an approach to bring opportunistic email encryption to the mass.
-We want to force convenient encryption whenever possible as a better approach to send emails.
-This approach is neither perfect not safe.
-Metadata tracking (who is sending email to whom) or
-active attacks (such as man-in-the-middle) are still possible.
+Note that this is an approach to bring opportunistic e-mail encryption
+to the masses.  Getting convenience-oriented users to take direct
+responsibility for key management has proved unlikely, leaving an
+overwhelming majority of mail in the clear.  Autocrypt aims to provide
+convenient encryption that is neither perfect nor as secure as
+traditional e-mail encryption, but should be convenient enough for
+much wider adoption.  Autocrypt does not defend against metadata
+tracking (who is sending email to whom) or active attacks (such as
+man-in-the-middle).
+
+Autocrypt will not get in the way of people who want to continue to do
+traditional encrypted e-mail, but they are not its target audience.
 
 
 Current docs (work-in-progress)
@@ -96,7 +104,7 @@ you may:
 .. _`upcoming events`:
 
 Upcoming events
-----------------
+---------------
 
 - Dec 2016: at `33c3`_, Hamburg, scheduled talk at the 
   `We Fix the Net`_ session and probably a separate one.
