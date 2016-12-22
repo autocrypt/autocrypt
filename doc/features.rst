@@ -3,7 +3,7 @@ Autocrypt features
 --------------------------------
 
 **If users ask how they can secure their e-mail the answer
-should be as simple as: use an autocrypt-enabled mail app.**
+should be as simple as: use an autocrypt-enabled mail app!**
 
 End-to-end encrypted e-mail has been around for decades, but has failed
 to see wide adoption outside of specialist communities, in large part
