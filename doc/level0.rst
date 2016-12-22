@@ -392,15 +392,6 @@ during message composition:
    The Autocrypt recommendation should probably change depending on
    whether the mail is a reply to an encrypted e-mail or not.
 
-   Nico: IMO it has to. IMO it is key that a reply to an encrypted email
-   by default always is encrypted.
-   Especially because otherwise one state change of multiple recipients
-   will disable encryption for all.
-   The question is whether this is part of the autocrypt recommendation
-   to the MUA or whether this is a recommended behavior for MUAs for how to
-   deal with the autocrypt recommendation.
-   
-
 Recommendations for single-recipient messages
 +++++++++++++++++++++++++++++++++++++++++++++
    
