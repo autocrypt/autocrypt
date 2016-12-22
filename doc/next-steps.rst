@@ -3,7 +3,11 @@ Future Enhancements to Autocrypt
 
 Please see :doc:`level0` for information about Level 0 requirements.
 Here, we document future improvements, which we hope will be
-incorporated in Level 1, or possibly some later Level.
+incorporated in Level 1, or possibly some later Level.  This is an
+unordered list.  If you have ideas about how to address one of these
+points, feel free to jump in!  (but let's try to stay focused on
+getting Level 0 stable before we invest too much energy in these next
+steps)
 
 
 
@@ -46,6 +50,22 @@ New Types
    message composition time, particularly for multi-recipient
    messages.
 
+X.509 and S/MIME
+++++++++++++++++
+
+.. todo::
+
+   Someone is bound to ask for this as a "key type"
+
+
+Deletable ("forward secure") encrypted mail
++++++++++++++++++++++++++++++++++++++++++++
+
+.. todo::
+
+   Given the Autocrypt infrastructure for key exchange, there's no
+   reason we couldn't define a mechanism for pairwise, ratcheted,
+   session-key establishment for e-mail.
 
 RSA2048 to Curve 25519
 ----------------------
@@ -95,4 +115,62 @@ Encrypted headers
    memoryhole ever makes it possible to hide normal `To:` and `Cc:`
    headers, then we need to rethink our approach to handling PKESK
    leakage further.
+
+
+Webmail
+-------
+
+.. todo::
+
+   How does Autocrypt interact with webmail?  Can we describe hooks
+   for webmail and browser extensions that make sense?
+
+Search
+------
+
+.. todo::
+
+   Guidance for implementers on dealing with searching a mailbox that
+   has both cleartext and encrypted messages. (session key caching,
+   etc)
+
+Gossip (or "introduction e-mails")
+----------------------------------
+
+.. todo::
+
+   Can we specify a sensible practice for passing around keys for
+   other people that we know about?
+
+   Or maybe it'd be simpler to define a standard workflow for
+   "introduction e-mails", where the sender tells multiple recipients
+   about the keys she has for all of them.
+
+Out-of-band key verification
+----------------------------
+
+.. todo::
+
+   Can we specify a simple, user-friendly way that Autocrypt users can
+   confirm each others' "Autocrypt info" out of band?
+
+   If we do specify such a thing, what additional UI/UX would be
+   required?
+
+
+Heuristics for dealing with "nopreference"
+------------------------------------------
+
+.. todo::
+
+   in Level 0, the Autocrypt recommendations for composing mail to a
+   remote peer with ``prefer-encrypted`` set to ``nopreference`` look
+   very much the same as the recommendations for when
+   ``prefer-encrypted`` is set to ``no``.  But different heuristics
+   could be applied to the ``nopreference`` case for MUAs that want to
+   help users be slightly more aggressive about sending encrypted
+   mail.
+
+   Documenting reasonable heuristics for MUAs to use in this case
+   would be very helpful.
 
