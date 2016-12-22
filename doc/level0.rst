@@ -112,6 +112,8 @@ client MUST change the ``Autocrypt:`` header.
 See :ref:`mua-happypath` for examples of outbound headers and
 the following sections for header format definitions and parsing.
 
+..  _autocryptheaderformat:
+
 Deriving a Parsed Autocrypt Header from a Message
 -------------------------------------------------
 
@@ -126,6 +128,10 @@ represents a specific subset of OpenPGP (see the the next section).
 
 ``prefer-encrypted`` indicates that agents should default to
 encrypting when composing emails to this recipient.
+If ``prefer-encrypted`` is not set,
+the value of ``prefer-encrypted`` is ``nopreference``.
+If ``prefer-encrypted`` is set, but neither ``yes`` nor ``no``,
+the MUA must skip the header as invalid.
 
 Additional attributes unspecified here are also possible before the
 ``key`` attribute.  If a MUA encounters an unknown attribute, if the
@@ -217,9 +223,9 @@ Updating internal state upon message receipt
 When first encountering an incoming e-mail ``M`` from an e-mail address ``A``,
 the MUA should follow the following ``autocrypt_update`` algorithm:
 
- - Set ``message_date`` to the ``Date:`` header of ``M``.
+ - Set a local ``message_date`` to the ``Date:`` header of ``M``.
 
- - If ``message_date`` is in the future, set ``selected_date`` to the
+ - If ``message_date`` is in the future, set ``message_date`` to the
    current time.
 
 .. todo::
@@ -233,19 +239,12 @@ the MUA should follow the following ``autocrypt_update`` algorithm:
    track of the message would be to simply ignore messages whose
    ```Date:`` header is in the future.
 
-.. todo::
-
-   the spec currently doesn't say how to integrate Autocrypt
-   processing on message receipt with spam filtering.  Should we say
-   something about not doing Autocrypt processing on message receipt
-   if the message is believed to be spam?
-
 ..
    
- - Set ``message_pah`` to be the ``Autocrypt:`` header in ``M``.  This is
+ - Set a local ``message_pah`` to be the ``Autocrypt:`` header in ``M``.  This is
    either a single Parsed Autocrypt header, or ``null``.
 
- - if ``message_pah`` is ``null``, and the MUA knows about additional
+ - If ``message_pah`` is ``null``, and the MUA knows about additional
    OpenPGP keys, then we replace ``message_pah`` with a
    ``synthesized_pah`` generated from the message itself:
 
@@ -268,14 +267,14 @@ the MUA should follow the following ``autocrypt_update`` algorithm:
      is set to ``yes``.  If it is not encrypted, then
      ``prefer_encrypted`` is set to ``nopreference``.
 
-.. note::
+   .. note::
 
-   We do *not* synthesize the Autocrypt header from any
-   ``application/pgp-keys`` message parts.  This is because it's
-   possible that an attached OpenPGP key is not intended to be the
-   sender's OpenPGP key.  For example, Alice might send Bob Carol's
-   OpenPGP key in an attachment, but Bob should not interpret it as
-   Carol's key.
+      We do *not* synthesize the Autocrypt header from any
+      ``application/pgp-keys`` message parts.  This is because it's
+      possible that an attached OpenPGP key is not intended to be the
+      sender's OpenPGP key.  For example, Alice might send Bob Carol's
+      OpenPGP key in an attachment, but Bob should not interpret it as
+      Carol's key.
 
 .. todo::
 
@@ -283,7 +282,7 @@ the MUA should follow the following ``autocrypt_update`` algorithm:
    
 ..
    
- - The agent continues this message receipt process even when
+ - Note: The agent continues this message receipt process even when
    ``message_pah`` is ``null``, since updating the stored state with
    ``null`` is sometimes the correct action.
    
@@ -306,20 +305,22 @@ the MUA should follow the following ``autocrypt_update`` algorithm:
    ``message_date``, then we compare ``message_pah`` with the ``pah``
    currently stored in ``autocrypt_peer_state[A]``.
 
- - This is done as a literal comparison using only the ``key`` and
+   This is done as a literal comparison using only the ``key`` and
    ``prefer_encrypt`` fields, even if the Agent stores additional
-   fields as an augmentation -- if ``key`` is bytewise different, or
-   if ``prefer_encrypted`` has a different value, then this is an
-   update.  If ``key`` and ``prefer_encrypted`` match exactly, then it
-   is considered a match.  If both ``pah`` and ``message_pah`` are
-   ``null``, it is a match.  If one is ``null`` and the other is not
-   ``null``, it is a update.
+   fields as an augmentation, as follows:
+   
+   - If ``key`` is bytewise different, or if ``prefer_encrypted`` has a different value,
+     then this is an *update*. 
+   - If ``key`` and ``prefer_encrypted`` match exactly, then it is considered a *match*.
+   - If both ``pah`` and ``message_pah`` are ``null``, it is a *match*.
+   - If one is ``null`` and the other is not ``null``, it is a *update*.
 
- - In the case of a match, set ``autocrypt_peer_state[A].last_seen``
-   to ``message_date``.
+ - In the case of a **match**,
+   set ``autocrypt_peer_state[A].last_seen`` to ``message_date``.
 
- - In the case of an update, set ``autocrypt_peer_state[A].pah`` to
-   ``message_pah`` and ``autocrypt_peer_state[A].last_seen`` and
+ - In the case of an **update**,
+   set ``autocrypt_peer_state[A].pah`` to ``message_pah`` and
+   ``autocrypt_peer_state[A].last_seen`` and
    ``autocrypt_peer_state[A].changed`` to ``message_date``.
 
 .. note::
@@ -347,6 +348,13 @@ the MUA should follow the following ``autocrypt_update`` algorithm:
    agents are expected to avoid these approaches and to do full
    bytestring comparisons of ``key`` data instead.
    
+.. todo::
+
+   the spec currently doesn't say how to integrate Autocrypt
+   processing on message receipt with spam filtering.  Should we say
+   something about not doing Autocrypt processing on message receipt
+   if the message is believed to be spam?
+
    
 Provide a recommendation for message encryption
 -----------------------------------------------
@@ -382,6 +390,15 @@ during message composition:
 
    The Autocrypt recommendation should probably change depending on
    whether the mail is a reply to an encrypted e-mail or not.
+
+   Nico: IMO it has to. IMO it is key that a reply to an encrypted email
+   by default always is encrypted.
+   Especially because otherwise one state change of multiple recipients
+   will disable encryption for all.
+   The question is whether this is part of the autocrypt recommendation
+   to the MUA or whether this is a recommended behavior for MUAs for how to
+   deal with the autocrypt recommendation.
+   
 
 Recommendations for single-recipient messages
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
