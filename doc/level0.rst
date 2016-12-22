@@ -154,7 +154,7 @@ be treated as 0 valid headers (that is, it should return ``null``).
 
 
 ``type=p``: OpenPGP Based key data
-++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++
 
 For maximum interoperability and sanity a certificate sent by an
 Autocrypt-enabled Level 0 MUA MUST send an OpenPGP "Transferable
@@ -402,7 +402,7 @@ during message composition:
    
 
 Recommendations for single-recipient messages
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++++++++++++++++++++++++++++++++++++++++++++++
    
 For level 0 MUAs, the Autocrypt recommendation for message composed to
 a single recipient with e-mail address ``A`` is derived from the value
@@ -419,7 +419,7 @@ If ``pah`` is not ``null``, and ``prefer-encrypted`` is either ``no``
 or ``nopreference``, then the recommendation is ``available``.
 
 Recommendations for messages to multiple addresses
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+++++++++++++++++++++++++++++++++++++++++++++++++++
 
 For level 0 agents, the Autocrypt recommendation for a message
 composed to multiple recipients is derived from the recommendations
@@ -463,7 +463,7 @@ UI at all by default.  However, some UI is inevitable, even if only
 tucked away in an arcane "preferences pane" or something.
 
 Account Preferences
-~~~~~~~~~~~~~~~~~~~
++++++++++++++++++++
 
 Level 0 MUAs MUST allow the user to disable Autocrypt completely for
 each account they control.  
@@ -478,7 +478,7 @@ Please see :doc:`ui-examples` for specific examples of how this might
 look.
 
 Message Composition
-~~~~~~~~~~~~~~~~~~~
++++++++++++++++++++
 
 If an MUA is willing to compose encrypted mail, it SHOULD include some
 UI mechanism at message composition time for the user to choose an
