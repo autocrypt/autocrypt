@@ -279,7 +279,7 @@ the MUA should follow the following ``autocrypt_update`` algorithm:
 
 .. todo::
 
-   Maybe move ``synthesized_pah`` into other-crypto-interop.rst ?
+   Maybe move ``synthesized_pah`` into :doc:`other-crypto-interop` ?
    
 ..
    
