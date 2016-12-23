@@ -373,6 +373,24 @@ Autocrypt recommendation.
 That said, all Autocrypt-capable agents should be able to calculate
 the same Autocrypt recommendation due to their internal state.
 
+The Autocrypt recommendation depends on the list of recipient
+addresses for the message being composed.  When the user edits the
+list of recipients, the recommendation may change.  The MUA should
+reflect this change.
+
+.. note::
+
+   It's possible that the user manually overriddes the Autocrypt
+   recommendation and then edits the list of recipients.  The MUA
+   SHOULD retain the user's manual choices for a given message even if
+   the Autcrypt recommendation changes.
+
+.. todo::
+
+   Discuss how to deal with the case where the user manually selects
+   encryption and subsequently adds a recipient whom the MUA has no
+   key.
+
 Autocrypt can produce three possible recommendations to the agent
 during message composition:
 
@@ -420,8 +438,8 @@ If any recipient has a recommendation of ``disable`` then the message
 recommendation is ``disable``.
 
 If every recipient other than "myself" (the e-mail address that the
-message is ``From:``) has a recommendation of ``encrypt`` then the message
-recommendation is ``encrypt``.
+message is ``From:``) has a recommendation of ``encrypt`` then the
+message recommendation is ``encrypt``.
 
 Otherwise, the message recommendation is ``available``.
 
