@@ -36,11 +36,11 @@ and upcoming events <contact>` on how you may talk with us and who
 The technical Autocrypt approach
 --------------------------------------
 
-Autocrypt uses existing email messages between people to transfer 
-the necessary information to allow encrypting subsequent messages.  
+Autocrypt uses regular email messages between people to piggyback
+necessary information to allow encrypting subsequent messages.  
 Under the hood, Autocrypt uses email headers for this information
-transfer. By default, no key management should be visible to the users.
-See :doc:`features` for more highlights.
+transfer. By default, no key management is visible to users.
+See :doc:`features` for more technical and UI cornerstones.
 
 We are establishing this approach step-by-step using different "Levels"
 of implementation compliance.  We are currently documenting :doc:`Level
