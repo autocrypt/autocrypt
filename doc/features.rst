@@ -2,9 +2,6 @@
 Autocrypt features
 --------------------------------
 
-**If users ask how they can secure their e-mail the answer
-should be as simple as: use an autocrypt-enabled mail app!**
-
 End-to-end encrypted e-mail has been around for decades, but has failed
 to see wide adoption outside of specialist communities, in large part
 because of difficulties with user experience and certification models.
@@ -37,15 +34,4 @@ from previous ones here are some of its features:
 - **Implement and specify "Level 0" support in several mail apps in spring
   2017.** Keep Level 0 minimal enough that it's easy for developers to
   adopt it and we can start to drive efforts from real-life experiences.
-  Please see :doc:`level0`.
-  Currently involved are developers from `K9/Android`_, `Enigmail`_,
-  `Mailpile`_, `Bitmask/LEAP`_ and others who are interested to add
-  support for OSX or write reference "bots" in `Python`_ or `Go`_.
-
-.. _`K9/Android`: https://k9mail.github.io/
-.. _`Enigmail`: https://enigmail.net/
-.. _`Mailpile`: https://mailpile.is/
-.. _`Bitmask/LEAP`: https://leap.se/en/docs/client
-
-.. _`Python`: https://www.python.org/
-.. _`Go`: https://golang.org/
+  Please see :doc:`level0`.  
