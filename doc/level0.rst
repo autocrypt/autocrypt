@@ -129,7 +129,7 @@ represents a specific subset of OpenPGP (see the the next section).
 ``key`` MUST be the last attribute.
 
 ``prefer-encrypted`` indicates that agents should default to
-encrypting when composing emails to this recipient.
+encrypting when composing e-mails to this recipient.
 If ``prefer-encrypted`` is not set,
 the value of ``prefer-encrypted`` is ``nopreference``.
 If ``prefer-encrypted`` is set, but neither ``yes`` nor ``no``,

@@ -3,7 +3,7 @@ Glossary
 
 MUA
         Mail User Agent.
-        Any program/client/app that handles emails for the end user.
+        Any program/client/app that handles e-mails for the end user.
 
 MUAA
         Mail User Agent Account.

@@ -62,14 +62,14 @@ yet will drop these headers and fall back to the one without priority.
 Why do you use the ``to=`` attribute rather than the uid from the key?
 ----------------------------------------------------------------------
 
-We need to store state about the key to use for a given email
+We need to store state about the key to use for a given e-mail
 address. Just importing the key into a keyring won't cut it.
 
 We want to be able to handle the header without having to parse the
 key first.  We believe that using the 'to' attribute will be more
 forward compatible. For example we discussed hashing the uid in the
-keys so in case they leak to pgp keyservers they do not leak the email
-address. This would not be compatible with requiring the email address
+keys so in case they leak to pgp keyservers they do not leak the e-mail
+address. This would not be compatible with requiring the e-mail address
 as the uid.
 
 How does Autocrypt interact with message signing?
@@ -206,13 +206,13 @@ Possibilities for uid we considered:
  Option  SC BC VO RvK SR
  ======= == == == === ==
  no uid            x  x
- email   x  x   x  x
+ e-mail  x  x   x  x
  fixed         x   x  x
  hash    x      x   x x
  ======= == == == === ==
 
 SC: self-claim. This was very important to us for usability
-reasons. This restricted us to either use the email directly or
+reasons. This restricted us to either use the e-mail directly or
 hashed.
 
 BC: backwards compatibility
@@ -221,13 +221,13 @@ VO: valid OpenPGP
 
 RvK: allows revocations using keyservers
 
-SR: Spam resistant/publicly list email addresses
+SR: Spam resistant/publicly list e-mail addresses
 
-Using a salted hash of the email address for the uid to not list them
+Using a salted hash of the e-mail address for the uid to not list them
 on keyservers would prevent the privacy issue of public mail addresses
 but the key should not be uploaded in the first place.
 
-Accidental or malicious uploading of keys with associated email
+Accidental or malicious uploading of keys with associated e-mail
 addresses should be prevented by introducing a flag at the keys that
 says that keyservers shouldn't accept it.  See `issue #1
 <https://github.com/autocrypt/autocrypt/issues/1>`_.

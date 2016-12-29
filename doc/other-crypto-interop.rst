@@ -64,7 +64,7 @@ can I use someone's pgp key that i have for encrypting mail to that person?
 if i have for a person an non-Autocrypt pgp key and an Autocrypt key, which one do
 i use to encrypt mails for that person?
 
-- Look up email address in pgp keyring
+- Look up e-mail address in pgp keyring
 - if there is a key that has better user ID validity for the matching address than "unknown", use that one
 - else look up a key from the Autocrypt state (which is also in the keyring)
 

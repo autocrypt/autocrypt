@@ -15,5 +15,3 @@ documentation, we need to settle internally on "agent" or "client" or
 "MUA" or "MUAA"
 
 glossary for technical documentation.
-
-we should use "email" or "e-mail" consistently in these docs

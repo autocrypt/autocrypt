@@ -76,11 +76,11 @@ Bob's key and the fact that Bob sent an encrypted mail.  Subsequently
 both Alice and Bob will have their MUAs encrypt mails to each other.
 
 If ``prefer-encrypted`` is sent as 'yes' the MUA MUST default to encrypting
-the next email. If it is set as 'no' the MUA MUST default to plaintext.
+the next e-mail. If it is set as 'no' the MUA MUST default to plaintext.
 If ``prefer-encrypted`` is not sent the MUA should stick to what it was doing
 before. If the attribute has never been sent it's up to the MUA to decide. The
 save way to go about it is to default to plaintext to make sure the recipient
-can read the email.
+can read the e-mail.
 
 We encourage MUA developers to propose heuristics for handling the undirected
 case. We will document the best approaches to develop a shared understanding.
@@ -136,7 +136,7 @@ your mail") Bob's MUA will see the new key and subsequently use it.
 
     Unless we can get perfect recoverability (also for device loss etc.) we will
     always have to consider this "fatal" case of losing a secret key and how
-    users can deal with it.  Especially in the federated email context We do
+    users can deal with it.  Especially in the federated e-mail context We do
     not think perfect recoverability is feasible.
 
 

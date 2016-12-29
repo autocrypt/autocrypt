@@ -7,7 +7,7 @@ and contributors, MUA developers and privacy enthusiasts.
 
 :doc:`index`
      introduction to why Autocrypt exists and why it is trying 
-     to achieve more email encryption.
+     to achieve more e-mail encryption.
 
 :doc:`features`
      discusses how the Autocrypt efforts is different from past 
