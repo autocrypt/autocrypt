@@ -52,6 +52,8 @@ Establishing encryption happens as a side effect when people send each other mai
 "Happy path" example: 1:1 communication
 ---------------------------------------
 
+.. image:: images/autocrypthappy.svg
+
 Consider a blank state and a first outgoing message from Alice to Bob::
 
     From: alice@a.example
