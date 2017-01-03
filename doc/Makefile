@@ -17,7 +17,7 @@ SOURCEDIR       = .
 IMAGEDIRS       = images
 # SVG to PDF conversion
 SVG2PDF       = inkscape
-SVG2PDF_FLAGS = 
+SVG2PDF_FLAGS =
 
 .PHONY: help
 help:
@@ -49,10 +49,10 @@ help:
 	@echo "  coverage   to run coverage check of the documentation (if enabled)"
 	@echo "  dummy      to check syntax errors of document sources"
 
-# 
+#
 # Pattern rule for converting SVG to PDF
 %.pdf : %.svg
-	$(SVG2PDF) -f $< -A $@ 
+	$(SVG2PDF) -f $< -A $@
 # Build a list of SVG files to convert to PDFs
 PDFs := $(foreach dir, $(IMAGEDIRS), $(patsubst %.svg,%.pdf,$(wildcard $(SOURCEDIR)/$(dir)/*.svg)))
 # Make a rule to build the PDFs
@@ -61,7 +61,7 @@ images: $(PDFs)
 .PHONY: clean
 clean:
 	rm -rf $(BUILDDIR)/*
-	rm $(PDFs)
+	rm -f $(PDFs)
 
 .PHONY: html
 html:
