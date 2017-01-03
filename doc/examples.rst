@@ -52,7 +52,7 @@ Establishing encryption happens as a side effect when people send each other mai
 "Happy path" example: 1:1 communication
 ---------------------------------------
 
-.. image:: ./images/autocrypthappy.svg
+.. image:: images/autocrypthappy.*
 
 .. uml::
 

@@ -16,12 +16,43 @@ requires the MUA to keep the information who announced Autocrypt and
 who they requested keys from.
 
 
-Why are we using IMAP folders rather than self send messages for multi device?
+Why are we using IMAP folders rather than self-sent messages for multi device?
 ------------------------------------------------------------------------------
 
-Self send messages end up in your inbox and might be confusing to
-users. They are likely also processed by your spam protection and
-might look like spam.
+Self-sent messages end up in your inbox and might be confusing to
+users who use multiple MUAs. They are also likely also processed by
+your spam filters and might look like spam.
+
+IMAP folders are more a stable and reliable transport, as well as
+being conceptually simpler to look for.
+
+
+Why not use IMAP METADATA instead of specially-named folders?
+-------------------------------------------------------------
+
+We ultimately want Autocrypt to be more generic than IMAP, to make it
+clear how other mail-checking protocols could work (e.g. MAPI, webmail
+interfaces) as long as they offer some sort of namespaced shared
+storage.  Using `IMAP METADATA <https://tools.ietf.org/html/rfc5464>`_
+would tie Autocrypt more tightly to IMAP, and would also limit the
+number of IMAP implementations that Autocrypt-enabled clients could
+connect to (METADATA is `not widely supported by today's IMAP server
+implementations <http://www.imapwiki.org/Specs>`_).
+
+If we wanted Autocrypt to use METADATA where it was available on the
+server, but allow for fallback to normal folders for IMAP servers that
+don't support METADATA, then we'd be adding an implementation
+requirement for clients that might not already know how to use the
+METADATA extension, which makes adoption harder.
+
+And without initially requiring it for clients, we don't see a way to
+transition once non-METADATA capable clients exist in the wild,
+either, since lockout and sync become difficult to do.  So we don't
+see a good story for METADATA deployment, sadly, despite it targeting
+our use case fairly neatly.
+
+See also `earlier discussion about IMAP METADATA
+<https://github.com/autocrypt/autocrypt/issues/12>`_.
 
 
 Why do you aim to use ed25519 - it's not supported by X?
@@ -124,7 +155,7 @@ Mailing lists that distribute cleartext (unencrypted) mail may end up
 distributing their user's public key material in the ``Autocrypt:``
 headers of the distributed mail.  For mailing lists that rewrite
 ``From:`` headers, these ``Autocrypt:`` headers will be dropped by
-recipients, which is fine.  
+recipients, which is fine.
 
 For encrypted mailing lists like `schleuder
 <http://schleuder2.nadir.org/>`_, we haven't done a full analysis yet.

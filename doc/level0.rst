@@ -25,8 +25,8 @@ has credentials and capabilities to perform these network services:
   MUA can control the entire message being sent, including both
   message headers and message body.
 
-- The ability to receive e-mail where the MUA gets access to 
-  the entire message being received, including both message 
+- The ability to receive e-mail where the MUA gets access to
+  the entire message being received, including both message
   headers and message body.
 
 - Access to a special (IMAP) Shared Message Archive (SMA) folder which
@@ -45,7 +45,7 @@ Autocrypt on it.
 
 .. todo::
 
-    Discuss with webmail developers how to work with, refine 
+    Discuss with webmail developers how to work with, refine
     the interactions.
 
 Secret key generation and storage
@@ -57,16 +57,17 @@ decrypting.  It MUST be capable of assembling these keys into an
 OpenPGP certificate (RFC 4880 "Transferable Public Key") that
 indicates these capabilities.
 
-These secret keys MUST be protected from access by other applications
-or co-tenants of the device at least as well as the passwords the MUA
-retains for the user's IMAP or SMTP accounts.  These secret keys MUST
-never be sent over the wire to any other party.
+The secret key material is critical for security as in other
+end-to-end applications, and should be protected from access by other
+applications or co-tenants of the device, at least as well as the
+passwords the MUA retains for the user's IMAP or SMTP accounts.
 
-When an Autocrypt-enabled MUA configures an e-mail account, it should
-generate these keys and store them locally.  Then it should proceed to 
-try to "claim" the account to `lock out <lockout>`_ other MUAs of the
-same users.  In Level 0 only one MUA can send and receive encrypted
-mail through Autocrypt mechanisms.
+In Level 0 only one MUA can send and receive encrypted mail through
+Autocrypt mechanisms.  When an Autocrypt-enabled MUA configures an
+e-mail account, it first tries to "claim" the account, to `lock out
+<lockout>`_ other MUAs of the same users.  If the claim was
+successful, the MUA should proceed to generate secret keys and store
+them locally.
 
 .. _lockout:
 
@@ -92,24 +93,24 @@ announcement and places it in the special location.
 
 .. todo::
 
-   - Document the claim announcement format
+   - Document the claim announcement format and precise location
    - Clarify concerns about race conditions, case-sensitivity, etc.
 
 
 Header injection in outbound mail
 ---------------------------------
 
-During message composition where the message will be marked as
-``From:`` an e-mail address that the Autocrypt-capable agent knows the
-secret key material for, it should always include an Autocrypt header
-with the associated public key material as the ``key=`` attribute, and
-it should include the ``to=`` attribute for recipients to match
-on. The most minimal Level 0 MUA will only include these two
-attributes.
+During message composition, if the ``From`` header of the outgoing
+e-mail matches an address that the Autocrypt-capable agent knows the
+secret key material for, it SHOULD include an Autocrypt header. This
+header contains the associated public key material as ``key=``
+attribute, and the same sender address that is used in the ``From``
+header in the ``to=`` attribute to confirm the association. The most
+minimal Level 0 MUA will only include these two attributes.
 
-If the ``From:`` address changes during message composition (e.g. if
-the user selects a different outbound identity, the Autocrypt-capable
-client MUST change the ``Autocrypt:`` header.
+If the ``From`` address changes during message composition (E.g. if
+the user selects a different outbound identity), the Autocrypt-capable
+cleitn MUST change the ``Autocrypt`` header appropriately.
 
 See :ref:`mua-happypath` for examples of outbound headers and
 the following sections for header format definitions and parsing.
@@ -119,62 +120,73 @@ the following sections for header format definitions and parsing.
 Deriving a Parsed Autocrypt Header from a Message
 -------------------------------------------------
 
-The ``Autocrypt:`` header MUST have the following format::
+The ``Autocrypt`` header has the following format::
 
-    Autocrypt: to=a@b.example.org; [type=(p|_*);] [prefer-encrypted=(yes|no);] key=BASE64
+    Autocrypt: to=a@b.example.org; [type=p;] [prefer-encrypted=(yes|no);] key=BASE64
 
-Where the value of ``key`` includes a Base64 representation of a
-minimal key. For now we only support ``p`` as the type, which
-represents a specific subset of OpenPGP (see the the next section).
-``key`` MUST be the last attribute.
+The ``to`` attribute indicates the single recipient address this
+header is valid for. In case this address differs from the one the MUA
+considers the sender of the e-mail in parsing, which will usually be
+the one specified in the ``From`` header, the entire header MUST be
+treated as invalid.
 
-``prefer-encrypted`` indicates that agents should default to
-encrypting when composing e-mails to this recipient.
-If ``prefer-encrypted`` is not set,
-the value of ``prefer-encrypted`` is ``nopreference``.
-If ``prefer-encrypted`` is set, but neither ``yes`` nor ``no``,
-the MUA must skip the header as invalid.
+The ``type`` and ``key`` attributes specify the type and data of the
+key material.  For now the only supported type is ``p``, which
+represents a specific subset of OpenPGP (see the next section), and is
+also the default.  Headers with an unknown ``type`` MUST be treated as
+invalid.  The value of the ``key`` attribute is a Base64
+representation of the public key material.  For ease of parsing, the
+``key`` attribute MUST be the last attribute in the header.
+
+The ``prefer-encrypted`` attribute indicates whether agents should
+default to encrypting when composing e-mails to this recipient.  If
+``prefer-encrypted`` is not set, the value of ``prefer-encrypted`` is
+``nopreference``.  If ``prefer-encrypted`` is set, but neither ``yes``
+nor ``no``, the MUA must skip the header as invalid.
 
 Additional attributes unspecified here are also possible before the
-``key`` attribute.  If a MUA encounters an unknown attribute, if the
-attribute name starts with an underscore (``_``), this is a
-"non-critical" attribute.  The MUA MUST ignore the non-critical
-attribute and continue parsing the header.  If the unknown attribute
-name does *not* start with an underscore, it is a "critical"
-attribute, and the MUA must skip the header as invalid.
+``key`` attribute.  If an attribute name starts with an underscore
+(``_``), it is a "non-critical" attribute.  An attribute name without
+a leading underscore is a "critical" attribute.  The MUA SHOULD ignore
+any unsupported non-critical attribute and continue parsing the rest
+of the header as though the attribute does not exist, but MUST treat
+the entire header as invalid if it encounters a "critical" attribute
+it doesn't support.
 
-If a Level 0 MUA encounters an otherwise-valid header which has
-``type`` set to something other than ``p`` it MUST skip the header as
-invalid.
+When parsing an incoming message, a MUA MUST examine all ``Autocrypt``
+headers, rather than just the first one.  If there is more than one
+valid header, this MUST be treated as an error, and all ``Autocrypt``
+headers discarded as invalid.
 
-When parsing an incoming message, a Level 0 MUA MUST examine all
-headers with the name ``Autocrypt:`` and collect all valid headers in a
-list.  If the list of valid headers has more than one entry, it should
-be treated as 0 valid headers (that is, it should return ``null``).
+.. todo::
 
+   - Document why we skip on more than one valid header?
 
 ``type=p``: OpenPGP Based key data
 ++++++++++++++++++++++++++++++++++
 
-For maximum interoperability and sanity a certificate sent by an
-Autocrypt-enabled Level 0 MUA MUST send an OpenPGP "Transferable
-Public Key" (see `RFC 4880 §11.1 <https://tools.ietf.org/html/rfc4880#section-11.1>`_) 
-containing exactly these five OpenPGP packets:
+For maximum interoperability, a certificate sent by an
+Autocrypt-enabled Level 0 MUA MUST consist of an OpenPGP "Transferable
+Public Key" (see `RFC 4880 §11.1
+<https://tools.ietf.org/html/rfc4880#section-11.1>`_) containing
+exactly these five OpenPGP packets:
 
- - a primary key ``Kp``
- - a uid that SHOULD be set to the e-mail address of the account
+ - a signing-capable primary key ``Kp``
+ - a user id that SHOULD be set to the e-mail address of the account
  - a self signature
  - an encryption-capable subkey ``Ke``
  - a binding signature over ``Ke`` by ``Kp``
 
-These packets should be assembled in binary format (not
-ASCII-armored), and then base64-encoded.  During interpretation,
-whitespace should be stripped before base64-decoding.
+The content of the user id packet is only decorative, and MAY contain
+different values from the ``to`` attribute, or even the empty string.
+
+These packets MUST be assembled in binary format (not ASCII-armored),
+and then base64-encoded.
 
 A Level 0 MUA MUST be capable of processing and handling 2048-bit RSA
 keys.  It SHOULD be capable of handling Curve 25519 keys (ed25519 for
 ``Kp`` and cv25519 for ``Ke``), but some underlying toolkits may not
-yet support Curve 25519.
+yet support Curve 25519.  It MAY support other OpenPGP key formats.
 
 
 Internal state storage
@@ -183,24 +195,25 @@ Internal state storage
 .. note::
 
     You should be familiar with :ref:`mua-happypath` before reading the
-    following.  
+    following.
 
 If a remote peer disables Autocrypt or drops back to using a
 non-Autocrypt MUA only we must be able to disable sending encrypted
 mails to this peer automatically.  MUAs capable of Autocrypt level 0
-therefore MUST store state about the capabilities of their remote peers.  
+therefore MUST store state about the capabilities of their remote
+peers.
 
-Agents MAY also store additional
-information gathered for heuristic purposes, or for other
-cryptographic schemes.  However, in order to support future syncing of
-Autocrypt state between agents, it is critical that Autocrypt-capable
-agents maintain the state specified here.
+Agents MAY also store additional information gathered for heuristic
+purposes, or for other cryptographic schemes.  However, in order to
+support future syncing of Autocrypt state between agents, it is
+critical that Autocrypt-capable agents maintain the state specified
+here.
 
 Conceptually, we represent this state as a table named
-``autocrypt_peer_state`` indexed by the peer's :doc:`canonicalized 
+``autocrypt_peer_state`` indexed by the peer's :doc:`canonicalized
 e-mail address <address-canonicalization>` and key type.  In level 0,
 there is only one type, ``p``, so level 0 agents can implement this by
-indexing only the peer's e-mail address. 
+indexing only the peer's e-mail address.
 
 For each e-mail and type, an Agent MUST store the following
 attributes:
@@ -217,12 +230,13 @@ next section).  The ``pah`` MUST contain the following fields:
  * ``key`` -- the raw key material, after base64 decoding
  * ``prefer_encrypted`` -- a tri-state: ``nopreference``, ``yes``, or ``no``
 
-   
+
 Updating internal state upon message receipt
 --------------------------------------------
 
-When first encountering an incoming e-mail ``M`` from an e-mail address ``A``,
-the MUA should follow the following ``autocrypt_update`` algorithm:
+When first encountering an incoming e-mail ``M`` from an e-mail
+address ``A``, the MUA should follow the following
+``autocrypt_update`` algorithm:
 
  - Set a local ``message_date`` to the ``Date:`` header of ``M``.
 
@@ -241,9 +255,10 @@ the MUA should follow the following ``autocrypt_update`` algorithm:
    ```Date:`` header is in the future.
 
 ..
-   
- - Set a local ``message_pah`` to be the ``Autocrypt:`` header in ``M``.  This is
-   either a single Parsed Autocrypt header, or ``null``.
+
+ - Set a local ``message_pah`` to be the ``Autocrypt:`` header in
+   ``M``.  This is either a single Parsed Autocrypt header, or
+   ``null``.
 
  - If ``message_pah`` is ``null``, and the MUA knows about additional
    OpenPGP keys, then we replace ``message_pah`` with a
@@ -279,14 +294,15 @@ the MUA should follow the following ``autocrypt_update`` algorithm:
 
 .. todo::
 
-   Maybe move ``synthesized_pah`` into :doc:`other-crypto-interop` ?
-   
+   - Maybe move ``synthesized_pah`` into :doc:`other-crypto-interop` ?
+   - Can we synthesize from attached keys, e.g. if it has a matching user id?
+
 ..
-   
+
  - Note: The agent continues this message receipt process even when
    ``message_pah`` is ``null``, since updating the stored state with
    ``null`` is sometimes the correct action.
-   
+
  - Next, the agent compares the ``message_pah`` with the ``pah`` stored in
    ``autocrypt_peer_state[A]``.
 
@@ -309,9 +325,9 @@ the MUA should follow the following ``autocrypt_update`` algorithm:
    This is done as a literal comparison using only the ``key`` and
    ``prefer_encrypt`` fields, even if the Agent stores additional
    fields as an augmentation, as follows:
-   
+
    - If ``key`` is bytewise different, or if ``prefer_encrypted`` has a different value,
-     then this is an *update*. 
+     then this is an *update*.
    - If ``key`` and ``prefer_encrypted`` match exactly, then it is considered a *match*.
    - If both ``pah`` and ``message_pah`` are ``null``, it is a *match*.
    - If one is ``null`` and the other is not ``null``, it is a *update*.
@@ -348,7 +364,7 @@ the MUA should follow the following ``autocrypt_update`` algorithm:
    simplicity and ease of implementation, level 0 Autocrypt-capable
    agents are expected to avoid these approaches and to do full
    bytestring comparisons of ``key`` data instead.
-   
+
 .. todo::
 
    the spec currently doesn't say how to integrate Autocrypt
@@ -356,7 +372,7 @@ the MUA should follow the following ``autocrypt_update`` algorithm:
    something about not doing Autocrypt processing on message receipt
    if the message is believed to be spam?
 
-   
+
 Provide a recommendation for message encryption
 -----------------------------------------------
 
@@ -412,7 +428,7 @@ during message composition:
 
 Recommendations for single-recipient messages
 +++++++++++++++++++++++++++++++++++++++++++++
-   
+
 For level 0 MUAs, the Autocrypt recommendation for message composed to
 a single recipient with e-mail address ``A`` is derived from the value
 stored in ``autocrypt_peer_state[A]``.
@@ -457,8 +473,8 @@ recipients and the public key whose secret is controlled by the MUA
 itself.
 
 For messages that are going to be encrypted when sent, the MUA MUST
-NOT leak the cleartext of drafts or other partially-composed messages
-to the SMA (e.g. in the "Drafts" folder).
+take care not to leak the cleartext of drafts or other
+partially-composed messages to the SMA (e.g. in the "Drafts" folder).
 
 If there is any chance that the message could be encrypted, the MUA
 SHOULD encrypt drafts only to itself before storing in any Drafts
@@ -469,19 +485,19 @@ Specific User Interface Elements
 
 Ideally, Autocrypt users see very little UI.  They might never see any
 UI at all by default.  However, some UI is inevitable, even if only
-tucked away in an arcane "preferences pane" or something.
+tucked away in an arcane "preferences pane".
 
 Account Preferences
 +++++++++++++++++++
 
 Level 0 MUAs MUST allow the user to disable Autocrypt completely for
-each account they control.  
+each account they control.
 
-If Autocrypt is enabled for a given account, the MUA MUST allow the
+If Autocrypt is enabled for a given account, the MUA SHOULD allow the
 user to specify whether they explicitly prefer encryption for inbound
 messages, or explicitly prefer cleartext for inbound messages, or
 choose to express no preference.  The default SHOULD be "no
-preference" unless the MUA has good reason to know better.
+preference".
 
 Please see :doc:`ui-examples` for specific examples of how this might
 look.
@@ -490,7 +506,7 @@ Message Composition
 +++++++++++++++++++
 
 If an MUA is willing to compose encrypted mail, it SHOULD include some
-UI mechanism at message composition time for the user to choose an
+UI mechanism at message composition time for the user to choose between
 encrypted message or cleartext.  This may be as simple as a single
 checkbox.
 
@@ -501,3 +517,7 @@ composition at all.
 If the Autocrypt recommendation is either ``available`` or
 ``encrypt``, the MUA SHOULD expose this UI during message composition
 to allow the user to make a different decision.
+
+.. todo::
+
+   - Should we really recommend hiding the encrypt UI? This reduces UI consistency!
