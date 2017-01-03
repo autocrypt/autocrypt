@@ -121,7 +121,7 @@ Deriving a Parsed Autocrypt Header from a Message
 
 The ``Autocrypt:`` header MUST have the following format::
 
-    Autocrypt: to=a@b.example.org; [type=(p|_*);] [prefer-encrypted=(yes|no);] key=BASE64
+    Autocrypt: to=a@b.example.org; [type=p;] [prefer-encrypted=(yes|no);] key=BASE64
 
 Where the value of ``key`` includes a Base64 representation of a
 minimal key. For now we only support ``p`` as the type, which
