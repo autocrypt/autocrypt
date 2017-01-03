@@ -1,0 +1,18 @@
+# this should work for all editors that support .editorconfig!
+#
+# on debian, emacs users should install elpa-editorconfig and vim
+# users should install vim-editorconfig.
+
+root = true
+
+[*]
+indent_style = space
+insert_final_newline = true
+trim_trailing_whitespace = true
+end_of_line = lf
+charset = utf-8
+indent_size = 4
+max_line_length = 70
+
+[Makefile]
+indent_style = tab
