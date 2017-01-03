@@ -52,7 +52,9 @@ Establishing encryption happens as a side effect when people send each other mai
 "Happy path" example: 1:1 communication
 ---------------------------------------
 
-.. image:: images/autocrypthappy.svg
+.. image:: ./images/autocrypthappy.svg
+
+.. image:: images/sequence_diagram_level0_1-1.*
 
 Consider a blank state and a first outgoing message from Alice to Bob::
 
@@ -97,6 +99,8 @@ that Bob and Carol's MUA will learn Alice's key.  After Bob and Carol
 have each replied once, all MUAs will have appropriate keys for
 encrypting the group communication.
 
+.. image:: images/sequence_diagram_level0_1-n_happy.*
+
 It is possible that an encrypted mail is replied to in cleartext (unencrypted).
 For example, consider this mail flow::
 
@@ -111,6 +115,8 @@ before his MUA has seen a mail from Carol.  This is fine because Autocrypt
 is about **opportunistic** encryption, i.e. encrypt if possible and
 otherwise don't get in the way of users.
 
+.. image:: images/sequence_diagram_level0_1-n.*
+
 
 Losing access to decryption key
 -------------------------------
@@ -122,6 +128,8 @@ If Alice loses access to her decryption secret:
 - her MUA will add an Encryption-Info header containing the new key with each mail
 
 - receiving MUAs will replace the old key with the new key
+
+.. image:: images/sequence_diagram_level0_lose_key.*
 
 Meanwhile, if Bob sends Alice a mail encrypted to the old key she will
 not be able tor ead it.  After she responds (e.g. with "Hey, can't read
@@ -150,3 +158,5 @@ Alice might decide to switch to a different MUA which does not support Autocrypt
 A MUA which previously saw an Autocrypt header and/or encryption from Alice
 now sees an unencrypted mail from Alice and no encryption header. This
 will disable encryption to Alice for subsequent mails.
+
+.. image:: images/sequence_diagram_level0_downgrade.*

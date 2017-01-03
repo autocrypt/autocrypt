@@ -1,0 +1,49 @@
+@startuml
+
+autonumber
+title Group (1:N) sequence diagram
+
+control Alice #blue
+control Bob #red
+control Carol #green
+
+note over Alice: <alice@a.example.com>
+note over Bob: <bob@b.example.com>
+note over Carol: <carol@c.example.com>
+
+Alice --> Bob:  Autocrypt: to=alice@a.example; prefer-encrypted=yes; key=AAA
+activate Alice
+activate Bob
+note over Bob: save Alice key
+deactivate Bob
+Alice --> Carol:  Autocrypt: to=alice@a.example; prefer-encrypted=yes; key=AAA
+activate Carol
+deactivate Alice
+note over Carol: save Alice key
+deactivate Carol
+
+note over Bob: use Alice key
+Alice <- Bob: Autocrypt: to=bob@b.example; prefer-encrypted=yes; key=BBB
+activate Bob
+activate Alice
+note over Alice: save Bob key
+deactivate Alice
+Bob --> Carol: Autocrypt: to=bob@b.example; prefer-encrypted=yes; key=BBB
+activate Carol
+deactivate Bob
+note over Carol: save Bob key
+deactivate Carol
+
+note over Carol: use Alice key
+Alice <- Carol: Autocrypt: to=carol@c.example; prefer-encrypted=yes; key=CCC
+activate Carol
+activate Alice
+note over Alice: save Carol key
+deactivate Carol
+deactivate Alice
+
+note over Alice: Alice has Bob and Carol keys
+note over Bob: Bob has Alice key
+note over Carol: Carol has Alice and Bob keys
+
+@enduml

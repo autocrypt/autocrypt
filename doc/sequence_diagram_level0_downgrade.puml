@@ -1,0 +1,22 @@
+@startuml
+
+autonumber
+title "Alice lose key sequence diagram"
+
+control Alice #blue
+control Bob #red
+
+note over Alice: <alice@a.example.com>
+note over Bob: <bob@b.example.com>
+
+Alice --> Alice: switch to MUA that does not support Autocrypt
+activate Alice
+deactivate Alice
+
+Alice --> Bob: no Autocrypt header
+activate  Bob
+note over Bob: update to do not encrypt to Alice
+deactivate Alice
+deactivate Bob
+
+@enduml
