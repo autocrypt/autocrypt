@@ -9,7 +9,7 @@ points, feel free to jump in!  (but let's try to stay focused on
 getting Level 0 stable before we invest too much energy in these next
 steps)
 
-
+.. contents::
 
 Expiry
 ------
