@@ -22,7 +22,7 @@ Expiry
    as an opportunity to refresh their secret key material or update
    the expiration dates in their public certificate.
 
-   
+
 Client sync
 -----------
 
@@ -40,7 +40,7 @@ Please see :doc:`peering`
 
 New Types
 ---------
-   
+
 .. todo::
 
    how to deal with multiple types (at least when a new type is
@@ -112,9 +112,9 @@ Encrypted headers
 .. todo::
 
    Document interaction with encrypted headers: if something like
-   memoryhole ever makes it possible to hide normal `To:` and `Cc:`
-   headers, then we need to rethink our approach to handling PKESK
-   leakage further.
+   `Memory Hole <http://modernpgp.org/memoryhole/>`_ ever makes it
+   possible to hide normal `To:` and `Cc:` headers, then we need to
+   rethink our approach to handling PKESK leakage further.
 
 
 Webmail
@@ -173,4 +173,3 @@ Heuristics for dealing with "nopreference"
 
    Documenting reasonable heuristics for MUAs to use in this case
    would be very helpful.
-
