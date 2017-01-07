@@ -7,7 +7,7 @@ should be as simple as: use an Autocrypt-enabled mail app!**
 **Why improve e-mail?** E-Mail has been declared dead many times but 
 refuses to die. It remains the largest open federated identity and
 messaging eco-system, anchors the web, mobiles and continues to relay
-sensitive information between citizens and organisations. It has
+sensitive information between people and organisations. It has
 problems but do you prefer the proprietary, easy-to-track mobile phone 
 number system to become the single source of digital identification?
 
