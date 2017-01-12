@@ -430,11 +430,6 @@ during message composition:
    the message in cleartext, and default to encryption.  Prepare the
    message as an encrypted message.
 
-.. todo::
-
-   The Autocrypt recommendation should probably change depending on
-   whether the mail is a reply to an encrypted e-mail or not.
-
 Recommendations for single-recipient messages
 +++++++++++++++++++++++++++++++++++++++++++++
 
@@ -446,8 +441,9 @@ If the ``pah`` is ``null``, or if ``pah.key`` is known to be unusable
 for encryption (e.g. it is otherwise known to be revoked or expired),
 then the recommendation is ``disable``.
 
-If the ``pah`` is not ``null``, and ``prefer-encrypted`` is ``yes``,
-then the recommendation is ``encrypt``.
+If the ``pah`` is not ``null``, and ``prefer-encrypted`` is ``yes`` or
+the message being composed is a reply to an encrypted message, then
+the recommendation is ``encrypt``.
 
 If ``pah`` is not ``null``, and ``prefer-encrypted`` is either ``no``
 or ``nopreference``, then the recommendation is ``available``.
@@ -462,13 +458,36 @@ for each recipient individually.
 If any recipient has a recommendation of ``disable`` then the message
 recommendation is ``disable``.
 
-If every recipient other than "myself" (the e-mail address that the
+If the message being composed is a reply to an encrypted message, or
+if every recipient other than "myself" (the e-mail address that the
 message is ``From:``) has a recommendation of ``encrypt`` then the
 message recommendation is ``encrypt``.
 
 Otherwise, the message recommendation is ``available``.
 
+Cleartext replies to encrypted mail
++++++++++++++++++++++++++++++++++++
 
+As you can see above, in the common use case, a reply to an encrypted
+message will also be encrypted.  Due to Autocrypt's opportunistic
+approach, however, it's possible that ``pah`` is ``null`` for some
+recipient, which means the reply will be sent in the clear.
+
+To avoid leaking cleartext from the original encrypted message in this
+case, the MUA MAY prepare the cleartext reply without including any
+of the typically quoted and attributed text from the previous message.
+Additionally, the MUA MAY include brief text in message body along the
+lines of::
+
+  The message this is a reply to was sent encrypted, but this reply is
+  unencrypted because I don't yet know how to encrypt to
+  ``bob@example.com``.  If ``bob@example.com`` would reply here, my
+  future messages in this thread will be encrypted.
+
+The above recommendations are only "MAY" and not "SHOULD" or "MUST"
+because we want to accomodate a user-friendly level 0 MUA that stays
+silent and does not impede the user's ability to reply.  Opportunistic
+encryption means we can't guarantee encryption in every case.
 
 Encrypt outbound mail as requested
 ----------------------------------
