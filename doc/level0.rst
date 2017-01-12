@@ -1,13 +1,20 @@
-Guidance for Implementers of Autocrypt Level 0
-==============================================
+Autocrypt Level 0: Enabling encryption, avoiding annoyances
+===========================================================
 
-This document describes the basic capabilities required for a MUA to
-be Autocrypt-capable at Level 0.  Some Autocrypt-capable clients may
-choose to go beyond these features, and future Levels of Autocrypt may
-require more specific control.
+This document describes the basic capabilities required for a mail app (MUA)
+to be Autocrypt-capable at Level 0.  The design of Level 0 is driven by
+usability concerns and by the realities of incremental deployment.  A user
+may use both Autocrypt-enabled mail apps and traditional plain ones
+and we'd like to avoid annoyances like unexpected unreadable mails
+while already supporting to turn on encryption explicitely.
 
-Throughout this document, we refer to a Mail User Agent (MUA) as
-though it was only capable of controlling a single e-mail account.  A
+In other words, Level 0 does not support multi-device configurations which is
+rather intended and discussed as part of Level 1.  We want to keep Level 0
+minimal enough that it's easy for developers to adopt it and we can
+start to drive efforts from real-life experiences as soon as possible.
+
+Throughout this document, we refer to a mail apps or Mail User Agents (MUA)
+as though it was only capable of controlling a single e-mail account.  A
 MUA that is capable of connecting to multiple e-mail accounts should
 have a separate Autocrypt state for each e-mail account it has access
 to.

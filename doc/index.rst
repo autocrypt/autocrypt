@@ -37,14 +37,15 @@ The technical Autocrypt approach
 --------------------------------------
 
 Autocrypt uses regular e-mail messages between people to piggyback
-necessary information to allow encrypting subsequent messages.  
-Under the hood, Autocrypt uses e-mail headers for this information
-transfer. By default, no key management is visible to users.
-See :doc:`features` for more technical and UI cornerstones.
+necessary information to allow encrypting subsequent messages; it
+adds a new "Autocrypt" e-mail header for transfering keys and 
+driving encryption behaviour. By default, key management is not visible 
+to users. See :doc:`features` for more technical and UI cornerstones.
 
-We are establishing this approach step-by-step using different "Levels"
-of implementation compliance.  We are currently documenting :doc:`Level
-0 <level0>`, which we aim to see supported in Spring of 2017 by various
-mailers.
+We are following this approach step-by-step using different "Levels"
+of implementation compliance.  Driven by usability concerns, we are
+refining and implementing :doc:`Level 0 <level0>` in several mail apps
+during spring 2017.  If you are interested to help please :doc:`join our
+channels and look at where we meet next <contact>`.
 
 See :doc:`contents` for an index of all docs and discussion results so far.
