@@ -66,7 +66,7 @@ code.  We want to support implementation where needed.
 So you say you care about header size... but then you type out prefer-encrypt?
 ------------------------------------------------------------------------------
 
-An ECC key is roughly 500 bytes formated in Base64 and RSA 2048 key is
+An ECC key is roughly 500 bytes formatted in Base64 and RSA 2048 key is
 1750 bytes.  The Length of attribute name does not matter so much. So
 we opted for readability.
 

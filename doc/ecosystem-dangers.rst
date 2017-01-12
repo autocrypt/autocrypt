@@ -64,7 +64,7 @@ Autocrypt-capable client in the first place.
 Mitigations:
 
  - Alice's next mail to Bob will correct Bob's client's state so that
-   futre mails will be back to Alice's actualy preferred state.  So
+   futre mails will be back to Alice's actually preferred state.  So
    the attacker must sustain a series of forgeries if the denial of
    service attack is intended to be sustained.
 
@@ -90,7 +90,7 @@ identity verification.
 
 Mitigations:
 
-- make out-of-band verification of keys between users 
+- make out-of-band verification of keys between users
   fun and thus increase the risk for attackers to get detected.
 
 - research how "level 2" Autocrypt could evolve to offer
@@ -104,9 +104,9 @@ Mike Hearn raised some fundamental concerns in his `Modern anti-spam
 and E2E crypto post on the modern crypto mailing list
 <https://moderncrypto.org/mail-archive/messaging/2014/000780.html>`_
 on how end-to-end encrypted mails and spam infrastructure possibly
-interfere.  While we may conceive new ways to fight spam in an E2E 
-setting by increased DKIM usage and other additional measures 
-the topic is a serious one as adoption of more encrypted mails 
+interfere.  While we may conceive new ways to fight spam in an E2E
+setting by increased DKIM usage and other additional measures
+the topic is a serious one as adoption of more encrypted mails
 could be seriously hampered if encryption can bypass current
 anti-spam technology.
 
@@ -119,4 +119,4 @@ massively harvest encryption keys; there is no central registery for
 key-mail address relations.  Massive collection of key/mailaddress
 associations would require co-operation from or compromise of big mail
 providers which is unlikely given they have been fighting unsolicited
-mails for decades and their business models depend on it. 
+mails for decades and their business models depend on it.

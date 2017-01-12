@@ -6,7 +6,7 @@ Shared MUAA Messaging Archive
 
 characteristics/requirements of of what SMAs need to provide:
 
-- a SMA can be implemented on top of IMAP commands 
+- a SMA can be implemented on top of IMAP commands
 
 - is used to synchronize states between MUAAs. We use "MUAAs" to
   indicate a particular MUA/Account combination because synchronization
@@ -18,8 +18,8 @@ characteristics/requirements of of what SMAs need to provide:
 
 - A MUAA needs to be able to detect if there is any other MUAA
 
-- messages are not (neccesarily) human readable and don't appear in the
-  regular inbox. 
+- messages are not (necessarily) human readable and don't appear in the
+  regular inbox.
 
 - probably: size of SMA should not grow linearly with number of
   incoming/outgoing mails, for example messages that have been
@@ -29,7 +29,7 @@ characteristics/requirements of of what SMAs need to provide:
   exist/are not alive anymore
 
 - we only require from IMAP servers that they handle first level folders
-  (subfolders are not neccessary)
+  (subfolders are not necessary)
 
 - there is a header in the messages stored in these folders, indicating
   that the message is an SMA message.
@@ -40,9 +40,9 @@ implementation on top of IMAP, pairing happy path
 Let's suppose we have a first MUAA.  It doesn't find an ``_Autocrypt_SMA``
 announcement folder so it will do the following:
 
-- create a random new number "1" which we call MUAA-ID. 
+- create a random new number "1" which we call MUAA-ID.
 
-- create an ``_Autocrypt_SMA`` "announcements" folder and 
+- create an ``_Autocrypt_SMA`` "announcements" folder and
   append some MUAA description message, most notably
   the MUAA-ID
 
@@ -51,9 +51,9 @@ announcement folder so it will do the following:
 
 If now another MUAA is added:
 
-- create a random new number "27" as MUAA-ID. 
+- create a random new number "27" as MUAA-ID.
 
-- discover the ``_Autocrypt_SMA`` folder exists and read all 
+- discover the ``_Autocrypt_SMA`` folder exists and read all
   of its messages, discover that there is an ``1`` MUAA
 
 - create an inbox folder ``_Autocrypt_SMA_27`` where other
@@ -69,8 +69,8 @@ The MUAA "1" will then:
 
 - read the pairing request message from its own ``_Autocrypt_SMA_1`` inbox
 
-- process the pairing request and send a pairing accept message to "27" by appending 
-  it to the ``_Autocrypt_SMA_27`` folder.  
+- process the pairing request and send a pairing accept message to "27" by appending
+  it to the ``_Autocrypt_SMA_27`` folder.
 
 - delete the pairing request message from its own ``_Autocrypt_SMA_1`` folder.
 

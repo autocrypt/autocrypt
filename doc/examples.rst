@@ -19,8 +19,8 @@ These examples try to walk a new reader through the basic flow.
    downgrade or man-in-the-middle attacks on Autocrypt's key
    discovery.  Users may, however, detect such tampering if they
    verify their keys out-of-band at some later point in time.  We hope
-   this possiblity will keep most providers honest or at least prevent
-   them from performing active attacks on a massive scale.
+   this possibility will keep most providers honest or at least
+   prevent them from performing active attacks on a massive scale.
 
 Please also see https://github.com/autocrypt/autocrypt/tree/master/src/tests/data
 for specific examples of Autocrypt messages.
@@ -43,7 +43,7 @@ Establishing encryption happens as a side effect when people send each other mai
   the info with a canonicalized version of the ``From:`` address contained
   in the :rfc:`822` message.
 
-- A MUA will encrypt a message if it earlier saw encryption keys 
+- A MUA will encrypt a message if it earlier saw encryption keys
   (and the request to encrypt) for all recipients.
 
 
