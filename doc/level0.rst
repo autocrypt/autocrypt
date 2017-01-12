@@ -9,8 +9,8 @@ and we'd like to avoid annoyances like unexpected unreadable mails
 while supporting users who want to explicitly turn on encryption.
 
 For ease of implementation and deployment, Level 0 does not support
-multi-device configurations.  We intend to `support the multi-device
-use case (and other features) as part of Level 1<nextsteps>`_.  We
+multi-device configurations.  We intend to :doc:`support the multi-device
+use case (and other features) as part of Level 1<next-steps>`.  We
 want to keep Level 0 minimal enough that it's easy for developers to
 adopt it and we can start to drive efforts from real-life experiences
 as soon as possible.
