@@ -22,7 +22,7 @@ much wider adoption.
 The social Autocrypt approach
 ------------------------------
 
-The Autocrypt project is driven by a diverse group mail of app developers, 
+The Autocrypt project is driven by a diverse group of mail app developers, 
 hackers and researchers who are willing to take fresh approaches, learn from
 past mistakes, and collectively aim to increase the overall encryption
 of e-mail in the net.  The group effort was born and named "Autocrypt"
