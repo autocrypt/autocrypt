@@ -40,9 +40,9 @@ has credentials and capabilities to perform these network services:
 
 - Access to a special (IMAP) Shared Message Archive (SMA) folder which
   can be accessed by all MUAs of a user's devices to co-ordinate
-  between them.  In Level 0 this is only used for `ensuring that only
+  between them.  In Level 0 this is only used for :ref:`ensuring that only
   one MUA has Autocrypt enabled for an e-mail account at once
-  <lockout>`_.
+  <lockout>`.
 
 If a particular e-mail account does not expose these features
 (e.g. if it only exposes a javascript-driven web interface for message
@@ -73,8 +73,8 @@ passwords the MUA retains for the user's IMAP or SMTP accounts.
 
 In Level 0 only one MUA can send and receive encrypted mail through
 Autocrypt mechanisms.  When an Autocrypt-enabled MUA configures an
-e-mail account, it first tries to "claim" the account, to `lock out
-<lockout>`_ other MUAs of the same users.  If the claim was
+e-mail account, it first tries to "claim" the account, to :ref:`lock out
+<lockout>` other MUAs of the same users.  If the claim was
 successful, the MUA should proceed to generate secret keys and store
 them locally.
 
