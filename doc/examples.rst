@@ -81,7 +81,7 @@ If ``prefer-encrypted`` is sent as 'yes' the MUA MUST default to encrypting
 the next e-mail. If it is set as 'no' the MUA MUST default to plaintext.
 If ``prefer-encrypted`` is not sent the MUA should stick to what it was doing
 before. If the attribute has never been sent it's up to the MUA to decide. The
-save way to go about it is to default to plaintext to make sure the recipient
+safe way to go about it is to default to plaintext to make sure the recipient
 can read the e-mail.
 
 We encourage MUA developers to propose heuristics for handling the undirected
@@ -92,8 +92,8 @@ Group mail communication (1:N)
 ------------------------------
 
 Consider a blank state and a first outgoing message from Alice to Bob
-and Carol.  Alice's MUA add a header just like in the 1:1 case so
-that Bob and Carol's MUA will learn Alice's key.  After Bob and Carol
+and Carol.  Alice's MUA adds a header just like in the 1:1 case so
+that Bob's and Carol's MUAs will learn Alice's key.  After Bob and Carol
 have each replied once, all MUAs will have appropriate keys for
 encrypting the group communication.
 
@@ -124,7 +124,7 @@ If Alice loses access to her decryption secret:
 - receiving MUAs will replace the old key with the new key
 
 Meanwhile, if Bob sends Alice a mail encrypted to the old key she will
-not be able tor ead it.  After she responds (e.g. with "Hey, can't read
+not be able to read it.  After she responds (e.g. with "Hey, can't read
 your mail") Bob's MUA will see the new key and subsequently use it.
 
 .. todo::
@@ -138,7 +138,7 @@ your mail") Bob's MUA will see the new key and subsequently use it.
 
     Unless we can get perfect recoverability (also for device loss etc.) we will
     always have to consider this "fatal" case of losing a secret key and how
-    users can deal with it.  Especially in the federated e-mail context We do
+    users can deal with it.  Especially in the federated e-mail context we do
     not think perfect recoverability is feasible.
 
 
