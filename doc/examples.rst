@@ -119,7 +119,7 @@ If Alice loses access to her decryption secret:
 
 - she lets her MUA generate a new key
 
-- her MUA will add an Encryption-Info header containing the new key with each mail
+- her MUA will add an Autocrypt header containing the new key with each mail
 
 - receiving MUAs will replace the old key with the new key
 
