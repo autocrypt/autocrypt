@@ -22,7 +22,7 @@ def generate_rsa_key(alg_key=PubKeyAlgorithm.RSAEncryptOrSign,
     :param alg_key: algorithm for primary key
     :param alg_subkey: algorithm for subkey
     :param size: key size
-    :param uid: email address
+    :param uid: e-mail address
     :return: key
     :type alg_key: PubKeyAlgorithm
     :type alg_subkey: PubKeyAlgorithm
@@ -33,11 +33,13 @@ def generate_rsa_key(alg_key=PubKeyAlgorithm.RSAEncryptOrSign,
     """
     # NOTE: default algorithm was decided to be RSA and size 2048.
     key = PGPKey.new(alg_key, size)
-    # NOTE: PGPy implements separate attributes for name and email and name
+    # NOTE: PGPy implements separate attributes for name and e-mail address
     # is mandatory.
-    # Here using email for the attribute name in order the uid will be the email
-    # If name attribute i set to empty string and email to the email, the uid
-    # will be ' <email>', for instance " <alice@testsuite.autocrypt.org>"
+    # Here using e-mail address for the attribute name in order for
+    # the uid to be the e-mail address.  If name attribute is set to
+    # empty string and email to the e-mail address, the uid will be '
+    # <e-mail address>', for instance:
+    # " <alice@testsuite.autocrypt.org>" - which we do not want.
     uid = PGPUID.new(uid)
     # NOTE: it is needed to specify all arguments in current PGPy version.
     key.add_uid(uid,
@@ -178,7 +180,7 @@ def generate_Autocrypt_header(key, uid):
 
     :param key: key (either public or private)
     :type key: PGPKey
-    :param uid: email address
+    :param uid: e-mail address
     :type uid: string
     :return: Autocrypt header
     :rtype: string
