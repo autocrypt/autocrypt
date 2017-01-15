@@ -52,7 +52,47 @@ Establishing encryption happens as a side effect when people send each other mai
 "Happy path" example: 1:1 communication
 ---------------------------------------
 
-.. image:: ./images/autocrypthappy.*
+.. image:: images/autocrypthappy.*
+
+.. uml::
+
+    @startuml
+
+    autonumber
+    title "happy path" (1:1) sequence diagram
+
+    control Alice #blue
+    control Bob #red
+
+    note over Alice: <alice@a.example.com>
+    note over Bob: <bob@b.example.com>
+
+    Alice --> Bob:  Autocrypt: to=alice@a.example; prefer-encrypted=yes; key=AAA
+    activate Alice
+    activate Bob
+    note over Bob: save Alice key
+    deactivate Bob
+    deactivate Alice
+
+    note over Bob: use Alice key
+    Alice <- Bob: Autocrypt: to=bob@b.example; prefer-encrypted=yes; key=BBB
+    activate Bob
+    activate Alice
+    note over Alice: save Bob key
+    deactivate Alice
+    deactivate Bob
+
+    note over Alice: use Bob key
+    Alice -> Bob: Autocrypt: to=alice@a.example; prefer-encrypted=yes; key=AAA
+    activate Alice
+    activate Bob
+    deactivate Alice
+    deactivate Bob
+
+    note over Alice: Alice has Bob key
+    note over Bob: Bob has Alice key
+
+    @enduml
 
 Consider a blank state and a first outgoing message from Alice to Bob::
 
@@ -95,7 +135,63 @@ Consider a blank state and a first outgoing message from Alice to Bob
 and Carol.  Alice's MUA adds a header just like in the 1:1 case so
 that Bob's and Carol's MUAs will learn Alice's key.  After Bob and Carol
 have each replied once, all MUAs will have appropriate keys for
-encrypting the group communication.
+encrypting the group communication. See the diagram below:
+
+.. uml::
+
+    @startuml
+
+    autonumber
+    title Group (1:N) "happy" sequence diagram
+
+    control Alice #blue
+    control Bob #red
+    control Carol #green
+
+    note over Alice: <alice@a.example.com>
+    note over Bob: <bob@b.example.com>
+    note over Carol: <carol@c.example.com>
+
+    Alice --> Bob:  Autocrypt: to=alice@a.example; prefer-encrypted=yes; key=AAA
+    activate Alice
+    activate Bob
+    note over Bob: save Alice key
+    deactivate Bob
+    Alice --> Carol:  Autocrypt: to=alice@a.example; prefer-encrypted=yes; key=AAA
+    activate Carol
+    deactivate Alice
+    note over Carol: save Alice key
+    deactivate Carol
+
+    note over Bob: use Alice key
+    Alice <- Bob: Autocrypt: to=bob@b.example; prefer-encrypted=yes; key=BBB
+    activate Bob
+    activate Alice
+    note over Alice: save Bob key
+    deactivate Alice
+    Bob --> Carol: Autocrypt: to=bob@b.example; prefer-encrypted=yes; key=BBB
+    activate Carol
+    deactivate Bob
+    note over Carol: save Bob key
+    deactivate Carol
+
+    note over Carol: use Alice key
+    Alice <- Carol: Autocrypt: to=carol@c.example; prefer-encrypted=yes; key=CCC
+    activate Carol
+    activate Alice
+    note over Alice: save Carol key
+    deactivate Alice
+    Bob <- Carol: Autocrypt: to=carol@c.example; prefer-encrypted=yes; key=CCC
+    activate Bob
+    deactivate Carol
+    note over Bob: save Carol key
+    deactivate Bob
+
+    note over Alice: Alice has Bob and Carol keys
+    note over Bob: Bob has Alice and Carol keys
+    note over Carol: Carol has Alice and Bob keys
+
+    @enduml
 
 It is possible that an encrypted mail is replied to in cleartext (unencrypted).
 For example, consider this mail flow::
@@ -110,7 +206,59 @@ mail to Bob and Carol but Bub will not be able to respond encrypted
 before his MUA has seen a mail from Carol.  This is fine because Autocrypt
 is about **opportunistic** encryption, i.e. encrypt if possible and
 otherwise don't get in the way of users.
+This case is represented in the following diagram:
 
+.. uml::
+
+    @startuml
+
+    autonumber
+    title Group (1:N) sequence diagram
+
+    control Alice #blue
+    control Bob #red
+    control Carol #green
+
+    note over Alice: <alice@a.example.com>
+    note over Bob: <bob@b.example.com>
+    note over Carol: <carol@c.example.com>
+
+    Alice --> Bob:  Autocrypt: to=alice@a.example; prefer-encrypted=yes; key=AAA
+    activate Alice
+    activate Bob
+    note over Bob: save Alice key
+    deactivate Bob
+    Alice --> Carol:  Autocrypt: to=alice@a.example; prefer-encrypted=yes; key=AAA
+    activate Carol
+    deactivate Alice
+    note over Carol: save Alice key
+    deactivate Carol
+
+    note over Bob: use Alice key
+    Alice <- Bob: Autocrypt: to=bob@b.example; prefer-encrypted=yes; key=BBB
+    activate Bob
+    activate Alice
+    note over Alice: save Bob key
+    deactivate Alice
+    Bob --> Carol: Autocrypt: to=bob@b.example; prefer-encrypted=yes; key=BBB
+    activate Carol
+    deactivate Bob
+    note over Carol: save Bob key
+    deactivate Carol
+
+    note over Carol: use Alice key
+    Alice <- Carol: Autocrypt: to=carol@c.example; prefer-encrypted=yes; key=CCC
+    activate Carol
+    activate Alice
+    note over Alice: save Carol key
+    deactivate Carol
+    deactivate Alice
+
+    note over Alice: Alice has Bob and Carol keys
+    note over Bob: Bob has Alice key
+    note over Carol: Carol has Alice and Bob keys
+
+    @enduml
 
 Losing access to decryption key
 -------------------------------
@@ -122,6 +270,31 @@ If Alice loses access to her decryption secret:
 - her MUA will add an Autocrypt header containing the new key with each mail
 
 - receiving MUAs will replace the old key with the new key
+
+.. uml::
+
+    @startuml
+
+    autonumber
+    title "Alice lose key sequence diagram"
+
+    control Alice #blue
+    control Bob #red
+
+    note over Alice: <alice@a.example.com>
+    note over Bob: <bob@b.example.com>
+
+    Alice --> Alice: switch to MUA that does not support Autocrypt
+    activate Alice
+    deactivate Alice
+
+    Alice --> Bob: no Autocrypt header
+    activate  Bob
+    note over Bob: update to do not encrypt to Alice
+    deactivate Alice
+    deactivate Bob
+
+    @enduml
 
 Meanwhile, if Bob sends Alice a mail encrypted to the old key she will
 not be able to read it.  After she responds (e.g. with "Hey, can't read
@@ -150,3 +323,30 @@ Alice might decide to switch to a different MUA which does not support Autocrypt
 A MUA which previously saw an Autocrypt header and/or encryption from Alice
 now sees an unencrypted mail from Alice and no encryption header. This
 will disable encryption to Alice for subsequent mails.
+
+.. uml::
+
+    @startuml
+
+    autonumber
+    title "Alice lose key sequence diagram"
+
+    control Alice #blue
+    control Bob #red
+
+    note over Alice: <alice@a.example.com>
+    note over Bob: <bob@b.example.com>
+
+    Alice --> Alice: lost decryption key :-(
+    activate Alice
+    note over Alice: generate new Alices key
+    deactivate Alice
+
+    Alice -> Bob: Autocrypt: to=alice@a.example; prefer-encrypted=yes; key=XXX
+    activate Alice
+    activate  Bob
+    note over Bob: save Alices new key
+    deactivate Alice
+    deactivate Bob
+
+    @enduml
