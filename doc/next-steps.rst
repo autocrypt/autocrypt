@@ -88,16 +88,17 @@ see :doc:`backup`
 Guidance on masking Key IDs
 ---------------------------
 
-If any recipients are in `Bcc:` (rather than `To:` or `Cc:`), and the
-key types used are all OpenPGP (`type=p`), then the agent SHOULD mask
-the recipient key ID in the generated PKESK packets that correspond to
-the Bcc'ed recipents.  It does not need to mask recipient key IDs of
-normal recipients.
+If any recipients are in :mailheader:`Bcc:` (rather than
+:mailheader:`To:` or :mailheader:`Cc:`), and the key types used are
+all OpenPGP (``type=p``), then the agent SHOULD mask the recipient key
+ID in the generated PKESK packets that correspond to the Bcc'ed
+recipents.  It does not need to mask recipient key IDs of normal
+recipients.
 
 Masking of Key IDs is done by setting the key ID to all-zeros.  See
-the end of section 5.1 RFC 4880 for more details.  Users of GnuPG can
-use the `--hidden-recipient` argument to indicate a recipient who will
-be masked.
+the end of :rfc:`section 5.1 RFC 4880<4880#section-5.1>` for more
+details.  Users of GnuPG can use the ``--hidden-recipient`` argument to
+indicate a recipient who will be masked.
 
 This is so that the message encryption does not leak much additional
 metadata beyond what is already found in the headers of the message.
@@ -113,8 +114,9 @@ Encrypted headers
 
    Document interaction with encrypted headers: if something like
    `Memory Hole <http://modernpgp.org/memoryhole/>`_ ever makes it
-   possible to hide normal `To:` and `Cc:` headers, then we need to
-   rethink our approach to handling PKESK leakage further.
+   possible to hide normal :mailheader:`To:` and :mailheader:`Cc:`
+   headers, then we need to rethink our approach to handling PKESK
+   leakage further.
 
 
 Webmail

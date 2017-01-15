@@ -33,15 +33,16 @@ Basic network protocol flow
 
 Establishing encryption happens as a side effect when people send each other mail:
 
-- A MUA (mail user agent) always adds an ``Autocrypt:`` header to all messages it
-  sends out.
+- A MUA (mail user agent) always adds an :mailheader:`Autocrypt:`
+  header to all messages it sends out.
 
-  The autocrypt header contains all necessary information to allow encryption
-  (especially the key; see :ref:`autocryptheaderformat` for the format in detail).
+  The :mailcrypt:`Autocrypt:` header contains all necessary
+  information to allow encryption (especially the key; see
+  :ref:`autocryptheaderformat` for the format in detail).
 
 - A MUA will scan incoming mails for encryption headers and associate
-  the info with a canonicalized version of the ``From:`` address contained
-  in the :rfc:`822` message.
+  the info with a canonicalized version of the :mailheader:`From:`
+  address contained in the :rfc:`822` message.
 
 - A MUA will encrypt a message if it earlier saw encryption keys
   (and the request to encrypt) for all recipients.
@@ -65,11 +66,12 @@ encryption key::
 
     Autocrypt: to=alice@a.example; type=p; prefer-encrypted=yes; key=...
 
-Bob's MUA will scan the incoming mail, find Alice's key and store it associated
-to the ``alice@a.example`` address taken from the ``to``-attribute.
-When Bob now composes a mail to Alice his MUA will find the key and signal to
-Bob that the mail will be encrypted and after finalization of the mail encrypt
-it.  Moreover, Bob's MUA will add its own Encryption Info::
+Bob's MUA will scan the incoming mail, find Alice's key and store it
+associated to the ``alice@a.example`` address taken from the
+``to``-attribute.  When Bob now composes a mail to Alice his MUA will
+find the key and signal to Bob that the mail will be encrypted and
+after finalization of the mail encrypt it.  Moreover, Bob's MUA will
+add its own encryption info::
 
     Autocrypt: to=bob@b.example; type=p; prefer-encrypted=yes; key=...
 
@@ -77,15 +79,17 @@ When Alice's MUA now scans the incoming mail from Bob it will store
 Bob's key and the fact that Bob sent an encrypted mail.  Subsequently
 both Alice and Bob will have their MUAs encrypt mails to each other.
 
-If ``prefer-encrypted`` is sent as 'yes' the MUA MUST default to encrypting
-the next e-mail. If it is set as 'no' the MUA MUST default to plaintext.
-If ``prefer-encrypted`` is not sent the MUA should stick to what it was doing
-before. If the attribute has never been sent it's up to the MUA to decide. The
-safe way to go about it is to default to plaintext to make sure the recipient
-can read the e-mail.
+If ``prefer-encrypted`` is sent as ``yes`` the MUA MUST default to
+encrypting the next e-mail. If it is set as ``no`` the MUA MUST
+default to plaintext.  If ``prefer-encrypted`` is not sent the MUA
+should stick to what it was doing before. If the attribute has never
+been sent it's up to the MUA to decide. The safe way to go about it is
+to default to plaintext to make sure the recipient can read the
+e-mail.
 
-We encourage MUA developers to propose heuristics for handling the undirected
-case. We will document the best approaches to develop a shared understanding.
+We encourage MUA developers to propose heuristics for handling the
+undirected case. We will document the best approaches to develop a
+shared understanding.
 
 
 Group mail communication (1:N)
@@ -119,7 +123,8 @@ If Alice loses access to her decryption secret:
 
 - she lets her MUA generate a new key
 
-- her MUA will add an Autocrypt header containing the new key with each mail
+- her MUA will add an :mailheader:`Autocrypt` header containing the
+  new key with each mail
 
 - receiving MUAs will replace the old key with the new key
 
@@ -129,7 +134,7 @@ your mail") Bob's MUA will see the new key and subsequently use it.
 
 .. todo::
 
-    Check if we can encrypt a mime mail such that non-decrypt-capable clients
+    Check if we can encrypt a MIME e-mail such that non-decrypt-capable clients
     will show a message that helps Alice to reply in the suggested way.  We don't
     want people to read handbooks before using Autocrypt so any guidance we can
     "automatically" provide in case of errors is good.
@@ -145,8 +150,13 @@ your mail") Bob's MUA will see the new key and subsequently use it.
 Downgrading / switch to a MUA without Autocrypt support
 -------------------------------------------------------
 
-Alice might decide to switch to a different MUA which does not support Autocrypt.
+Alice might decide to switch to a different MUA which does not support
+Autocrypt.
 
-A MUA which previously saw an Autocrypt header and/or encryption from Alice
-now sees an unencrypted mail from Alice and no encryption header. This
-will disable encryption to Alice for subsequent mails.
+A MUA which previously saw an :mailheader:`Autocrypt` header and/or
+encryption from Alice now sees an unencrypted mail from Alice and no
+:mailheader:`Autocrypt` header. This will disable encryption to Alice
+for subsequent mails.
+
+Autocrypt relies on non-Autocrypt-capable MUAs to act as a sort of
+"reset" for the user in the case where they stop using Autocrypt.

@@ -63,8 +63,8 @@ Secret key generation and storage
 The MUA MUST be capable of generating and storing two RSA 2048-bit
 secret keys, one for signing and self-certification and the other for
 decrypting.  It MUST be capable of assembling these keys into an
-OpenPGP certificate (RFC 4880 "Transferable Public Key") that
-indicates these capabilities.
+OpenPGP certificate (:rfc:`RFC 4880 "Transferable Public
+Key"<4880#section-11.1>`) that indicates these capabilities.
 
 The secret key material is critical for security as in other
 end-to-end applications, and should be protected from access by other
@@ -109,35 +109,37 @@ announcement and places it in the special location.
 Header injection in outbound mail
 ---------------------------------
 
-During message composition, if the ``From`` header of the outgoing
-e-mail matches an address that the Autocrypt-capable agent knows the
-secret key material for, it SHOULD include an Autocrypt header. This
-header contains the associated public key material as ``key=``
-attribute, and the same sender address that is used in the ``From``
-header in the ``to=`` attribute to confirm the association. The most
-minimal Level 0 MUA will only include these two attributes.
+During message composition, if the :mailheader:`From:` header of the
+outgoing e-mail matches an address that the Autocrypt-capable agent
+knows the secret key material for, it SHOULD include an Autocrypt
+header. This header contains the associated public key material as
+``key=`` attribute, and the same sender address that is used in the
+``From`` header in the ``to=`` attribute to confirm the
+association. The most minimal Level 0 MUA will only include these two
+attributes.
 
-If the ``From`` address changes during message composition (E.g. if
-the user selects a different outbound identity), the Autocrypt-capable
-cleitn MUST change the ``Autocrypt`` header appropriately.
+If the :mailheader:`From:` address changes during message composition
+(E.g. if the user selects a different outbound identity), the
+Autocrypt-capable client MUST change the :mailheader:`Autocrypt`
+header appropriately.
 
 See :ref:`mua-happypath` for examples of outbound headers and
 the following sections for header format definitions and parsing.
 
 ..  _autocryptheaderformat:
 
-Deriving a Parsed Autocrypt Header from a Message
--------------------------------------------------
+Deriving a Parsed :mailheader:`Autocrypt` Header from a Message
+---------------------------------------------------------------
 
-The ``Autocrypt`` header has the following format::
+The :mailheader:`Autocrypt` header has the following format::
 
     Autocrypt: to=a@b.example.org; [type=p;] [prefer-encrypted=(yes|no);] key=BASE64
 
 The ``to`` attribute indicates the single recipient address this
 header is valid for. In case this address differs from the one the MUA
 considers the sender of the e-mail in parsing, which will usually be
-the one specified in the ``From`` header, the entire header MUST be
-treated as invalid.
+the one specified in the :mailheader:`From` header, the entire header
+MUST be treated as invalid.
 
 The ``type`` and ``key`` attributes specify the type and data of the
 key material.  For now the only supported type is ``p``, which
@@ -162,10 +164,10 @@ of the header as though the attribute does not exist, but MUST treat
 the entire header as invalid if it encounters a "critical" attribute
 it doesn't support.
 
-When parsing an incoming message, a MUA MUST examine all ``Autocrypt``
-headers, rather than just the first one.  If there is more than one
-valid header, this MUST be treated as an error, and all ``Autocrypt``
-headers discarded as invalid.
+When parsing an incoming message, a MUA MUST examine all
+:mailheader:`Autocrypt` headers, rather than just the first one.  If
+there is more than one valid header, this MUST be treated as an error,
+and all :mailheader:`Autocrypt` headers discarded as invalid.
 
 .. todo::
 
@@ -175,10 +177,9 @@ headers discarded as invalid.
 ++++++++++++++++++++++++++++++++++
 
 For maximum interoperability, a certificate sent by an
-Autocrypt-enabled Level 0 MUA MUST consist of an OpenPGP "Transferable
-Public Key" (see `RFC 4880 §11.1
-<https://tools.ietf.org/html/rfc4880#section-11.1>`_) containing
-exactly these five OpenPGP packets:
+Autocrypt-enabled Level 0 MUA MUST consist of an :rfc:`OpenPGP
+"Transferable Public Key"<4880#section-11.1>`) containing exactly these five
+OpenPGP packets:
 
  - a signing-capable primary key ``Kp``
  - a user id that SHOULD be set to the e-mail address of the account
@@ -224,10 +225,10 @@ e-mail address <address-canonicalization>` and key type.  In level 0,
 there is only one type, ``p``, so level 0 agents can implement this by
 indexing only the peer's e-mail address.
 
-For each e-mail and type, an Agent MUST store the following
+For each e-mail and type, an agent MUST store the following
 attributes:
 
- * ``pah``: Parsed Autocrypt header, which could be ``null``
+ * ``pah``: Parsed Autocrypt Header, which could be ``null``
  * ``changed``: UTC Timestamp when ``pah`` was last changed
  * ``last_seen``: Most recent UTC time that ``pah`` was confirmed
 
@@ -247,7 +248,7 @@ When first encountering an incoming e-mail ``M`` from an e-mail
 address ``A``, the MUA should follow the following
 ``autocrypt_update`` algorithm:
 
- - Set a local ``message_date`` to the ``Date:`` header of ``M``.
+ - Set a local ``message_date`` to the :mailheader:`Date:` header of ``M``.
 
  - If ``message_date`` is in the future, set ``message_date`` to the
    current time.
@@ -256,18 +257,18 @@ address ``A``, the MUA should follow the following
 
    This implies that Autocrypt clients keep track of whether they have
    encountered a given message before, but does not provide them with
-   guidance on how to do so.  Message-ID?  Digest of full message
-   body?  The consequences of re-triggering the message receipt
-   process should only matter for messages that are erroneously marked
-   with a future date. Another approach that would not require keeping
-   track of the message would be to simply ignore messages whose
-   ```Date:`` header is in the future.
+   guidance on how to do so.  :mailheader:`Message-ID`?  Digest of
+   full message body?  The consequences of re-triggering the message
+   receipt process should only matter for messages that are
+   erroneously marked with a future date. Another approach that would
+   not require keeping track of the message would be to simply ignore
+   messages whose :mailheader:`Date:` header is in the future.
 
 ..
 
- - Set a local ``message_pah`` to be the ``Autocrypt:`` header in
-   ``M``.  This is either a single Parsed Autocrypt header, or
-   ``null``.
+ - Set a local ``message_pah`` to be the :mailheader:`Autocrypt:`
+   header in ``M``.  This is either a single Parsed Autocrypt Header,
+   or ``null``.
 
  - If ``message_pah`` is ``null``, and the MUA knows about additional
    OpenPGP keys, then we replace ``message_pah`` with a
@@ -308,9 +309,11 @@ address ``A``, the MUA should follow the following
 
 ..
 
- - Note: The agent continues this message receipt process even when
-   ``message_pah`` is ``null``, since updating the stored state with
-   ``null`` is sometimes the correct action.
+  .. note::
+
+     The agent continues this message receipt process even when
+     ``message_pah`` is ``null``, since updating the stored state with
+     ``null`` is sometimes the correct action.
 
  - Next, the agent compares the ``message_pah`` with the ``pah`` stored in
    ``autocrypt_peer_state[A]``.
@@ -374,6 +377,8 @@ address ``A``, the MUA should follow the following
    agents are expected to avoid these approaches and to do full
    bytestring comparisons of ``key`` data instead.
 
+.. _spam-filters:
+
 .. todo::
 
    the spec currently doesn't say how to integrate Autocrypt
@@ -426,7 +431,7 @@ during message composition:
    encrypt the message, but do not default to encryption.  Prepare the
    message in cleartext.
 
- * ``encrypt`` : Enable UI that would allow the user to choose to send
+ * ``encrypt``: Enable UI that would allow the user to choose to send
    the message in cleartext, and default to encryption.  Prepare the
    message as an encrypted message.
 
@@ -496,7 +501,7 @@ As the user composes mail, in some circumstances, the MUA may be
 instructed by the user to encrypt the message.  If the recipient's
 keys are all of ``type=p``, and the sender has keys for all recipients
 (as well as themselves), they should construct the encrypted message
-as a PGP/MIME (RFC 3156) encrypted+signed message, encrypted to all
+as a :rfc:`PGP/MIME <3156>` encrypted+signed message, encrypted to all
 recipients and the public key whose secret is controlled by the MUA
 itself.
 
@@ -548,4 +553,5 @@ to allow the user to make a different decision.
 
 .. todo::
 
-   - Should we really recommend hiding the encrypt UI? This reduces UI consistency!
+   - Should we really recommend hiding the encrypt UI? This reduces UI
+     consistency!

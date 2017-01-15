@@ -9,10 +9,9 @@ To better understand how the Autocrypt effort is different
 from previous ones here are some of its features:
 
 - **Protect first against passive data-collecting adversaries**,
-  resist the temptation to early-add complexity which aim to
-  prevent active attacks.  See `RFC7435 A New Perspective
-  <https://tools.ietf.org/html/rfc7435#section-1.2>`_ for some
-  motivation of this and the next points.
+  resist the temptation to early-add complexity which aim to prevent
+  active attacks.  See :rfc:`RFC7435 A New Perspective
+  <7435#section-1.2>` for some motivation of this and the next points.
 
 - **Focus on incremental deployment**, always consider that there
   will be both Autocrypt-enabled mail apps and traditional plain ones,

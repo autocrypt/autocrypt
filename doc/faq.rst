@@ -33,10 +33,10 @@ Why not use IMAP METADATA instead of specially-named folders?
 We ultimately want Autocrypt to be more generic than IMAP, to make it
 clear how other mail-checking protocols could work (e.g. MAPI, webmail
 interfaces) as long as they offer some sort of namespaced shared
-storage.  Using `IMAP METADATA <https://tools.ietf.org/html/rfc5464>`_
-would tie Autocrypt more tightly to IMAP, and would also limit the
-number of IMAP implementations that Autocrypt-enabled clients could
-connect to (METADATA is `not widely supported by today's IMAP server
+storage.  Using :rfc:`IMAP METADATA <5464>` would tie Autocrypt more
+tightly to IMAP, and would also limit the number of IMAP
+implementations that Autocrypt-enabled clients could connect to
+(METADATA is `not widely supported by today's IMAP server
 implementations <http://www.imapwiki.org/Specs>`_).
 
 If we wanted Autocrypt to use METADATA where it was available on the
@@ -85,9 +85,11 @@ If you really care about supporting other keys than what we use in
 Autocrypt there is the OpenPGP header that could use some standardization and
 automatic client support. Feel free to innovate there.
 
-If we want to enable multiple headers in the future we can still add Autocrypt
-headers with a critical attribute 'priority'. Versions that do not support it
-yet will drop these headers and fall back to the one without priority.
+If we want to enable multiple headers in the future we can still add
+:mailheader:`Autocrypt:` headers with a critical attribute
+``priority``. Versions that do not support it yet will ignore these
+headers as invalid and fall back to the one without a ``priority``
+attribute.
 
 
 Why do you use the ``to=`` attribute rather than the uid from the key?
@@ -126,14 +128,14 @@ adoption, not to re-invent the encryption mechanism itself.
 
 Please see `key-formats` for more discussion.
 
-Why don't you use the ``User-Agent`` header to detect different mail apps?
---------------------------------------------------------------------------
+Why don't you use the :mailheader:`User-Agent` header to detect different mail apps?
+------------------------------------------------------------------------------------
 
-Not all mail apps implement the ``User-Agent`` header (and there is an
-ongoing effort to discourage its use as a way to reduce metadata
-leakage).  Also, some mail apps are used only to read mail, and are
-not used to send at all, so the remote peer can't see anything about
-those specific apps.
+Not all mail apps implement the :mailheader:`User-Agent` header (and
+there is an ongoing effort to discourage its use as a way to reduce
+metadata leakage).  Also, some mail apps are used only to read mail,
+and are not used to send at all, so the remote peer can't see anything
+about those specific apps.
 
 We could encourage each MUA to publish a UUID to inform the remote
 peer that multiple mail apps are in use, but it's not clear that this
@@ -145,17 +147,18 @@ What about spammers accidentally downgrading encryption?
 
 A spammer who forges mail from a given address could potentially
 downgrade encryption for that person as a side effect.  Please see
-`level0/public-key-management` for details about expected interaction
-with spam filters.
+:ref:`the Level 0 documentation <spam-filters>` for details
+about expected interaction with spam filters.
 
 How does Autocrypt interact with today's mailing list managers?
 ---------------------------------------------------------------
 
 Mailing lists that distribute cleartext (unencrypted) mail may end up
-distributing their user's public key material in the ``Autocrypt:``
-headers of the distributed mail.  For mailing lists that rewrite
-``From:`` headers, these ``Autocrypt:`` headers will be dropped by
-recipients, which is fine.
+distributing their user's public key material in the
+:mailheader:`Autocrypt:` headers of the distributed mail.  For mailing
+lists that rewrite :mailheader:`From:` headers, these
+:mailheader:`Autocrypt:` headers will be dropped by recipients, which
+is fine.
 
 For encrypted mailing lists like `schleuder
 <http://schleuder2.nadir.org/>`_, we haven't done a full analysis yet.
@@ -206,11 +209,11 @@ sending different keys.
    by an agent you no longer use)
 
 
-Why do you clamp ``Date:`` to the current time?
------------------------------------------------
+Why do you clamp :mailheader:`Date:` to the current time?
+---------------------------------------------------------
 
-E-mail messages with ``Date:`` in the future could destroy the ability
-to update the internal state.
+E-mail messages with :mailheader:`Date:` in the future could destroy
+the ability to update the internal state.
 
 However, since different MUAs view messages at different times,
 future-dated e-mails could result in state de-synchronization.
@@ -219,7 +222,7 @@ future-dated e-mails could result in state de-synchronization.
 
    deeper analysis of this state de-sync issue with future-dated
    e-mails, or alternate, more-stable approaches to dealing with wrong
-   ``Date:`` headers.
+   :mailheader:`Date:` headers.
 
 Why do you always encrypt-to-self?
 ----------------------------------

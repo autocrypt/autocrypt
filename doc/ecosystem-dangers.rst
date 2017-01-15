@@ -24,9 +24,9 @@ communication.
 Message Deliverability
 ----------------------
 
-Autocrypt headers that use RSA 2048 are large enough that, when
-unwrapped, they exceed the SMTP line length limit of 1000 ASCII
-characters.
+:mailheader:`Autocrypt` headers that use RSA 2048 are large enough
+that, when unwrapped, they exceed the SMTP line length limit of 1000
+ASCII characters.
 
 It's conceivable that some MTAs or MUAs will choke upon trying to deal
 with these headers, and render the message undeliverable or
@@ -52,11 +52,11 @@ Autocrypt-capable client.
 
 Mallory crafts a new key K.  She can throw away the secret key
 material entirely if she wants to.  She then forges an e-mail from
-Alice and adds an Autocrypt header to it containing that public key and
-`prefer-encrypted=yes`.  If Bob writes a message to Alice after
-receiving that key, and before receiving any other legitimate message
-to Alice, his message will be encrypted to a key that Alice cannot
-read.
+Alice and adds an :mailheader:`Autocrypt` header to it containing that
+public key and `prefer-encrypted=yes`.  If Bob writes a message to
+Alice after receiving that key, and before receiving any other
+legitimate message to Alice, his message will be encrypted to a key
+that Alice cannot read.
 
 this represents a risk to Alice, even if she has never adopted an
 Autocrypt-capable client in the first place.
@@ -70,7 +70,7 @@ Mitigations:
 
  - we should specify that any spam/malware flag set from a filter that
    the user trusts should be sufficient to discourage processing of
-   Autocrypt headers, so that Mallory needs to craft a
+   :mailheader:`Autocrypt` headers, so that Mallory needs to craft a
    sufficiently-plausible message (including DKIM and whatever other
    indicators the filters care about) to make it into the
    Autocrypt-capable agent's internal state storage.
