@@ -33,7 +33,7 @@ For current OpenPGP users
    More guidance here!
 
 
-   
+
 
 
 Interoperability with existing PGP practises

@@ -24,7 +24,7 @@ Restore
 .. todo::
 
    Fill in here
-   
+
 Prompting the user for backup code?
 
 Note also that the backup code MUST be strong -- it is subject to

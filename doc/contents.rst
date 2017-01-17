@@ -6,11 +6,11 @@ The following in-progress documents are written for early adopters
 and contributors, MUA developers and privacy enthusiasts.
 
 :doc:`index`
-     introduction to why Autocrypt exists and why it is trying 
+     introduction to why Autocrypt exists and why it is trying
      to achieve more e-mail encryption.
 
 :doc:`features`
-     discusses how the Autocrypt efforts is different from past 
+     discusses how the Autocrypt efforts is different from past
      e2e encryption efforts.
 
 :doc:`examples`

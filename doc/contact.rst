@@ -4,7 +4,7 @@
 Channels
 --------
 
-If you want to help, including offering constructive criticism, 
+If you want to help, including offering constructive criticism,
 you may:
 
 - join the `Autocrypt mailing list`_
@@ -51,7 +51,7 @@ Upcoming events
 .. _`33c3`: https://events.ccc.de/congress/2016/wiki/Main_Page
 
 .. _`We Fix the Net`: https://events.ccc.de/congress/2016/wiki/Session:We_Fix_the_Net
-  
+
 .. _`RealWorldCrypto 2017`: http://www.realworldcrypto.com/rwc2017
 
 .. _`Internet Freedom Festival`: https://internetfreedomfestival.org/
@@ -60,10 +60,10 @@ Past events
 -------------
 
 - Dec 2016: at `33c3`_, Hamburg, `holger's autocrypt 15min talk
-  <https://fossil.net2o.de/33c3/doc/trunk/wiki/autocrypt.md>`_ and 
+  <https://fossil.net2o.de/33c3/doc/trunk/wiki/autocrypt.md>`_ and
   `opportunistic mail panel discussion <https://fossil.net2o.de/33c3/doc/trunk/wiki/panel.md>`_
   at the `We Fix the Net`_ sessions.
 
-- Jan 2017: a lightning talk from dkg at 
+- Jan 2017: a lightning talk from dkg at
   `RealWorldCrypto 2017`_ in New york
 
