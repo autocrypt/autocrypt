@@ -19,10 +19,12 @@ you may:
 .. _`github Autocrypt repo`: https://github.com/autocrypt/autocrypt
 
 
+See :doc:`dev-status` for links to ongoing development.
 Currently involved are developers from `K9/Android`_,
 `OpenKeyChain/Android`_, `Enigmail`_, `Mailpile`_, `Bitmask/LEAP`_ as
 well as people from the `nextleap`_, `enzevalos`_ research projects
 and the ACLU_.
+
 
 .. _`ACLU`: https://www.aclu.org/
 .. _`K9/Android`: https://k9mail.github.io/
