@@ -22,9 +22,9 @@ and contributors, MUA developers and privacy enthusiasts.
      Minimum requirements and implementer guidance for Level 0
      Autocrypt-capable MUAs.
 
-:doc:`MUA development branches <dev-status>`
+:doc:`dev-status`
      a first collection of current autocrypt developments (Jan 2017) with
-     various mail programs.
+     various mail programs and some development resources.
 
 :doc:`other-crypto-interop`
      Guidance for integrating Autocrypt with other e-mail encryption
