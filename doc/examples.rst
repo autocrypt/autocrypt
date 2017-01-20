@@ -33,19 +33,19 @@ Basic network protocol flow
 
 Establishing encryption happens as a side effect when people send each other mail:
 
-- A MUA (mail user agent) always adds an :mailheader:`Autocrypt:`
-  header to all messages it sends out.
-
-  The :mailcrypt:`Autocrypt:` header contains all necessary
-  information to allow encryption (especially the key; see
-  :ref:`autocryptheaderformat` for the format in detail).
+- A MUA (mail user agent) adds an ``Autocrypt:``
+  header to all messages it sends out.  The header
+  contains all necessary information to allow encryption
+  (especially the encryption key; see :ref:`autocryptheaderformat` for
+  the format in detail).
 
 - A MUA will scan incoming mails for encryption headers and associate
-  the info with a canonicalized version of the :mailheader:`From:`
+  the info with a canonicalized version of the ``From:```
   address contained in the :rfc:`822` message.
 
-- A MUA will encrypt a message if it earlier saw encryption keys
-  (and the request to encrypt) for all recipients.
+- A MUA will encrypt a message if it has encryption keys
+  for all recipients and it determined through user choice or
+  recipient-determined policies that the message should be encrypted.
 
 
 .. _mua-happypath:
