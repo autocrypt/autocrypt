@@ -1,3 +1,5 @@
+Multi-Device Pairing Considerations
+===================================
 
 .. _`sma`:
 

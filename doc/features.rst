@@ -1,6 +1,6 @@
 
 Autocrypt features
---------------------------------
+==================
 
 End-to-end encrypted e-mail has been around for decades, but has failed
 to see wide adoption outside of specialist communities, in large part

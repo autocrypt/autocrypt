@@ -1,4 +1,8 @@
 
+
+Channels and Contact possibilities
+==================================
+
 .. _`contact channels`:
 
 Channels

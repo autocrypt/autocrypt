@@ -1,6 +1,6 @@
 
 Current docs (work-in-progress)
--------------------------------
+===============================
 
 The following in-progress documents are written for early adopters
 and contributors, MUA developers and privacy enthusiasts.
