@@ -55,7 +55,7 @@ master_doc = 'contents'
 
 # General information about the project.
 project = u'Autocrypt'
-copyright = u'2016, hpk, dkg and the Autocrypt team'
+copyright = u'2017, hpk, dkg and the Autocrypt team'
 author = u'hpk, dkg and the Autocrypt team'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -260,7 +260,7 @@ htmlhelp_basename = 'Autocryptdoc'
 latex_elements = {
      # The paper size ('letterpaper' or 'a4paper').
      #
-     # 'papersize': 'letterpaper',
+     'papersize': 'a4paper',
 
      # The font size ('10pt', '11pt' or '12pt').
      #
@@ -291,7 +291,7 @@ latex_documents = [
 # For "manual" documents, if this is true, then toplevel headings are parts,
 # not chapters.
 #
-# latex_use_parts = False
+latex_use_parts = True
 
 # If true, show page references after internal links.
 #
