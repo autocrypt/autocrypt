@@ -68,7 +68,7 @@ encryption key::
 
 Bob's MUA will scan the incoming mail, find Alice's key and store it
 associated to the ``alice@a.example`` address taken from the
-``to``-attribute.  When Bob now composes a mail to Alice his MUA will
+``from``-attribute.  When Bob now composes a mail to Alice his MUA will
 find the key and signal to Bob that the mail will be encrypted and
 after finalization of the mail encrypt it.  Moreover, Bob's MUA will
 add its own encryption info::
