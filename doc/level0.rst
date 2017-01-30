@@ -182,13 +182,14 @@ Autocrypt-enabled Level 0 MUA MUST consist of an :rfc:`OpenPGP
 OpenPGP packets:
 
  - a signing-capable primary key ``Kp``
- - a user id that SHOULD be set to the e-mail address of the account
+ - a user id
  - a self signature
  - an encryption-capable subkey ``Ke``
  - a binding signature over ``Ke`` by ``Kp``
 
-The content of the user id packet is only decorative, and MAY contain
-different values from the ``to`` attribute, or even the empty string.
+The content of the user id packet is only decorative. By convention, it
+contains the same address used in the ``to`` attribute in angle brackets,
+conforming to the :rfc:`2822` grammar ``angle-addr``.
 
 These packets MUST be assembled in binary format (not ASCII-armored),
 and then base64-encoded.
