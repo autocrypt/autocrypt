@@ -1,22 +1,27 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # vim:ts=4:sw=4:expandtab 2
-"""Functions to generate Autocrypt OpenPGP keys and headers"""
+
+"""Functions to create, file import/export OpenPGP keys"""
+# FIXME: this file should be moved to ../autocrypt/ and possibly
+# merged with gpg.py
 
 import logging
 import sys
 from base64 import b64encode
+from pgpy import PGPKey, PGPUID
 from pgpy.constants import PubKeyAlgorithm, KeyFlags, HashAlgorithm
 from pgpy.constants import SymmetricKeyAlgorithm, CompressionAlgorithm
-from pgpy import PGPKey, PGPUID
-
 
 logger = logging.getLogger(__name__)
 
 
-def generate_rsa_key(alg_key=PubKeyAlgorithm.RSAEncryptOrSign,
-                     alg_subkey=PubKeyAlgorithm.RSAEncrypt,
-                     size=2048,
-                     uid='alice@testsuite.autocrypt.org'):
+def generate_rsa_key(uid='alice@testsuite.autocrypt.org',
+                     alg_key=PubKeyAlgorithm.RSAEncryptOrSign,
+                     alg_subkey=PubKeyAlgorithm.RSAEncryptOrSign,
+                     size=2048):
+    # RSAEncrypt is deprecated, therefore using RSAEncryptOrSign
+    # also for the subkey
     """Generate PGPKey object.
 
     :param alg_key: algorithm for primary key
@@ -42,6 +47,7 @@ def generate_rsa_key(alg_key=PubKeyAlgorithm.RSAEncryptOrSign,
     # " <alice@testsuite.autocrypt.org>" - which we do not want.
     uid = PGPUID.new(uid)
     # NOTE: it is needed to specify all arguments in current pgpy version.
+    # FIXME: see which defaults we would like here
     key.add_uid(uid,
                 usage={KeyFlags.Sign},
                 hashes=[HashAlgorithm.SHA512, HashAlgorithm.SHA256],
@@ -55,6 +61,7 @@ def generate_rsa_key(alg_key=PubKeyAlgorithm.RSAEncryptOrSign,
     subkey = PGPKey.new(alg_subkey, size)
     key.add_subkey(subkey, usage={KeyFlags.EncryptCommunications,
                                   KeyFlags.EncryptStorage})
+    logger.debug('Created key with fingerprint %s', key.fingerprint)
     return key
 
 
@@ -73,7 +80,7 @@ def key_from_file(key_path='/tmp/pubkey.asc'):
 
     """
     key, _ = PGPKey.from_file(key_path)
-    logger.debug('_ %s', _)
+    logger.debug('Imported key with fingerprint %s', key.fingerprint)
     return key
 
 
@@ -103,6 +110,7 @@ def export_key_to_file(key, key_path='/tmp/key.asc'):
     """
     with open(key_path, 'w') as fp:
         fp.write(str(key))
+    logger.debug('Exported private key with fingerprint %s to file %s', key.fingerprint, key_path)
 
 
 def export_pubkey_to_file(key, pubkey_path='/tmp/pubkey.asc'):
@@ -119,6 +127,7 @@ def export_pubkey_to_file(key, pubkey_path='/tmp/pubkey.asc'):
     else:
         pubkey = key.pubkey
         export_key_to_file(pubkey, pubkey_path)
+    logger.debug('Exported public key with fingerprint %s to file %s', key.fingerprint, pubkey_path)
 
 
 def key_fp(key):
@@ -173,20 +182,3 @@ def key_base64(key):
     keybytes = key_bytes(key)
     keybase64 = b64encode(keybytes)
     return keybase64
-
-
-def generate_Autocrypt_header(key, uid):
-    """Generate Autocrypt header
-
-    :param key: key (either public or private)
-    :type key: PGPKey
-    :param uid: e-mail address
-    :type uid: string
-    :return: Autocrypt header
-    :rtype: string
-
-    """
-    keybase64 = key_base64(key)
-    # NOTE: this is done right now in autocrypt.bot
-    autocrypt_header = "to=%s; key=\n" % (uid,) + keybase64
-    return autocrypt_header
