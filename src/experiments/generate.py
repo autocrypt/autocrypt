@@ -5,9 +5,9 @@
 import logging
 import sys
 from base64 import b64encode
-from PGPy.constants import PubKeyAlgorithm, KeyFlags, HashAlgorithm
-from PGPy.constants import SymmetricKeyAlgorithm, CompressionAlgorithm
-from PGPy import PGPKey, PGPUID
+from pgpy.constants import PubKeyAlgorithm, KeyFlags, HashAlgorithm
+from pgpy.constants import SymmetricKeyAlgorithm, CompressionAlgorithm
+from pgpy import PGPKey, PGPUID
 
 
 logger = logging.getLogger(__name__)
@@ -33,7 +33,7 @@ def generate_rsa_key(alg_key=PubKeyAlgorithm.RSAEncryptOrSign,
     """
     # NOTE: default algorithm was decided to be RSA and size 2048.
     key = PGPKey.new(alg_key, size)
-    # NOTE: PGPy implements separate attributes for name and e-mail address
+    # NOTE: pgpy implements separate attributes for name and e-mail address
     # is mandatory.
     # Here using e-mail address for the attribute name in order for
     # the uid to be the e-mail address.  If name attribute is set to
@@ -41,7 +41,7 @@ def generate_rsa_key(alg_key=PubKeyAlgorithm.RSAEncryptOrSign,
     # <e-mail address>', for instance:
     # " <alice@testsuite.autocrypt.org>" - which we do not want.
     uid = PGPUID.new(uid)
-    # NOTE: it is needed to specify all arguments in current PGPy version.
+    # NOTE: it is needed to specify all arguments in current pgpy version.
     key.add_uid(uid,
                 usage={KeyFlags.Sign},
                 hashes=[HashAlgorithm.SHA512, HashAlgorithm.SHA256],
@@ -59,7 +59,7 @@ def generate_rsa_key(alg_key=PubKeyAlgorithm.RSAEncryptOrSign,
 
 
 def generate_ec_key():
-    # NOTE: PGPy does implement ed25519 nor cv25519
+    # NOTE: pgpy does implement ed25519 nor cv25519
     pass
 
 
@@ -86,9 +86,9 @@ def import_key_into_keyring(key, gnupghome_path='/tmp/gnupg'):
     :type gnupghome_path: string
 
     .. note::
-        PGPy does not implement filesystem keyring
+        pgpy does not implement filesystem keyring
     """
-    # NOTE: PGPy does not implement filesystem keyring
+    # NOTE: pgpy does not implement filesystem keyring
     pass
 
 
