@@ -2,11 +2,11 @@
 import pytest
 
 @pytest.fixture
-def gpg(tmpdir, datadir):
-    from autocrypt.gpg import GPG
+def bingpg(tmpdir, datadir):
+    from autocrypt.gpg import BinGPG
     p = tmpdir.mkdir("keyring")
     p.chmod(0o700)
-    g = GPG(p.strpath)
+    g = BinGPG(p.strpath)
     # import RSA 2048 key for "bot@autocrypt.org"
     g.import_keyfile(datadir.join("testbot.secretkey"))
     return g

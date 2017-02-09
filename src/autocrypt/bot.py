@@ -5,7 +5,7 @@ simple bot functionality to work answering for bot@autocrypt.org
 import os, sys
 import logging
 from autocrypt.parse import extract_autocrypt_header, parse_message
-from autocrypt.gpg import GPG
+from autocrypt.gpg import BinGPG
 import email.parser
 from email.mime.text import MIMEText
 import smtplib
@@ -60,7 +60,7 @@ def send_reply(host, port, msg):
     return smtp.sendmail(MY_ADR, msg["To"], msg.as_string())
 
 def main():
-    gpg = GPG(os.path.expanduser("~/keyring"))
+    gpg = BinGPG(os.path.expanduser("~/keyring"))
     reply_msg = generate_reply(gpg, sys.stdin)
     return send_reply('localhost', 25, reply_msg)
 
