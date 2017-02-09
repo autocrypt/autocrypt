@@ -3,6 +3,7 @@ import subprocess
 import tempfile
 import io
 
+
 def cached_property(f):
     """returns a property definition which lazily computes and
     caches the result of calling f.  The property also allows
