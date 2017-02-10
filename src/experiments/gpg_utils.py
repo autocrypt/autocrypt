@@ -38,8 +38,8 @@ def generate_rsa_key(uid='alice@testsuite.autocrypt.org',
     """
     # NOTE: default algorithm was decided to be RSA and size 2048.
     key = PGPKey.new(alg_key, size)
-    # NOTE: pgpy implements separate attributes for name and e-mail address
-    # is mandatory.
+    # NOTE: pgpy implements separate attributes for name and e-mail address.
+    # name is mandatory.
     # Here using e-mail address for the attribute name in order for
     # the uid to be the e-mail address.  If name attribute is set to
     # empty string and email to the e-mail address, the uid will be '
@@ -66,7 +66,7 @@ def generate_rsa_key(uid='alice@testsuite.autocrypt.org',
 
 
 def generate_ec_key():
-    # NOTE: pgpy does implement ed25519 nor cv25519
+    # NOTE: currently pgpy does not implement ed25519 nor cv25519
     pass
 
 
@@ -95,7 +95,7 @@ def import_key_into_keyring(key, gnupghome_path='/tmp/gnupg'):
     .. note::
         pgpy does not implement filesystem keyring
     """
-    # NOTE: pgpy does not implement filesystem keyring
+    # NOTE: currently pgpy does not implement filesystem keyring
     pass
 
 
