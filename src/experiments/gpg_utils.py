@@ -130,6 +130,14 @@ def export_pubkey_to_file(key, pubkey_path='/tmp/pubkey.asc'):
     logger.debug('Exported public key with fingerprint %s to file %s', key.fingerprint, pubkey_path)
 
 
+def key_shortid(key):
+    return key.fingerprint.replace(' ', '')[:8]
+
+
+def key_longid(key):
+    return key.fingerprint.replace(' ', '')[:16]
+
+
 def key_fp(key):
     """Key fingerprint.
 
