@@ -2,3 +2,6 @@
 __pycache__
 autocrypt.egg-info
 .cache
+.tox
+build
+dist
