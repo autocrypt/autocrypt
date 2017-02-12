@@ -8,6 +8,8 @@
 
 import logging
 import sys
+import tempfile
+import os.path
 from base64 import b64encode
 from pgpy import PGPKey, PGPUID
 from pgpy.constants import PubKeyAlgorithm, KeyFlags, HashAlgorithm
@@ -63,7 +65,8 @@ def generate_rsa_key(uid='alice@testsuite.autocrypt.org',
         subkey = PGPKey.new(alg_subkey, size)
         key.add_subkey(subkey, usage={KeyFlags.EncryptCommunications,
                                   KeyFlags.EncryptStorage})
-    logger.debug('Created key with fingerprint %s', key.fingerprint)
+        logger.debug('Created subkey')
+    logger.debug('Created key pair %s', key_shortid(key))
     return key
 
 
@@ -101,35 +104,55 @@ def import_key_into_keyring(key, gnupghome_path='/tmp/gnupg'):
     pass
 
 
-def export_key_to_file(key, key_path='/tmp/key.asc'):
+def export_key_to_file(key, outputdir=None):
     """Export key to file.
 
     :param key: key (either public or private)
     :type key: PGPKey
-    :param key_path: filesystem path to write the key to
-    :type key_path: string
+    :param outputdir: filesystem dir to write the key to
+    :type outputdir: string
 
     """
-    with open(key_path, 'w') as fp:
-        fp.write(str(key))
-    logger.debug('Exported private key with fingerprint %s to file %s', key.fingerprint, key_path)
+    if outputdir is None:
+        with tempfile.NamedTemporaryFile(prefix=key_shortid(key) +
+                                             '_',
+                                         suffix='_private.asc',
+                                         delete=False) as fd:
+            fd.write(str(key))
+            path = fd.name
+    else:
+        path = os.path.join(outputdir, key_shortid(key) +
+                            '_private.asc')
+        with open(path, 'wb') as fd:
+            fd.write(str(key))
+    logger.debug('Exported private keyto file %s', path)
 
 
-def export_pubkey_to_file(key, pubkey_path='/tmp/pubkey.asc'):
+def export_pubkey_to_file(key, outputdir=None):
     """Export public key to file from either a public or private key.
 
     :param key: key (either public or private)
     :type key: PGPKey
-    :param key_path: filesystem path to write the key to
-    :type key_path: string
+    :param outputdir: filesystem dir to write the key to
+    :type outputdir: string
 
     """
     if key.is_public:
-        export_key_to_file(key, pubkey_path)
+        pubkey = key
     else:
         pubkey = key.pubkey
-        export_key_to_file(pubkey, pubkey_path)
-    logger.debug('Exported public key with fingerprint %s to file %s', key.fingerprint, pubkey_path)
+    if outputdir is None:
+        with tempfile.NamedTemporaryFile(prefix=key_shortid(key) +
+                                             '_',
+                                         suffix='.asc',
+                                         delete=False) as fd:
+            fd.write(str(pubkey))
+            path = fd.name
+    else:
+        path = os.path.join(outputdir, key_shortid(key) + '.asc')
+        with open(path, 'wb') as fd:
+            fd.write(str(pubkey))
+    logger.debug('Exported public key to file %s', path)
 
 
 def key_shortid(key):
