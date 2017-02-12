@@ -36,6 +36,9 @@ def main():
     parser.add_argument('-g', '--gen',
                         help='Generate a OpenPGP key pair',
                         default=True)
+    parser.add_argument('-s', '--subkey',
+                        help='Generate encryption subkey',
+                        default=True)
     args = parser.parse_args()
 
     if args.debug:
@@ -59,14 +62,16 @@ def main():
 
     if args.gen is True:
         # generate a new key
-        key = gpg_utils.generate_rsa_key(args.sender)
+        if args.subkey is False:
+            key = gpg_utils.generate_rsa_key(args.sender, add_subkey=False)
+        else:
+            key = gpg_utils.generate_rsa_key(args.sender)
         # export key to files
         gpg_utils.export_key_to_file(key)
         gpg_utils.export_pubkey_to_file(key)
     else:
         # import key from a file
         key = gpg_utils.key_from_file()
-        pass
     keybase64 = gpg_utils.key_base64(key)
     keyfp = gpg_utils.key_fp(key)
     msg = generate_autocrypt.generate_email(keybase64,

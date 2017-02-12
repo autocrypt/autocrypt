@@ -19,7 +19,8 @@ logger = logging.getLogger(__name__)
 def generate_rsa_key(uid='alice@testsuite.autocrypt.org',
                      alg_key=PubKeyAlgorithm.RSAEncryptOrSign,
                      alg_subkey=PubKeyAlgorithm.RSAEncryptOrSign,
-                     size=2048):
+                     size=2048,
+                     add_subkey=True):
     # RSAEncrypt is deprecated, therefore using RSAEncryptOrSign
     # also for the subkey
     """Generate PGPKey object.
@@ -58,8 +59,9 @@ def generate_rsa_key(uid='alice@testsuite.autocrypt.org',
                              CompressionAlgorithm.BZ2,
                              CompressionAlgorithm.ZIP,
                              CompressionAlgorithm.Uncompressed])
-    subkey = PGPKey.new(alg_subkey, size)
-    key.add_subkey(subkey, usage={KeyFlags.EncryptCommunications,
+    if add_subkey is True:
+        subkey = PGPKey.new(alg_subkey, size)
+        key.add_subkey(subkey, usage={KeyFlags.EncryptCommunications,
                                   KeyFlags.EncryptStorage})
     logger.debug('Created key with fingerprint %s', key.fingerprint)
     return key
