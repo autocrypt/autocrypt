@@ -63,8 +63,11 @@ class BinGPG(object):
             f.write("\n".join([
                 "Key-Type: RSA",
                 "Key-Length: 2048",
+                "Key-Usage: sign",
                 "Subkey-Type: RSA",
                 "Subkey-Length: 2048",
+                "Subkey-Usage: encrypt",
+                #"Name-Real: " + uid,
                 "Name-Email: " + emailadr,
                 "Expire-Date: 0",
                 "%commit"
@@ -79,8 +82,42 @@ class BinGPG(object):
         assert len(m.groups()) == 1
         return m.groups()[0]
 
-    def export_public_keydata(self, keyid):
-        return self._gpg_out(["--export", "-a", keyid])
+    def list_secret_key_packets(self, keyid):
+        sk = self._gpg_out(["--export-secret-key", keyid])
+        return self._list_packets(keyid)
+
+    def list_public_key_packets(self, keyid):
+        sk = self._gpg_out(["--export", keyid])
+        return self._list_packets(sk)
+
+    def list_packets(self, keydata):
+        out = self._gpg_out(["--list-packets"], input=keydata)
+        # build up a list of (pkgname, pkgvalue, lines) tuples
+        packets = []
+        lines = []
+        last_package_type = None
+        pattern = re.compile(b":([^:]+):(.*)")
+        for line in out.splitlines():
+            m = pattern.search(line)
+            if m:
+                ptype, pvalue = m.groups()
+                pvalue = pvalue.strip()
+                if last_package_type is not None:
+                    packets.append(last_package_type + (lines,))
+                    lines = []
+                last_package_type = (ptype, pvalue)
+            else:
+                assert last_package_type, line
+                lines.append(line)
+        else:
+            packets.append(last_package_type + (lines,))
+        return packets
+
+    def get_public_keydata(self, keyid):
+        return self._gpg_out(["--export", keyid])
+
+    def get_secret_keydata(self, keyid):
+        return self._gpg_out(["--export-secret-key", keyid])
 
     def encrypt(self, data, recipients):
         recs = []
