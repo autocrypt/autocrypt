@@ -3,7 +3,7 @@ import pytest
 
 @pytest.fixture
 def bingpg(tmpdir, datadir):
-    from autocrypt.gpg import BinGPG
+    from autocrypt.bingpg import BinGPG
     p = tmpdir.mkdir("keyring")
     p.chmod(0o700)
     g = BinGPG(p.strpath)

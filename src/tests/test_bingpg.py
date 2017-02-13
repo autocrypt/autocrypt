@@ -1,5 +1,5 @@
 
-from autocrypt.gpg import cached_property, BinGPG
+from autocrypt.bingpg import cached_property, BinGPG
 
 def test_cached_property_object():
     l = []

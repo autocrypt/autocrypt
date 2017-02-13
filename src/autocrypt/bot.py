@@ -5,7 +5,7 @@ simple bot functionality to work answering for bot@autocrypt.org
 import os, sys
 import logging
 from autocrypt.parse import extract_autocrypt_header, parse_message
-from autocrypt.gpg import BinGPG
+from autocrypt.bingpg import BinGPG
 import email.parser
 from email.mime.text import MIMEText
 import smtplib
