@@ -1,5 +1,5 @@
 import pytest
-from autocrypt.parse import extract_autocrypt_header, parse_message
+from autocrypt.header import extract_autocrypt_header, parse_message
 
 def parse_autocrypt_header(fp):
     msg = parse_message(fp)
