@@ -55,9 +55,14 @@ class TestBinGPG:
     def test_transfer_key_and_encrypt_decrypt_roundtrip(self, bingpg, bingpg2):
         keyid = bingpg.gen_secret_key(emailadr="hello@xyz.org")
         pub_keydata = bingpg.get_public_keydata(keyid=keyid)
-        bingpg2.import_keydata(pub_keydata)
+        keyid2 = bingpg2.import_keydata(pub_keydata)
+        assert keyid2 == keyid
         out_encrypt = bingpg2.encrypt(b"123", recipients=[keyid])
         out = bingpg.decrypt(out_encrypt)
         assert out == b"123"
 
-
+    def test_gen_key_and_sign_verify(self, bingpg):
+        keyid = bingpg.gen_secret_key(emailadr="hello@xyz.org")
+        sig = bingpg.sign(b"123", keyid=keyid)
+        keyid_verified = bingpg.verify(data=b'123', signature=sig)
+        assert keyid == keyid_verified

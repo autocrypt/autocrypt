@@ -1,24 +1,34 @@
 
 import pytest
-from autocrypt.bingpg import BinGPG
+from autocrypt.bingpg import BinGPG, find_executable
 
-@pytest.fixture
-def bingpg(tmpdir, datadir):
-    p = tmpdir.mkdir("keyring")
-    g = _makegpg(p)
-    # import RSA 2048 key for "bot@autocrypt.org"
-    keydata = datadir.read_bytes("testbot.secretkey")
-    g.import_keydata(keydata)
-    return g
 
-def _makegpg(p):
+@pytest.fixture(params=["gpg", "gpg2"], scope="session")
+def gpgpath(request):
+    path = find_executable(request.param)
+    if path is None:
+        pytest.skip("can not find executable: %s" % request.name)
+    return path
+
+
+def _makegpg(request, p, gpgpath):
     p.chmod(0o700)
-    return BinGPG(p.strpath)
+    bingpg = BinGPG(p.strpath, gpgpath=gpgpath)
+    request.addfinalizer(bingpg.killagent)
+    return bingpg
+
 
 @pytest.fixture
-def bingpg2(tmpdir):
+def bingpg(request, tmpdir, gpgpath):
+    p = tmpdir.mkdir("keyring")
+    return _makegpg(request, p, gpgpath)
+
+
+@pytest.fixture
+def bingpg2(request, tmpdir, gpgpath):
     p = tmpdir.mkdir("keyring2")
-    return _makegpg(p)
+    return _makegpg(request, p, gpgpath)
+
 
 @pytest.fixture()
 def datadir(request):
