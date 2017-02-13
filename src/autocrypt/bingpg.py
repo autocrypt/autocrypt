@@ -1,7 +1,8 @@
 from __future__ import print_function, unicode_literals
+import logging
 import os
 import sys
-from subprocess import Popen, PIPE, CalledProcessError
+from subprocess import Popen, PIPE
 import tempfile
 import io
 import re
@@ -26,21 +27,48 @@ def cached_property(f):
     return property(get, set)
 
 
+class InvocationFailure(Exception):
+    def __init__(self, ret, cmd, out, err):
+        self.ret = ret
+        self.cmd = cmd
+        self.out = out
+        self.err = err
+
+    def __str__(self):
+        lines = ["GPG Command '%s' retcode=%d" % (self.cmd, self.ret)]
+        for name, olines in [("stdout:", self.out), ("stderr:", self.err)]:
+            lines.append(name)
+            for line in olines.splitlines():
+                lines.append("  " + line)
+        return "\n".join(lines)
+
+
 class BinGPG(object):
     """ basic wrapper for gpg command line invocations. """
+    InvocationFailure = InvocationFailure
+
     def __init__(self, homedir):
         self.homedir = homedir
 
-    def _gpg_out(self, argv, input=None):
-        return self._gpg_outerr(argv, input=input)[0]
+    def _gpg_out(self, argv, input=None, strict=False):
+        return self._gpg_outerr(argv, input=input, strict=strict)[0]
 
-    def _gpg_outerr(self, argv, input=None):
-        args = ["gpg", "--homedir", str(self.homedir)] + argv
+    def _gpg_outerr(self, argv, input=None, strict=False):
+        args = ["gpg", "--homedir", str(self.homedir)]
+        # make sure we use unicode for all provided arguments
+        for arg in argv:
+            if isinstance(arg, bytes):
+                arg = arg.decode("utf8")
+            args.append(arg)
+
+        # open the process, pipe everything
         popen = Popen(args, stdout=PIPE, stderr=PIPE, stdin=PIPE)
+        logging.debug("exec: %s", " ".join(args))
         out, err = popen.communicate(input=input)
         ret = popen.wait()
-        if ret != 0:
-            raise CalledProcessError(ret, " ".join(args), out + err)
+        if ret != 0 or (strict and err):
+            raise self.InvocationFailure(ret, " ".join(args),
+                                         out=str(out), err=str(err))
         return out, err
 
     @cached_property
@@ -77,10 +105,12 @@ class BinGPG(object):
         finally:
             os.remove(f.name)
         # quickly find key id or fingerprint
-        m = re.search(b"([0-9A-F]+)", err)
+        m = re.search(b"key ([0-9A-F]+)", err)
         assert m, err
         assert len(m.groups()) == 1
-        return m.groups()[0]
+        keyid = m.groups()[0]
+        logging.debug("created secret key: %s", keyid)
+        return keyid
 
     def list_secret_key_packets(self, keyid):
         sk = self._gpg_out(["--export-secret-key", keyid])
@@ -114,10 +144,10 @@ class BinGPG(object):
         return packets
 
     def get_public_keydata(self, keyid):
-        return self._gpg_out(["--export", keyid])
+        return self._gpg_out(["--export", keyid], strict=True)
 
     def get_secret_keydata(self, keyid):
-        return self._gpg_out(["--export-secret-key", keyid])
+        return self._gpg_out(["--export-secret-key", keyid], strict=True)
 
     def encrypt(self, data, recipients):
         recs = []

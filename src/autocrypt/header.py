@@ -1,8 +1,15 @@
-
+from __future__ import unicode_literals
 import email.parser
 import logging
 import base64
 
+def make_header(emailadr, keydata):
+    assert keydata
+    key = base64.b64encode(keydata)
+    if isinstance(key, bytes):
+        key = key.decode("ascii")
+    l = ["to=" + emailadr, "key=" + key]
+    return "Autocrypt: " + "; ".join(l)
 
 def parse_message(fp):
     return email.parser.Parser().parse(fp)

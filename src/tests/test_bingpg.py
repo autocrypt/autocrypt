@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 
 import pytest
-from autocrypt.bingpg import cached_property, BinGPG, CalledProcessError
+from autocrypt.bingpg import cached_property, BinGPG
 
 def test_cached_property_object():
     l = []
@@ -24,7 +24,7 @@ def test_cached_property_object():
 
 class TestBinGPG:
     def test_failed_invocation_outerr(self, bingpg2):
-        with pytest.raises(CalledProcessError) as e:
+        with pytest.raises(bingpg2.InvocationFailure) as e:
             bingpg2._gpg_outerr(["qwe"])
 
     def test_gen_key_and_list_secret_packets(self, bingpg, bingpg2):
