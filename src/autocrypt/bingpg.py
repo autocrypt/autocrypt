@@ -1,7 +1,10 @@
+from __future__ import print_function, unicode_literals
 import os
-import subprocess
+import sys
+from subprocess import Popen, PIPE, CalledProcessError
 import tempfile
 import io
+import re
 
 
 def cached_property(f):
@@ -28,13 +31,21 @@ class BinGPG(object):
     def __init__(self, homedir):
         self.homedir = homedir
 
-    def _gpg(self, argv):
+    def _gpg_out(self, argv, input=None):
+        return self._gpg_outerr(argv, input=input)[0]
+
+    def _gpg_outerr(self, argv, input=None):
         args = ["gpg", "--homedir", str(self.homedir)] + argv
-        return subprocess.check_output(args)
+        popen = Popen(args, stdout=PIPE, stderr=PIPE, stdin=PIPE)
+        out, err = popen.communicate(input=input)
+        ret = popen.wait()
+        if ret != 0:
+            raise CalledProcessError(ret, " ".join(args), out + err)
+        return out, err
 
     @cached_property
     def _version_info(self):
-        return self._gpg(['--version']).decode()
+        return self._gpg_out(['--version']).decode()
 
     def get_version(self):
         vline = self._version_info.split('\n', 1)[0]
@@ -47,12 +58,38 @@ class BinGPG(object):
                     lambda x:x.strip().lower(), l.split(':', 1)[1].split(','))
         return False
 
-    def import_keydata(self, keydata):
+    def gen_secret_key(self, emailadr):
         with tempfile.NamedTemporaryFile(delete=False) as f:
-            f.write(keydata)
-        self.import_keyfile(f.name)
+            f.write("\n".join([
+                "Key-Type: RSA",
+                "Key-Length: 2048",
+                "Subkey-Type: RSA",
+                "Subkey-Length: 2048",
+                "Name-Email: " + emailadr,
+                "Expire-Date: 0",
+                "%commit"
+            ]).encode("utf8"))
+        try:
+            out, err = self._gpg_outerr(["--batch", "--gen-key", f.name])
+        finally:
+            os.remove(f.name)
+        # quickly find key id or fingerprint
+        m = re.search(b"([0-9A-F]+)", err)
+        assert m, err
+        assert len(m.groups()) == 1
+        return m.groups()[0]
 
-    def import_keyfile(self, fn):
-        assert os.path.exists(fn)
-        self._gpg(["--import", fn])
+    def export_public_keydata(self, keyid):
+        return self._gpg_out(["--export", "-a", keyid])
 
+    def encrypt(self, data, recipients):
+        recs = []
+        for r in recipients:
+            recs.extend(["--recipient", r])
+        return self._gpg_out(recs + ["--encrypt", "--always-trust"], input=data)
+
+    def decrypt(self, enc_data):
+        return self._gpg_out(["--decrypt"], input=enc_data)
+
+    def import_keydata(self, keydata):
+        self._gpg_out(["--import"], input=keydata)
