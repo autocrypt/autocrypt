@@ -1,5 +1,8 @@
 
 from autocrypt.bot import generate_reply, send_reply
+from autocrypt.main import autocrypt_main
+
+from click.testing import CliRunner
 
 
 def test_botkey_load_and_sign(bingpg, datadir):
@@ -7,6 +10,7 @@ def test_botkey_load_and_sign(bingpg, datadir):
     keyid = bingpg.import_keydata(keydata)
     sigdata = bingpg.sign(data=b"123", keyid=keyid)
     bingpg.verify(data=b'123', signature=sigdata)
+
 
 
 def test_generate_reply(datadir, bingpg, smtpserver):

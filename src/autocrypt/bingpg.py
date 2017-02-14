@@ -2,6 +2,7 @@ from __future__ import print_function, unicode_literals
 import logging
 import os
 import sys
+import six
 from subprocess import Popen, PIPE
 from contextlib import contextmanager
 import tempfile
@@ -51,6 +52,8 @@ class BinGPG(object):
     def __init__(self, homedir, gpgpath=None):
         self.homedir = str(homedir)
         # for gpg2>2.1 and <2.1.12 we need to explicitely allow loopback pinentry
+        if not os.path.exists(self.homedir):
+            os.makedirs(self.homedir)
         with open(os.path.join(self.homedir, "gpg-agent.conf"), "w") as f:
             f.write("allow-loopback-pinentry\n")
 
@@ -85,7 +88,8 @@ class BinGPG(object):
         return self._gpg_outerr(argv, input=input, strict=strict)[0]
 
     def _gpg_outerr(self, argv, input=None, strict=False):
-        args = [self.gpgpath, "--homedir", self.homedir, "--batch"]
+        args = [self.gpgpath, "--homedir", self.homedir, "--batch",
+                "--no-permission-warning"]
 
         args.extend(["--passphrase", "''"])
         if self.isgpg2:
@@ -147,7 +151,10 @@ class BinGPG(object):
     def _find_keyid(self, string):
         m = self._gpgout_keyid_pattern.search(string)
         assert m and len(m.groups()) == 1, string
-        return m.groups()[0]
+        x = m.groups()[0]
+        if not isinstance(x, six.text_type):
+            x = x.decode("ascii")
+        return x
 
     def list_secret_key_packets(self, keyid):
         return self._list_packets(self.get_secret_keydata(keyid))
@@ -183,7 +190,7 @@ class BinGPG(object):
         return packets
 
     def get_public_keydata(self, keyid):
-        return self._gpg_out(["--export", keyid], strict=True)
+        return self._gpg_out(["--export", str(keyid)], strict=True)
 
     def get_secret_keydata(self, keyid):
         return self._gpg_out(["--export-secret-key", keyid], strict=True)

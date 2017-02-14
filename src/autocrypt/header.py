@@ -11,8 +11,19 @@ def make_header(emailadr, keydata):
     l = ["to=" + emailadr, "key=" + key]
     return "Autocrypt: " + "; ".join(l)
 
+
 def parse_message(fp):
     return email.parser.Parser().parse(fp)
+
+
+def parse_message_from_string(string):
+    return email.parser.Parser().parsestr(string)
+
+
+def parse_autocrypt_header_from_string(string):
+    msg = email.parser.Parser().parsestr(string)
+    return extract_autocrypt_header(msg)
+
 
 def extract_autocrypt_header(msg):
     autocrypt_headers = msg.get_all("Autocrypt")
