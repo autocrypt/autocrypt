@@ -189,11 +189,15 @@ class BinGPG(object):
             packets.append(last_package_type + (lines,))
         return packets
 
-    def get_public_keydata(self, keyid):
-        return self._gpg_out(["--export", str(keyid)], strict=True)
+    def get_public_keydata(self, keyid, armor=False):
+        args = ["-a"] if armor else []
+        args.extend(["--export", str(keyid)])
+        return self._gpg_out(args, strict=True)
 
-    def get_secret_keydata(self, keyid):
-        return self._gpg_out(["--export-secret-key", keyid], strict=True)
+    def get_secret_keydata(self, keyid, armor=False):
+        args = ["-a"] if armor else []
+        args.extend(["--export-secret-key", keyid])
+        return self._gpg_out(args, strict=True)
 
     def encrypt(self, data, recipients):
         recs = []

@@ -43,13 +43,10 @@ class ClickRunner:
 
     def run_ok(self, args, fnmatch_lines=None):
         argv = self._rootargs + args
-        res = self.runner.invoke(self._main, argv)
+        res = self.runner.invoke(self._main, argv, catch_exceptions=False)
         if res.exit_code != 0:
-            #print (res.output)
-            #if not isinstance(res.exception, SystemExit):
-            #    traceback.print_exception(*res.exc_info)
+            print(res.output)
             raise Exception("cmd exited with %d: %s" %(res.exit_code, argv))
-
         return self._perform_match(res, fnmatch_lines)
 
     def run_fail(self, args, fnmatch_lines=None):

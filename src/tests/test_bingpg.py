@@ -27,7 +27,7 @@ class TestBinGPG:
         with pytest.raises(bingpg2.InvocationFailure) as e:
             bingpg2._gpg_outerr(["qwe"])
 
-    def test_gen_key_and_list_secret_packets(self, bingpg, bingpg2):
+    def test_gen_key_and_check_packets(self, bingpg, bingpg2):
         keyid = bingpg.gen_secret_key(emailadr="hello@xyz.org")
         keydata = bingpg.get_secret_keydata(keyid)
         packets = bingpg.list_packets(keydata)
@@ -40,8 +40,6 @@ class TestBinGPG:
         assert packets[3][0] == b"secret sub key packet"
         assert packets[4][0] == b"signature packet"
 
-    def test_gen_key_and_list_public_packets(self, bingpg, bingpg2):
-        keyid = bingpg.gen_secret_key(emailadr="hello@xyz.org")
         keydata = bingpg.get_public_keydata(keyid)
         packets = bingpg.list_packets(keydata)
         assert len(packets) == 5
@@ -52,9 +50,15 @@ class TestBinGPG:
         assert packets[3][0] == b"public sub key packet"
         assert packets[4][0] == b"signature packet"
 
-    def test_transfer_key_and_encrypt_decrypt_roundtrip(self, bingpg, bingpg2):
+    @pytest.mark.parametrize("armor", [True, False])
+    def test_transfer_key_and_encrypt_decrypt_roundtrip(self, bingpg, bingpg2, armor):
         keyid = bingpg.gen_secret_key(emailadr="hello@xyz.org")
-        pub_keydata = bingpg.get_public_keydata(keyid=keyid)
+        priv_keydata = bingpg.get_secret_keydata(keyid=keyid, armor=armor)
+        if armor:
+            priv_keydata.decode("ascii")
+        pub_keydata = bingpg.get_public_keydata(keyid=keyid, armor=armor)
+        if armor:
+            pub_keydata.decode("ascii")
         keyid2 = bingpg2.import_keydata(pub_keydata)
         assert keyid2 == keyid
         out_encrypt = bingpg2.encrypt(b"123", recipients=[keyid])

@@ -73,6 +73,11 @@ class Account(KVStoreMixin):
         self.own_keyhandle = keyhandle
         self.kv_commit()
 
+    def _ensure_exists(self):
+        if not self.exists():
+            raise self.NotInitialized(
+                "Account directory %r not initialized" %(self.dir))
+
     def exists(self):
         return bool(self._kv_dict)
 
@@ -87,12 +92,18 @@ class Account(KVStoreMixin):
         the same key across those aliases.
         XXX discuss whether "to" is all that useful for level-0 autocrypt.
         """
-        if not self.exists():
-            raise self.NotInitialized(
-                "Account directory %r not initialized" %(self.dir))
+        self._ensure_exists()
         return make_header(
             emailadr=emailadr,
             keydata=self.bingpg.get_public_keydata(self.own_keyhandle),
         )
 
+    def export_public_key(self):
+        """ return armored public key for this account. """
+        self._ensure_exists()
+        return self.bingpg.get_public_keydata(self.own_keyhandle, armor=True)
 
+    def export_private_key(self):
+        """ return armored public key for this account. """
+        self._ensure_exists()
+        return self.bingpg.get_secret_keydata(self.own_keyhandle, armor=True)
