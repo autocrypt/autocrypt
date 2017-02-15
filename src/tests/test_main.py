@@ -23,17 +23,17 @@ def test_help(cmd):
         *export-private-key*
     """)
     res = cmd.run_ok(["--help"], """
-        *access Autocrypt*
+        *access and manage*
     """)
 
 
-def test_gen_account_help(cmd):
+def test_init_help(cmd):
     cmd.run_ok(["init", "--help"], """
-        *generate autocrypt account*
+        *initialize new autocrypt*
     """)
 
 
-def test_gen_account(mycmd):
+def test_init(mycmd):
     mycmd.run_ok(["init"], """
             *account*created*
     """)
@@ -45,16 +45,24 @@ def test_gen_account(mycmd):
             *account*created*
     """)
 
-def test_gen_account_and_show_header(mycmd):
+def test_init_and_show_header(mycmd):
     mycmd.run_fail(["make-header", "xyz"], """
         *Account*not initialized*
     """)
+    adr = "x@yz.org"
     mycmd.run_ok(["init"])
-    out = mycmd.run_ok(["make-header", "this@xyz.org"])
+    out = mycmd.run_ok(["make-header", adr])
     d = parse_one_ac_header_from_string(out)
-    assert d["to"] == "this@xyz.org"
-    out2 = mycmd.run_ok(["make-header", "this@xyz.org"])
+    assert "prefer-encrypt" not in out
+    assert "type" not in out
+    assert d["to"] == adr
+    out2 = mycmd.run_ok(["make-header", adr])
     assert out == out2
+
+    mycmd.run_ok(["set-prefer-encrypt", "yes"])
+    out3 = mycmd.run_ok(["make-header", adr])
+    d3 = parse_one_ac_header_from_string(out3)
+    assert d3["prefer-encrypt"] == "yes"
 
 
 def test_exports(mycmd):
@@ -72,7 +80,7 @@ def check_ascii(out):
         out.decode("ascii")
 
 
-def test_gen_account_and_show_header_with_envvar(cmd, tmpdir):
+def test_init_and_show_header_with_envvar(cmd, tmpdir):
     with tmpdir.as_cwd():
         os.environ["AUTOCRYPT_BASEDIR"] = "."
-        test_gen_account_and_show_header(cmd)
+        test_init_and_show_header(cmd)

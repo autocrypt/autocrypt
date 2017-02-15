@@ -43,6 +43,7 @@ class ClickRunner:
         self._rootargs = list(options) + self._rootargs
 
     def run_ok(self, args, fnmatch_lines=None):
+        __tracebackhide__ = True
         argv = self._rootargs + args
         res = self.runner.invoke(self._main, argv, catch_exceptions=False)
         if res.exit_code != 0:
@@ -51,6 +52,7 @@ class ClickRunner:
         return self._perform_match(res, fnmatch_lines)
 
     def run_fail(self, args, fnmatch_lines=None):
+        __tracebackhide__ = True
         argv = self._rootargs + args
         res = self.runner.invoke(self._main, argv, catch_exceptions=False)
         if res.exit_code == 0:
@@ -59,6 +61,7 @@ class ClickRunner:
         return self._perform_match(res, fnmatch_lines)
 
     def _perform_match(self, res, fnmatch_lines):
+        __tracebackhide__ = True
         if fnmatch_lines:
             lm = LineMatcher(res.output.splitlines())
             lines = [x.strip() for x in fnmatch_lines.strip().splitlines()]
