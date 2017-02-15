@@ -36,15 +36,32 @@ def test_persisted_property(tmpdir):
     assert a.hello == 42
 
 
-def test_account(account):
+def test_account_header_defaults(account):
     adr = "hello@xyz.org"
     with pytest.raises(account.NotInitialized):
         account.make_header(adr)
     account.init()
     h = account.make_header(adr)
-    d = header.parse_autocrypt_header_from_string(h)
+    d = header.parse_one_ac_header_from_string(h)
     assert d["to"] == adr
     assert d["key"] == account.bingpg.get_public_keydata(account.own_keyhandle)
+    assert d["prefer-encrypt"] == "notset"
+    assert d["type"] == "p"
+
+
+@pytest.mark.parametrize("pref", ["yes", "no", "notset"])
+def test_account_header_prefer_encrypt(account, pref):
+    adr = "hello@xyz.org"
+    with pytest.raises(ValueError):
+        account.set_prefer_encrypt("random")
+    account.init()
+    account.set_prefer_encrypt(pref)
+    h = account.make_header(adr)
+    d = header.parse_one_ac_header_from_string(h)
+    assert d["to"] == adr
+    assert d["key"] == account.bingpg.get_public_keydata(account.own_keyhandle)
+    assert d["prefer-encrypt"] == pref
+    assert d["type"] == "p"
 
 
 def test_account_handling(tmpdir):

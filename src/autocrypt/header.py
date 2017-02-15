@@ -3,16 +3,20 @@ import email.parser
 import logging
 import base64
 
-def make_header(emailadr, keydata):
+def make_header(emailadr, keydata, prefer_encrypt="notset", keytype="p"):
     assert keydata
     key = base64.b64encode(keydata)
     if isinstance(key, bytes):
         key = key.decode("ascii")
     l = ["to=" + emailadr, "key=" + key]
+    if prefer_encrypt != "notset":
+        l.insert(1, "prefer-encrypt=" + prefer_encrypt)
+    if keytype != "p":
+        l.insert(1, "type=" + keytype)
     return "Autocrypt: " + "; ".join(l)
 
 
-def parse_message(fp):
+def parse_message_from_file(fp):
     return email.parser.Parser().parse(fp)
 
 
@@ -20,59 +24,57 @@ def parse_message_from_string(string):
     return email.parser.Parser().parsestr(string)
 
 
-def parse_autocrypt_header_from_string(string):
+def parse_one_ac_header_from_string(string):
     msg = email.parser.Parser().parsestr(string)
-    return extract_autocrypt_header(msg)
+    return parse_one_ac_header_from_msg(msg)
 
 
-def extract_autocrypt_header(msg):
-    autocrypt_headers = msg.get_all("Autocrypt")
-    all_results = []
-    if autocrypt_headers == None:
-        logging.warn("found no Autocrypt header")
-        return {}
-    for inb in autocrypt_headers:
-        res = parse_autocrypt_headervalue(inb)
-        if res:
-            all_results.append(res)
+def parse_all_ac_headers_from_msg(msg):
+    autocrypt_headers = msg.get_all("Autocrypt") or []
+    return [parse_ac_headervalue(inb)
+                for inb in autocrypt_headers if inb]
+
+def parse_one_ac_header_from_msg(msg):
+    all_results = parse_all_ac_headers_from_msg(msg)
     if len(all_results) == 1:
         return all_results[0]
     if len(all_results) > 1:
-        logging.warn("found more than one Autocrypt header, ignoring all")
+        raise ValueError("more than one Autocrypt header\n%s" %
+                         "\n".join(msg.get_all("Autocrypt")))
     return {}
 
 
-def parse_autocrypt_headervalue(value):
+def parse_ac_headervalue(value):
+    """ return a autocrypt attribute dictionary parsed
+    from the specified autocrypt header value.  Unspecified
+    default values for prefer-encrypt and the key type are filled in."""
     parts = value.split(";")
-    result_dict = {}
+    result_dict = {"prefer-encrypt": "notset", "type": "p"}
     for x in parts:
         kv = x.split("=", 1)
-        name = kv[0].strip()
-        value = kv[1].strip()
-        if name == "to":
-            result_dict["to"] = value
-        elif name == "key":
+        name, value = [x.strip() for x in kv]
+        if name == "key":
             keydata_base64 = "".join(value.split())
-            keydata = base64.b64decode(keydata_base64)
-            result_dict["key"] = keydata
-        elif name == "type":
-            result_dict["type"] = value
-        elif name == "prefer-encrypted":
-            result_dict["prefer-encrypted"] = value
-        elif name[0] == "_":
-            logging.warn("found non-critical %r header attribute, ignoring it", name)
-        else:
-            logging.warn("found unknown critical attribute, ignoring header")
-            return {}
-    if "key" not in result_dict:
-        logging.warn("found no key, ignoring header")
-    elif "to" not in result_dict:
-        logging.warn("found no to e-mail address, ignoring header")
-    elif "type" in result_dict and result_dict["type"] != "p":
-        logging.warn("found type %r, but we only support 'p'", result_dict["type"])
-    elif "prefer-encrypted" in result_dict and result_dict["prefer-encrypted"] not in ["yes", "no"]:
-        logging.warn("found prefer-encrypted %r, but we only support yes or no",
-                     result_dict["prefer-encrypted"])
-    else:
-        return result_dict
+            value = base64.b64decode(keydata_base64)
+        result_dict[name] = value
+    return result_dict
 
+
+def verify_ac_dict(ac_dict):
+    """ return a list of errors from checking the autocrypt attribute dict.
+    if the returned list is empty no errors were found.
+    """
+    l = []
+    for name in ac_dict:
+        if name not in ("key", "to", "type", "prefer-encrypt") and name[0] != "_":
+            l.append("unknown critical attr '%s'" %(name, ))
+    if "type" not in ac_dict:
+        l.append("type missing")
+    if "key" not in ac_dict:
+        l.append("key missing")
+    if ac_dict["type"] != "p":
+        l.append("unknown key type '%s'" % (ac_dict["type"], ))
+    if ac_dict["prefer-encrypt"] not in ("notset", "yes", "no"):
+        l.append("unknown prefer-encrypt setting '%s'" %
+                 (ac_dict["prefer-encrypt"]))
+    return l

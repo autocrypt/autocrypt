@@ -3,6 +3,7 @@ from click.testing import CliRunner
 import pytest
 from _pytest.pytester import LineMatcher
 from autocrypt.bingpg import BinGPG, find_executable
+from autocrypt import header
 
 
 @pytest.fixture(params=["gpg", "gpg2"], scope="session")
@@ -87,5 +88,8 @@ def datadir(request):
         def read_bytes(self, name):
             with self.open(name, "rb") as f:
                 return f.read()
-
+        def parse_ac_header_from_email(self, name):
+            with self.open(name) as fp:
+                msg = header.parse_message_from_file(fp)
+                return header.parse_one_ac_header_from_msg(msg)
     return D(request.fspath.dirpath("data"))

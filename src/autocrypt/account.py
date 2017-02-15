@@ -59,6 +59,7 @@ class Account(KVStoreMixin):
 
     uuid = kv_persisted_property("uuid", six.text_type)
     own_keyhandle = kv_persisted_property("own_keyhandle", six.text_type)
+    _prefer_encrypt = kv_persisted_property("prefer_encrypt", six.text_type)
 
     @cached_property
     def bingpg(self):
@@ -71,6 +72,13 @@ class Account(KVStoreMixin):
         assert isinstance(keyhandle, six.text_type)
         self.uuid = account_uuid
         self.own_keyhandle = keyhandle
+        self._prefer_encrypt = "notset"
+        self.kv_commit()
+
+    def set_prefer_encrypt(self, value):
+        if value not in ("yes", "no", "notset"):
+            raise ValueError(repr(value))
+        self._prefer_encrypt = value
         self.kv_commit()
 
     def _ensure_exists(self):
@@ -96,6 +104,7 @@ class Account(KVStoreMixin):
         return make_header(
             emailadr=emailadr,
             keydata=self.bingpg.get_public_keydata(self.own_keyhandle),
+            prefer_encrypt=self._prefer_encrypt,
         )
 
     def export_public_key(self):

@@ -2,7 +2,7 @@ from __future__ import print_function, unicode_literals
 import os
 import six
 import pytest
-from autocrypt.header import parse_autocrypt_header_from_string
+from autocrypt.header import parse_one_ac_header_from_string
 
 
 @pytest.fixture
@@ -51,7 +51,7 @@ def test_gen_account_and_show_header(mycmd):
     """)
     mycmd.run_ok(["init"])
     out = mycmd.run_ok(["make-header", "this@xyz.org"])
-    d = parse_autocrypt_header_from_string(out)
+    d = parse_one_ac_header_from_string(out)
     assert d["to"] == "this@xyz.org"
     out2 = mycmd.run_ok(["make-header", "this@xyz.org"])
     assert out == out2
