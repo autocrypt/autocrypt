@@ -120,7 +120,27 @@ def export_private_key(ctx):
     click.echo(account.export_private_key())
 
 
+@click.command()
+@click.pass_context
+def show(ctx):
+    """print account info including peer state."""
+    account = get_account(ctx)
+    click.echo("account-dir: " + account.dir)
+    click.echo("uuid: " + account.uuid)
+    click.echo("own-keyhandle: " + account.own_keyhandle)
+    click.echo("prefer-encrypt: " + account._prefer_encrypt)
+    peers = account._kv_dict.get("peers")
+    if peers:
+        click.echo("----peers-----")
+        for name, ac_dict in peers.items():
+            d = ac_dict.copy()
+            keyid = account.get_latest_public_keyid(name)
+            click.echo("%s: key %s [%d bytes] %s" %(
+                       d.pop("to"), keyid, len(d.pop("key")),
+                       " ".join(["%s=%s" % x for x in d.items()])))
+
 autocrypt_main.add_command(init)
+autocrypt_main.add_command(show)
 autocrypt_main.add_command(make_header)
 autocrypt_main.add_command(set_prefer_encrypt)
 autocrypt_main.add_command(process_incoming_mail)

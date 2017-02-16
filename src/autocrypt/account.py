@@ -58,7 +58,7 @@ class Account(KVStoreMixin):
 
     def __init__(self, dir):
         self.dir = dir
-        kvstore_path = os.path.join(self.dir, ".autocrypt-kvstore")
+        kvstore_path = os.path.join(self.dir, "config")
         super(Account, self).__init__(kvstore_path)
 
     uuid = kv_persisted_property("uuid", six.text_type)

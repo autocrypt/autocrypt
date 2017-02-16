@@ -45,7 +45,7 @@ def test_init(mycmd):
             *account*created*
     """)
 
-def test_init_and_show_header(mycmd):
+def test_init_and_make_header(mycmd):
     mycmd.run_fail(["make-header", "xyz"], """
         *Account*not initialized*
     """)
@@ -65,12 +65,18 @@ def test_init_and_show_header(mycmd):
     assert d3["prefer-encrypt"] == "yes"
 
 
-def test_exports(mycmd):
+def test_exports_and_show(mycmd):
     mycmd.run_ok(["init"])
     out = mycmd.run_ok(["export-public-key"])
     check_ascii(out)
     out = mycmd.run_ok(["export-private-key"])
     check_ascii(out)
+    out = mycmd.run_ok(["show"], """
+        account-dir:*
+        uuid:*
+        own-keyhandle:*
+        prefer-encrypt: notset
+    """)
 
 
 def check_ascii(out):
@@ -83,7 +89,7 @@ def check_ascii(out):
 def test_init_and_show_header_with_envvar(cmd, tmpdir):
     with tmpdir.as_cwd():
         os.environ["AUTOCRYPT_BASEDIR"] = "."
-        test_init_and_show_header(cmd)
+        test_init_and_make_header(cmd)
 
 
 def test_process_incoming_mail(mycmd, datadir):
@@ -100,3 +106,7 @@ def test_process_incoming_mail(mycmd, datadir):
     """)
     assert out1 == out2
 
+    mycmd.run_ok(["show"], """
+        *---peers---*
+        alice@testsuite.autocrypt.org*D993BD7F*1636 bytes*prefer-encrypt*
+    """)
