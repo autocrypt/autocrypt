@@ -13,31 +13,43 @@ def pytest_addoption(parser):
                      help="ignore test cache state")
 
 
-@pytest.fixture(params=["gpg", "gpg2"], scope="session")
+@pytest.fixture(params=["gpg1", "gpg2"], scope="session")
 def gpgpath(request):
-    path = find_executable(request.param)
+    name = "gpg" if request.param == "gpg1" else "gpg2"
+    path = find_executable(name)
     if path is None:
         pytest.skip("can not find executable: %s" % request.name)
     return path
 
 
-def _makegpg(request, p, gpgpath):
+def _makegpg(request, p, gpgpath, testcache):
     p.chmod(0o700)
-    bingpg = BinGPG(p.strpath, gpgpath=gpgpath)
+    class MyBinGPG(BinGPG):
+        def gen_secret_key(self, emailadr):
+            next_backup = testcache.next_backup(request, gpgpath)
+            if next_backup.exists():
+                return next_backup.restore(p)
+            else:
+                ret = super(MyBinGPG, self).gen_secret_key(emailadr)
+                if p.exists():
+                    next_backup.store(p, ret)
+                return ret
+
+    bingpg = MyBinGPG(p.strpath, gpgpath=gpgpath)
     request.addfinalizer(bingpg.killagent)
     return bingpg
 
 
 @pytest.fixture
-def bingpg(request, tmpdir, gpgpath):
+def bingpg(request, tmpdir, gpgpath, testcache):
     p = tmpdir.mkdir("keyring")
-    return _makegpg(request, p, gpgpath)
+    return _makegpg(request, p, gpgpath, testcache=testcache)
 
 
 @pytest.fixture
-def bingpg2(request, tmpdir, gpgpath):
+def bingpg2(request, tmpdir, gpgpath, testcache):
     p = tmpdir.mkdir("keyring2")
-    return _makegpg(request, p, gpgpath)
+    return _makegpg(request, p, gpgpath, testcache=testcache)
 
 
 class ClickRunner:
@@ -105,28 +117,56 @@ def datadir(request):
     return D(request.fspath.dirpath("data"))
 
 
-_counters = {}
+@pytest.fixture(scope="session")
+def testcache():
+    counters = {}
+    class TestCache:
+        def next_backup(self, func_request, extra=""):
+            count_key = func_request.node.nodeid + extra
+            count = counters.setdefault(count_key, 0)
+            key = count_key + str(count)
+            try:
+                return NextBackup(func_request, key)
+            finally:
+                counters[count_key] += 1
+    return TestCache()
+
+
+class NextBackup:
+    def __init__(self, func_request, key):
+        self.cache = func_request.config.cache
+        self.disabled = func_request.config.getoption("--no-test-cache")
+        self.key = key
+        self.backup_path = self.cache._cachedir.join(self.key)
+
+    def exists(self):
+        dummy = object()
+        return not self.disabled and \
+               self.cache.get(self.key, dummy) != dummy and \
+               self.backup_path.exists()
+
+    def store(self, path, ret):
+        self.backup_path.dirpath().ensure(dir=1)
+        py.path.local(path).copy(self.backup_path) #, mode=True)
+        self.cache.set(self.key, ret)
+
+    def restore(self, path):
+        self.backup_path.copy(py.path.local(path)) # , mode=True)
+        return self.cache.get(self.key, None)
+
+
 @pytest.fixture
-def Account(request):
-    if not request.config.getoption("--no-test-cache"):
-        count = _counters.setdefault(request.node.nodeid, 0)
-
-        class MyAccount(OrigAccount):
-            def __init__(self, *args, **kwargs):
-                self._backup_path = request.fspath.dirpath(".cache/%s-%s" %
-                      (request.node.nodeid, _counters[request.node.nodeid]))
-                _counters[request.node.nodeid] += 1
-                super(MyAccount, self).__init__(*args, **kwargs)
-
-            def init(self):
-                if self._backup_path.exists():
-                    self._backup_path.copy(py.path.local(self.dir), mode=True)
-                    self.kv_reload()
-                else:
-                    super(MyAccount, self).init()
-                    py.path.local(self.dir).copy(self._backup_path, mode=True)
-    else:
-        MyAccount = OrigAccount
+def Account(request, testcache):
+    class MyAccount(OrigAccount):
+        def init(self):
+            next_backup = testcache.next_backup(request)
+            if next_backup.exists():
+                ret = next_backup.restore(self.dir)
+                self.kv_reload()
+            else:
+                ret = super(MyAccount, self).init()
+                next_backup.store(self.dir, ret)
+            return ret
     return MyAccount
 
 
