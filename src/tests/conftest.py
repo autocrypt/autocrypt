@@ -12,10 +12,15 @@ def pytest_addoption(parser):
     parser.addoption("--no-test-cache", action="store_true",
                      help="ignore test cache state")
 
+    parser.addoption("--with-gpg2", action="store_true",
+                     help="run tests also with gpg2")
+
 
 @pytest.fixture(params=["gpg1", "gpg2"], scope="session")
 def gpgpath(request):
     name = "gpg" if request.param == "gpg1" else "gpg2"
+    if name == "gpg2" and not request.config.getoption("--with-gpg2"):
+        pytest.skip("skip gpg2 tests unless you specify --slow")
     path = find_executable(name)
     if path is None:
         pytest.skip("can not find executable: %s" % request.name)
@@ -57,18 +62,32 @@ class ClickRunner:
         self.runner = CliRunner()
         self._main = main
         self._rootargs = []
+        self._nextbackup = None
 
-    def add_rootargs(self, options):
-        self._rootargs = list(options) + self._rootargs
+    def set_basedir(self, account_dir, nextbackup):
+        self._rootargs.insert(0, "--basedir")
+        self._rootargs.insert(1, account_dir)
+        self._nextbackup = nextbackup
 
     def run_ok(self, args, fnmatch_lines=None):
-        __tracebackhide__ = True
+        #__tracebackhide__ = True
         argv = self._rootargs + args
+        basedir = None
+        # we use our nextbackup helper to cache account creation
+        # unless --no-test-cache is specified
+        if args[:1] == ["init"] and self._rootargs[:1] == ["--basedir"]:
+            basedir = self._rootargs[1]
+            if self._nextbackup and self._nextbackup.exists():
+                return self._nextbackup.restore(basedir)
         res = self.runner.invoke(self._main, argv, catch_exceptions=False)
         if res.exit_code != 0:
             print(res.output)
             raise Exception("cmd exited with %d: %s" %(res.exit_code, argv))
-        return self._perform_match(res, fnmatch_lines)
+        ret = self._perform_match(res, fnmatch_lines)
+        if basedir:
+            self._nextbackup.store(basedir, ret)
+        return ret
+
 
     def run_fail(self, args, fnmatch_lines=None):
         __tracebackhide__ = True

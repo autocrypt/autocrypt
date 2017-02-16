@@ -10,8 +10,10 @@ def account_dir(tmpdir):
     return tmpdir.join("account").strpath
 
 @pytest.fixture
-def mycmd(cmd, tmpdir):
-    cmd.add_rootargs(["--basedir", tmpdir.join("account").strpath])
+def mycmd(cmd, tmpdir, testcache, request):
+    # cache "autocrypt init" calls in cross-testrun test cache
+    next_backup = testcache.next_backup(request)
+    cmd.set_basedir(tmpdir.join("account").strpath, next_backup)
     return cmd
 
 
