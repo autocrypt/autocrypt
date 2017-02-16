@@ -8,6 +8,7 @@ import uuid
 from .bingpg import BinGPG, cached_property
 from base64 import b64decode
 from . import header
+from email.utils import parsedate
 
 
 class KVStoreMixin(object):
@@ -123,13 +124,27 @@ class Account(KVStoreMixin):
         return self.bingpg.get_secret_keydata(self.own_keyhandle, armor=True)
 
     def process_incoming_mail(self, msg):
+        """ process incoming mail message and store information
+        about potential Autocrypt header for the From/Autocrypt peer.
+        """
         self._ensure_exists()
+        peers = self._kv_dict.setdefault("peers", {})
+        From = header.parse_email_addr(msg["From"])[1]
+        old = peers.get(From, {})
         d = header.parse_one_ac_header_from_msg(msg)
-        if d["to"] == header.parse_email_addr(msg["From"])[1]:
-            peers = self._kv_dict.setdefault("peers", {})
-            peers[d["to"]] = d
+        date = msg.get("Date")
+        if d:
+            if d["to"] == From:
+                if parsedate(date) >= parsedate(old.get("*date", date)):
+                    d["*date"] = date
+                    peers[From] = d
+                    self.kv_commit()
+                return d["to"]
+        elif old:
+            # we had an autocrypt header and now forget about it
+            # because we got a mail which doesn't have one
+            peers[From] = {}
             self.kv_commit()
-            return d["to"]
 
     def get_latest_public_keyid(self, emailadr):
         peers = self._kv_dict.get("peers", {})

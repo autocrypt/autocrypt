@@ -192,3 +192,14 @@ def Account(request, testcache):
 @pytest.fixture
 def account(tmpdir, Account):
     return Account(tmpdir.join("account").strpath)
+
+
+@pytest.fixture
+def account_maker(tmpdir, Account):
+    count = [0]
+    def maker():
+        ac = Account(tmpdir.join("account" + str(count[0])).strpath)
+        count[0] += 1
+        ac.init()
+        return ac
+    return maker

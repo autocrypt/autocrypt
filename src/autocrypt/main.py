@@ -137,7 +137,7 @@ def show(ctx):
             keyid = account.get_latest_public_keyid(name)
             click.echo("%s: key %s [%d bytes] %s" %(
                        d.pop("to"), keyid, len(d.pop("key")),
-                       " ".join(["%s=%s" % x for x in d.items()])))
+                       "; ".join(["%s=%s" % x for x in d.items()])))
 
 autocrypt_main.add_command(init)
 autocrypt_main.add_command(show)
