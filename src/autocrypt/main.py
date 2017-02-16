@@ -3,6 +3,7 @@ import shutil
 import six
 import click
 from .account import Account
+from . import header
 
 class CmdlineState:
     pass
@@ -39,7 +40,7 @@ def autocrypt_main(context, basedir):
               help="delete autocrypt account directory before init")
 @click.pass_context
 def init(ctx, replace):
-    """initialize new autocrypt key and default options."""
+    """init autocrypt account state. """
     account = ctx.parent.account
     if account.exists():
         if not replace:
@@ -87,18 +88,34 @@ def set_prefer_encrypt(ctx, value):
         click.echo("set prefer-encrypt to %r" % value)
 
 
-@click.command("export-public-key")
+@click.command("process-incoming-mail")
+@click.argument("mail", type=click.File())
 @click.pass_context
-def export_public_key(ctx):
-    """print armored public key associated with this autocrypt account. """
+def process_incoming_mail(ctx, mail):
+    """process incoming mail from file/stdin."""
     account = get_account(ctx)
-    click.echo(account.export_public_key())
+    msg = header.parse_message_from_file(mail)
+    adr = account.process_incoming_mail(msg)
+    keyid = account.get_latest_public_keyid(adr)
+    click.echo("processed mail from %s, found key: %s" % (adr, keyid))
+
+
+@click.command("export-public-key")
+@click.argument("keyid_or_email", default=None, required=False)
+@click.pass_context
+def export_public_key(ctx, keyid_or_email):
+    """print public key of own or peer account."""
+    account = get_account(ctx)
+    if keyid_or_email is not None:
+        if "@" in keyid_or_email:
+            keyid_or_email = account.get_latest_public_keyid(keyid_or_email)
+    click.echo(account.export_public_key(keyid=keyid_or_email))
 
 
 @click.command("export-private-key")
 @click.pass_context
 def export_private_key(ctx):
-    """print armored private key associated with this autocrypt account. """
+    """print private key of own autocrypt account. """
     account = get_account(ctx)
     click.echo(account.export_private_key())
 
@@ -106,6 +123,7 @@ def export_private_key(ctx):
 autocrypt_main.add_command(init)
 autocrypt_main.add_command(make_header)
 autocrypt_main.add_command(set_prefer_encrypt)
+autocrypt_main.add_command(process_incoming_mail)
 autocrypt_main.add_command(export_public_key)
 autocrypt_main.add_command(export_private_key)
 

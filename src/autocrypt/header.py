@@ -15,6 +15,10 @@ def make_ac_header_value(emailadr, keydata, prefer_encrypt="notset", keytype="p"
     return "; ".join(l)
 
 
+def parse_email_addr(string):
+    """ return a (prefix, emailadr) tuple. """
+    return email.utils.parseaddr(string)
+
 def parse_message_from_file(fp):
     return email.parser.Parser().parse(fp)
 

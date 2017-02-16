@@ -74,19 +74,29 @@ def test_account_handling(Account, tmpdir):
     assert not acc.exists()
 
 
-def test_account_parse_incoming_mail_and_encrypt(Account, tmpdir):
+def test_account_parse_incoming_mail_and_raw_encrypt(Account, tmpdir):
+    adr = "a@a.org"
     ac1 = Account(tmpdir.join("ac1").strpath)
     ac1.init()
     ac2 = Account(tmpdir.join("ac2").strpath)
     ac2.init()
-    msg = gen_mail_msg(From="a@a.org", To=["b@b.org"],
-                       Autocrypt=ac1.make_header("a@a.org", headername=""))
-    ac2.process_incoming_mail(msg)
-    keyid = ac2.get_latest_public_keyid("a@a.org")
+    msg = gen_mail_msg(From="Alice <%s>" % adr, To=["b@b.org"],
+                       Autocrypt=ac1.make_header(adr, headername=""))
+    inc_adr = ac2.process_incoming_mail(msg)
+    assert inc_adr == adr
+    keyid = ac2.get_latest_public_keyid(adr)
     enc = ac2.bingpg.encrypt(data=b"123", recipients=[keyid])
     data = ac1.bingpg.decrypt(enc)
     assert data == b"123"
 
+
+def test_account_export_public_key(account, datadir):
+    account.init()
+    msg = header.parse_message_from_file(datadir.open("rsa2048-simple.eml"))
+    adr = account.process_incoming_mail(msg)
+    keyid = account.get_latest_public_keyid(adr)
+    x = account.export_public_key(keyid)
+    assert x
 
 
 def gen_mail_msg(From, To, Autocrypt):

@@ -29,7 +29,7 @@ def test_help(cmd):
 
 def test_init_help(cmd):
     cmd.run_ok(["init", "--help"], """
-        *initialize new autocrypt*
+        *init*
     """)
 
 
@@ -84,3 +84,19 @@ def test_init_and_show_header_with_envvar(cmd, tmpdir):
     with tmpdir.as_cwd():
         os.environ["AUTOCRYPT_BASEDIR"] = "."
         test_init_and_show_header(cmd)
+
+
+def test_process_incoming_mail(mycmd, datadir):
+    mycmd.run_ok(["init"])
+    fn = datadir.join("rsa2048-simple.eml")
+    mycmd.run_ok(["process-incoming-mail", fn], """
+        *processed mail from alice@testsuite.autocrypt.org*key: D993BD7F*
+    """)
+    out1 = mycmd.run_ok(["export-public-key", "alice@testsuite.autocrypt.org"], """
+        *---BEGIN PGP*
+    """)
+    out2 = mycmd.run_ok(["export-public-key", "D993BD7F"], """
+        *---BEGIN PGP*
+    """)
+    assert out1 == out2
+

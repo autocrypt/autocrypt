@@ -111,10 +111,11 @@ class Account(KVStoreMixin):
             prefer_encrypt=self._prefer_encrypt,
         )
 
-    def export_public_key(self):
+    def export_public_key(self, keyid=None):
         """ return armored public key for this account. """
         self._ensure_exists()
-        return self.bingpg.get_public_keydata(self.own_keyhandle, armor=True)
+        keyid = self.own_keyhandle if keyid is None else keyid
+        return self.bingpg.get_public_keydata(keyid, armor=True)
 
     def export_private_key(self):
         """ return armored public key for this account. """
@@ -124,10 +125,11 @@ class Account(KVStoreMixin):
     def process_incoming_mail(self, msg):
         self._ensure_exists()
         d = header.parse_one_ac_header_from_msg(msg)
-        if d["to"] == msg["From"]:
+        if d["to"] == header.parse_email_addr(msg["From"])[1]:
             peers = self._kv_dict.setdefault("peers", {})
             peers[d["to"]] = d
             self.kv_commit()
+            return d["to"]
 
     def get_latest_public_keyid(self, emailadr):
         peers = self._kv_dict.get("peers", {})
