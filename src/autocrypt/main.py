@@ -45,13 +45,13 @@ def init(ctx, replace):
     if account.exists():
         if not replace:
             click.echo("account {} exists at {} and --replace was not specified".format(
-                       account.uuid, account.dir))
+                       account.config.uuid, account.dir))
             ctx.exit(1)
         else:
             click.echo("deleting account directory: {}".format(account.dir))
             account.remove()
     account.init()
-    click.echo("{}: account {} created".format(account.dir, account.uuid))
+    click.echo("{}: account {} created".format(account.dir, account.config.uuid))
 
 
 def get_account(ctx):
@@ -126,10 +126,10 @@ def show(ctx):
     """print account info including peer state."""
     account = get_account(ctx)
     click.echo("account-dir: " + account.dir)
-    click.echo("uuid: " + account.uuid)
-    click.echo("own-keyhandle: " + account.own_keyhandle)
-    click.echo("prefer-encrypt: " + account._prefer_encrypt)
-    peers = account._kv_dict.get("peers")
+    click.echo("uuid: " + account.config.uuid)
+    click.echo("own-keyhandle: " + account.config.own_keyhandle)
+    click.echo("prefer-encrypt: " + account.config.prefer_encrypt)
+    peers = account.config.peers
     if peers:
         click.echo("----peers-----")
         for name, ac_dict in peers.items():
