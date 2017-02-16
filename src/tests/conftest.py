@@ -1,9 +1,16 @@
 import traceback
 from click.testing import CliRunner
 import pytest
+import py
 from _pytest.pytester import LineMatcher
 from autocrypt.bingpg import BinGPG, find_executable
 from autocrypt import header
+from autocrypt.account import Account as OrigAccount
+
+
+def pytest_addoption(parser):
+    parser.addoption("--no-test-cache", action="store_true",
+                     help="ignore test cache state")
 
 
 @pytest.fixture(params=["gpg", "gpg2"], scope="session")
@@ -96,3 +103,33 @@ def datadir(request):
                 msg = header.parse_message_from_file(fp)
                 return header.parse_one_ac_header_from_msg(msg)
     return D(request.fspath.dirpath("data"))
+
+
+_counters = {}
+@pytest.fixture
+def Account(request):
+    if not request.config.getoption("--no-test-cache"):
+        count = _counters.setdefault(request.node.nodeid, 0)
+
+        class MyAccount(OrigAccount):
+            def __init__(self, *args, **kwargs):
+                self._backup_path = request.fspath.dirpath(".cache/%s-%s" %
+                      (request.node.nodeid, _counters[request.node.nodeid]))
+                _counters[request.node.nodeid] += 1
+                super(MyAccount, self).__init__(*args, **kwargs)
+
+            def init(self):
+                if self._backup_path.exists():
+                    self._backup_path.copy(py.path.local(self.dir), mode=True)
+                    self.kv_reload()
+                else:
+                    super(MyAccount, self).init()
+                    py.path.local(self.dir).copy(self._backup_path, mode=True)
+    else:
+        MyAccount = OrigAccount
+    return MyAccount
+
+
+@pytest.fixture
+def account(tmpdir, Account):
+    return Account(tmpdir.join("account").strpath)

@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 import pytest
 import six
 from autocrypt import header
+from base64 import b64decode
 
 
 def make_ac_dict(**kwargs):
@@ -13,21 +14,20 @@ def make_ac_dict(**kwargs):
     return d
 
 
-def test_genkey_make_and_parse_header():
-    adr, keydata = "x@xy.z", b"123"
-    h = header.make_header(emailadr=adr, keydata=keydata)
-    assert h.startswith("Autocrypt: ")
-    d = header.parse_ac_headervalue(h[10:])
+def test_make_and_parse_header_value():
+    adr, keydata = "x@xy.z", "123"
+    h = header.make_ac_header_value(emailadr=adr, keydata=keydata)
+    d = header.parse_ac_headervalue(h)
     assert not header.verify_ac_dict(d)
     assert d == make_ac_dict(to=adr, key=keydata)
 
 
-def test_genkey_make_and_parse_header_errors():
-    adr, keydata = "x@xy.z", b"123"
-    h = header.make_header(
+def test_make_and_parse_header_errors():
+    adr, keydata = "x@xy.z", "123"
+    h = header.make_ac_header_value(
         emailadr=adr, keydata=keydata, prefer_encrypt="notset", keytype="x")
     assert "prefer-encrypt" not in h, h
-    d = header.parse_ac_headervalue(h[10:])
+    d = header.parse_ac_headervalue(h)
     assert "unknown key type" in header.verify_ac_dict(d)[0]
     assert d == make_ac_dict(to=adr, key=keydata, type="x")
 
@@ -36,7 +36,7 @@ class TestEmailCorpus:
     def test_rsa2048_simple(self, datadir, bingpg):
         d = datadir.parse_ac_header_from_email("rsa2048-simple.eml")
         assert d["to"] == "alice@testsuite.autocrypt.org", d
-        keyid = bingpg.import_keydata(d["key"])
+        keyid = bingpg.import_keydata(b64decode(d["key"]))
 
     def test_25519_simple(self, datadir, bingpg):
         if (not bingpg.supports_eddsa()):
@@ -44,18 +44,18 @@ class TestEmailCorpus:
         d = datadir.parse_ac_header_from_email("25519-simple.eml")
         assert d["to"] == "alice@testsuite.autocrypt.org"
         assert "key" in d and d["key"]
-        bingpg.import_keydata(d["key"])
+        bingpg.import_keydata(b64decode(d["key"]))
 
     def test_rsa2048_explicit_type(self, datadir, bingpg):
         d = datadir.parse_ac_header_from_email("rsa2048-explicit-type.eml")
         assert d["to"] == "alice@testsuite.autocrypt.org"
-        bingpg.import_keydata(d["key"])
+        bingpg.import_keydata(b64decode(d["key"]))
 
     def test_rsa2048_unknown_non_critical(self, datadir, bingpg):
         d = datadir.parse_ac_header_from_email("rsa2048-unknown-non-critical.eml")
         assert d["to"] == "alice@testsuite.autocrypt.org"
         assert d["_monkey"] == "ignore"
-        bingpg.import_keydata(d["key"])
+        bingpg.import_keydata(b64decode(d["key"]))
 
     def test_rsa2048_unknown_critical(self, datadir):
         d = datadir.parse_ac_header_from_email("rsa2048-unknown-critical.eml")

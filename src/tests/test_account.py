@@ -1,16 +1,16 @@
 from __future__ import unicode_literals
 import pytest
-from autocrypt.account import Account, KVStoreMixin, kv_persisted_property
+import py
+from autocrypt.account import KVStoreMixin, kv_persisted_property
 from autocrypt import header
+from email.mime.text import MIMEText
 
 
 @pytest.fixture
 def kvstore(tmpdir):
     return KVStoreMixin(tmpdir.join("kvstore").strpath)
 
-@pytest.fixture
-def account(tmpdir):
-    return Account(tmpdir.join("account").strpath)
+
 
 def test_kvstore(kvstore):
     kvstore._kv_dict["hello"] = 3
@@ -44,7 +44,7 @@ def test_account_header_defaults(account):
     h = account.make_header(adr)
     d = header.parse_one_ac_header_from_string(h)
     assert d["to"] == adr
-    assert d["key"] == account.bingpg.get_public_keydata(account.own_keyhandle)
+    assert d["key"] == account.bingpg.get_public_keydata(account.own_keyhandle, b64=True)
     assert d["prefer-encrypt"] == "notset"
     assert d["type"] == "p"
 
@@ -59,12 +59,12 @@ def test_account_header_prefer_encrypt(account, pref):
     h = account.make_header(adr)
     d = header.parse_one_ac_header_from_string(h)
     assert d["to"] == adr
-    assert d["key"] == account.bingpg.get_public_keydata(account.own_keyhandle)
+    assert d["key"] == account.bingpg.get_public_keydata(account.own_keyhandle, b64=True)
     assert d["prefer-encrypt"] == pref
     assert d["type"] == "p"
 
 
-def test_account_handling(tmpdir):
+def test_account_handling(Account, tmpdir):
     tmpdir = tmpdir.strpath
     acc = Account(tmpdir)
     assert not acc.exists()
@@ -72,3 +72,28 @@ def test_account_handling(tmpdir):
     assert acc.exists()
     acc.remove()
     assert not acc.exists()
+
+
+def test_account_parse_incoming_mail_and_encrypt(Account, tmpdir):
+    ac1 = Account(tmpdir.join("ac1").strpath)
+    ac1.init()
+    ac2 = Account(tmpdir.join("ac2").strpath)
+    ac2.init()
+    msg = gen_mail_msg(From="a@a.org", To=["b@b.org"],
+                       Autocrypt=ac1.make_header("a@a.org", headername=""))
+    ac2.process_incoming_mail(msg)
+    keyid = ac2.get_latest_public_keyid("a@a.org")
+    enc = ac2.bingpg.encrypt(data=b"123", recipients=[keyid])
+    data = ac1.bingpg.decrypt(enc)
+    assert data == b"123"
+
+
+
+def gen_mail_msg(From, To, Autocrypt):
+    msg = MIMEText('''Autoresponse''')
+    msg['From'] = From
+    msg['To'] = ",".join(To)
+    msg['Subject'] = "testmail"
+    msg["Autocrypt"] = Autocrypt
+    return msg
+

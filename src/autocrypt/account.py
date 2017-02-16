@@ -6,7 +6,8 @@ import shutil
 import six
 import uuid
 from .bingpg import BinGPG, cached_property
-from .header import make_header
+from base64 import b64decode
+from . import header
 
 
 class KVStoreMixin(object):
@@ -24,7 +25,10 @@ class KVStoreMixin(object):
         return d
 
     def kv_reload(self):
-        self._property_cache.clear()
+        try:
+            self._property_cache.clear()
+        except AttributeError:
+            pass
         self._kv_dict
 
     def kv_commit(self):
@@ -93,7 +97,7 @@ class Account(KVStoreMixin):
         shutil.rmtree(self.dir)
         self._property_cache.clear()
 
-    def make_header(self, emailadr):
+    def make_header(self, emailadr, headername="Autocrypt: "):
         """ return an Autocrypt header line which uses our own
         key and the provided emailadr.  We need the emailadr because
         an account may send mail from multiple aliases and we advertise
@@ -101,7 +105,7 @@ class Account(KVStoreMixin):
         XXX discuss whether "to" is all that useful for level-0 autocrypt.
         """
         self._ensure_exists()
-        return make_header(
+        return headername + header.make_ac_header_value(
             emailadr=emailadr,
             keydata=self.bingpg.get_public_keydata(self.own_keyhandle),
             prefer_encrypt=self._prefer_encrypt,
@@ -116,3 +120,18 @@ class Account(KVStoreMixin):
         """ return armored public key for this account. """
         self._ensure_exists()
         return self.bingpg.get_secret_keydata(self.own_keyhandle, armor=True)
+
+    def process_incoming_mail(self, msg):
+        self._ensure_exists()
+        d = header.parse_one_ac_header_from_msg(msg)
+        if d["to"] == msg["From"]:
+            peers = self._kv_dict.setdefault("peers", {})
+            peers[d["to"]] = d
+            self.kv_commit()
+
+    def get_latest_public_keyid(self, emailadr):
+        peers = self._kv_dict.get("peers", {})
+        state = peers.get(emailadr)
+        if state:
+            keydata = b64decode(state["key"])
+            return self.bingpg.import_keydata(keydata)

@@ -5,10 +5,18 @@ import sys
 import six
 from subprocess import Popen, PIPE
 from contextlib import contextmanager
+from base64 import b64encode
 import tempfile
 import io
 import re
 iswin32 = sys.platform == "win32" or (getattr(os, '_name', False) == 'nt')
+
+def b64encode_u(x):
+    res = b64encode(x)
+    if isinstance(res, bytes):
+        res = res.decode("ascii")
+    return res
+
 
 def cached_property(f):
     """returns a property definition which lazily computes and
@@ -189,10 +197,11 @@ class BinGPG(object):
             packets.append(last_package_type + (lines,))
         return packets
 
-    def get_public_keydata(self, keyid, armor=False):
+    def get_public_keydata(self, keyid, armor=False, b64=False):
         args = ["-a"] if armor else []
         args.extend(["--export", str(keyid)])
-        return self._gpg_out(args, strict=True)
+        out = self._gpg_out(args, strict=True)
+        return out if not b64 else b64encode_u(out)
 
     def get_secret_keydata(self, keyid, armor=False):
         args = ["-a"] if armor else []

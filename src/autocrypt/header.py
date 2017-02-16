@@ -1,11 +1,10 @@
 from __future__ import unicode_literals
 import email.parser
-import logging
 import base64
 
-def make_header(emailadr, keydata, prefer_encrypt="notset", keytype="p"):
+def make_ac_header_value(emailadr, keydata, prefer_encrypt="notset", keytype="p"):
     assert keydata
-    key = base64.b64encode(keydata)
+    key = base64.b64encode(keydata) if isinstance(keydata, bytes) else keydata
     if isinstance(key, bytes):
         key = key.decode("ascii")
     l = ["to=" + emailadr, "key=" + key]
@@ -13,7 +12,7 @@ def make_header(emailadr, keydata, prefer_encrypt="notset", keytype="p"):
         l.insert(1, "prefer-encrypt=" + prefer_encrypt)
     if keytype != "p":
         l.insert(1, "type=" + keytype)
-    return "Autocrypt: " + "; ".join(l)
+    return "; ".join(l)
 
 
 def parse_message_from_file(fp):
@@ -54,8 +53,7 @@ def parse_ac_headervalue(value):
         kv = x.split("=", 1)
         name, value = [x.strip() for x in kv]
         if name == "key":
-            keydata_base64 = "".join(value.split())
-            value = base64.b64decode(keydata_base64)
+            value = "".join(value.split())
         result_dict[name] = value
     return result_dict
 
@@ -68,6 +66,8 @@ def verify_ac_dict(ac_dict):
     for name in ac_dict:
         if name not in ("key", "to", "type", "prefer-encrypt") and name[0] != "_":
             l.append("unknown critical attr '%s'" %(name, ))
+    #keydata_base64 = "".join(ac_dict["key"])
+    #base64.b64decode(keydata_base64)
     if "type" not in ac_dict:
         l.append("type missing")
     if "key" not in ac_dict:
