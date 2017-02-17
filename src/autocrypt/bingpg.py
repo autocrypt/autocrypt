@@ -155,7 +155,7 @@ class BinGPG(object):
         return keyhandle
 
     def list_public_keyhandles(self):
-        out = self._gpg_out(["--with-colons", "--list-public-keys"])
+        out = self._gpg_out(["--skip-verify", "--with-colons", "--list-public-keys"])
         return [line.split(b":")[4]
                     for line in out.splitlines()
                         if line.startswith(b"pub:")]
@@ -237,7 +237,7 @@ class BinGPG(object):
         return self._gpg_out(["--decrypt"], input=enc_data)
 
     def import_keydata(self, keydata):
-        out, err = self._gpg_outerr(["--import"], input=keydata)
+        out, err = self._gpg_outerr(["--skip-verify", "--import"], input=keydata)
         return self._find_keyhandle(err)
 
 
