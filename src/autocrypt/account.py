@@ -6,6 +6,7 @@ import shutil
 import six
 import uuid
 from .bingpg import BinGPG, cached_property
+from contextlib import contextmanager
 from base64 import b64decode
 from . import header
 from email.utils import parsedate
@@ -25,23 +26,28 @@ class KVStoreMixin(object):
         self._dict_old = d.copy()
         return d
 
-    def kv_exists(self):
-        return os.path.exists(self._path)
+    def _reload(self):
+        try:
+            self._property_cache.pop("_dict")
+        except AttributeError:
+            pass
 
-    def kv_reload(self):
-        self._dict.clear()
-        if os.path.exists(self._path):
-            self._dict.clear()
-            with open(self._path, "r") as f:
-                self._dict.update(json.load(f))
-        self._dict_old = self._dict.copy()
-
-    def kv_commit(self):
+    def _commit(self):
         if self._dict != self._dict_old:
             with open(self._path, "w") as f:
                 json.dump(self._dict, f)
             self._kv_dict_old = self._dict.copy()
             return True
+
+    @contextmanager
+    def atomic_change(self):
+        try:
+            yield
+        except:
+            self._dict = self._dict_old.copy()
+            raise
+        else:
+            self._commit()
 
 
 def kv_property(name, typ):
@@ -49,7 +55,9 @@ def kv_property(name, typ):
         return self._dict.setdefault(name, typ())
     def set(self, value):
         if not isinstance(value, typ):
-            raise TypeError(value)
+            if not (typ == six.text_type and isinstance(value, bytes)):
+                raise TypeError(value)
+            value = value.decode("ascii")
         self._dict[name] = value
     return property(get, set)
 
@@ -59,6 +67,9 @@ class Config(KVStoreMixin):
     own_keyhandle = kv_property("own_keyhandle", six.text_type)
     prefer_encrypt = kv_property("prefer_encrypt", six.text_type)
     peers = kv_property("peers", dict)
+
+    def exists(self):
+        return self.uuid
 
 
 class Account(object):
@@ -75,24 +86,23 @@ class Account(object):
 
     @cached_property
     def bingpg(self):
+        self._ensure_exists()
         return BinGPG(os.path.join(self.dir, "gpghome"))
 
     def init(self):
         assert not self.exists()
-        account_uuid = six.text_type(uuid.uuid4().hex)
-        keyhandle = self.bingpg.gen_secret_key(account_uuid)
-        assert isinstance(keyhandle, six.text_type)
-        self.config.uuid = account_uuid
-        self.config.own_keyhandle = keyhandle
-        self.config.prefer_encrypt = "notset"
-        self.config.kv_commit()
+        with self.config.atomic_change():
+            self.config.uuid = uuid.uuid4().hex
+            keyhandle = self.bingpg.gen_secret_key(self.config.uuid)
+            self.config.own_keyhandle = keyhandle
+            self.config.prefer_encrypt = "notset"
         assert self.exists()
 
     def set_prefer_encrypt(self, value):
         if value not in ("yes", "no", "notset"):
             raise ValueError(repr(value))
-        self.config.prefer_encrypt = value
-        self.config.kv_commit()
+        with self.config.atomic_change():
+            self.config.prefer_encrypt = value
 
     def _ensure_exists(self):
         if not self.exists():
@@ -100,7 +110,7 @@ class Account(object):
                 "Account directory %r not initialized" %(self.dir))
 
     def exists(self):
-        return self.config.kv_exists()
+        return self.config.exists()
 
     def remove(self):
         shutil.rmtree(self.dir)
@@ -145,14 +155,14 @@ class Account(object):
             if d["to"] == From:
                 if parsedate(date) >= parsedate(old.get("*date", date)):
                     d["*date"] = date
-                    self.config.peers[From] = d
-                    self.config.kv_commit()
+                    with self.config.atomic_change():
+                        self.config.peers[From] = d
                 return d["to"]
         elif old:
             # we had an autocrypt header and now forget about it
             # because we got a mail which doesn't have one
-            self.config.peers[From] = {}
-            self.config.kv_commit()
+            with self.config.atomic_change():
+                self.config.peers[From] = {}
 
     def get_latest_public_keyhandle(self, emailadr):
         state = self.config.peers.get(emailadr)

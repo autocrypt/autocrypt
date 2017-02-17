@@ -1,42 +1,36 @@
 from __future__ import unicode_literals
 import pytest
 import py
-from autocrypt.account import KVStoreMixin, kv_property
+from autocrypt.account import Config, kv_property
 from autocrypt import header
 from email.mime.text import MIMEText
 from email.utils import formatdate
 
 
 
-def test_kvstore(tmpdir):
-    class KV(KVStoreMixin):
-        x = kv_property("x", int)
-        y = kv_property("y", dict)
+def test_config(tmpdir):
+    config = Config(tmpdir.join("config").strpath)
 
-    kv = KV(tmpdir.join("kvstore").strpath)
-
-    assert not kv.kv_exists()
     with pytest.raises(AttributeError):
-        kv.z
+        config.qwe
 
-    assert kv.x == 0
-    assert kv.y == {}
+    assert config.uuid == ""
+    assert config.own_keyhandle == ""
+    assert config.peers == {}
 
-    with pytest.raises(TypeError):
-        kv.x = "123"
+    assert not config.exists()
+    with config.atomic_change():
+        config.uuid = "123"
+        assert config.exists()
+        assert config.uuid == "123"
+    assert config.uuid == "123"
 
-    kv.x = 13
-    kv.y["1"] = 2
-    kv.kv_commit()
-    assert kv.kv_exists()
-
-    assert kv.x == 13
-    assert kv.y == {"1": 2}
-    kv2 = KV(kv._path)
-    assert kv2.kv_exists()
-    assert kv2.x == 13
-    assert kv2.y == {"1": 2}
-    kv2.kv_commit()
+    try:
+        with config.atomic_change():
+            config.own_keyhandle = "123"
+            raise ValueError()
+    except ValueError:
+        assert config.own_keyhandle == ""
 
 
 def test_account_header_defaults(account):

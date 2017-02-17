@@ -181,7 +181,7 @@ def Account(request, testcache):
             next_backup = testcache.next_backup(request)
             if next_backup.exists():
                 ret = next_backup.restore(self.dir)
-                self.config.kv_reload()
+                self.config._reload()
             else:
                 ret = super(MyAccount, self).init()
                 next_backup.store(self.dir, ret)

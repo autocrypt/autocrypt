@@ -25,15 +25,16 @@ def cached_property(f):
     """
     def get(self):
         propcache = self.__dict__.setdefault("_property_cache", {})
+        key = f.__name__
         try:
-            return propcache[f]
+            return propcache[key]
         except KeyError:
-            x = self._property_cache[f] = f(self)
+            x = self._property_cache[key] = f(self)
             return x
 
     def set(self, val):
         propcache = self.__dict__.setdefault("_property_cache", {})
-        propcache[f] = val
+        propcache[f.__name__] = val
     return property(get, set)
 
 
