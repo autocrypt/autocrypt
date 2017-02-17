@@ -132,7 +132,7 @@ class Account(object):
         self._ensure_exists()
         return self.bingpg.get_secret_keydata(self.config.own_keyhandle, armor=True)
 
-    def process_incoming_mail(self, msg):
+    def process_incoming(self, msg):
         """ process incoming mail message and store information
         about potential Autocrypt header for the From/Autocrypt peer.
         """

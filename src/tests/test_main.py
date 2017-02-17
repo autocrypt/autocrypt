@@ -61,7 +61,16 @@ def test_init_and_make_header(mycmd):
     out2 = mycmd.run_ok(["make-header", adr])
     assert out == out2
 
+def test_set_prefer_encrypt(mycmd):
+    mycmd.run_ok(["init"])
+    mycmd.run_ok(["set-prefer-encrypt"], """
+        *notset*
+    """)
     mycmd.run_ok(["set-prefer-encrypt", "yes"])
+    mycmd.run_ok(["set-prefer-encrypt"], """
+        *yes*
+    """)
+    adr = "x@yz.org"
     out3 = mycmd.run_ok(["make-header", adr])
     d3 = parse_one_ac_header_from_string(out3)
     assert d3["prefer-encrypt"] == "yes"
@@ -94,10 +103,10 @@ def test_init_and_show_header_with_envvar(cmd, tmpdir):
         test_init_and_make_header(cmd)
 
 
-def test_process_incoming_mail(mycmd, datadir):
+def test_process_incoming(mycmd, datadir):
     mycmd.run_ok(["init"])
     fn = datadir.join("rsa2048-simple.eml")
-    mycmd.run_ok(["process-incoming-mail", fn], """
+    mycmd.run_ok(["process-incoming", fn], """
         *processed mail from alice@testsuite.autocrypt.org*key: BAFC533CD993BD7F*
     """)
     out1 = mycmd.run_ok(["export-public-key", "alice@testsuite.autocrypt.org"], """

@@ -81,21 +81,21 @@ def set_prefer_encrypt(ctx, value):
     """print or set prefer-encrypted setting."""
     account = get_account(ctx)
     if value is None:
-        click.echo(account._prefer_encrypt)
+        click.echo(account.config.prefer_encrypt)
     else:
         value = six.text_type(value)
         account.set_prefer_encrypt(value)
         click.echo("set prefer-encrypt to %r" % value)
 
 
-@click.command("process-incoming-mail")
+@click.command("process-incoming")
 @click.argument("mail", type=click.File())
 @click.pass_context
-def process_incoming_mail(ctx, mail):
+def process_incoming(ctx, mail):
     """process incoming mail from file/stdin."""
     account = get_account(ctx)
     msg = header.parse_message_from_file(mail)
-    adr = account.process_incoming_mail(msg)
+    adr = account.process_incoming(msg)
     keyhandle = account.get_latest_public_keyhandle(adr)
     click.echo("processed mail from %s, found key: %s" % (adr, keyhandle))
 
@@ -143,7 +143,7 @@ autocrypt_main.add_command(init)
 autocrypt_main.add_command(show)
 autocrypt_main.add_command(make_header)
 autocrypt_main.add_command(set_prefer_encrypt)
-autocrypt_main.add_command(process_incoming_mail)
+autocrypt_main.add_command(process_incoming)
 autocrypt_main.add_command(export_public_key)
 autocrypt_main.add_command(export_secret_key)
 

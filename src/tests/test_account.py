@@ -85,7 +85,7 @@ def test_account_parse_incoming_mail_and_raw_encrypt(account_maker):
     ac2 = account_maker()
     msg = gen_mail_msg(From="Alice <%s>" % adr, To=["b@b.org"],
                        Autocrypt=ac1.make_header(adr, headername=""))
-    inc_adr = ac2.process_incoming_mail(msg)
+    inc_adr = ac2.process_incoming(msg)
     assert inc_adr == adr
     keyhandle = ac2.get_latest_public_keyhandle(adr)
     enc = ac2.bingpg.encrypt(data=b"123", recipients=[keyhandle])
@@ -100,11 +100,11 @@ def test_account_parse_incoming_mails_replace(account_maker):
     adr = "alice@a.org"
     msg1 = gen_mail_msg(From="Alice <%s>" % adr, To=["b@b.org"],
                         Autocrypt=ac2.make_header(adr, headername=""))
-    adr = ac1.process_incoming_mail(msg1)
+    adr = ac1.process_incoming(msg1)
     assert ac1.get_latest_public_keyhandle(adr) == ac2.config.own_keyhandle
     msg2 = gen_mail_msg(From="Alice <%s>" % adr, To=["b@b.org"],
                         Autocrypt=ac3.make_header(adr, headername=""))
-    adr = ac1.process_incoming_mail(msg2)
+    adr = ac1.process_incoming(msg2)
     assert ac1.get_latest_public_keyhandle(adr) == ac3.config.own_keyhandle
 
 
@@ -119,13 +119,13 @@ def test_account_parse_incoming_mails_replace_by_date(account_maker):
     msg1 = gen_mail_msg(From="Alice <%s>" % adr, To=["b@b.org"],
                         Autocrypt=ac2.make_header(adr, headername=""),
                         Date='Thu, 16 Feb 2017 13:00:00 -0000')
-    ac1.process_incoming_mail(msg2)
+    ac1.process_incoming(msg2)
     assert ac1.get_latest_public_keyhandle(adr) == ac3.config.own_keyhandle
-    ac1.process_incoming_mail(msg1)
+    ac1.process_incoming(msg1)
     assert ac1.get_latest_public_keyhandle(adr) == ac3.config.own_keyhandle
     msg3 = gen_mail_msg(From="Alice <%s>" % adr, To=["b@b.org"],
                         Date='Thu, 16 Feb 2017 17:00:00 -0000')
-    ac1.process_incoming_mail(msg3)
+    ac1.process_incoming(msg3)
     assert not ac1.get_latest_public_keyhandle(adr)
 
 
@@ -133,7 +133,7 @@ def test_account_parse_incoming_mails_replace_by_date(account_maker):
 def test_account_export_public_key(account, datadir):
     account.init()
     msg = header.parse_message_from_file(datadir.open("rsa2048-simple.eml"))
-    adr = account.process_incoming_mail(msg)
+    adr = account.process_incoming(msg)
     keyhandle = account.get_latest_public_keyhandle(adr)
     x = account.export_public_key(keyhandle)
     assert x
