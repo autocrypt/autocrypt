@@ -7,8 +7,8 @@ from click.testing import CliRunner
 
 def test_botkey_load_and_sign(bingpg, datadir):
     keydata = datadir.read_bytes("testbot.secretkey")
-    keyid = bingpg.import_keydata(keydata)
-    sigdata = bingpg.sign(data=b"123", keyid=keyid)
+    keyhandle = bingpg.import_keydata(keydata)
+    sigdata = bingpg.sign(data=b"123", keyhandle=keyhandle)
     bingpg.verify(data=b'123', signature=sigdata)
 
 

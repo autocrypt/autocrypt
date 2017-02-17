@@ -120,13 +120,14 @@ class Account(object):
             prefer_encrypt=self.config.prefer_encrypt,
         )
 
-    def export_public_key(self, keyid=None):
-        """ return armored public key for this account. """
+    def export_public_key(self, keyhandle=None):
+        """ return armored public key of this account or the one
+        indicated by the key handle. """
         self._ensure_exists()
-        keyid = self.config.own_keyhandle if keyid is None else keyid
-        return self.bingpg.get_public_keydata(keyid, armor=True)
+        keyhandle = self.config.own_keyhandle if keyhandle is None else keyhandle
+        return self.bingpg.get_public_keydata(keyhandle, armor=True)
 
-    def export_private_key(self):
+    def export_secret_key(self):
         """ return armored public key for this account. """
         self._ensure_exists()
         return self.bingpg.get_secret_keydata(self.config.own_keyhandle, armor=True)
@@ -153,7 +154,7 @@ class Account(object):
             self.config.peers[From] = {}
             self.config.kv_commit()
 
-    def get_latest_public_keyid(self, emailadr):
+    def get_latest_public_keyhandle(self, emailadr):
         state = self.config.peers.get(emailadr)
         if state:
             keydata = b64decode(state["key"])

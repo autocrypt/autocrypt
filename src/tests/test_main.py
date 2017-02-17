@@ -22,7 +22,7 @@ def test_help(cmd):
         *init*
         *make-header*
         *export-public-key*
-        *export-private-key*
+        *export-secret-key*
     """)
     res = cmd.run_ok(["--help"], """
         *access and manage*
@@ -71,7 +71,7 @@ def test_exports_and_show(mycmd):
     mycmd.run_ok(["init"])
     out = mycmd.run_ok(["export-public-key"])
     check_ascii(out)
-    out = mycmd.run_ok(["export-private-key"])
+    out = mycmd.run_ok(["export-secret-key"])
     check_ascii(out)
     out = mycmd.run_ok(["show"], """
         account-dir:*
@@ -98,12 +98,12 @@ def test_process_incoming_mail(mycmd, datadir):
     mycmd.run_ok(["init"])
     fn = datadir.join("rsa2048-simple.eml")
     mycmd.run_ok(["process-incoming-mail", fn], """
-        *processed mail from alice@testsuite.autocrypt.org*key: D993BD7F*
+        *processed mail from alice@testsuite.autocrypt.org*key: BAFC533CD993BD7F*
     """)
     out1 = mycmd.run_ok(["export-public-key", "alice@testsuite.autocrypt.org"], """
         *---BEGIN PGP*
     """)
-    out2 = mycmd.run_ok(["export-public-key", "D993BD7F"], """
+    out2 = mycmd.run_ok(["export-public-key", "BAFC533CD993BD7F"], """
         *---BEGIN PGP*
     """)
     assert out1 == out2

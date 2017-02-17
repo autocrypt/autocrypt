@@ -96,28 +96,28 @@ def process_incoming_mail(ctx, mail):
     account = get_account(ctx)
     msg = header.parse_message_from_file(mail)
     adr = account.process_incoming_mail(msg)
-    keyid = account.get_latest_public_keyid(adr)
-    click.echo("processed mail from %s, found key: %s" % (adr, keyid))
+    keyhandle = account.get_latest_public_keyhandle(adr)
+    click.echo("processed mail from %s, found key: %s" % (adr, keyhandle))
 
 
 @click.command("export-public-key")
-@click.argument("keyid_or_email", default=None, required=False)
+@click.argument("keyhandle_or_email", default=None, required=False)
 @click.pass_context
-def export_public_key(ctx, keyid_or_email):
+def export_public_key(ctx, keyhandle_or_email):
     """print public key of own or peer account."""
     account = get_account(ctx)
-    if keyid_or_email is not None:
-        if "@" in keyid_or_email:
-            keyid_or_email = account.get_latest_public_keyid(keyid_or_email)
-    click.echo(account.export_public_key(keyid=keyid_or_email))
+    if keyhandle_or_email is not None:
+        if "@" in keyhandle_or_email:
+            keyhandle_or_email = account.get_latest_public_keyhandle(keyhandle_or_email)
+    click.echo(account.export_public_key(keyhandle=keyhandle_or_email))
 
 
-@click.command("export-private-key")
+@click.command("export-secret-key")
 @click.pass_context
-def export_private_key(ctx):
-    """print private key of own autocrypt account. """
+def export_secret_key(ctx):
+    """print secret key of own autocrypt account. """
     account = get_account(ctx)
-    click.echo(account.export_private_key())
+    click.echo(account.export_secret_key())
 
 
 @click.command()
@@ -134,9 +134,9 @@ def show(ctx):
         click.echo("----peers-----")
         for name, ac_dict in peers.items():
             d = ac_dict.copy()
-            keyid = account.get_latest_public_keyid(name)
+            keyhandle = account.get_latest_public_keyhandle(name)
             click.echo("%s: key %s [%d bytes] %s" %(
-                       d.pop("to"), keyid, len(d.pop("key")),
+                       d.pop("to"), keyhandle, len(d.pop("key")),
                        "; ".join(["%s=%s" % x for x in d.items()])))
 
 autocrypt_main.add_command(init)
@@ -145,7 +145,7 @@ autocrypt_main.add_command(make_header)
 autocrypt_main.add_command(set_prefer_encrypt)
 autocrypt_main.add_command(process_incoming_mail)
 autocrypt_main.add_command(export_public_key)
-autocrypt_main.add_command(export_private_key)
+autocrypt_main.add_command(export_secret_key)
 
 
 #@click.command()

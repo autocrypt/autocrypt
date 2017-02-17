@@ -36,7 +36,7 @@ class TestEmailCorpus:
     def test_rsa2048_simple(self, datadir, bingpg):
         d = datadir.parse_ac_header_from_email("rsa2048-simple.eml")
         assert d["to"] == "alice@testsuite.autocrypt.org", d
-        keyid = bingpg.import_keydata(b64decode(d["key"]))
+        keyhandle = bingpg.import_keydata(b64decode(d["key"]))
 
     def test_25519_simple(self, datadir, bingpg):
         if (not bingpg.supports_eddsa()):

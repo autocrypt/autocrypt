@@ -148,27 +148,38 @@ class BinGPG(object):
             "%commit"
         ]).encode("utf8")
         with self.temp_written_file(spec) as fn:
-            out, err = self._gpg_outerr(["--gen-key", fn])
+            out, err = self._gpg_outerr(["--with-colons", "--gen-key", fn])
 
-        # quickly find key id or fingerprint
-        keyid = self._find_keyid(err)
-        logging.debug("created secret key: %s", keyid)
-        return keyid
+        keyhandle = self._find_keyhandle(err)
+        logging.debug("created secret key: %s", keyhandle)
+        return keyhandle
 
-    _gpgout_keyid_pattern = re.compile(b"key (?:ID )?([0-9A-F]+)")
-    def _find_keyid(self, string):
-        m = self._gpgout_keyid_pattern.search(string)
+    def list_public_keyhandles(self):
+        out = self._gpg_out(["--with-colons", "--list-public-keys"])
+        return [line.split(b":")[4]
+                    for line in out.splitlines()
+                        if line.startswith(b"pub:")]
+
+    _gpgout_keyhandle_pattern = re.compile(b"key (?:ID )?([0-9A-F]+)")
+    def _find_keyhandle(self, string):
+        m = self._gpgout_keyhandle_pattern.search(string)
         assert m and len(m.groups()) == 1, string
         x = m.groups()[0]
-        if not isinstance(x, six.text_type):
-            x = x.decode("ascii")
-        return x
 
-    def list_secret_key_packets(self, keyid):
-        return self._list_packets(self.get_secret_keydata(keyid))
+        # now search the fingerprint
+        assert len(x) == 8   # keyid has 8 hex bytes
+        for fp in self.list_public_keyhandles():
+            if fp[-8:] == x:
+                if not isinstance(x, six.text_type):
+                    fp = fp.decode("ascii")
+                return fp
+        raise ValueError("could not find fingerprint")
 
-    def list_public_key_packets(self, keyid):
-        return self._list_packets(self.get_public_keydata(keyid))
+    def list_secret_key_packets(self, keyhandle):
+        return self._list_packets(self.get_secret_keydata(keyhandle))
+
+    def list_public_key_packets(self, keyhandle):
+        return self._list_packets(self.get_public_keydata(keyhandle))
 
     def list_packets(self, keydata):
         out = self._gpg_out(["--list-packets"], input=keydata)
@@ -197,15 +208,15 @@ class BinGPG(object):
             packets.append(last_package_type + (lines,))
         return packets
 
-    def get_public_keydata(self, keyid, armor=False, b64=False):
+    def get_public_keydata(self, keyhandle, armor=False, b64=False):
         args = ["-a"] if armor else []
-        args.extend(["--export", str(keyid)])
+        args.extend(["--export", str(keyhandle)])
         out = self._gpg_out(args, strict=True)
         return out if not b64 else b64encode_u(out)
 
-    def get_secret_keydata(self, keyid, armor=False):
+    def get_secret_keydata(self, keyhandle, armor=False):
         args = ["-a"] if armor else []
-        args.extend(["--export-secret-key", keyid])
+        args.extend(["--export-secret-key", keyhandle])
         return self._gpg_out(args, strict=True)
 
     def encrypt(self, data, recipients):
@@ -214,20 +225,20 @@ class BinGPG(object):
             recs.extend(["--recipient", r])
         return self._gpg_out(recs + ["--encrypt", "--always-trust"], input=data)
 
-    def sign(self, data, keyid):
-        return self._gpg_out(["--detach-sign", "-u", keyid], input=data)
+    def sign(self, data, keyhandle):
+        return self._gpg_out(["--detach-sign", "-u", keyhandle], input=data)
 
     def verify(self, data, signature):
         with self.temp_written_file(signature) as sig_fn:
             out, err = self._gpg_outerr(["--verify", sig_fn, "-"], input=data)
-        return self._find_keyid(err)
+        return self._find_keyhandle(err)
 
     def decrypt(self, enc_data):
         return self._gpg_out(["--decrypt"], input=enc_data)
 
     def import_keydata(self, keydata):
         out, err = self._gpg_outerr(["--import"], input=keydata)
-        return self._find_keyid(err)
+        return self._find_keyhandle(err)
 
 
 def find_executable(name):
