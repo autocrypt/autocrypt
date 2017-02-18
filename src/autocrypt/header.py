@@ -22,7 +22,6 @@ def parse_email_addr(string):
 def parse_message_from_file(fp):
     return email.parser.Parser().parse(fp)
 
-
 def parse_message_from_string(string):
     return email.parser.Parser().parsestr(string)
 
