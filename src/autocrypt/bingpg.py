@@ -1,5 +1,6 @@
 from __future__ import print_function, unicode_literals
 import logging
+from distutils.version import LooseVersion as V
 import os
 import sys
 import six
@@ -67,10 +68,14 @@ class BinGPG(object):
 
     def init(self):
         if not os.path.exists(self.homedir):
-            os.makedirs(self.homedir)
-        # for gpg2>2.1 and <2.1.12 we need to explicitely allow loopback pinentry
-        with open(os.path.join(self.homedir, "gpg-agent.conf"), "w") as f:
-            f.write("allow-loopback-pinentry\n")
+            # we create the dir if the basedir exists, otherwise we fail
+            os.mkdir(self.homedir)
+
+        if V("2.0") <= V(self.get_version()) < V("2.1.12"):
+            p = os.path.join(self.homedir, "gpg-agent.conf")
+            assert not os.path.exists(p)
+            with open(p, "w") as f:
+                f.write("allow-loopback-pinentry\n")
 
     def killagent(self):
         if self.isgpg2:
@@ -80,16 +85,9 @@ class BinGPG(object):
             popen = Popen(args)
             popen.wait()
 
-    @cached_property
-    def _tempbase(self):
-        tmpbase = os.path.join(self.homedir, "tmp")
-        if not os.path.exists(tmpbase):
-            os.makedirs(tmpbase)
-        return tmpbase
-
     @contextmanager
     def temp_written_file(self, data):
-        with tempfile.NamedTemporaryFile(dir=self._tempbase, delete=False) as f:
+        with tempfile.NamedTemporaryFile(delete=False) as f:
             f.write(data)
         try:
             yield f.name
@@ -151,7 +149,6 @@ class BinGPG(object):
         return False
 
     def gen_secret_key(self, emailadr):
-        #assert os.path.exists(os.path.join(self.homedir, "gpg-agent.conf"))
         spec = "\n".join([
             "%no-protection",
             "Key-Type: RSA",

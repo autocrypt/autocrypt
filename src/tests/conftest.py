@@ -189,6 +189,7 @@ def Account(request, testcache):
             else:
                 ret = super(MyAccount, self).init()
                 next_backup.store(self.dir, ret)
+            request.addfinalizer(self.bingpg.killagent)
             return ret
     return MyAccount
 
@@ -202,7 +203,7 @@ def account(account_maker):
 def account_maker(tmpdir, Account, gpgpath):
     count = [0]
     def maker(init=True):
-        ac = Account(tmpdir.join("account" + str(count[0])).strpath,
+        ac = Account(tmpdir.mkdir("account" + str(count[0])).strpath,
                      gpgpath=gpgpath)
         count[0] += 1
         if init:

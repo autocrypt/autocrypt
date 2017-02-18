@@ -13,7 +13,7 @@ def account_dir(tmpdir):
 def mycmd(cmd, tmpdir, testcache, request):
     # cache "autocrypt init" calls in cross-testrun test cache
     next_backup = testcache.next_backup(request)
-    cmd.set_basedir(tmpdir.join("account").strpath, next_backup)
+    cmd.set_basedir(tmpdir.mkdir("account").strpath, next_backup)
     return cmd
 
 
@@ -61,6 +61,11 @@ def test_init_and_make_header(mycmd):
     out2 = mycmd.run_ok(["make-header", adr])
     assert out == out2
 
+def test_init_and_make_header_with_envvar(cmd, tmpdir):
+    with tmpdir.as_cwd():
+        os.environ["AUTOCRYPT_BASEDIR"] = "."
+        test_init_and_make_header(cmd)
+
 def test_set_prefer_encrypt(mycmd):
     mycmd.run_ok(["init"])
     mycmd.run_ok(["set-prefer-encrypt"], """
@@ -95,12 +100,6 @@ def check_ascii(out):
         out.encode("ascii")
     else:
         out.decode("ascii")
-
-
-def test_init_and_show_header_with_envvar(cmd, tmpdir):
-    with tmpdir.as_cwd():
-        os.environ["AUTOCRYPT_BASEDIR"] = "."
-        test_init_and_make_header(cmd)
 
 
 def test_process_incoming(mycmd, datadir):

@@ -50,6 +50,8 @@ def init(ctx, replace):
         else:
             click.echo("deleting account directory: {}".format(account.dir))
             account.remove()
+    if not os.path.exists(account.dir):
+        os.mkdir(account.dir)
     account.init()
     click.echo("{}: account {} created".format(account.dir, account.config.uuid))
 
