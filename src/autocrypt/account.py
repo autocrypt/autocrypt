@@ -26,11 +26,11 @@ class PersistentAttrMixin(object):
         self._dict_old = d.copy()
         return d
 
-    def _reload(self):
-        try:
-            self._property_cache.pop("_dict")
-        except AttributeError:
-            pass
+    #def _reload(self):
+    #    try:
+    #        self._property_cache.pop("_dict")
+    #    except AttributeError:
+    #        pass
 
     def _commit(self):
         if self._dict != self._dict_old:
@@ -41,6 +41,8 @@ class PersistentAttrMixin(object):
 
     @contextmanager
     def atomic_change(self):
+        # XXX allow multi-read/single-write multi-process concurrency model
+        # by doing some file locking or using sqlite or something.
         try:
             yield
         except:
@@ -80,14 +82,8 @@ class Account(object):
 
     def __init__(self, dir, gpgpath=None):
         self.dir = dir
-        kvstore_path = os.path.join(self.dir, "config")
-        self.config = Config(kvstore_path)
-        self.gpgpath = gpgpath
-
-
-    @cached_property
-    def bingpg(self):
-        return BinGPG(os.path.join(self.dir, "gpghome"), gpgpath=self.gpgpath)
+        self.config = Config(os.path.join(self.dir, "config"))
+        self.bingpg = BinGPG(os.path.join(self.dir, "gpghome"), gpgpath=gpgpath)
 
     def init(self):
         assert not self.exists()

@@ -60,17 +60,21 @@ class BinGPG(object):
     InvocationFailure = InvocationFailure
 
     def __init__(self, homedir, gpgpath=None):
-        self.homedir = str(homedir)
+        self.homedir = homedir
         if gpgpath is None:
             gpgpath = find_executable("gpg")
         self.gpgpath = gpgpath
-        self.isgpg2 = os.path.basename(gpgpath) == "gpg2"
+
+    @cached_property
+    def isgpg2(self, min_version=V("2.0")):
+        return V(self.get_version()) >= min_version
 
     def init(self):
         if not os.path.exists(self.homedir):
             # we create the dir if the basedir exists, otherwise we fail
             os.mkdir(self.homedir)
 
+        # fix bad defaults for certain gpg2 versions
         if V("2.0") <= V(self.get_version()) < V("2.1.12"):
             p = os.path.join(self.homedir, "gpg-agent.conf")
             assert not os.path.exists(p)
@@ -110,9 +114,8 @@ class BinGPG(object):
         """
         args = [self.gpgpath, "--homedir", self.homedir, "--batch",
                 "--no-permission-warning"]
-
         args.extend(["--passphrase", "''"])
-        if self.isgpg2:
+        if argv[0] != "--version" and self.isgpg2:
             args.extend(["--pinentry-mode=loopback"])
         # make sure we use unicode for all provided arguments
         for arg in argv:
