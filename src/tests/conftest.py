@@ -41,6 +41,7 @@ def _makegpg(request, p, gpgpath, testcache):
                 return ret
 
     bingpg = MyBinGPG(p.strpath, gpgpath=gpgpath)
+    bingpg.init()
     request.addfinalizer(bingpg.killagent)
     return bingpg
 
@@ -193,16 +194,18 @@ def Account(request, testcache):
 
 
 @pytest.fixture
-def account(tmpdir, Account):
-    return Account(tmpdir.join("account").strpath)
+def account(account_maker):
+    return account_maker(init=False)
 
 
 @pytest.fixture
-def account_maker(tmpdir, Account):
+def account_maker(tmpdir, Account, gpgpath):
     count = [0]
-    def maker():
-        ac = Account(tmpdir.join("account" + str(count[0])).strpath)
+    def maker(init=True):
+        ac = Account(tmpdir.join("account" + str(count[0])).strpath,
+                     gpgpath=gpgpath)
         count[0] += 1
-        ac.init()
+        if init:
+            ac.init()
         return ac
     return maker

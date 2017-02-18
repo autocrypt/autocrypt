@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 import pytest
 import py
-from autocrypt.account import Config, kv_property
+from autocrypt.account import Config
 from autocrypt import header
 from email.mime.text import MIMEText
 from email.utils import formatdate

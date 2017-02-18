@@ -12,7 +12,7 @@ from . import header
 from email.utils import parsedate
 
 
-class KVStoreMixin(object):
+class PersistentAttrMixin(object):
     def __init__(self, path):
         self._path = path
 
@@ -50,7 +50,7 @@ class KVStoreMixin(object):
             self._commit()
 
 
-def kv_property(name, typ):
+def persistent_property(name, typ):
     def get(self):
         return self._dict.setdefault(name, typ())
     def set(self, value):
@@ -62,11 +62,11 @@ def kv_property(name, typ):
     return property(get, set)
 
 
-class Config(KVStoreMixin):
-    uuid = kv_property("uuid", six.text_type)
-    own_keyhandle = kv_property("own_keyhandle", six.text_type)
-    prefer_encrypt = kv_property("prefer_encrypt", six.text_type)
-    peers = kv_property("peers", dict)
+class Config(PersistentAttrMixin):
+    uuid = persistent_property("uuid", six.text_type)
+    own_keyhandle = persistent_property("own_keyhandle", six.text_type)
+    prefer_encrypt = persistent_property("prefer_encrypt", six.text_type)
+    peers = persistent_property("peers", dict)
 
     def exists(self):
         return self.uuid
@@ -78,19 +78,21 @@ class Account(object):
     class NotInitialized(Exception):
         pass
 
-    def __init__(self, dir):
+    def __init__(self, dir, gpgpath=None):
         self.dir = dir
         kvstore_path = os.path.join(self.dir, "config")
         self.config = Config(kvstore_path)
+        self.gpgpath = gpgpath
 
 
     @cached_property
     def bingpg(self):
-        self._ensure_exists()
-        return BinGPG(os.path.join(self.dir, "gpghome"))
+        #self._ensure_exists()
+        return BinGPG(os.path.join(self.dir, "gpghome"), gpgpath=self.gpgpath)
 
     def init(self):
         assert not self.exists()
+        self.bingpg.init()
         with self.config.atomic_change():
             self.config.uuid = uuid.uuid4().hex
             keyhandle = self.bingpg.gen_secret_key(self.config.uuid)

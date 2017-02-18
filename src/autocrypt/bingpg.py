@@ -60,20 +60,17 @@ class BinGPG(object):
 
     def __init__(self, homedir, gpgpath=None):
         self.homedir = str(homedir)
-        # for gpg2>2.1 and <2.1.12 we need to explicitely allow loopback pinentry
-        if not os.path.exists(self.homedir):
-            os.makedirs(self.homedir)
-        with open(os.path.join(self.homedir, "gpg-agent.conf"), "w") as f:
-            f.write("allow-loopback-pinentry\n")
-
         if gpgpath is None:
             gpgpath = find_executable("gpg")
-        assert os.path.isfile(gpgpath)
         self.gpgpath = gpgpath
         self.isgpg2 = os.path.basename(gpgpath) == "gpg2"
-        self._tempbase = os.path.join(self.homedir, "tmp")
-        if not os.path.exists(self._tempbase):
-            os.makedirs(self._tempbase)
+
+    def init(self):
+        if not os.path.exists(self.homedir):
+            os.makedirs(self.homedir)
+        # for gpg2>2.1 and <2.1.12 we need to explicitely allow loopback pinentry
+        with open(os.path.join(self.homedir, "gpg-agent.conf"), "w") as f:
+            f.write("allow-loopback-pinentry\n")
 
     def killagent(self):
         if self.isgpg2:
@@ -83,6 +80,12 @@ class BinGPG(object):
             popen = Popen(args)
             popen.wait()
 
+    @cached_property
+    def _tempbase(self):
+        tmpbase = os.path.join(self.homedir, "tmp")
+        if not os.path.exists(tmpbase):
+            os.makedirs(tmpbase)
+        return tmpbase
 
     @contextmanager
     def temp_written_file(self, data):
@@ -148,6 +151,7 @@ class BinGPG(object):
         return False
 
     def gen_secret_key(self, emailadr):
+        #assert os.path.exists(os.path.join(self.homedir, "gpg-agent.conf"))
         spec = "\n".join([
             "%no-protection",
             "Key-Type: RSA",
@@ -162,7 +166,7 @@ class BinGPG(object):
             "%commit"
         ]).encode("utf8")
         with self.temp_written_file(spec) as fn:
-            out, err = self._gpg_outerr(["--with-colons", "--gen-key", fn])
+            out, err = self._gpg_outerr(["--gen-key", fn])
 
         keyhandle = self._find_keyhandle(err)
         logging.debug("created secret key: %s", keyhandle)
