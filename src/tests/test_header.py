@@ -19,7 +19,7 @@ def test_parse_message_from_file(datadir):
     assert msg.get_payload()
 
 def test_parse_message_from_string(datadir):
-    msg = header.parse_message_from_string(datadir.read_bytes("rsa2048-simple.eml"))
+    msg = header.parse_message_from_string(datadir.read("rsa2048-simple.eml"))
     assert msg.get_all("Autocrypt")
     assert msg.get_payload()
 

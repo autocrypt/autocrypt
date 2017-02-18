@@ -129,6 +129,9 @@ def datadir(request):
         def read_bytes(self, name):
             with self.open(name, "rb") as f:
                 return f.read()
+        def read(self, name):
+            with self.open(name, "r") as f:
+                return f.read()
         def parse_ac_header_from_email(self, name):
             with self.open(name) as fp:
                 msg = header.parse_message_from_file(fp)

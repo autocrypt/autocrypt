@@ -34,22 +34,22 @@ class TestBinGPG:
         packets = bingpg.list_packets(keydata)
         # maybe the below a bit too strict?
         assert len(packets) == 5
-        assert packets[0][0] == b"secret key packet"
-        assert packets[1][0] == b"user ID packet"
-        assert packets[1][1] == b'" <hello@xyz.org>"'
-        assert packets[2][0] == b"signature packet"
-        assert packets[3][0] == b"secret sub key packet"
-        assert packets[4][0] == b"signature packet"
+        assert packets[0][0] == "secret key packet"
+        assert packets[1][0] == "user ID packet"
+        assert packets[1][1] == '" <hello@xyz.org>"'
+        assert packets[2][0] == "signature packet"
+        assert packets[3][0] == "secret sub key packet"
+        assert packets[4][0] == "signature packet"
 
         keydata = bingpg.get_public_keydata(keyhandle)
         packets = bingpg.list_packets(keydata)
         assert len(packets) == 5
-        assert packets[0][0] == b"public key packet" == packets[0][0]
-        assert packets[1][0] == b"user ID packet"
-        assert packets[1][1] == b'" <hello@xyz.org>"'
-        assert packets[2][0] == b"signature packet"
-        assert packets[3][0] == b"public sub key packet"
-        assert packets[4][0] == b"signature packet"
+        assert packets[0][0] == "public key packet" == packets[0][0]
+        assert packets[1][0] == "user ID packet"
+        assert packets[1][1] == '" <hello@xyz.org>"'
+        assert packets[2][0] == "signature packet"
+        assert packets[3][0] == "public sub key packet"
+        assert packets[4][0] == "signature packet"
 
     @pytest.mark.parametrize("armor", [True, False])
     def test_transfer_key_and_encrypt_decrypt_roundtrip(self, bingpg, bingpg2, armor):
@@ -63,8 +63,24 @@ class TestBinGPG:
         keyhandle2 = bingpg2.import_keydata(public_keydata)
         assert keyhandle2 == keyhandle
         out_encrypt = bingpg2.encrypt(b"123", recipients=[keyhandle])
-        out = bingpg.decrypt(out_encrypt)
+
+        out, decrypt_info = bingpg.decrypt(out_encrypt)
         assert out == b"123"
+        assert len(decrypt_info) == 1
+        k = decrypt_info[0]
+        assert k.bits == 2048
+        assert k.type == "RSA"
+        assert k.date_created
+        # fish out encryption sub key and check if it matches
+        for ptype, _, lines in bingpg2.list_public_key_packets(keyhandle):
+            if "key packet" in ptype:
+                for x in lines:
+                    if x.startswith("keyid: "):
+                        print(x[len("keyid: "):].strip())
+                        if x[len("keyid: "):].strip()[-8:] == k.id:
+                            return
+        else:
+            assert 0, k.id
 
     def test_gen_key_and_sign_verify(self, bingpg):
         keyhandle = bingpg.gen_secret_key(emailadr="hello@xyz.org")

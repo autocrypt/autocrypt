@@ -93,10 +93,20 @@ class BinGPG(object):
         finally:
             os.remove(f.name)
 
-    def _gpg_out(self, argv, input=None, strict=False):
-        return self._gpg_outerr(argv, input=input, strict=strict)[0]
+    def _gpg_out(self, argv, input=None, strict=False, encoding="utf8"):
+        return self._gpg_outerr(argv, input=input, strict=strict, encoding=encoding)[0]
 
-    def _gpg_outerr(self, argv, input=None, strict=False):
+    def _gpg_outerr(self, argv, input=None, strict=False, encoding="utf8"):
+        """ return stdout and stderr output of invoking gpg with the
+        specified parameters.
+
+        If the invocation leads to a non-zero exit
+        status an InvocationFailure exception is thrown.  It is also
+        thrown if strict is True and there was non-empty stderr output.
+        stderr output will always be returned as a text type while
+        stdout output will be encoded if encoding is set (default is "utf8").
+        If you want binary stdout output specify encoding=None.
+        """
         args = [self.gpgpath, "--homedir", self.homedir, "--batch",
                 "--no-permission-warning"]
 
@@ -117,11 +127,14 @@ class BinGPG(object):
         if ret != 0 or (strict and err):
             raise self.InvocationFailure(ret, " ".join(args),
                                          out=str(out), err=str(err))
+        err = err.decode("ascii")
+        if encoding:
+            out = out.decode(encoding)
         return out, err
 
     @cached_property
     def _version_info(self):
-        return self._gpg_out(['--version']).decode()
+        return self._gpg_out(['--version'])
 
     def get_version(self):
         vline = self._version_info.split('\n', 1)[0]
@@ -157,11 +170,11 @@ class BinGPG(object):
 
     def list_public_keyhandles(self):
         out = self._gpg_out(["--skip-verify", "--with-colons", "--list-public-keys"])
-        return [line.split(b":")[4]
+        return [line.split(":")[4]
                     for line in out.splitlines()
-                        if line.startswith(b"pub:")]
+                        if line.startswith("pub:")]
 
-    _gpgout_keyhandle_pattern = re.compile(b"key (?:ID )?([0-9A-F]+)")
+    _gpgout_keyhandle_pattern = re.compile("key (?:ID )?([0-9A-F]+)")
     def _find_keyhandle(self, string):
         m = self._gpgout_keyhandle_pattern.search(string)
         assert m and len(m.groups()) == 1, string
@@ -177,10 +190,10 @@ class BinGPG(object):
         raise ValueError("could not find fingerprint")
 
     def list_secret_key_packets(self, keyhandle):
-        return self._list_packets(self.get_secret_keydata(keyhandle))
+        return self.list_packets(self.get_secret_keydata(keyhandle))
 
     def list_public_key_packets(self, keyhandle):
-        return self._list_packets(self.get_public_keydata(keyhandle))
+        return self.list_packets(self.get_public_keydata(keyhandle))
 
     def list_packets(self, keydata):
         out = self._gpg_out(["--list-packets"], input=keydata)
@@ -191,9 +204,9 @@ class BinGPG(object):
         for rawline in out.splitlines():
             line = rawline.strip()
             c = line[0:1]
-            if c == b"#":
+            if c == "#":
                 continue
-            if c == b":":
+            if c == ":":
                 i = line[1:].find(c)
                 if i != -1:
                     ptype = line[1:i+1]
@@ -212,22 +225,24 @@ class BinGPG(object):
     def get_public_keydata(self, keyhandle, armor=False, b64=False):
         args = ["-a"] if armor else []
         args.extend(["--export", str(keyhandle)])
-        out = self._gpg_out(args, strict=True)
+        out = self._gpg_out(args, strict=True, encoding=None)
         return out if not b64 else b64encode_u(out)
 
     def get_secret_keydata(self, keyhandle, armor=False):
         args = ["-a"] if armor else []
         args.extend(["--export-secret-key", keyhandle])
-        return self._gpg_out(args, strict=True)
+        return self._gpg_out(args, strict=True, encoding=None)
 
     def encrypt(self, data, recipients):
         recs = []
         for r in recipients:
             recs.extend(["--recipient", r])
-        return self._gpg_out(recs + ["--encrypt", "--always-trust"], input=data)
+        return self._gpg_out(recs + ["--encrypt", "--always-trust"], input=data,
+                             encoding=None)
 
     def sign(self, data, keyhandle):
-        return self._gpg_out(["--detach-sign", "-u", keyhandle], input=data)
+        return self._gpg_out(["--detach-sign", "-u", keyhandle], input=data,
+                             encoding=None)
 
     def verify(self, data, signature):
         with self.temp_written_file(signature) as sig_fn:
@@ -235,12 +250,34 @@ class BinGPG(object):
         return self._find_keyhandle(err)
 
     def decrypt(self, enc_data):
-        return self._gpg_out(["--decrypt"], input=enc_data)
+        out, err = self._gpg_outerr(["--with-colons", "--decrypt"],
+                                    input=enc_data, encoding=None)
+        lines = err.splitlines()
+        l = []
+        while lines:
+            line1 = lines.pop(0)
+            m = re.match("gpg.*with (\d+)-bit (\w+).*"
+                         "ID (\w+).*created (.*)", line1)
+            if m:
+                bits, keytype, id, date = m.groups()
+                line2 = lines.pop(0)
+                if line2.startswith("    "):
+                   uid = line2.strip().strip('"')
+                l.append(KeyInfo(keytype, bits, id, uid, date))
+        return out, l
 
     def import_keydata(self, keydata):
         out, err = self._gpg_outerr(["--skip-verify", "--import"], input=keydata)
         return self._find_keyhandle(err)
 
+
+class KeyInfo:
+    def __init__(self, type, bits, id, uid, date_created):
+        self.type = type
+        self.bits = int(bits)
+        self.id = id
+        self.uid = uid
+        self.date_created = date_created
 
 def find_executable(name):
     """ return a path object found by looking at the systems

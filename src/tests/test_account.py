@@ -83,7 +83,7 @@ def test_account_parse_incoming_mail_and_raw_encrypt(account_maker):
     assert inc_adr == adr
     keyhandle = ac2.get_latest_public_keyhandle(adr)
     enc = ac2.bingpg.encrypt(data=b"123", recipients=[keyhandle])
-    data = ac1.bingpg.decrypt(enc)
+    data, descr_info = ac1.bingpg.decrypt(enc)
     assert data == b"123"
 
 
