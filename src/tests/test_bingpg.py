@@ -1,7 +1,8 @@
 from __future__ import unicode_literals
 
 import pytest
-from autocrypt.bingpg import cached_property, BinGPG
+from autocrypt.bingpg import cached_property
+
 
 def test_cached_property_object():
     l = []

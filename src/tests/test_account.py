@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 import pytest
 import py
-from autocrypt.account import Config
+from autocrypt.account import Config, Account
 from autocrypt import header
 from email.mime.text import MIMEText
 from email.utils import formatdate
@@ -63,7 +63,7 @@ def test_account_header_prefer_encrypt(account, pref):
     assert d["type"] == "p"
 
 
-def test_account_handling(Account, tmpdir):
+def test_account_handling(tmpdir):
     tmpdir = tmpdir.strpath
     acc = Account(tmpdir)
     assert not acc.exists()

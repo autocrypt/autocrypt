@@ -1,11 +1,13 @@
 import traceback
 from click.testing import CliRunner
+import os
+import itertools
 import pytest
 import py
 from _pytest.pytester import LineMatcher
-from autocrypt.bingpg import BinGPG, find_executable
+from autocrypt.bingpg import find_executable, BinGPG
 from autocrypt import header
-from autocrypt.account import Account as OrigAccount
+from autocrypt.account import Account
 
 
 def pytest_addoption(parser):
@@ -16,8 +18,14 @@ def pytest_addoption(parser):
                      help="run tests also with gpg2")
 
 
-@pytest.fixture(params=["gpg1", "gpg2"], scope="session")
+@pytest.fixture(params=["gpg1", "gpg2"], scope="module")
 def gpgpath(request):
+    """ return twice with system paths of "gpg" and "gpg2"
+    respectively.  If one is not present the test requesting
+    this fixture is skipped. By default we do not run gpg2
+    tests because they are much slower.  A clean "tox" run
+    will also run the gpg2 tests.
+    """
     name = "gpg" if request.param == "gpg1" else "gpg2"
     if name == "gpg2" and not request.config.getoption("--with-gpg2"):
         pytest.skip("skip gpg2 tests unless you specify --slow")
@@ -27,35 +35,53 @@ def gpgpath(request):
     return path
 
 
-def _makegpg(request, p, gpgpath, testcache):
-    p.chmod(0o700)
-    class MyBinGPG(BinGPG):
-        def gen_secret_key(self, emailadr):
-            next_backup = testcache.next_backup(request, gpgpath)
-            if next_backup.exists():
-                return next_backup.restore(p)
-            else:
-                ret = super(MyBinGPG, self).gen_secret_key(emailadr)
-                if p.exists():
-                    next_backup.store(p, ret)
-                return ret
+@pytest.fixture(autouse=True)
+def _testcache_bingpg_(request, get_next_cache, monkeypatch):
+    # cache generation of secret keys
+    old_gen_secret_key = BinGPG.gen_secret_key
+    def gen_secret_key(self, emailadr):
+        basekey = request.node.nodeid
+        next_cache = get_next_cache(basekey)
+        if next_cache.exists():
+            return next_cache.restore(self.homedir)
+        else:
+            ret = old_gen_secret_key(self, emailadr)
+            if os.path.exists(self.homedir):
+                next_cache.store(self.homedir, ret)
+            return ret
+    monkeypatch.setattr(BinGPG, "gen_secret_key", gen_secret_key)
 
-    bingpg = MyBinGPG(p.strpath, gpgpath=gpgpath)
-    bingpg.init()
-    request.addfinalizer(bingpg.killagent)
-    return bingpg
+    # make sure any possibly started agents are killed
+    old_init = BinGPG.__init__
+    def __init__(self, *args, **kwargs):
+        old_init(self, *args, **kwargs)
+        request.addfinalizer(self.killagent)
+    monkeypatch.setattr(BinGPG, "__init__", __init__)
+    return
 
 
 @pytest.fixture
-def bingpg(request, tmpdir, gpgpath, testcache):
-    p = tmpdir.mkdir("keyring")
-    return _makegpg(request, p, gpgpath, testcache=testcache)
+def bingpg_maker(request, tmpdir, gpgpath):
+    """ return a function which creates initialized BinGPG instances. """
+    counter = itertools.count()
+    def maker():
+        p = tmpdir.mkdir("bingpg%d" % next(counter))
+        bingpg = BinGPG(p.strpath, gpgpath=gpgpath)
+        bingpg.init()
+        return bingpg
+    return maker
 
 
 @pytest.fixture
-def bingpg2(request, tmpdir, gpgpath, testcache):
-    p = tmpdir.mkdir("keyring2")
-    return _makegpg(request, p, gpgpath, testcache=testcache)
+def bingpg(bingpg_maker):
+    """ return an initialized bingpg instance. """
+    return bingpg_maker()
+
+@pytest.fixture
+def bingpg2(bingpg_maker):
+    """ return an initialized bingpg instance different from the first. """
+    return bingpg_maker()
+
 
 
 class ClickRunner:
@@ -63,12 +89,10 @@ class ClickRunner:
         self.runner = CliRunner()
         self._main = main
         self._rootargs = []
-        self._nextbackup = None
 
-    def set_basedir(self, account_dir, nextbackup):
+    def set_basedir(self, account_dir):
         self._rootargs.insert(0, "--basedir")
         self._rootargs.insert(1, account_dir)
-        self._nextbackup = nextbackup
 
     def run_ok(self, args, fnmatch_lines=None):
         #__tracebackhide__ = True
@@ -76,18 +100,11 @@ class ClickRunner:
         basedir = None
         # we use our nextbackup helper to cache account creation
         # unless --no-test-cache is specified
-        if args[:1] == ["init"] and self._rootargs[:1] == ["--basedir"]:
-            basedir = self._rootargs[1]
-            if self._nextbackup and self._nextbackup.exists():
-                return self._nextbackup.restore(basedir)
         res = self.runner.invoke(self._main, argv, catch_exceptions=False)
         if res.exit_code != 0:
             print(res.output)
             raise Exception("cmd exited with %d: %s" %(res.exit_code, argv))
-        ret = self._perform_match(res, fnmatch_lines)
-        if basedir:
-            self._nextbackup.store(basedir, ret)
-        return ret
+        return self._perform_match(res, fnmatch_lines)
 
 
     def run_fail(self, args, fnmatch_lines=None):
@@ -114,12 +131,14 @@ class ClickRunner:
 
 @pytest.fixture
 def cmd():
+    """ invoke a command line subcommand. """
     from autocrypt.main import autocrypt_main
     return ClickRunner(autocrypt_main)
 
 
 @pytest.fixture()
 def datadir(request):
+    """ get, read, open test files from the "data" directory. """
     class D:
         def __init__(self, basepath):
             self.basepath = basepath
@@ -141,24 +160,20 @@ def datadir(request):
 
 
 @pytest.fixture(scope="session")
-def testcache():
+def get_next_cache(pytestconfig):
+    cache = pytestconfig.cache
     counters = {}
-    class TestCache:
-        def next_backup(self, func_request, extra=""):
-            count_key = func_request.node.nodeid + extra
-            count = counters.setdefault(count_key, 0)
-            key = count_key + str(count)
-            try:
-                return NextBackup(func_request, key)
-            finally:
-                counters[count_key] += 1
-    return TestCache()
+    def next_cache(basekey):
+        count = counters.setdefault(basekey, itertools.count())
+        key = basekey + str(next(count))
+        return DirCache(cache, key)
+    return next_cache
 
 
-class NextBackup:
-    def __init__(self, func_request, key):
-        self.cache = func_request.config.cache
-        self.disabled = func_request.config.getoption("--no-test-cache")
+class DirCache:
+    def __init__(self, cache, key):
+        self.cache = cache
+        self.disabled = cache.config.getoption("--no-test-cache")
         self.key = key
         self.backup_path = self.cache._cachedir.join(self.key)
 
@@ -178,34 +193,22 @@ class NextBackup:
         return self.cache.get(self.key, None)
 
 
-@pytest.fixture
-def Account(request, testcache):
-    class MyAccount(OrigAccount):
-        def init(self):
-            next_backup = testcache.next_backup(request)
-            if next_backup.exists():
-                ret = next_backup.restore(self.dir)
-                self.config._reload()
-            else:
-                ret = super(MyAccount, self).init()
-                next_backup.store(self.dir, ret)
-            request.addfinalizer(self.bingpg.killagent)
-            return ret
-    return MyAccount
-
 
 @pytest.fixture
 def account(account_maker):
+    """ return an uninitialized Autocrypt account. """
     return account_maker(init=False)
 
 
 @pytest.fixture
-def account_maker(tmpdir, Account, gpgpath):
-    count = [0]
+def account_maker(tmpdir, gpgpath):
+    """ return a function which creates a new Autocrypt account, by default initialized.
+    pass init=False to the function to avoid initizialtion.
+    """
+    count = itertools.count()
     def maker(init=True):
-        ac = Account(tmpdir.mkdir("account" + str(count[0])).strpath,
-                     gpgpath=gpgpath)
-        count[0] += 1
+        basedir = tmpdir.mkdir("account%d" % next(count)).strpath
+        ac = Account(basedir, gpgpath=gpgpath)
         if init:
             ac.init()
         return ac

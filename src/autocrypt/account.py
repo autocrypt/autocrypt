@@ -5,7 +5,7 @@ import json
 import shutil
 import six
 import uuid
-from .bingpg import BinGPG, cached_property
+from .bingpg import cached_property, BinGPG
 from contextlib import contextmanager
 from base64 import b64decode
 from . import header
@@ -87,7 +87,6 @@ class Account(object):
 
     @cached_property
     def bingpg(self):
-        #self._ensure_exists()
         return BinGPG(os.path.join(self.dir, "gpghome"), gpgpath=self.gpgpath)
 
     def init(self):
