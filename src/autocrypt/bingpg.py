@@ -63,6 +63,8 @@ class BinGPG(object):
         self.homedir = homedir
         if gpgpath is None:
             gpgpath = find_executable("gpg")
+        elif not os.path.isabs(gpgpath):
+            gpgpath = find_executable(gpgpath)
         self.gpgpath = gpgpath
 
     @cached_property

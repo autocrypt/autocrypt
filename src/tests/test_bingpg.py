@@ -1,7 +1,8 @@
 from __future__ import unicode_literals
 
+import os
 import pytest
-from autocrypt.bingpg import cached_property
+from autocrypt.bingpg import cached_property, BinGPG
 
 
 def test_cached_property_object():
@@ -24,6 +25,10 @@ def test_cached_property_object():
 
 
 class TestBinGPG:
+    def test_find_executable(self, tmpdir, gpgpath):
+        b = BinGPG(tmpdir.strpath, gpgpath=os.path.basename(gpgpath))
+        assert b.gpgpath == gpgpath
+
     def test_failed_invocation_outerr(self, bingpg2):
         with pytest.raises(bingpg2.InvocationFailure) as e:
             bingpg2._gpg_outerr(["qwe"])
