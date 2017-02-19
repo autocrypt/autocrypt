@@ -8,7 +8,7 @@ import uuid
 from .bingpg import cached_property, BinGPG
 from contextlib import contextmanager
 from base64 import b64decode
-from . import header
+from . import mime
 from email.utils import parsedate
 
 
@@ -121,7 +121,7 @@ class Account(object):
         XXX discuss whether "to" is all that useful for level-0 autocrypt.
         """
         self._ensure_exists()
-        return headername + header.make_ac_header_value(
+        return headername + mime.make_ac_header_value(
             emailadr=emailadr,
             keydata=self.bingpg.get_public_keydata(self.config.own_keyhandle),
             prefer_encrypt=self.config.prefer_encrypt,
@@ -144,9 +144,9 @@ class Account(object):
         about potential Autocrypt header for the From/Autocrypt peer.
         """
         self._ensure_exists()
-        From = header.parse_email_addr(msg["From"])[1]
+        From = mime.parse_email_addr(msg["From"])[1]
         old = self.config.peers.get(From, {})
-        d = header.parse_one_ac_header_from_msg(msg)
+        d = mime.parse_one_ac_header_from_msg(msg)
         date = msg.get("Date")
         if d:
             if d["to"] == From:

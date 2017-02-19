@@ -3,7 +3,7 @@ import shutil
 import six
 import click
 from .account import Account
-from . import header
+from . import mime
 
 class CmdlineState:
     pass
@@ -96,7 +96,7 @@ def set_prefer_encrypt(ctx, value):
 def process_incoming(ctx, mail):
     """process incoming mail from file/stdin."""
     account = get_account(ctx)
-    msg = header.parse_message_from_file(mail)
+    msg = mime.parse_message_from_file(mail)
     adr = account.process_incoming(msg)
     keyhandle = account.get_latest_public_keyhandle(adr)
     click.echo("processed mail from %s, found key: %s" % (adr, keyhandle))

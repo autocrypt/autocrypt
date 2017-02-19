@@ -2,7 +2,7 @@ from __future__ import print_function, unicode_literals
 import os
 import six
 import pytest
-from autocrypt.header import parse_one_ac_header_from_string
+from autocrypt.mime import parse_one_ac_header_from_string
 
 
 @pytest.fixture

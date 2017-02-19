@@ -6,7 +6,7 @@ import pytest
 import py
 from _pytest.pytester import LineMatcher
 from autocrypt.bingpg import find_executable, BinGPG
-from autocrypt import header
+from autocrypt import mime
 from autocrypt.account import Account
 
 
@@ -154,8 +154,8 @@ def datadir(request):
                 return f.read()
         def parse_ac_header_from_email(self, name):
             with self.open(name) as fp:
-                msg = header.parse_message_from_file(fp)
-                return header.parse_one_ac_header_from_msg(msg)
+                msg = mime.parse_message_from_file(fp)
+                return mime.parse_one_ac_header_from_msg(msg)
     return D(request.fspath.dirpath("data"))
 
 

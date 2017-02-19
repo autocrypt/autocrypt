@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 import pytest
 import py
 from autocrypt.account import Config, Account
-from autocrypt import header
+from autocrypt import mime
 from email.mime.text import MIMEText
 from email.utils import formatdate
 
@@ -39,7 +39,7 @@ def test_account_header_defaults(account):
         account.make_header(adr)
     account.init()
     h = account.make_header(adr)
-    d = header.parse_one_ac_header_from_string(h)
+    d = mime.parse_one_ac_header_from_string(h)
     assert d["to"] == adr
     key = account.bingpg.get_public_keydata(account.config.own_keyhandle, b64=True)
     assert d["key"] == key
@@ -55,7 +55,7 @@ def test_account_header_prefer_encrypt(account, pref):
     account.init()
     account.set_prefer_encrypt(pref)
     h = account.make_header(adr)
-    d = header.parse_one_ac_header_from_string(h)
+    d = mime.parse_one_ac_header_from_string(h)
     assert d["to"] == adr
     key = account.bingpg.get_public_keydata(account.config.own_keyhandle, b64=True)
     assert d["key"] == key
@@ -126,7 +126,7 @@ def test_account_parse_incoming_mails_replace_by_date(account_maker):
 
 def test_account_export_public_key(account, datadir):
     account.init()
-    msg = header.parse_message_from_file(datadir.open("rsa2048-simple.eml"))
+    msg = mime.parse_message_from_file(datadir.open("rsa2048-simple.eml"))
     adr = account.process_incoming(msg)
     keyhandle = account.get_latest_public_keyhandle(adr)
     x = account.export_public_key(keyhandle)

@@ -4,7 +4,7 @@ simple bot functionality to work answering for bot@autocrypt.org
 
 import os, sys
 import logging
-from . import header
+from . import mime
 from .bingpg import BinGPG
 import email.parser
 from email.mime.text import MIMEText
@@ -39,10 +39,10 @@ ikey = """\
 AUTOCRYPT_HEADER = "to=bot@autocrypt.org; key=\n" + ikey
 
 def generate_reply(gpg, fp):
-    msg = header.parse_message_from_file(fp)
+    msg = mime.parse_message_from_file(fp)
     from_header = msg.get_all("from")
     subject = msg.get_all("subject")
-    autocrypt_header = header.parse_one_ac_header_from_msg(msg)
+    autocrypt_header = mime.parse_one_ac_header_from_msg(msg)
 
     logging.info("got mail: %s", msg.as_string())
 
