@@ -7,6 +7,8 @@ from __future__ import unicode_literals, print_function
 import sys
 import email.parser
 import base64
+from email.mime.text import MIMEText
+from email.utils import formatdate
 
 def make_ac_header_value(emailadr, keydata, prefer_encrypt="notset", keytype="p"):
     assert keydata
@@ -87,6 +89,17 @@ def verify_ac_dict(ac_dict):
         l.append("unknown prefer-encrypt setting '%s'" %
                  (ac_dict["prefer-encrypt"]))
     return l
+
+
+def gen_mail_msg(From, To, Autocrypt=None, Date=None):
+    msg = MIMEText('''autoresponse''')
+    msg['From'] = From
+    msg['To'] = ",".join(To)
+    msg['Subject'] = "testmail"
+    msg['Date'] = Date or formatdate()
+    if Autocrypt:
+        msg["autocrypt"] = Autocrypt
+    return msg
 
 
 # adapted from ModernPGP:memoryhole/generators/generator.py which

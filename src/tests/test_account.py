@@ -6,8 +6,6 @@ import pytest
 import py
 from autocrypt.account import Config, Account
 from autocrypt import mime
-from email.mime.text import MIMEText
-from email.utils import formatdate
 
 
 
@@ -80,8 +78,9 @@ def test_account_parse_incoming_mail_and_raw_encrypt(account_maker):
     adr = "a@a.org"
     ac1 = account_maker()
     ac2 = account_maker()
-    msg = gen_mail_msg(From="Alice <%s>" % adr, To=["b@b.org"],
-                       Autocrypt=ac1.make_header(adr, headername=""))
+    msg = mime.gen_mail_msg(
+        From="Alice <%s>" % adr, To=["b@b.org"],
+        Autocrypt=ac1.make_header(adr, headername=""))
     inc_adr = ac2.process_incoming(msg)
     assert inc_adr == adr
     keyhandle = ac2.get_latest_public_keyhandle(adr)
@@ -95,12 +94,14 @@ def test_account_parse_incoming_mails_replace(account_maker):
     ac2 = account_maker()
     ac3 = account_maker()
     adr = "alice@a.org"
-    msg1 = gen_mail_msg(From="Alice <%s>" % adr, To=["b@b.org"],
-                        Autocrypt=ac2.make_header(adr, headername=""))
+    msg1 = mime.gen_mail_msg(
+        From="Alice <%s>" % adr, To=["b@b.org"],
+        Autocrypt=ac2.make_header(adr, headername=""))
     adr = ac1.process_incoming(msg1)
     assert ac1.get_latest_public_keyhandle(adr) == ac2.config.own_keyhandle
-    msg2 = gen_mail_msg(From="Alice <%s>" % adr, To=["b@b.org"],
-                        Autocrypt=ac3.make_header(adr, headername=""))
+    msg2 = mime.gen_mail_msg(
+        From="Alice <%s>" % adr, To=["b@b.org"],
+        Autocrypt=ac3.make_header(adr, headername=""))
     adr = ac1.process_incoming(msg2)
     assert ac1.get_latest_public_keyhandle(adr) == ac3.config.own_keyhandle
 
@@ -110,18 +111,21 @@ def test_account_parse_incoming_mails_replace_by_date(account_maker):
     ac2 = account_maker()
     ac3 = account_maker()
     adr = "alice@a.org"
-    msg2 = gen_mail_msg(From="Alice <%s>" % adr, To=["b@b.org"],
-                        Autocrypt=ac3.make_header(adr, headername=""),
-                        Date='Thu, 16 Feb 2017 15:00:00 -0000')
-    msg1 = gen_mail_msg(From="Alice <%s>" % adr, To=["b@b.org"],
-                        Autocrypt=ac2.make_header(adr, headername=""),
-                        Date='Thu, 16 Feb 2017 13:00:00 -0000')
+    msg2 = mime.gen_mail_msg(
+        From="Alice <%s>" % adr, To=["b@b.org"],
+        Autocrypt=ac3.make_header(adr, headername=""),
+        Date='Thu, 16 Feb 2017 15:00:00 -0000')
+    msg1 = mime.gen_mail_msg(
+        From="Alice <%s>" % adr, To=["b@b.org"],
+        Autocrypt=ac2.make_header(adr, headername=""),
+        Date='Thu, 16 Feb 2017 13:00:00 -0000')
     ac1.process_incoming(msg2)
     assert ac1.get_latest_public_keyhandle(adr) == ac3.config.own_keyhandle
     ac1.process_incoming(msg1)
     assert ac1.get_latest_public_keyhandle(adr) == ac3.config.own_keyhandle
-    msg3 = gen_mail_msg(From="Alice <%s>" % adr, To=["b@b.org"],
-                        Date='Thu, 16 Feb 2017 17:00:00 -0000')
+    msg3 = mime.gen_mail_msg(
+        From="Alice <%s>" % adr, To=["b@b.org"],
+        Date='Thu, 16 Feb 2017 17:00:00 -0000')
     ac1.process_incoming(msg3)
     assert not ac1.get_latest_public_keyhandle(adr)
 
@@ -135,13 +139,3 @@ def test_account_export_public_key(account, datadir):
     x = account.export_public_key(keyhandle)
     assert x
 
-
-def gen_mail_msg(From, To, Autocrypt=None, Date=None):
-    msg = MIMEText('''Autoresponse''')
-    msg['From'] = From
-    msg['To'] = ",".join(To)
-    msg['Subject'] = "testmail"
-    msg['Date'] = Date or formatdate()
-    if Autocrypt:
-        msg["Autocrypt"] = Autocrypt
-    return msg

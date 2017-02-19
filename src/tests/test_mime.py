@@ -27,6 +27,14 @@ def test_parse_message_from_string(datadir):
     assert msg.get_payload()
 
 
+def test_render(datadir):
+    msg = mime.parse_message_from_string(datadir.read("rsa2048-simple.eml"))
+    io = six.StringIO()
+    mime.render_mime_structure(msg, stream=io)
+    value = io.getvalue()
+    assert "text/plain" in value
+
+
 def test_make_and_parse_header_value():
     adr, keydata = "x@xy.z", "123"
     h = mime.make_ac_header_value(emailadr=adr, keydata=keydata)
