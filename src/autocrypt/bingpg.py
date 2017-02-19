@@ -119,8 +119,8 @@ class BinGPG(object):
         If the invocation leads to a non-zero exit
         status an InvocationFailure exception is thrown.  It is also
         thrown if strict is True and there was non-empty stderr output.
-        stderr output will always be returned as a text type while
-        stdout output will be encoded if encoding is set (default is "utf8").
+        stderr output will always be returned as a text type (utf8-decoded)
+        while stdout output is returned decoded if encoding is set (default is "utf8").
         If you want binary stdout output specify encoding=None.
         """
         args = [self.gpgpath, "--homedir", self.homedir, "--batch",
@@ -142,7 +142,7 @@ class BinGPG(object):
         if ret != 0 or (strict and err):
             raise self.InvocationFailure(ret, " ".join(args),
                                          out=str(out), err=str(err))
-        err = err.decode("ascii")
+        err = err.decode("utf8")
         if encoding:
             out = out.decode(encoding)
         return out, err
@@ -293,6 +293,10 @@ class KeyInfo:
         self.id = id
         self.uid = uid
         self.date_created = date_created
+
+    def __str__(self):
+        return "Key {id!r}, {uid!r}, {bits}-bit {type}".format(
+            **self.__dict__)
 
 def find_executable(name):
     """ return a path object found by looking at the systems

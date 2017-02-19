@@ -77,6 +77,7 @@ class TestBinGPG:
         assert out == b"123"
         assert len(decrypt_info) == 1
         k = decrypt_info[0]
+        assert str(k)
         assert k.bits == 2048
         assert k.type == "RSA"
         assert k.date_created
