@@ -1,4 +1,10 @@
-from __future__ import unicode_literals
+# -*- coding: utf-8 -*-
+# vim:ts=4:sw=4:expandtab
+
+""" mime message parsing and manipulation for Autocrypt usage. """
+
+from __future__ import unicode_literals, print_function
+import sys
 import email.parser
 import base64
 
@@ -81,3 +87,43 @@ def verify_ac_dict(ac_dict):
         l.append("unknown prefer-encrypt setting '%s'" %
                  (ac_dict["prefer-encrypt"]))
     return l
+
+
+# adapted from ModernPGP:memoryhole/generators/generator.py which
+# was adapted from notmuch:devel/printmimestructure
+def render_mime_structure(z, prefix='└', stream=sys.stdout):
+    '''z should be an email.message.Message object'''
+    fname = '' if z.get_filename() is None else ' [' + z.get_filename() + ']'
+    cset = '' if z.get_charset() is None else ' (' + z.get_charset() + ')'
+    disp = z.get_params(None, header='Content-Disposition')
+    if (disp is None):
+        disposition = ''
+    else:
+        disposition = ''
+        for d in disp:
+            if d[0] in [ 'attachment', 'inline' ]:
+                disposition = ' ' + d[0]
+
+    if 'subject' in z:
+        subject = ' (Subject: %s)' % z['subject']
+    else:
+        subject = ''
+    if (z.is_multipart()):
+        print(prefix + '┬╴' + z.get_content_type() + cset +
+                disposition + fname, z.as_string().__len__().__str__()
+                + ' bytes' + subject, file=stream)
+        if prefix.endswith('└'):
+            prefix = prefix.rpartition('└')[0] + ' '
+        if prefix.endswith('├'):
+            prefix = prefix.rpartition('├')[0] + '│'
+        parts = z.get_payload()
+        i = 0
+        while (i < parts.__len__()-1):
+            render_mime_structure(parts[i], prefix + '├', stream=stream)
+            i += 1
+        render_mime_structure(parts[i], prefix + '└', stream=stream)
+        # FIXME: show epilogue?
+    else:
+        print(prefix + '─╴'+ z.get_content_type() + cset + disposition
+                + fname, z.get_payload().__len__().__str__(),
+                'bytes' + subject, file=stream)

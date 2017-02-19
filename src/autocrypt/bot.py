@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+# vim:ts=4:sw=4:expandtab
+
 """
 simple bot functionality to work answering for bot@autocrypt.org
 """

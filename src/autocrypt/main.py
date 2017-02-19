@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+# vim:ts=4:sw=4:expandtab
+
+"""Autocrypt Command line implementation.
+"""
+
 import os
 import shutil
 import six

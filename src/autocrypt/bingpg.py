@@ -1,3 +1,12 @@
+# -*- coding: utf-8 -*-
+# vim:ts=4:sw=4:expandtab
+
+""" BinGPG is a "gpg" or "gpg2" command line wrapper which
+implements all operations we need for Autocrypt usage.
+It is not meant as a general wrapper outside Autocrypt
+contexts.
+"""
+
 from __future__ import print_function, unicode_literals
 import logging
 from distutils.version import LooseVersion as V

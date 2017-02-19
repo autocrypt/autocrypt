@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+# vim:ts=4:sw=4:expandtab
 
 from autocrypt.bot import generate_reply, send_reply
 from autocrypt.main import autocrypt_main

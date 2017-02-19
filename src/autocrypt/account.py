@@ -1,3 +1,16 @@
+# -*- coding: utf-8 -*-
+# vim:ts=4:sw=4:expandtab
+
+""" Autocrypt Account class which offers to manage and work
+with an Autocrypt account which typically contains a standalone
+GPG managed keyring and persists its config to a default
+app-config location.
+
+You can init an account and then use it to generate Autocrypt
+headers and process incoming mails to discover and memorize
+a peer's Autocrypt headers.
+"""
+
 from __future__ import unicode_literals
 
 import os
