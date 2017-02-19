@@ -49,13 +49,22 @@ use "pip" to install the autocrypt library and command line too::
 This will install the required dependency "click", a python
 framework for writing command line clients.
 
-If you plan to work/modify the sources you may use the
-develop-install mode of pip::
 
-    $ sudo pip install -e autocrypt
+installation for development
+++++++++++++++++++++++++++++
 
-Any changes you make to the source will be available
-without further installing the autocrypt package again.
+If you plan to work/modify the sources and have
+a github checkout we strongly recommend to create
+and activate a python virtualenv and then once use
+**pip without sudo in edit mode**::
+
+    $ virtualenv venv
+    $ source venv/bin/activate
+    $ pip install -e .
+
+Changes you subsequently make to the sources will be
+available without further installing the autocrypt
+package again.
 
 
 running the command line
