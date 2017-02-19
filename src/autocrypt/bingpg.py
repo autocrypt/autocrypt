@@ -17,9 +17,9 @@ from subprocess import Popen, PIPE
 from contextlib import contextmanager
 from base64 import b64encode
 import tempfile
-import io
 import re
 iswin32 = sys.platform == "win32" or (getattr(os, '_name', False) == 'nt')
+
 
 def b64encode_u(x):
     res = b64encode(x)
@@ -139,6 +139,8 @@ class BinGPG(object):
         logging.debug("exec: %s", " ".join(args))
         out, err = popen.communicate(input=input)
         ret = popen.wait()
+        if ret == 130:
+            raise KeyboardInterrupt("detected in gpg invocation")
         if ret != 0 or (strict and err):
             raise self.InvocationFailure(ret, " ".join(args),
                                          out=str(out), err=str(err))
@@ -159,7 +161,7 @@ class BinGPG(object):
         for l in self._version_info.split('\n'):
             if l.startswith('Pubkey:'):
                 return 'eddsa' in map(
-                    lambda x:x.strip().lower(), l.split(':', 1)[1].split(','))
+                    lambda x: x.strip().lower(), l.split(':', 1)[1].split(','))
         return False
 
     def gen_secret_key(self, emailadr):
@@ -171,7 +173,7 @@ class BinGPG(object):
             "Subkey-Type: RSA",
             "Subkey-Length: 2048",
             "Subkey-Usage: encrypt",
-            #"Name-Real: " + uid,
+            # "Name-Real: " + uid,
             "Name-Email: " + emailadr,
             "Expire-Date: 0",
             "%commit"
@@ -186,12 +188,10 @@ class BinGPG(object):
     def list_public_keyhandles(self):
         out = self._gpg_out(["--skip-verify", "--with-colons", "--list-public-keys"])
         return [line.split(":")[4]
-                    for line in out.splitlines()
-                        if line.startswith("pub:")]
+                for line in out.splitlines() if line.startswith("pub:")]
 
-    _gpgout_keyhandle_pattern = re.compile("key (?:ID )?([0-9A-F]+)")
-    def _find_keyhandle(self, string):
-        m = self._gpgout_keyhandle_pattern.search(string)
+    def _find_keyhandle(self, string, _pattern=re.compile("key (?:ID )?([0-9A-F]+)")):
+        m = _pattern.search(string)
         assert m and len(m.groups()) == 1, string
         x = m.groups()[0]
 
@@ -224,8 +224,8 @@ class BinGPG(object):
             if c == ":":
                 i = line[1:].find(c)
                 if i != -1:
-                    ptype = line[1:i+1]
-                    pvalue = line[i+2:].strip()
+                    ptype = line[1: i + 1]
+                    pvalue = line[i + 2:].strip()
                     if last_package_type is not None:
                         packets.append(last_package_type + (lines,))
                         lines = []
@@ -277,7 +277,7 @@ class BinGPG(object):
                 bits, keytype, id, date = m.groups()
                 line2 = lines.pop(0)
                 if line2.startswith("    "):
-                   uid = line2.strip().strip('"')
+                    uid = line2.strip().strip('"')
                 l.append(KeyInfo(keytype, bits, id, uid, date))
         return out, l
 
@@ -297,6 +297,7 @@ class KeyInfo:
     def __str__(self):
         return "Key {id!r}, {uid!r}, {bits}-bit {type}".format(
             **self.__dict__)
+
 
 def find_executable(name):
     """ return a path object found by looking at the systems
@@ -334,4 +335,3 @@ def find_executable(name):
                 except Exception:
                     pass
     return None
-

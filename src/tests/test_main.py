@@ -9,6 +9,7 @@ from autocrypt.mime import parse_one_ac_header_from_string
 def account_dir(tmpdir):
     return tmpdir.join("account").strpath
 
+
 @pytest.fixture
 def mycmd(cmd, tmpdir, request):
     cmd.set_basedir(tmpdir.mkdir("account").strpath)
@@ -16,13 +17,13 @@ def mycmd(cmd, tmpdir, request):
 
 
 def test_help(cmd):
-    res = cmd.run_ok([], """
+    cmd.run_ok([], """
         *init*
         *make-header*
         *export-public-key*
         *export-secret-key*
     """)
-    res = cmd.run_ok(["--help"], """
+    cmd.run_ok(["--help"], """
         *access and manage*
     """)
 
@@ -45,6 +46,7 @@ def test_init(mycmd):
             *account*created*
     """)
 
+
 def test_init_and_make_header(mycmd):
     mycmd.run_fail(["make-header", "xyz"], """
         *Account*not initialized*
@@ -59,10 +61,12 @@ def test_init_and_make_header(mycmd):
     out2 = mycmd.run_ok(["make-header", adr])
     assert out == out2
 
+
 def test_init_and_make_header_with_envvar(cmd, tmpdir):
     with tmpdir.as_cwd():
         os.environ["AUTOCRYPT_BASEDIR"] = "."
         test_init_and_make_header(cmd)
+
 
 def test_set_prefer_encrypt(mycmd):
     mycmd.run_ok(["init"])
@@ -79,13 +83,13 @@ def test_set_prefer_encrypt(mycmd):
     assert d3["prefer-encrypt"] == "yes"
 
 
-def test_exports_and_show(mycmd):
+def test_exports_and_status(mycmd):
     mycmd.run_ok(["init"])
     out = mycmd.run_ok(["export-public-key"])
     check_ascii(out)
     out = mycmd.run_ok(["export-secret-key"])
     check_ascii(out)
-    out = mycmd.run_ok(["show"], """
+    out = mycmd.run_ok(["status"], """
         account-dir:*
         uuid:*
         own-keyhandle:*
@@ -114,7 +118,7 @@ def test_process_incoming(mycmd, datadir):
     """)
     assert out1 == out2
 
-    mycmd.run_ok(["show"], """
+    mycmd.run_ok(["status"], """
         *---peers---*
         alice@testsuite.autocrypt.org*D993BD7F*1636 bytes*prefer-encrypt*
     """)

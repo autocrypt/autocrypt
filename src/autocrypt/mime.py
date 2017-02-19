@@ -10,6 +10,7 @@ import base64
 from email.mime.text import MIMEText
 from email.utils import formatdate
 
+
 def make_ac_header_value(emailadr, keydata, prefer_encrypt="notset", keytype="p"):
     assert keydata
     key = base64.b64encode(keydata) if isinstance(keydata, bytes) else keydata
@@ -27,8 +28,10 @@ def parse_email_addr(string):
     """ return a (prefix, emailadr) tuple. """
     return email.utils.parseaddr(string)
 
+
 def parse_message_from_file(fp):
     return email.parser.Parser().parse(fp)
+
 
 def parse_message_from_string(string):
     return email.parser.Parser().parsestr(string)
@@ -43,6 +46,7 @@ def parse_all_ac_headers_from_msg(msg):
     autocrypt_headers = msg.get_all("Autocrypt") or []
     return [parse_ac_headervalue(inb)
                 for inb in autocrypt_headers if inb]
+
 
 def parse_one_ac_header_from_msg(msg):
     all_results = parse_all_ac_headers_from_msg(msg)
@@ -76,9 +80,9 @@ def verify_ac_dict(ac_dict):
     l = []
     for name in ac_dict:
         if name not in ("key", "to", "type", "prefer-encrypt") and name[0] != "_":
-            l.append("unknown critical attr '%s'" %(name, ))
-    #keydata_base64 = "".join(ac_dict["key"])
-    #base64.b64decode(keydata_base64)
+            l.append("unknown critical attr '{}'".format(name))
+    # keydata_base64 = "".join(ac_dict["key"])
+    # base64.b64decode(keydata_base64)
     if "type" not in ac_dict:
         l.append("type missing")
     if "key" not in ac_dict:
@@ -102,6 +106,18 @@ def gen_mail_msg(From, To, Autocrypt=None, Date=None):
     return msg
 
 
+def decrypt_message(msg, bingpg):
+    ctype = msg.get_content_type()
+    assert ctype == "multipart/encrypted"
+    parts = msg.get_payload()
+    meta, enc = parts
+    assert meta.get_content_type() == "application/pgp-encrypted"
+    dec, err = bingpg.decrypt(enc.get_payload())
+    newmsg = parse_message_from_string(dec)
+    msg.set_payload(newmsg)
+    return msg, err
+
+
 # adapted from ModernPGP:memoryhole/generators/generator.py which
 # was adapted from notmuch:devel/printmimestructure
 def render_mime_structure(z, prefix='└', stream=sys.stdout):
@@ -114,7 +130,7 @@ def render_mime_structure(z, prefix='└', stream=sys.stdout):
     else:
         disposition = ''
         for d in disp:
-            if d[0] in [ 'attachment', 'inline' ]:
+            if d[0] in ['attachment', 'inline']:
                 disposition = ' ' + d[0]
 
     if 'subject' in z:
@@ -123,20 +139,20 @@ def render_mime_structure(z, prefix='└', stream=sys.stdout):
         subject = ''
     if (z.is_multipart()):
         print(prefix + '┬╴' + z.get_content_type() + cset +
-                disposition + fname, z.as_string().__len__().__str__()
-                + ' bytes' + subject, file=stream)
+              disposition + fname, z.as_string().__len__().__str__() +
+              ' bytes' + subject, file=stream)
         if prefix.endswith('└'):
             prefix = prefix.rpartition('└')[0] + ' '
         if prefix.endswith('├'):
             prefix = prefix.rpartition('├')[0] + '│'
         parts = z.get_payload()
         i = 0
-        while (i < parts.__len__()-1):
+        while (i < parts.__len__() - 1):
             render_mime_structure(parts[i], prefix + '├', stream=stream)
             i += 1
         render_mime_structure(parts[i], prefix + '└', stream=stream)
         # FIXME: show epilogue?
     else:
-        print(prefix + '─╴'+ z.get_content_type() + cset + disposition
-                + fname, z.get_payload().__len__().__str__(),
-                'bytes' + subject, file=stream)
+        print(prefix + '─╴' + z.get_content_type() + cset + disposition +
+              fname, z.get_payload().__len__().__str__(),
+              'bytes' + subject, file=stream)

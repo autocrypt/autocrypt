@@ -39,7 +39,7 @@ class PersistentAttrMixin(object):
         self._dict_old = d.copy()
         return d
 
-    #def _reload(self):
+    # def _reload(self):
     #    try:
     #        self._property_cache.pop("_dict")
     #    except AttributeError:
@@ -68,12 +68,14 @@ class PersistentAttrMixin(object):
 def persistent_property(name, typ):
     def get(self):
         return self._dict.setdefault(name, typ())
+
     def set(self, value):
         if not isinstance(value, typ):
             if not (typ == six.text_type and isinstance(value, bytes)):
                 raise TypeError(value)
             value = value.decode("ascii")
         self._dict[name] = value
+
     return property(get, set)
 
 
@@ -117,7 +119,7 @@ class Account(object):
     def _ensure_exists(self):
         if not self.exists():
             raise self.NotInitialized(
-                "Account directory %r not initialized" %(self.dir))
+                "Account directory {!r} not initialized".format(self.dir))
 
     def exists(self):
         return self.config.exists()

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # vim:ts=4:sw=4:expandtab
 
-import traceback
 from click.testing import CliRunner
 import os
 import itertools
@@ -42,6 +41,7 @@ def gpgpath(request):
 def _testcache_bingpg_(request, get_next_cache, monkeypatch):
     # cache generation of secret keys
     old_gen_secret_key = BinGPG.gen_secret_key
+
     def gen_secret_key(self, emailadr):
         basekey = request.node.nodeid
         next_cache = get_next_cache(basekey)
@@ -52,13 +52,16 @@ def _testcache_bingpg_(request, get_next_cache, monkeypatch):
             if os.path.exists(self.homedir):
                 next_cache.store(self.homedir, ret)
             return ret
+
     monkeypatch.setattr(BinGPG, "gen_secret_key", gen_secret_key)
 
     # make sure any possibly started agents are killed
     old_init = BinGPG.__init__
+
     def __init__(self, *args, **kwargs):
         old_init(self, *args, **kwargs)
         request.addfinalizer(self.killagent)
+
     monkeypatch.setattr(BinGPG, "__init__", __init__)
     return
 
@@ -67,6 +70,7 @@ def _testcache_bingpg_(request, get_next_cache, monkeypatch):
 def bingpg_maker(request, tmpdir, gpgpath):
     """ return a function which creates initialized BinGPG instances. """
     counter = itertools.count()
+
     def maker():
         p = tmpdir.mkdir("bingpg%d" % next(counter))
         bingpg = BinGPG(p.strpath, gpgpath=gpgpath)
@@ -80,11 +84,11 @@ def bingpg(bingpg_maker):
     """ return an initialized bingpg instance. """
     return bingpg_maker()
 
+
 @pytest.fixture
 def bingpg2(bingpg_maker):
     """ return an initialized bingpg instance different from the first. """
     return bingpg_maker()
-
 
 
 class ClickRunner:
@@ -98,17 +102,15 @@ class ClickRunner:
         self._rootargs.insert(1, account_dir)
 
     def run_ok(self, args, fnmatch_lines=None):
-        #__tracebackhide__ = True
+        __tracebackhide__ = True
         argv = self._rootargs + args
-        basedir = None
         # we use our nextbackup helper to cache account creation
         # unless --no-test-cache is specified
         res = self.runner.invoke(self._main, argv, catch_exceptions=False)
         if res.exit_code != 0:
             print(res.output)
-            raise Exception("cmd exited with %d: %s" %(res.exit_code, argv))
+            raise Exception("cmd exited with %d: %s" % (res.exit_code, argv))
         return self._perform_match(res, fnmatch_lines)
-
 
     def run_fail(self, args, fnmatch_lines=None):
         __tracebackhide__ = True
@@ -145,20 +147,26 @@ def datadir(request):
     class D:
         def __init__(self, basepath):
             self.basepath = basepath
+
         def open(self, name, mode="r"):
             return self.basepath.join(name).open(mode)
+
         def join(self, name):
             return self.basepath.join(name).strpath
+
         def read_bytes(self, name):
             with self.open(name, "rb") as f:
                 return f.read()
+
         def read(self, name):
             with self.open(name, "r") as f:
                 return f.read()
+
         def parse_ac_header_from_email(self, name):
             with self.open(name) as fp:
                 msg = mime.parse_message_from_file(fp)
                 return mime.parse_one_ac_header_from_msg(msg)
+
     return D(request.fspath.dirpath("data"))
 
 
@@ -166,6 +174,7 @@ def datadir(request):
 def get_next_cache(pytestconfig):
     cache = pytestconfig.cache
     counters = {}
+
     def next_cache(basekey):
         count = counters.setdefault(basekey, itertools.count())
         key = basekey + str(next(count))
@@ -188,13 +197,12 @@ class DirCache:
 
     def store(self, path, ret):
         self.backup_path.dirpath().ensure(dir=1)
-        py.path.local(path).copy(self.backup_path) #, mode=True)
+        py.path.local(path).copy(self.backup_path)
         self.cache.set(self.key, ret)
 
     def restore(self, path):
-        self.backup_path.copy(py.path.local(path)) # , mode=True)
+        self.backup_path.copy(py.path.local(path))
         return self.cache.get(self.key, None)
-
 
 
 @pytest.fixture
@@ -209,6 +217,7 @@ def account_maker(tmpdir, gpgpath):
     pass init=False to the function to avoid initizialtion.
     """
     count = itertools.count()
+
     def maker(init=True):
         basedir = tmpdir.mkdir("account%d" % next(count)).strpath
         ac = Account(basedir, gpgpath=gpgpath)

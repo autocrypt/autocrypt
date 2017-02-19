@@ -10,6 +10,7 @@ from autocrypt.bingpg import cached_property, BinGPG
 
 def test_cached_property_object():
     l = []
+
     class A(object):
         @cached_property
         def x1(self):
@@ -33,7 +34,7 @@ class TestBinGPG:
         assert b.gpgpath == gpgpath
 
     def test_failed_invocation_outerr(self, bingpg2):
-        with pytest.raises(bingpg2.InvocationFailure) as e:
+        with pytest.raises(bingpg2.InvocationFailure):
             bingpg2._gpg_outerr(["qwe"])
 
     def test_gen_key_and_check_packets(self, bingpg):

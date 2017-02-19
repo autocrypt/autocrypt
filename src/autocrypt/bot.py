@@ -5,11 +5,11 @@
 simple bot functionality to work answering for bot@autocrypt.org
 """
 
-import os, sys
+import os
+import sys
 import logging
 from . import mime
 from .bingpg import BinGPG
-import email.parser
 from email.mime.text import MIMEText
 import smtplib
 
@@ -41,12 +41,9 @@ ikey = """\
 """
 AUTOCRYPT_HEADER = "to=bot@autocrypt.org; key=\n" + ikey
 
+
 def generate_reply(gpg, fp):
     msg = mime.parse_message_from_file(fp)
-    from_header = msg.get_all("from")
-    subject = msg.get_all("subject")
-    autocrypt_header = mime.parse_one_ac_header_from_msg(msg)
-
     logging.info("got mail: %s", msg.as_string())
 
     reply_msg = MIMEText('''Autoresponse''')
@@ -57,15 +54,18 @@ def generate_reply(gpg, fp):
 
     return reply_msg
 
+
 def send_reply(host, port, msg):
     smtp = smtplib.SMTP(host, port)
     logging.info("sending reply: %s", msg.as_string())
     return smtp.sendmail(MY_ADR, msg["To"], msg.as_string())
 
+
 def main():
     gpg = BinGPG(os.path.expanduser("~/keyring"))
     reply_msg = generate_reply(gpg, sys.stdin)
     return send_reply('localhost', 25, reply_msg)
+
 
 if __name__ == "__main__":
     main()

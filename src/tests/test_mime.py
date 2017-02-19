@@ -16,10 +16,12 @@ def make_ac_dict(**kwargs):
     d.setdefault("prefer-encrypt", "notset")
     return d
 
+
 def test_parse_message_from_file(datadir):
     msg = mime.parse_message_from_file(datadir.open("rsa2048-simple.eml"))
     assert msg.get_all("Autocrypt")
     assert msg.get_payload()
+
 
 def test_parse_message_from_string(datadir):
     msg = mime.parse_message_from_string(datadir.read("rsa2048-simple.eml"))
@@ -57,7 +59,7 @@ class TestEmailCorpus:
     def test_rsa2048_simple(self, datadir, bingpg):
         d = datadir.parse_ac_header_from_email("rsa2048-simple.eml")
         assert d["to"] == "alice@testsuite.autocrypt.org", d
-        keyhandle = bingpg.import_keydata(b64decode(d["key"]))
+        bingpg.import_keydata(b64decode(d["key"]))
 
     def test_25519_simple(self, datadir, bingpg):
         if (not bingpg.supports_eddsa()):

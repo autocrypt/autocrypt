@@ -5,14 +5,10 @@
 """
 
 import os
-import shutil
 import six
 import click
 from .account import Account
 from . import mime
-
-class CmdlineState:
-    pass
 
 
 class MyGroup(click.Group):
@@ -130,8 +126,8 @@ def export_secret_key(ctx):
 
 @click.command()
 @click.pass_context
-def show(ctx):
-    """print account info including peer state."""
+def status(ctx):
+    """print account state including those of peers. """
     account = get_account(ctx)
     click.echo("account-dir: " + account.dir)
     click.echo("uuid: " + account.config.uuid)
@@ -143,12 +139,14 @@ def show(ctx):
         for name, ac_dict in peers.items():
             d = ac_dict.copy()
             keyhandle = account.get_latest_public_keyhandle(name)
-            click.echo("%s: key %s [%d bytes] %s" %(
-                       d.pop("to"), keyhandle, len(d.pop("key")),
-                       "; ".join(["%s=%s" % x for x in d.items()])))
+            click.echo("{to}: key {keyhandle} [{bytes:d} bytes] {attrs}".format(
+                       to=d.pop("to"), keyhandle=keyhandle,
+                       bytes=len(d.pop("key")),
+                       attrs="; ".join(["%s=%s" % x for x in d.items()])))
+
 
 autocrypt_main.add_command(init)
-autocrypt_main.add_command(show)
+autocrypt_main.add_command(status)
 autocrypt_main.add_command(make_header)
 autocrypt_main.add_command(set_prefer_encrypt)
 autocrypt_main.add_command(process_incoming)
@@ -156,8 +154,8 @@ autocrypt_main.add_command(export_public_key)
 autocrypt_main.add_command(export_secret_key)
 
 
-#@click.command()
-#@click.pass_obj
-#def bot(ctx):
-#    """Bot invocation and account generation commands. """
-##    assert 0, obj.account_dir
+# @click.command()
+# @click.pass_obj
+# def bot(ctx):
+#     """Bot invocation and account generation commands. """
+#     assert 0, obj.account_dir

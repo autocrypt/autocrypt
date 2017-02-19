@@ -3,10 +3,8 @@
 
 from __future__ import unicode_literals
 import pytest
-import py
 from autocrypt.account import Config, Account
 from autocrypt import mime
-
 
 
 def test_config(tmpdir):
@@ -130,7 +128,6 @@ def test_account_parse_incoming_mails_replace_by_date(account_maker):
     assert not ac1.get_latest_public_keyhandle(adr)
 
 
-
 def test_account_export_public_key(account, datadir):
     account.init()
     msg = mime.parse_message_from_file(datadir.open("rsa2048-simple.eml"))
@@ -138,4 +135,3 @@ def test_account_export_public_key(account, datadir):
     keyhandle = account.get_latest_public_keyhandle(adr)
     x = account.export_public_key(keyhandle)
     assert x
-
