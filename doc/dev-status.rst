@@ -14,12 +14,17 @@ Notmuch/Alot: XXX to-be-filled-in
 
 Bitmask/LEAP: `ongoing refactorings <https://0xacab.org/leap/bitmask-dev/merge_requests/55/diffs>`_
 
-Python: `Python Autocrypt Bot <https://github.com/autocrypt/autocrypt>`_
-
 Go: `Go Autocrypt <https://github.com/autocrypt/go-autocrypt>`_
 
 **Please-fill-in-your-development-branch here**
 
+Autocrypt command line client
+-----------------------------
+
+See :doc:`src/index` for how to install and get started
+with the ``autocrypt`` command line tool. It can generate
+and parse Autocrypt headers, process incoming mail for
+discoverying peers who also have autocrypt headers.
 
 Autocrypt bot
 -------------

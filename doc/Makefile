@@ -238,3 +238,7 @@ dummy:
 	$(SPHINXBUILD) -b dummy $(ALLSPHINXOPTS) $(BUILDDIR)/dummy
 	@echo
 	@echo "Build finished. Dummy builder generates no files."
+
+regen:
+	PYTHONDONTWRITEBYTECODE=1 COLUMNS=76 regendoc --update *.rst */*.rst ${REGENDOC_ARGS}
+
