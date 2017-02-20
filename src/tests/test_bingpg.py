@@ -28,11 +28,21 @@ def test_cached_property_object():
     assert l == ['x']
 
 
-class TestBinGPG:
-    def test_find_executable(self, tmpdir, gpgpath):
-        b = BinGPG(tmpdir.strpath, gpgpath=os.path.basename(gpgpath))
+def test_find_executable(tmpdir, gpgpath):
+    bn = os.path.basename(gpgpath)
+    b = BinGPG(tmpdir.strpath, gpgpath=bn)
+    assert b.gpgpath == gpgpath
+    if bn == "gpg":
+        b = BinGPG(tmpdir.strpath)
         assert b.gpgpath == gpgpath
 
+
+def test_find_executable_not_existing(tmpdir):
+    with pytest.raises(ValueError):
+        BinGPG(tmpdir.strpath, gpgpath="123")
+
+
+class TestBinGPG:
     def test_failed_invocation_outerr(self, bingpg2):
         with pytest.raises(bingpg2.InvocationFailure):
             bingpg2._gpg_outerr(["qwe"])

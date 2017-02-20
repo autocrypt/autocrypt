@@ -24,7 +24,7 @@ class MyGroup(click.Group):
         return self._cmdlist
 
 
-@click.command(cls=MyGroup)
+@click.command(cls=MyGroup, context_settings=dict(help_option_names=["-h", "--help"]))
 @click.option("--basedir", type=click.Path(),
               default=click.get_app_dir("autocrypt"),
               envvar="AUTOCRYPT_BASEDIR",

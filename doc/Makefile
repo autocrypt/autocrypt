@@ -64,8 +64,8 @@ clean:
 	rm -f $(PDFs)
 
 .PHONY: html
-html:
-	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
+html: 
+	python with_venv.py ${BUILDDIR}/_venv $(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
 
@@ -240,5 +240,4 @@ dummy:
 	@echo "Build finished. Dummy builder generates no files."
 
 regen:
-	PYTHONDONTWRITEBYTECODE=1 COLUMNS=76 regendoc --update *.rst */*.rst ${REGENDOC_ARGS}
-
+	python with_tmphome.py regendoc --update src/cmdline.rst

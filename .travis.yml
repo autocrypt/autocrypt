@@ -1,0 +1,24 @@
+sudo: false
+language: python
+python:
+    - '2.7'
+# command to install dependencies
+install: "pip install -U tox"
+# # command to run tests
+env:
+  matrix:
+    - TESTENV=lint
+    - TESTENV=py27
+    - TESTENV=py35
+
+script: tox --recreate -e $TESTENV
+
+#notifications:
+#  irc:
+#    channels:
+#      - "chat.freenode.net#autocrypt"
+#    on_success: change
+#    on_failure: change
+#    skip_join: true
+#  email:
+#    - pytest-commit@python.org

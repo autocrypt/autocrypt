@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vim:ts=4:sw=4:expandtab
 
-""" mime message parsing and manipulation for Autocrypt usage. """
+""" mime message parsing and manipulation functions for Autocrypt usage. """
 
 from __future__ import unicode_literals, print_function
 import sys
@@ -120,11 +120,11 @@ def decrypt_message(msg, bingpg):
 
 # adapted from ModernPGP:memoryhole/generators/generator.py which
 # was adapted from notmuch:devel/printmimestructure
-def render_mime_structure(z, prefix='└', stream=sys.stdout):
-    '''z should be an email.message.Message object'''
-    fname = '' if z.get_filename() is None else ' [' + z.get_filename() + ']'
-    cset = '' if z.get_charset() is None else ' (' + z.get_charset() + ')'
-    disp = z.get_params(None, header='Content-Disposition')
+def render_mime_structure(msg, prefix='└', stream=sys.stdout):
+    '''msg should be an email.message.Message object'''
+    fname = '' if msg.get_filename() is None else ' [' + msg.get_filename() + ']'
+    cset = '' if msg.get_charset() is None else ' (' + msg.get_charset() + ')'
+    disp = msg.get_params(None, header='Content-Disposition')
     if (disp is None):
         disposition = ''
     else:
@@ -133,19 +133,19 @@ def render_mime_structure(z, prefix='└', stream=sys.stdout):
             if d[0] in ['attachment', 'inline']:
                 disposition = ' ' + d[0]
 
-    if 'subject' in z:
-        subject = ' (Subject: %s)' % z['subject']
+    if 'subject' in msg:
+        subject = ' (Subject: %s)' % msg['subject']
     else:
         subject = ''
-    if (z.is_multipart()):
-        print(prefix + '┬╴' + z.get_content_type() + cset +
-              disposition + fname, z.as_string().__len__().__str__() +
+    if (msg.is_multipart()):
+        print(prefix + '┬╴' + msg.get_content_type() + cset +
+              disposition + fname, msg.as_string().__len__().__str__() +
               ' bytes' + subject, file=stream)
         if prefix.endswith('└'):
             prefix = prefix.rpartition('└')[0] + ' '
         if prefix.endswith('├'):
             prefix = prefix.rpartition('├')[0] + '│'
-        parts = z.get_payload()
+        parts = msg.get_payload()
         i = 0
         while (i < parts.__len__() - 1):
             render_mime_structure(parts[i], prefix + '├', stream=stream)
@@ -153,6 +153,6 @@ def render_mime_structure(z, prefix='└', stream=sys.stdout):
         render_mime_structure(parts[i], prefix + '└', stream=stream)
         # FIXME: show epilogue?
     else:
-        print(prefix + '─╴' + z.get_content_type() + cset + disposition +
-              fname, z.get_payload().__len__().__str__(),
+        print(prefix + '─╴' + msg.get_content_type() + cset + disposition +
+              fname, msg.get_payload().__len__().__str__(),
               'bytes' + subject, file=stream)

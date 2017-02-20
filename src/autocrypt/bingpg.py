@@ -29,10 +29,9 @@ def b64encode_u(x):
 
 
 def cached_property(f):
-    """returns a property definition which lazily computes and
-    caches the result of calling f.  The property also allows
-    setting the value (before or after read).
-    """
+    # returns a property definition which lazily computes and
+    # caches the result of calling f.  The property also allows
+    # setting the value (before or after read).
     def get(self):
         propcache = self.__dict__.setdefault("_property_cache", {})
         key = f.__name__
@@ -68,13 +67,12 @@ class BinGPG(object):
     """ basic wrapper for gpg command line invocations. """
     InvocationFailure = InvocationFailure
 
-    def __init__(self, homedir, gpgpath=None):
+    def __init__(self, homedir, gpgpath="gpg"):
         self.homedir = homedir
-        if gpgpath is None:
-            gpgpath = find_executable("gpg")
-        elif not os.path.isabs(gpgpath):
-            gpgpath = find_executable(gpgpath)
-        self.gpgpath = gpgpath
+        p = find_executable(gpgpath)
+        if p is None:
+            raise ValueError("could not find binary for {!r}".format(gpgpath))
+        self.gpgpath = p
 
     @cached_property
     def isgpg2(self, min_version=V("2.0")):

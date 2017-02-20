@@ -64,5 +64,7 @@ and contributors, MUA developers and privacy enthusiasts.
    cleanup
    peering
    src/index
+   src/api
+   src/cmdline
 
 
