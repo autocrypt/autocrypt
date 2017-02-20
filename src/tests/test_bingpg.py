@@ -93,7 +93,8 @@ class TestBinGPG:
         assert k.type == "RSA"
         assert k.date_created
         # fish out encryption sub key and check if it matches
-        for ptype, _, lines in bingpg2.list_public_key_packets(keyhandle):
+        packets = bingpg2.list_public_key_packets(keyhandle)
+        for ptype, _, lines in packets:
             if "key packet" in ptype:
                 for x in lines:
                     if x.startswith("keyid: "):
@@ -101,6 +102,8 @@ class TestBinGPG:
                         if x[len("keyid: "):].strip()[-8:] == k.id:
                             return
         else:
+            import pprint
+            pprint.pprint(packets)
             assert 0, k.id
 
     def test_gen_key_and_sign_verify(self, bingpg):

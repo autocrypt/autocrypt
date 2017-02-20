@@ -1,17 +1,22 @@
-sudo: false
+sudo: required
 language: python
 python:
-    - '2.7'
-# command to install dependencies
+    - '3.5'
 install: "pip install -U tox"
-# # command to run tests
+
+
+# if we install gpg2 here we get 2.0 which does not work with the lib.
+before_install: 
+    - sudo apt-get install rng-tools
+    - sudo rngd -r /dev/urandom
+
 env:
   matrix:
-    - TESTENV=lint
     - TESTENV=py27
     - TESTENV=py35
+    - TESTENV=lint
 
-script: tox --recreate -e $TESTENV
+script: cd src ; tox --recreate -e $TESTENV tests/
 
 #notifications:
 #  irc:
