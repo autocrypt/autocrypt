@@ -1,16 +1,29 @@
 sudo: required
 language: python
+dist: trusty
 python:
     - '3.5'
-install: "pip install -U tox"
+cache:
+  directories:
+    - $HOME/bin
+    - $HOME/lib
+install:
+  - PATH="$HOME/bin:$PATH"
+  - LD_LIBRARY_PATH="$HOME/lib:${LD_LIBRARY_PATH}"
+  - export PATH LD_LIBRARY_PATH
+  - util/custom-gpg.sh
+  - gpg2 --version
+  - pip install -U tox
 
 # if we install gpg2 here we get 2.0 which does not work with the lib.
-before_install: 
+before_install:
     - sudo apt-get update
     - sudo apt-get install rng-tools
     - sudo rngd -r /dev/urandom
 
 env:
+  global:
+    - GPG_VERSION='2.1.18'
   matrix:
     - TESTENV=doc
     - TESTENV=py27
