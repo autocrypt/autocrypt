@@ -4,19 +4,20 @@ python:
     - '3.5'
 install: "pip install -U tox"
 
-
 # if we install gpg2 here we get 2.0 which does not work with the lib.
 before_install: 
+    - sudo apt-get update
     - sudo apt-get install rng-tools
     - sudo rngd -r /dev/urandom
 
 env:
   matrix:
+    - TESTENV=doc
     - TESTENV=py27
     - TESTENV=py35
     - TESTENV=lint
 
-script: cd src ; tox --recreate -e $TESTENV tests/
+script: cd src ; tox -e $TESTENV --recreate tests/
 
 #notifications:
 #  irc:

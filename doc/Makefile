@@ -65,7 +65,8 @@ clean:
 
 .PHONY: html
 html: 
-	python with_venv.py ${BUILDDIR}/_venv $(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
+	python with_venv.py ${BUILDDIR}/_venv $(SPHINXBUILD) -E -W \
+						-b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
 
