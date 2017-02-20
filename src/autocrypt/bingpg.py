@@ -12,7 +12,6 @@ import logging
 from distutils.version import LooseVersion as V
 import os
 import sys
-import six
 from subprocess import Popen, PIPE
 from contextlib import contextmanager
 from base64 import b64encode
@@ -183,10 +182,19 @@ class BinGPG(object):
         logging.debug("created secret key: %s", keyhandle)
         return keyhandle
 
-    def list_public_keyhandles(self):
-        out = self._gpg_out(["--skip-verify", "--with-colons", "--list-public-keys"])
-        return [line.split(":")[4]
-                for line in out.splitlines() if line.startswith("pub:")]
+    def list_public_keyinfos(self, keyhandle=None):
+        args = ["--skip-verify", "--with-colons", "--list-public-keys"]
+        if keyhandle is not None:
+            args.append(keyhandle)
+        out = self._gpg_out(args)
+        keyinfos = []
+        for line in out.splitlines():
+            parts = line.split(":")
+            if parts[0] in ("pub", "sub"):
+                keyinfos.append(
+                    KeyInfo(type=parts[3], bits=int(parts[2]), uid=parts[9],
+                            id=parts[4], date_created=parts[5]))
+        return keyinfos
 
     def _find_keyhandle(self, string, _pattern=re.compile("key (?:ID )?([0-9A-F]+)")):
         m = _pattern.search(string)
@@ -195,11 +203,9 @@ class BinGPG(object):
 
         # now search the fingerprint
         assert len(x) == 8   # keyid has 8 hex bytes
-        for fp in self.list_public_keyhandles():
-            if fp[-8:] == x:
-                if not isinstance(x, six.text_type):
-                    fp = fp.decode("ascii")
-                return fp
+        for k in self.list_public_keyinfos(x):
+            if k.id[-8:] == x:
+                return k.id
         raise ValueError("could not find fingerprint")
 
     def list_secret_key_packets(self, keyhandle):
@@ -293,8 +299,10 @@ class KeyInfo:
         self.date_created = date_created
 
     def __str__(self):
-        return "Key {id!r}, {uid!r}, {bits}-bit {type}".format(
+        return "KeyInfo(id={id!r}, uid={uid!r}, bits={bits}, type={type})".format(
             **self.__dict__)
+
+    __repr__ = __str__
 
 
 def find_executable(name):

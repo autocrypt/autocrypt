@@ -49,7 +49,6 @@ class TestBinGPG:
 
     def test_gen_key_and_check_packets(self, bingpg):
         keyhandle = bingpg.gen_secret_key(emailadr="hello@xyz.org")
-        return
         keydata = bingpg.get_secret_keydata(keyhandle)
         packets = bingpg.list_packets(keydata)
         # maybe the below a bit too strict?
@@ -70,6 +69,12 @@ class TestBinGPG:
         assert packets[2][0] == "signature packet"
         assert packets[3][0] == "public sub key packet"
         assert packets[4][0] == "signature packet"
+
+    def test_list_public_keyhandles(self, bingpg):
+        keyhandle = bingpg.gen_secret_key(emailadr="hello@xyz.org")
+        l = bingpg.list_public_keyinfos(keyhandle)
+        assert len(l) == 2
+        assert l[0].id == keyhandle
 
     @pytest.mark.parametrize("armor", [True, False])
     def test_transfer_key_and_encrypt_decrypt_roundtrip(self, bingpg, bingpg2, armor):
@@ -92,19 +97,13 @@ class TestBinGPG:
         assert k.bits == 2048
         assert k.type == "RSA"
         assert k.date_created
-        # fish out encryption sub key and check if it matches
-        packets = bingpg2.list_public_key_packets(keyhandle)
-        for ptype, _, lines in packets:
-            if "key packet" in ptype:
-                for x in lines:
-                    if x.startswith("keyid: "):
-                        print(x[len("keyid: "):].strip())
-                        if x[len("keyid: "):].strip()[-8:] == k.id:
-                            return
+        keyinfos = bingpg2.list_public_keyinfos(keyhandle)
+        for keyinfo in keyinfos:
+            if keyinfo.id[-8:] == k.id:
+                break
         else:
-            import pprint
-            pprint.pprint(packets)
-            assert 0, k.id
+            pytest.fail("decryption key {!r} not found in {}".format(
+                        k.id, keyinfos))
 
     def test_gen_key_and_sign_verify(self, bingpg):
         keyhandle = bingpg.gen_secret_key(emailadr="hello@xyz.org")
