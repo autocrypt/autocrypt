@@ -10,6 +10,7 @@ import logging
 import sys
 import tempfile
 import os.path
+import getpass
 from base64 import b64encode
 from pgpy import PGPKey, PGPUID
 from pgpy.constants import PubKeyAlgorithm, KeyFlags, HashAlgorithm
@@ -22,7 +23,8 @@ def generate_rsa_key(uid='alice@testsuite.autocrypt.org',
                      alg_key=PubKeyAlgorithm.RSAEncryptOrSign,
                      alg_subkey=PubKeyAlgorithm.RSAEncryptOrSign,
                      size=2048,
-                     add_subkey=True):
+                     add_subkey=True,
+                     protected=False):
     # RSAEncrypt is deprecated, therefore using RSAEncryptOrSign
     # also for the subkey
     """Generate PGPKey object.
@@ -64,8 +66,13 @@ def generate_rsa_key(uid='alice@testsuite.autocrypt.org',
     if add_subkey is True:
         subkey = PGPKey.new(alg_subkey, size)
         key.add_subkey(subkey, usage={KeyFlags.EncryptCommunications,
-                                  KeyFlags.EncryptStorage})
+                                      KeyFlags.EncryptStorage})
         logger.debug('Created subkey')
+    if protected is True:
+        passphrase = getpass.getpass()
+        key.protect(passphrase, SymmetricKeyAlgorithm.AES256,
+                    HashAlgorithm.SHA256)
+        logger.debug('Key protected')
     logger.debug('Created key pair %s', key_shortid(key))
     return key
 
@@ -113,19 +120,38 @@ def export_key_to_file(key, outputdir=None):
     :type outputdir: string
 
     """
-    if outputdir is None:
-        with tempfile.NamedTemporaryFile(prefix=key_shortid(key) +
-                                             '_',
-                                         suffix='_private.asc',
-                                         delete=False) as fd:
-            fd.write(str(key))
-            path = fd.name
+    # FIXME: refactor
+    if key.is_protected:
+        passphrase = getpass.getpass()
+        with key.unlock(passphrase):
+            if outputdir is None:
+                with tempfile.NamedTemporaryFile(
+                                    prefix=key_shortid(key) + '_',
+                                    suffix='_private.asc',
+                                    delete=False
+                                ) as fd:
+                    fd.write(str(key))
+                    path = fd.name
+            else:
+                path = os.path.join(outputdir, key_shortid(key) +
+                                    '_private.asc')
+                with open(path, 'wb') as fd:
+                    fd.write(str(key))
     else:
-        path = os.path.join(outputdir, key_shortid(key) +
-                            '_private.asc')
-        with open(path, 'wb') as fd:
-            fd.write(str(key))
-    logger.debug('Exported private keyto file %s', path)
+        if outputdir is None:
+            with tempfile.NamedTemporaryFile(
+                                    prefix=key_shortid(key) + '_',
+                                    suffix='_private.asc',
+                                    delete=False
+                                ) as fd:
+                fd.write(str(key))
+                path = fd.name
+        else:
+            path = os.path.join(outputdir, key_shortid(key) +
+                                '_private.asc')
+            with open(path, 'wb') as fd:
+                fd.write(str(key))
+    logger.debug('Exported private key to file %s', path)
 
 
 def export_pubkey_to_file(key, outputdir=None):
@@ -143,7 +169,7 @@ def export_pubkey_to_file(key, outputdir=None):
         pubkey = key.pubkey
     if outputdir is None:
         with tempfile.NamedTemporaryFile(prefix=key_shortid(key) +
-                                             '_',
+                                         '_',
                                          suffix='.asc',
                                          delete=False) as fd:
             fd.write(str(pubkey))

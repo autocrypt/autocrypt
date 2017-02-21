@@ -39,6 +39,9 @@ def main():
     parser.add_argument('-s', '--subkey',
                         help='Generate encryption subkey',
                         default=True)
+    parser.add_argument('-p', '--protect',
+                        help='Protect private key',
+                        default=False)
     parser.add_argument('-m', '--mail',
                         help='Generate key and send mail, '\
                               'otherwise generate only key',
