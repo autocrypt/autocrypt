@@ -4,11 +4,13 @@
 """ mime message parsing and manipulation functions for Autocrypt usage. """
 
 from __future__ import unicode_literals, print_function
-import sys
+import itertools
 import email.parser
 import base64
 from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from email.utils import formatdate
+import six
 
 
 def make_ac_header_value(emailadr, keydata, prefer_encrypt="notset", keytype="p"):
@@ -34,11 +36,12 @@ def parse_message_from_file(fp):
 
 
 def parse_message_from_string(string):
-    return email.parser.Parser().parsestr(string)
+    stream = six.StringIO(string)
+    return parse_message_from_file(stream)
 
 
 def parse_one_ac_header_from_string(string):
-    msg = email.parser.Parser().parsestr(string)
+    msg = parse_message_from_string(string)
     return parse_one_ac_header_from_msg(msg)
 
 
@@ -120,8 +123,9 @@ def decrypt_message(msg, bingpg):
 
 # adapted from ModernPGP:memoryhole/generators/generator.py which
 # was adapted from notmuch:devel/printmimestructure
-def render_mime_structure(msg, prefix='└', stream=sys.stdout):
+def render_mime_structure(msg, prefix='└'):
     '''msg should be an email.message.Message object'''
+    stream = six.StringIO()
     fname = '' if msg.get_filename() is None else ' [' + msg.get_filename() + ']'
     cset = '' if msg.get_charset() is None else ' (' + msg.get_charset() + ')'
     disp = msg.get_params(None, header='Content-Disposition')
@@ -139,7 +143,7 @@ def render_mime_structure(msg, prefix='└', stream=sys.stdout):
         subject = ''
     if (msg.is_multipart()):
         print(prefix + '┬╴' + msg.get_content_type() + cset +
-              disposition + fname, msg.as_string().__len__().__str__() +
+              disposition + fname, str(len(msg.as_string())) +
               ' bytes' + subject, file=stream)
         if prefix.endswith('└'):
             prefix = prefix.rpartition('└')[0] + ' '
@@ -147,12 +151,13 @@ def render_mime_structure(msg, prefix='└', stream=sys.stdout):
             prefix = prefix.rpartition('├')[0] + '│'
         parts = msg.get_payload()
         i = 0
-        while (i < parts.__len__() - 1):
-            render_mime_structure(parts[i], prefix + '├', stream=stream)
+        while (i < len(parts) - 1):
+            print(render_mime_structure(parts[i], prefix + '├'), file=stream)
             i += 1
-        render_mime_structure(parts[i], prefix + '└', stream=stream)
+        print(render_mime_structure(parts[i], prefix + '└'), file=stream)
         # FIXME: show epilogue?
     else:
         print(prefix + '─╴' + msg.get_content_type() + cset + disposition +
               fname, msg.get_payload().__len__().__str__(),
               'bytes' + subject, file=stream)
+    return stream.getvalue().rstrip()

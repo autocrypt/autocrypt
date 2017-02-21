@@ -31,10 +31,8 @@ def test_parse_message_from_string(datadir):
 
 def test_render(datadir):
     msg = mime.parse_message_from_string(datadir.read("rsa2048-simple.eml"))
-    io = six.StringIO()
-    mime.render_mime_structure(msg, stream=io)
-    value = io.getvalue()
-    assert "text/plain" in value
+    x = mime.render_mime_structure(msg)
+    assert "text/plain" in x
 
 
 def test_make_and_parse_header_value():
