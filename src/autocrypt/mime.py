@@ -4,11 +4,9 @@
 """ mime message parsing and manipulation functions for Autocrypt usage. """
 
 from __future__ import unicode_literals, print_function
-import itertools
 import email.parser
 import base64
 from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 from email.utils import formatdate
 import six
 
@@ -110,15 +108,23 @@ def gen_mail_msg(From, To, Autocrypt=None, Date=None):
 
 
 def decrypt_message(msg, bingpg):
+    # this method is not tested through the test suite
+    # currently because we lack a way to generate proper
+    # encrypted messages
     ctype = msg.get_content_type()
     assert ctype == "multipart/encrypted"
     parts = msg.get_payload()
     meta, enc = parts
     assert meta.get_content_type() == "application/pgp-encrypted"
+    assert enc.get_content_type() == "application/octet-stream"
+
     dec, err = bingpg.decrypt(enc.get_payload())
-    newmsg = parse_message_from_string(dec)
-    msg.set_payload(newmsg)
-    return msg, err
+    dec_msg = parse_message_from_string(dec)
+    for name, val in msg.items():
+        if name.lower() in ("content-type", "content-transfer-encoding"):
+            continue
+        dec_msg.add_header(name, val)
+    return dec_msg, err
 
 
 # adapted from ModernPGP:memoryhole/generators/generator.py which

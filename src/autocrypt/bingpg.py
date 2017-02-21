@@ -279,7 +279,7 @@ class BinGPG(object):
         out, err = self._gpg_outerr(["--with-colons", "--decrypt"],
                                     input=enc_data, encoding=None)
         lines = err.splitlines()
-        l = []
+        keyinfos = []
         while lines:
             line1 = lines.pop(0)
             m = re.match("gpg.*with (\d+)-bit (\w+).*"
@@ -289,8 +289,8 @@ class BinGPG(object):
                 line2 = lines.pop(0)
                 if line2.startswith("    "):
                     uid = line2.strip().strip('"')
-                l.append(KeyInfo(keytype, bits, id, uid, date))
-        return out, l
+                keyinfos.append(KeyInfo(keytype, bits, id, uid, date))
+        return out, keyinfos
 
     def import_keydata(self, keydata):
         out, err = self._gpg_outerr(["--skip-verify", "--import"], input=keydata)
