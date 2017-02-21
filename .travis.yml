@@ -30,7 +30,12 @@ env:
     - TESTENV=py35
     - TESTENV=lint
 
-script: cd src ; tox -e $TESTENV --recreate tests/
+script:
+  - cd src
+  - gpg2 --version
+  - echo $PATH
+  - which gpg2
+  - tox -e $TESTENV --recreate tests/
 
 #notifications:
 #  irc:
