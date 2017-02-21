@@ -35,7 +35,7 @@ script:
   - gpg2 --version
   - echo $PATH
   - which gpg2
-  - tox -e $TESTENV --recreate tests/
+  - tox -e $TESTENV --recreate -- --no-test-cache --with-gpg2 tests/
 
 #notifications:
 #  irc:

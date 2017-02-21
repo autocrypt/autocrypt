@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 
 import os
 import pytest
-from autocrypt.bingpg import cached_property, BinGPG
+from autocrypt.bingpg import cached_property, BinGPG, KeyInfo
 
 
 def test_cached_property_object():
@@ -40,6 +40,16 @@ def test_find_executable(tmpdir, gpgpath):
 def test_find_executable_not_existing(tmpdir):
     with pytest.raises(ValueError):
         BinGPG(tmpdir.strpath, gpgpath="123")
+
+
+@pytest.mark.parametrize("id1,id2", [
+    ("90123456", "1234567890123456"),
+    ("1234567890123456", "1234567890123456"),
+])
+def test_keyinfo_match(id1, id2):
+    k = KeyInfo(type="1", bits=2048, id=id1, uid="123",
+                date_created="Di 21. Feb 10:43:40 CET 2017")
+    assert k.match(id2), k
 
 
 class TestBinGPG:
@@ -99,7 +109,7 @@ class TestBinGPG:
         assert k.date_created
         keyinfos = bingpg2.list_public_keyinfos(keyhandle)
         for keyinfo in keyinfos:
-            if keyinfo.id[-8:] == k.id:
+            if keyinfo.match(k.id):
                 break
         else:
             pytest.fail("decryption key {!r} not found in {}".format(
@@ -109,4 +119,5 @@ class TestBinGPG:
         keyhandle = bingpg.gen_secret_key(emailadr="hello@xyz.org")
         sig = bingpg.sign(b"123", keyhandle=keyhandle)
         keyhandle_verified = bingpg.verify(data=b'123', signature=sig)
-        assert keyhandle == keyhandle_verified
+        i = min(len(keyhandle_verified), len(keyhandle))
+        assert keyhandle[-i:] == keyhandle_verified[-i:]

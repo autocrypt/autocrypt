@@ -73,6 +73,10 @@ class BinGPG(object):
             raise ValueError("could not find binary for {!r}".format(gpgpath))
         self.gpgpath = p
 
+    def __str__(self):
+        return "BinGPG(gpgpath={gpgpath}, homedir={homedir})".format(
+            gpgpath=self.gpgpath, homedir=self.homedir)
+
     @cached_property
     def isgpg2(self, min_version=V("2.0")):
         return V(self.get_version()) >= min_version
@@ -138,12 +142,12 @@ class BinGPG(object):
         ret = popen.wait()
         if ret == 130:
             raise KeyboardInterrupt("detected in gpg invocation")
-        if ret != 0 or (strict and err):
-            raise self.InvocationFailure(ret, " ".join(args),
-                                         out=str(out), err=str(err))
         err = err.decode("utf8")
         if encoding:
             out = out.decode(encoding)
+        if ret != 0 or (strict and err):
+            raise self.InvocationFailure(ret, " ".join(args),
+                                         out=out, err=err)
         return out, err
 
     @cached_property
@@ -201,12 +205,15 @@ class BinGPG(object):
         assert m and len(m.groups()) == 1, string
         x = m.groups()[0]
 
-        # now search the fingerprint
-        assert len(x) == 8   # keyid has 8 hex bytes
-        for k in self.list_public_keyinfos(x):
-            if k.id[-8:] == x:
-                return k.id
-        raise ValueError("could not find fingerprint")
+        # now search the fingerprint if we only have a shortid
+        if len(x) <= 8:   # keyid has 8 hex bytes
+            keyinfos = self.list_public_keyinfos(x)
+            for k in keyinfos:
+                if k.match(x):
+                    return k.id
+            raise ValueError("could not find fingerprint %r in %r" % (x, keyinfos))
+        # note that this might be a 16-char fingerprint or a 40-char one (gpg-2.1.18)
+        return x
 
     def list_secret_key_packets(self, keyhandle):
         return self.list_packets(self.get_secret_keydata(keyhandle))
@@ -297,6 +304,10 @@ class KeyInfo:
         self.id = id
         self.uid = uid
         self.date_created = date_created
+
+    def match(self, other_id):
+        i = min(len(other_id), len(self.id))
+        return self.id[-i:] == other_id[-i:]
 
     def __str__(self):
         return "KeyInfo(id={id!r}, uid={uid!r}, bits={bits}, type={type})".format(
