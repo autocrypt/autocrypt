@@ -52,6 +52,19 @@ def test_keyinfo_match(id1, id2):
     assert k.match(id2), k
 
 
+def test_bingpg_native(bingpg_maker, monkeypatch):
+    bingpg1 = bingpg_maker()
+    monkeypatch.setenv("GNUPGHOME", bingpg1.homedir)
+    bingpg2 = bingpg_maker(native=True)
+    assert not bingpg2.homedir
+    keyhandle = bingpg2.gen_secret_key("x@y.org")
+    keyinfos = bingpg1.list_public_keyinfos(keyhandle)
+    for k in keyinfos:
+        if k.match(keyhandle):
+            return
+    pytest.fail("did not find handle %r" % keyhandle)
+
+
 class TestBinGPG:
     def test_failed_invocation_outerr(self, bingpg2):
         with pytest.raises(bingpg2.InvocationFailure):

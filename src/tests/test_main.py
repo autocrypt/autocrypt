@@ -47,6 +47,18 @@ def test_init(mycmd):
     """)
 
 
+@pytest.mark.xfail(reason="not implemented")
+def test_init_native_gpg(mycmd, monkeypatch, bingpg, gpgpath):
+    adr = "x@y.org"
+    keyhandle = bingpg.gen_secret_key(adr)
+    monkeypatch.setenv("GNUPGHOME", bingpg.homedir)
+    mycmd.run_ok(["init-with-existing", gpgpath, adr], """
+            *account*created*
+            *using existing*
+    """)
+    assert 0, keyhandle
+
+
 def test_init_and_make_header(mycmd):
     mycmd.run_fail(["make-header", "xyz"], """
         *Account*not initialized*

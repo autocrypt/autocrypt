@@ -66,7 +66,7 @@ class BinGPG(object):
     """ basic wrapper for gpg command line invocations. """
     InvocationFailure = InvocationFailure
 
-    def __init__(self, homedir, gpgpath="gpg"):
+    def __init__(self, homedir=None, gpgpath="gpg"):
         self.homedir = homedir
         p = find_executable(gpgpath)
         if p is None:
@@ -74,7 +74,7 @@ class BinGPG(object):
         self.gpgpath = p
 
     def __str__(self):
-        return "BinGPG(gpgpath={gpgpath}, homedir={homedir})".format(
+        return "BinGPG(gpgpath={gpgpath!r}, homedir={homedir!r})".format(
             gpgpath=self.gpgpath, homedir=self.homedir)
 
     @cached_property
@@ -82,6 +82,9 @@ class BinGPG(object):
         return V(self.get_version()) >= min_version
 
     def init(self):
+        if self.homedir is None:
+            return
+
         if not os.path.exists(self.homedir):
             # we create the dir if the basedir exists, otherwise we fail
             os.mkdir(self.homedir)
@@ -95,9 +98,8 @@ class BinGPG(object):
 
     def killagent(self):
         if self.isgpg2:
-            args = [find_executable("gpg-connect-agent"),
-                    "--homedir", self.homedir, "--no-autostart",
-                    "KILLAGENT"]
+            args = [find_executable("gpg-connect-agent"), "--no-autostart"]
+            args += self._homedirflags + ["KILLAGENT"]
             popen = Popen(args)
             popen.wait()
 
@@ -109,6 +111,10 @@ class BinGPG(object):
             yield f.name
         finally:
             os.remove(f.name)
+
+    @property
+    def _homedirflags(self):
+        return ["--homedir", self.homedir] if self.homedir else []
 
     def _gpg_out(self, argv, input=None, strict=False, encoding="utf8"):
         return self._gpg_outerr(argv, input=input, strict=strict, encoding=encoding)[0]
@@ -124,8 +130,7 @@ class BinGPG(object):
         while stdout output is returned decoded if encoding is set (default is "utf8").
         If you want binary stdout output specify encoding=None.
         """
-        args = [self.gpgpath, "--homedir", self.homedir, "--batch",
-                "--no-permission-warning"]
+        args = [self.gpgpath, "--batch", "--no-permission-warning"] + self._homedirflags
         args.extend(["--passphrase", "''"])
         if argv[0] != "--version" and self.isgpg2:
             args.extend(["--pinentry-mode=loopback"])

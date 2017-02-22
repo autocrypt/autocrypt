@@ -2,6 +2,7 @@
 # vim:ts=4:sw=4:expandtab
 
 from click.testing import CliRunner
+import logging
 import os
 import itertools
 import pytest
@@ -45,12 +46,16 @@ def _testcache_bingpg_(request, get_next_cache, monkeypatch):
     def gen_secret_key(self, emailadr):
         basekey = request.node.nodeid
         next_cache = get_next_cache(basekey)
-        if next_cache.exists():
+        if self.homedir and next_cache.exists():
+            logging.debug("restoring homedir {}".format(self.homedir))
             return next_cache.restore(self.homedir)
         else:
+            if self.homedir is None:
+                assert "GNUPGHOME" in os.environ
             ret = old_gen_secret_key(self, emailadr)
-            if os.path.exists(self.homedir):
-                next_cache.store(self.homedir, ret)
+            if self.homedir is not None:
+                if os.path.exists(self.homedir):
+                    next_cache.store(self.homedir, ret)
             return ret
 
     monkeypatch.setattr(BinGPG, "gen_secret_key", gen_secret_key)
@@ -71,10 +76,13 @@ def bingpg_maker(request, tmpdir, gpgpath):
     """ return a function which creates initialized BinGPG instances. """
     counter = itertools.count()
 
-    def maker():
-        p = tmpdir.mkdir("bingpg%d" % next(counter))
-        bingpg = BinGPG(p.strpath, gpgpath=gpgpath)
-        bingpg.init()
+    def maker(native=False):
+        if native:
+            bingpg = BinGPG(gpgpath=gpgpath)
+        else:
+            p = tmpdir.mkdir("bingpg%d" % next(counter))
+            bingpg = BinGPG(p.strpath, gpgpath=gpgpath)
+            bingpg.init()
         return bingpg
     return maker
 
