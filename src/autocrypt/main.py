@@ -29,6 +29,19 @@ class MyGroup(click.Group):
         return self._cmdlist
 
 
+class MyCommand(click.Command):
+    def invoke(self, ctx):
+        try:
+            return super(MyCommand, self).invoke(ctx)
+        except Account.NotInitialized as e:
+            out_red(str(e))
+            ctx.exit(1)
+
+
+def mycommand(*args):
+    return click.command(*args, cls=MyCommand)
+
+
 @click.command(cls=MyGroup, context_settings=dict(help_option_names=["-h", "--help"]))
 @click.option("--basedir", type=click.Path(),
               default=click.get_app_dir("autocrypt"),
@@ -42,7 +55,7 @@ def autocrypt_main(context, basedir):
     context.account = Account(basedir)
 
 
-@click.command()
+@mycommand()
 @click.option("--replace", default=False, is_flag=True,
               help="delete autocrypt account directory before attempting init")
 @click.option("--use-existing-key", default=None, type=str,
@@ -55,12 +68,14 @@ def autocrypt_main(context, basedir):
 def init(ctx, replace, use_existing_key, gpgbin):
     """init autocrypt account state.
 
-    By default this command creates a directory structure which
-    contains an own key ring and will create a new secret key to
-    be used with this account.
+    By default this command creates account state in a directory which
+    contains an own key ring in which it will create a new secret key to
+    be used for this account.
 
-    If you specify "--use-existing-key" this account will rather
-    use the specified secret key and the system's gpg keyrings.
+    If you specify "--use-existing-key <keyhandle>" this account will rather
+    use the specified secret key and the system's gpg keyrings.  All incoming
+    autocrypt keys will thus be stored in the system key ring intead of
+    an own keyring.
     """
     account = ctx.parent.account
     if account.exists():
@@ -82,16 +97,11 @@ def init(ctx, replace, use_existing_key, gpgbin):
 
 
 def get_account(ctx):
-    account = ctx.parent.account
-    try:
-        account._ensure_exists()
-    except account.NotInitialized as e:
-        click.secho(str(e), fg='red')
-        ctx.exit(1)
-    return account
+    ctx.parent.account.bingpg  # to raise NotInitialized
+    return ctx.parent.account
 
 
-@click.command("make-header")
+@mycommand("make-header")
 @click.argument("emailadr", type=click.STRING)
 @click.pass_context
 def make_header(ctx, emailadr):
@@ -100,7 +110,7 @@ def make_header(ctx, emailadr):
     click.echo(account.make_header(emailadr))
 
 
-@click.command("set-prefer-encrypt")
+@mycommand("set-prefer-encrypt")
 @click.argument("value", default=None, required=False,
                 type=click.Choice(["notset", "yes", "no"]))
 @click.pass_context
@@ -115,7 +125,7 @@ def set_prefer_encrypt(ctx, value):
         click.echo("set prefer-encrypt to %r" % value)
 
 
-@click.command("process-incoming")
+@mycommand("process-incoming")
 @click.argument("mail", type=click.File())
 @click.pass_context
 def process_incoming(ctx, mail):
@@ -129,7 +139,7 @@ def process_incoming(ctx, mail):
         click.echo("processed mail, found nothing")
 
 
-@click.command("export-public-key")
+@mycommand("export-public-key")
 @click.argument("keyhandle_or_email", default=None, required=False)
 @click.pass_context
 def export_public_key(ctx, keyhandle_or_email):
@@ -142,7 +152,7 @@ def export_public_key(ctx, keyhandle_or_email):
     click.echo(account.export_public_key(keyhandle=kh))
 
 
-@click.command("export-secret-key")
+@mycommand("export-secret-key")
 @click.pass_context
 def export_secret_key(ctx):
     """print secret key of own autocrypt account. """
@@ -150,7 +160,7 @@ def export_secret_key(ctx):
     click.echo(account.export_secret_key())
 
 
-@click.command()
+@mycommand()
 @click.pass_context
 def status(ctx):
     """print account state including those of peers. """

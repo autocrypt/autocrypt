@@ -132,9 +132,10 @@ class Account(object):
         elif gpgmode == "system":
             gpghome = None
         else:
-            raise ValueError("unknown gpgmode {!r}".format(gpgmode))
-        if not self.config.gpgbin:
-            raise ValueError("you must initialize account first")
+            gpghome = -1
+        if gpghome == -1 or not self.config.gpgbin:
+            raise self.NotInitialized(
+                "Account directory {!r} not initialized".format(self.dir))
         return BinGPG(homedir=gpghome, gpgpath=self.config.gpgbin)
 
     def init(self, gpgbin="gpg"):
@@ -178,11 +179,6 @@ class Account(object):
         with self.config.atomic_change():
             self.config.prefer_encrypt = value
 
-    def _ensure_exists(self):
-        if not self.exists():
-            raise self.NotInitialized(
-                "Account directory {!r} not initialized".format(self.dir))
-
     def exists(self):
         """ return True if the account directory exists and has been properly
         initialized (through an earlier call to init()).
@@ -216,7 +212,6 @@ class Account(object):
         :rtype: unicode
         :returns: autocrypt header with prefix and value
         """
-        self._ensure_exists()
         return headername + mime.make_ac_header_value(
             emailadr=emailadr,
             keydata=self.bingpg.get_public_keydata(self.config.own_keyhandle),
@@ -232,7 +227,6 @@ class Account(object):
         :param msg: instance of a standard email Message.
         :rtype: PeerInfo
         """
-        self._ensure_exists()
         From = mime.parse_email_addr(msg["From"])[1]
         old = self.config.peers.get(From, {})
         d = mime.parse_one_ac_header_from_msg(msg)
@@ -267,13 +261,12 @@ class Account(object):
     def export_public_key(self, keyhandle=None):
         """ return armored public key of this account or the one
         indicated by the key handle. """
-        self._ensure_exists()
-        keyhandle = self.config.own_keyhandle if keyhandle is None else keyhandle
+        if keyhandle is None:
+            keyhandle = self.config.own_keyhandle
         return self.bingpg.get_public_keydata(keyhandle, armor=True)
 
     def export_secret_key(self):
         """ return armored public key for this account. """
-        self._ensure_exists()
         return self.bingpg.get_secret_keydata(self.config.own_keyhandle, armor=True)
 
 
