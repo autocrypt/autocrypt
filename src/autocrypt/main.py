@@ -8,7 +8,12 @@ import os
 import six
 import click
 from .account import Account
+from .bingpg import find_executable
 from . import mime
+
+
+def out_red(msg):
+    click.secho(msg, fg="red")
 
 
 class MyGroup(click.Group):
@@ -39,23 +44,41 @@ def autocrypt_main(context, basedir):
 
 @click.command()
 @click.option("--replace", default=False, is_flag=True,
-              help="delete autocrypt account directory before init")
+              help="delete autocrypt account directory before attempting init")
+@click.option("--use-existing-key", default=None, type=str,
+              help="use specified secret key from system's gnupg keyring "
+                   "and don't create own keyrings or gpghome dir")
+@click.option("--gpgbin", default="gpg", type=str,
+              help="use specified gpg binary. if it is a simple name it "
+                   "is looked up on demand through the system's PATH.")
 @click.pass_context
-def init(ctx, replace):
-    """init autocrypt account state. """
+def init(ctx, replace, use_existing_key, gpgbin):
+    """init autocrypt account state.
+
+    By default this command creates a directory structure which
+    contains an own key ring and will create a new secret key to
+    be used with this account.
+
+    If you specify "--use-existing-key" this account will rather
+    use the specified secret key and the system's gpg keyrings.
+    """
     account = ctx.parent.account
     if account.exists():
         if not replace:
-            click.echo("account {} exists at {} and --replace was not specified".format(
-                       account.config.uuid, account.dir))
+            out_red("account {} exists at {} and --replace was not specified".format(
+                    account.config.uuid, account.dir))
             ctx.exit(1)
         else:
-            click.echo("deleting account directory: {}".format(account.dir))
+            out_red("deleting account directory: {}".format(account.dir))
             account.remove()
     if not os.path.exists(account.dir):
         os.mkdir(account.dir)
-    account.init()
+    if use_existing_key:
+        account.init_with_existing(keyhandle=use_existing_key, gpgbin=gpgbin)
+    else:
+        account.init(gpgbin=gpgbin)
     click.echo("{}: account {} created".format(account.dir, account.config.uuid))
+    _status(account)
 
 
 def get_account(ctx):
@@ -129,10 +152,23 @@ def export_secret_key(ctx):
 def status(ctx):
     """print account state including those of peers. """
     account = get_account(ctx)
+    _status(account)
+
+
+def _status(account):
     click.echo("account-dir: " + account.dir)
     click.echo("uuid: " + account.config.uuid)
     click.echo("own-keyhandle: " + account.config.own_keyhandle)
     click.echo("prefer-encrypt: " + account.config.prefer_encrypt)
+
+    gpgbin = account.config.gpgbin
+    if os.sep not in gpgbin:
+        click.echo("gpgbin: {} [currently resolves to: {}]".format(
+                   gpgbin, find_executable(gpgbin)))
+    else:
+        click.echo("gpgbin: {}".format(gpgbin))
+
+    click.echo("gpgmode: " + account.config.gpgmode)
     peers = account.config.peers
     if peers:
         click.echo("----peers-----")

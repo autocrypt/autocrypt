@@ -24,6 +24,7 @@ from email.utils import parsedate
 class PersistentAttrMixin(object):
     def __init__(self, path):
         self._path = path
+        self._dict_old = {}
 
     @cached_property
     def _dict(self):
@@ -45,7 +46,7 @@ class PersistentAttrMixin(object):
         if self._dict != self._dict_old:
             with open(self._path, "w") as f:
                 json.dump(self._dict, f)
-            self._kv_dict_old = self._dict.copy()
+            self._dict_old = self._dict.copy()
             return True
 
     @contextmanager
@@ -61,7 +62,7 @@ class PersistentAttrMixin(object):
             self._commit()
 
 
-def persistent_property(name, typ):
+def persistent_property(name, typ, values=None):
     def get(self):
         return self._dict.setdefault(name, typ())
 
@@ -70,6 +71,8 @@ def persistent_property(name, typ):
             if not (typ == six.text_type and isinstance(value, bytes)):
                 raise TypeError(value)
             value = value.decode("ascii")
+        if values is not None and value not in values:
+            raise ValueError("can only set to one of %r" % values)
         self._dict[name] = value
 
     return property(get, set)
@@ -77,8 +80,11 @@ def persistent_property(name, typ):
 
 class Config(PersistentAttrMixin):
     uuid = persistent_property("uuid", six.text_type)
+    gpgmode = persistent_property("gpgmode", six.text_type, ["system", "own"])
+    gpgbin = persistent_property("gpgbin", six.text_type)
     own_keyhandle = persistent_property("own_keyhandle", six.text_type)
-    prefer_encrypt = persistent_property("prefer_encrypt", six.text_type)
+    prefer_encrypt = persistent_property("prefer_encrypt", six.text_type,
+                                         ["yes", "no", "notset"])
     peers = persistent_property("peers", dict)
 
     def exists(self):
@@ -98,7 +104,7 @@ class Account(object):
     class NotInitialized(Exception):
         pass
 
-    def __init__(self, dir, gpgpath="gpg"):
+    def __init__(self, dir):
         """ Initialize the account configuration and internally
         used gpggrapper.
 
@@ -117,20 +123,50 @@ class Account(object):
         """
         self.dir = dir
         self.config = Config(os.path.join(self.dir, "config"))
-        self.bingpg = BinGPG(os.path.join(self.dir, "gpghome"), gpgpath=gpgpath)
 
-    def init(self):
+    @cached_property
+    def bingpg(self):
+        gpgmode = self.config.gpgmode
+        if gpgmode == "own":
+            gpghome = os.path.join(self.dir, "gpghome")
+        elif gpgmode == "system":
+            gpghome = None
+        else:
+            raise ValueError("unknown gpgmode {!r}".format(gpgmode))
+        if not self.config.gpgbin:
+            raise ValueError("you must initialize account first")
+        return BinGPG(homedir=gpghome, gpgpath=self.config.gpgbin)
+
+    def init(self, gpgbin="gpg"):
         """ Initialize this account with a new secret key, uuid
         and default settings.
         """
         assert not self.exists()
-        self.bingpg.init()
         with self.config.atomic_change():
             self.config.uuid = uuid.uuid4().hex
+            self.config.gpgmode = "own"
+            self.config.gpgbin = gpgbin
+            self.bingpg.init()
             keyhandle = self.bingpg.gen_secret_key(self.config.uuid)
             self.config.own_keyhandle = keyhandle
             self.config.prefer_encrypt = "notset"
         assert self.exists()
+
+    def init_with_existing(self, keyhandle, gpgbin="gpg"):
+        assert not self.exists()
+        with self.config.atomic_change():
+            self.config.uuid = uuid.uuid4().hex
+            self.config.gpgmode = "system"
+            self.config.gpgbin = gpgbin
+            keyinfos = self.bingpg.list_secret_keyinfos(keyhandle)
+            for k in keyinfos:
+                if keyhandle in k.uid or k.match(keyhandle):
+                    break
+            else:
+                raise ValueError("could not find secret key for {!r}, found {!r}"
+                                 .format(keyhandle, keyinfos))
+            self.config.own_keyhandle = k.id
+            self.config.prefer_encrypt = "notset"
 
     def set_prefer_encrypt(self, value):
         """ set prefer-encrypt setting to be used when generating a
@@ -138,9 +174,6 @@ class Account(object):
 
         :param value: one of "yes", "no", "notset"
         """
-
-        if value not in ("yes", "no", "notset"):
-            raise ValueError(repr(value))
         with self.config.atomic_change():
             self.config.prefer_encrypt = value
 

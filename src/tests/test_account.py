@@ -2,6 +2,7 @@
 # vim:ts=4:sw=4:expandtab
 
 from __future__ import unicode_literals
+import os
 import pytest
 from autocrypt.account import Config, Account
 from autocrypt import mime
@@ -26,10 +27,12 @@ def test_config(tmpdir):
 
     try:
         with config.atomic_change():
-            config.own_keyhandle = "123"
+            config.uuid = "456"
             raise ValueError()
     except ValueError:
-        assert config.own_keyhandle == ""
+        assert config.uuid == "123"
+    else:
+        assert 0
 
 
 def test_account_header_defaults(account):
@@ -37,6 +40,7 @@ def test_account_header_defaults(account):
     with pytest.raises(account.NotInitialized):
         account.make_header(adr)
     account.init()
+    assert account.config.gpgmode == "own"
     h = account.make_header(adr)
     d = mime.parse_one_ac_header_from_string(h)
     assert d["to"] == adr
@@ -46,12 +50,23 @@ def test_account_header_defaults(account):
     assert d["type"] == "p"
 
 
+def test_account_init_with_existing(account_maker, datadir, gpgpath, monkeypatch):
+    acc1 = account_maker()
+    monkeypatch.setenv("GNUPGHOME", acc1.bingpg.homedir)
+    acc2 = account_maker(init=False)
+    gpgbin = os.path.basename(gpgpath)
+    acc2.init_with_existing(gpgbin=gpgbin, keyhandle=acc1.config.own_keyhandle)
+    assert acc2.config.own_keyhandle == acc1.config.own_keyhandle
+    assert acc2.config.gpgmode == "system"
+    assert acc2.config.gpgbin == gpgbin
+
+
 @pytest.mark.parametrize("pref", ["yes", "no", "notset"])
 def test_account_header_prefer_encrypt(account, pref):
     adr = "hello@xyz.org"
+    account.init()
     with pytest.raises(ValueError):
         account.set_prefer_encrypt("random")
-    account.init()
     account.set_prefer_encrypt(pref)
     h = account.make_header(adr)
     d = mime.parse_one_ac_header_from_string(h)

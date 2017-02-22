@@ -228,8 +228,8 @@ def account_maker(tmpdir, gpgpath):
 
     def maker(init=True):
         basedir = tmpdir.mkdir("account%d" % next(count)).strpath
-        ac = Account(basedir, gpgpath=gpgpath)
+        ac = Account(basedir)
         if init:
-            ac.init()
+            ac.init(gpgbin=gpgpath)
         return ac
     return maker

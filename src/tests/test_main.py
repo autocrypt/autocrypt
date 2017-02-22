@@ -37,6 +37,7 @@ def test_init_help(cmd):
 def test_init(mycmd):
     mycmd.run_ok(["init"], """
             *account*created*
+            *gpgmode*own*
     """)
     mycmd.run_fail(["init"], """
             *account*exists*
@@ -47,16 +48,19 @@ def test_init(mycmd):
     """)
 
 
-@pytest.mark.xfail(reason="not implemented")
-def test_init_native_gpg(mycmd, monkeypatch, bingpg, gpgpath):
+def test_init_existing_key_native_gpg(mycmd, monkeypatch, bingpg, gpgpath):
     adr = "x@y.org"
     keyhandle = bingpg.gen_secret_key(adr)
     monkeypatch.setenv("GNUPGHOME", bingpg.homedir)
-    mycmd.run_ok(["init-with-existing", gpgpath, adr], """
+    mycmd.run_ok(["init", "--use-existing-key", adr, "--gpgbin=%s" % gpgpath], """
             *account*created*
-            *using existing*
+            *own-keyhandle*{}*
+            *gpgbin*{}*
+            *gpgmode*system*
+    """.format(keyhandle, gpgpath))
+    mycmd.run_ok(["make-header", adr], """
+        *Autocrypt*to=x@y.org*
     """)
-    assert 0, keyhandle
 
 
 def test_init_and_make_header(mycmd):

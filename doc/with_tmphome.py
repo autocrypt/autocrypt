@@ -14,6 +14,10 @@ if __name__ == "__main__":
     if os.path.exists(tmphome):
         shutil.rmtree(tmphome)
     os.makedirs(os.path.join(tmphome, ".config"))
+    gnupghome = os.path.join(tmphome, ".gnupg")
+    os.mkdir(gnupghome)
+    os.chmod(gnupghome, 0o700)
     os.environ["HOME"] = tmphome
     os.environ["USER"] = "tmpuser"
+    os.environ["GNUPGHOME"] = gnupghome
     sys.exit(subprocess.call(sys.argv[1:]))

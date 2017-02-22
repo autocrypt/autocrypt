@@ -116,6 +116,11 @@ class BinGPG(object):
     def _homedirflags(self):
         return ["--homedir", self.homedir] if self.homedir else []
 
+    @cached_property
+    def _nopassphrase(self):
+        return ((["--pinentry-mode=loopback"] if self.isgpg2 else []) +
+                ["--passphrase", "''"])
+
     def _gpg_out(self, argv, input=None, strict=False, encoding="utf8"):
         return self._gpg_outerr(argv, input=input, strict=strict, encoding=encoding)[0]
 
@@ -131,9 +136,6 @@ class BinGPG(object):
         If you want binary stdout output specify encoding=None.
         """
         args = [self.gpgpath, "--batch", "--no-permission-warning"] + self._homedirflags
-        args.extend(["--passphrase", "''"])
-        if argv[0] != "--version" and self.isgpg2:
-            args.extend(["--pinentry-mode=loopback"])
         # make sure we use unicode for all provided arguments
         for arg in argv:
             if isinstance(arg, bytes):
@@ -187,21 +189,30 @@ class BinGPG(object):
             "%commit"
         ]).encode("utf8")
         with self.temp_written_file(spec) as fn:
-            out, err = self._gpg_outerr(["--gen-key", fn])
+            out, err = self._gpg_outerr(self._nopassphrase + ["--gen-key", fn])
 
         keyhandle = self._find_keyhandle(err)
         logging.debug("created secret key: %s", keyhandle)
         return keyhandle
 
+    def list_secret_keyinfos(self, keyhandle=None):
+        args = ["--skip-verify", "--with-colons", "--list-secret-keys"]
+        if keyhandle is not None:
+            args.append(keyhandle)
+        return self._parse_list(args, ("sec", "ssb"))
+
     def list_public_keyinfos(self, keyhandle=None):
         args = ["--skip-verify", "--with-colons", "--list-public-keys"]
         if keyhandle is not None:
             args.append(keyhandle)
+        return self._parse_list(args, ("pub", "sub"))
+
+    def _parse_list(self, args, types):
         out = self._gpg_out(args)
         keyinfos = []
         for line in out.splitlines():
             parts = line.split(":")
-            if parts[0] in ("pub", "sub"):
+            if parts[0] in types:
                 keyinfos.append(
                     KeyInfo(type=parts[3], bits=int(parts[2]), uid=parts[9],
                             id=parts[4], date_created=parts[5]))
@@ -257,13 +268,15 @@ class BinGPG(object):
 
     def get_public_keydata(self, keyhandle, armor=False, b64=False):
         args = ["-a"] if armor else []
-        args.extend(["--export", str(keyhandle)])
+        args.extend(self._nopassphrase +
+                    ["--export-options=export-minimal", "--export", str(keyhandle)])
         out = self._gpg_out(args, strict=True, encoding=None)
         return out if not b64 else b64encode_u(out)
 
     def get_secret_keydata(self, keyhandle, armor=False):
         args = ["-a"] if armor else []
-        args.extend(["--export-secret-key", keyhandle])
+        args.extend(self._nopassphrase + ["--export-options=export-minimal",
+                    "--export-secret-key", keyhandle])
         return self._gpg_out(args, strict=True, encoding=None)
 
     def encrypt(self, data, recipients):
@@ -274,8 +287,8 @@ class BinGPG(object):
                              encoding=None)
 
     def sign(self, data, keyhandle):
-        return self._gpg_out(["--detach-sign", "-u", keyhandle], input=data,
-                             encoding=None)
+        return self._gpg_out(self._nopassphrase +
+            ["--detach-sign", "-u", keyhandle], input=data, encoding=None)
 
     def verify(self, data, signature):
         with self.temp_written_file(signature) as sig_fn:
@@ -283,8 +296,8 @@ class BinGPG(object):
         return self._find_keyhandle(err)
 
     def decrypt(self, enc_data):
-        out, err = self._gpg_outerr(["--with-colons", "--decrypt"],
-                                    input=enc_data, encoding=None)
+        out, err = self._gpg_outerr(self._nopassphrase +
+            ["--with-colons", "--decrypt"], input=enc_data, encoding=None)
         lines = err.splitlines()
         keyinfos = []
         while lines:

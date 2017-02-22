@@ -93,11 +93,15 @@ class TestBinGPG:
         assert packets[3][0] == "public sub key packet"
         assert packets[4][0] == "signature packet"
 
-    def test_list_public_keyhandles(self, bingpg):
+    def test_list_secret_keyhandles(self, bingpg):
         keyhandle = bingpg.gen_secret_key(emailadr="hello@xyz.org")
         l = bingpg.list_public_keyinfos(keyhandle)
         assert len(l) == 2
         assert l[0].id == keyhandle
+
+        l = bingpg.list_secret_keyinfos(keyhandle)
+        assert len(l) == 2
+        assert l[0].match(keyhandle)
 
     @pytest.mark.parametrize("armor", [True, False])
     def test_transfer_key_and_encrypt_decrypt_roundtrip(self, bingpg, bingpg2, armor):
