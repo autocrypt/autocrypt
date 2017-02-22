@@ -136,7 +136,9 @@ class BinGPG(object):
             args.append(arg)
 
         # open the process, pipe everything
-        popen = Popen(args, stdout=PIPE, stderr=PIPE, stdin=PIPE)
+        env = os.environ.copy()
+        env["LANG"] = "C"
+        popen = Popen(args, stdout=PIPE, stderr=PIPE, stdin=PIPE, env=env)
         logging.debug("exec: %s", " ".join(args))
         out, err = popen.communicate(input=input)
         ret = popen.wait()
