@@ -122,9 +122,11 @@ def process_incoming(ctx, mail):
     """process incoming mail from file/stdin."""
     account = get_account(ctx)
     msg = mime.parse_message_from_file(mail)
-    adr = account.process_incoming(msg)
-    keyhandle = account.get_latest_public_keyhandle(adr)
-    click.echo("processed mail from %s, found key: %s" % (adr, keyhandle))
+    peerinfo = account.process_incoming(msg)
+    if peerinfo:
+        click.echo("processed mail, found: {}".format(peerinfo))
+    else:
+        click.echo("processed mail, found nothing")
 
 
 @click.command("export-public-key")
@@ -133,10 +135,11 @@ def process_incoming(ctx, mail):
 def export_public_key(ctx, keyhandle_or_email):
     """print public key of own or peer account."""
     account = get_account(ctx)
-    if keyhandle_or_email is not None:
-        if "@" in keyhandle_or_email:
-            keyhandle_or_email = account.get_latest_public_keyhandle(keyhandle_or_email)
-    click.echo(account.export_public_key(keyhandle=keyhandle_or_email))
+    kh = keyhandle_or_email
+    if kh is not None:
+        if "@" in kh:
+            kh = account.get_peerinfo(kh).keyhandle
+    click.echo(account.export_public_key(keyhandle=kh))
 
 
 @click.command("export-secret-key")
@@ -174,9 +177,8 @@ def _status(account):
         click.echo("----peers-----")
         for name, ac_dict in peers.items():
             d = ac_dict.copy()
-            keyhandle = account.get_latest_public_keyhandle(name)
             click.echo("{to}: key {keyhandle} [{bytes:d} bytes] {attrs}".format(
-                       to=d.pop("to"), keyhandle=keyhandle,
+                       to=d.pop("to"), keyhandle=d.pop("*keyhandle"),
                        bytes=len(d.pop("key")),
                        attrs="; ".join(["%s=%s" % x for x in d.items()])))
 

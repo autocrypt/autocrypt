@@ -88,6 +88,7 @@ class BinGPG(object):
         if not os.path.exists(self.homedir):
             # we create the dir if the basedir exists, otherwise we fail
             os.mkdir(self.homedir)
+            os.chmod(self.homedir, 0o700)
 
         # fix bad defaults for certain gpg2 versions
         if V("2.0") <= V(self.get_version()) < V("2.1.12"):
@@ -135,18 +136,23 @@ class BinGPG(object):
         while stdout output is returned decoded if encoding is set (default is "utf8").
         If you want binary stdout output specify encoding=None.
         """
-        args = [self.gpgpath, "--batch", "--no-permission-warning"] + self._homedirflags
+        args = [self.gpgpath, "--batch"] + self._homedirflags
         # make sure we use unicode for all provided arguments
-        for arg in argv:
-            if isinstance(arg, bytes):
-                arg = arg.decode("utf8")
-            args.append(arg)
 
-        # open the process, pipe everything
+        def ensure_unicode(x):
+            return x.decode("utf8") if isinstance(x, bytes) else x
+        args.extend(map(ensure_unicode, argv))
+
+        # open the process with a C locale, pipe everything
         env = os.environ.copy()
         env["LANG"] = "C"
         popen = Popen(args, stdout=PIPE, stderr=PIPE, stdin=PIPE, env=env)
-        logging.debug("exec: %s", " ".join(args))
+
+        # some debugging info
+        G = os.environ.get("GNUPGHOME")
+        extra = "" if not G else ("GNUPGHOME=" + G + " ")
+        logging.debug("$ %s%s", extra, " ".join(args))
+
         out, err = popen.communicate(input=input)
         ret = popen.wait()
         if ret == 130:
@@ -210,12 +216,17 @@ class BinGPG(object):
     def _parse_list(self, args, types):
         out = self._gpg_out(args)
         keyinfos = []
+        last_main_type_keyinfo = None
         for line in out.splitlines():
             parts = line.split(":")
             if parts[0] in types:
                 keyinfos.append(
                     KeyInfo(type=parts[3], bits=int(parts[2]), uid=parts[9],
                             id=parts[4], date_created=parts[5]))
+                if parts[0] == types[0]:
+                    last_main_type_keyinfo = keyinfos[-1]
+            elif parts[0] == "uid":
+                last_main_type_keyinfo.uids.append(parts[9])
         return keyinfos
 
     def _find_keyhandle(self, string, _pattern=re.compile("key (?:ID )?([0-9A-F]+)")):
@@ -287,8 +298,8 @@ class BinGPG(object):
                              encoding=None)
 
     def sign(self, data, keyhandle):
-        return self._gpg_out(self._nopassphrase +
-            ["--detach-sign", "-u", keyhandle], input=data, encoding=None)
+        args = self._nopassphrase + ["--detach-sign", "-u", keyhandle]
+        return self._gpg_out(args, input=data, encoding=None)
 
     def verify(self, data, signature):
         with self.temp_written_file(signature) as sig_fn:
@@ -296,8 +307,8 @@ class BinGPG(object):
         return self._find_keyhandle(err)
 
     def decrypt(self, enc_data):
-        out, err = self._gpg_outerr(self._nopassphrase +
-            ["--with-colons", "--decrypt"], input=enc_data, encoding=None)
+        args = self._nopassphrase + ["--with-colons", "--decrypt"]
+        out, err = self._gpg_outerr(args, input=enc_data, encoding=None)
         lines = err.splitlines()
         keyinfos = []
         while lines:
@@ -322,7 +333,7 @@ class KeyInfo:
         self.type = type
         self.bits = int(bits)
         self.id = id
-        self.uid = uid
+        self.uids = [uid] if uid else []
         self.date_created = date_created
 
     def match(self, other_id):
@@ -330,7 +341,7 @@ class KeyInfo:
         return self.id[-i:] == other_id[-i:]
 
     def __str__(self):
-        return "KeyInfo(id={id!r}, uid={uid!r}, bits={bits}, type={type})".format(
+        return "KeyInfo(id={id!r}, uids={uids!r}, bits={bits}, type={type})".format(
             **self.__dict__)
 
     __repr__ = __str__

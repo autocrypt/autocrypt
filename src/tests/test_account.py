@@ -94,10 +94,9 @@ def test_account_parse_incoming_mail_and_raw_encrypt(account_maker):
     msg = mime.gen_mail_msg(
         From="Alice <%s>" % adr, To=["b@b.org"],
         Autocrypt=ac1.make_header(adr, headername=""))
-    inc_adr = ac2.process_incoming(msg)
-    assert inc_adr == adr
-    keyhandle = ac2.get_latest_public_keyhandle(adr)
-    enc = ac2.bingpg.encrypt(data=b"123", recipients=[keyhandle])
+    peerinfo = ac2.process_incoming(msg)
+    assert peerinfo["to"] == adr
+    enc = ac2.bingpg.encrypt(data=b"123", recipients=[peerinfo.keyhandle])
     data, descr_info = ac1.bingpg.decrypt(enc)
     assert data == b"123"
 
@@ -110,13 +109,13 @@ def test_account_parse_incoming_mails_replace(account_maker):
     msg1 = mime.gen_mail_msg(
         From="Alice <%s>" % adr, To=["b@b.org"],
         Autocrypt=ac2.make_header(adr, headername=""))
-    adr = ac1.process_incoming(msg1)
-    assert ac1.get_latest_public_keyhandle(adr) == ac2.config.own_keyhandle
+    peerinfo = ac1.process_incoming(msg1)
+    assert peerinfo.keyhandle == ac2.config.own_keyhandle
     msg2 = mime.gen_mail_msg(
         From="Alice <%s>" % adr, To=["b@b.org"],
         Autocrypt=ac3.make_header(adr, headername=""))
-    adr = ac1.process_incoming(msg2)
-    assert ac1.get_latest_public_keyhandle(adr) == ac3.config.own_keyhandle
+    peerinfo2 = ac1.process_incoming(msg2)
+    assert peerinfo2.keyhandle == ac3.config.own_keyhandle
 
 
 def test_account_parse_incoming_mails_replace_by_date(account_maker):
@@ -133,20 +132,19 @@ def test_account_parse_incoming_mails_replace_by_date(account_maker):
         Autocrypt=ac2.make_header(adr, headername=""),
         Date='Thu, 16 Feb 2017 13:00:00 -0000')
     ac1.process_incoming(msg2)
-    assert ac1.get_latest_public_keyhandle(adr) == ac3.config.own_keyhandle
+    assert ac1.get_peerinfo(adr).keyhandle == ac3.config.own_keyhandle
     ac1.process_incoming(msg1)
-    assert ac1.get_latest_public_keyhandle(adr) == ac3.config.own_keyhandle
+    assert ac1.get_peerinfo(adr).keyhandle == ac3.config.own_keyhandle
     msg3 = mime.gen_mail_msg(
         From="Alice <%s>" % adr, To=["b@b.org"],
         Date='Thu, 16 Feb 2017 17:00:00 -0000')
     ac1.process_incoming(msg3)
-    assert not ac1.get_latest_public_keyhandle(adr)
+    assert ac1.get_peerinfo(adr) is None
 
 
 def test_account_export_public_key(account, datadir):
     account.init()
     msg = mime.parse_message_from_file(datadir.open("rsa2048-simple.eml"))
-    adr = account.process_incoming(msg)
-    keyhandle = account.get_latest_public_keyhandle(adr)
-    x = account.export_public_key(keyhandle)
+    peerinfo = account.process_incoming(msg)
+    x = account.export_public_key(peerinfo.keyhandle)
     assert x

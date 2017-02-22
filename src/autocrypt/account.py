@@ -160,7 +160,8 @@ class Account(object):
             self.config.gpgbin = gpgbin
             keyinfos = self.bingpg.list_secret_keyinfos(keyhandle)
             for k in keyinfos:
-                if keyhandle in k.uid or k.match(keyhandle):
+                is_in_uids = any(keyhandle in uid for uid in k.uids)
+                if is_in_uids or k.match(keyhandle):
                     break
             else:
                 raise ValueError("could not find secret key for {!r}, found {!r}"
@@ -229,6 +230,7 @@ class Account(object):
 
         :type msg: email.message.Message
         :param msg: instance of a standard email Message.
+        :rtype: PeerInfo
         """
         self._ensure_exists()
         From = mime.parse_email_addr(msg["From"])[1]
@@ -239,26 +241,28 @@ class Account(object):
             if d["to"] == From:
                 if parsedate(date) >= parsedate(old.get("*date", date)):
                     d["*date"] = date
+                    keydata = b64decode(d["key"])
+                    keyhandle = self.bingpg.import_keydata(keydata)
+                    d["*keyhandle"] = keyhandle
                     with self.config.atomic_change():
                         self.config.peers[From] = d
-                return d["to"]
+                    return PeerInfo(d)
         elif old:
             # we had an autocrypt header and now forget about it
             # because we got a mail which doesn't have one
             with self.config.atomic_change():
                 self.config.peers[From] = {}
 
-    def get_latest_public_keyhandle(self, emailadr):
-        """ get latest public keyhandle we have for a given
-        emailadress.
+    def get_peerinfo(self, emailadr):
+        """ get peerinfo object for a given email address.
 
         :type emailadr: unicode
         :param emailadr: pure email address without any prefixes or real names.
+        :rtype: PeerInfo or None
         """
         state = self.config.peers.get(emailadr)
         if state:
-            keydata = b64decode(state["key"])
-            return self.bingpg.import_keydata(keydata)
+            return PeerInfo(state)
 
     def export_public_key(self, keyhandle=None):
         """ return armored public key of this account or the one
@@ -271,3 +275,26 @@ class Account(object):
         """ return armored public key for this account. """
         self._ensure_exists()
         return self.bingpg.get_secret_keydata(self.config.own_keyhandle, armor=True)
+
+
+class PeerInfo:
+    """ Read only Information coming from the Parsed Autocrypt header of a previous
+    incoming Mail from a peer. """
+    def __init__(self, d):
+        self._dict = dic = d.copy()
+        self.keyhandle = dic.pop("*keyhandle")
+        self.date = dic.pop("*date")
+
+    def __getitem__(self, name):
+        return self._dict[name]
+
+    def __setitem__(self, name, val):
+        raise TypeError("setting of values not allowed")
+
+    def __str__(self):
+        d = self._dict.copy()
+        return "{to}: key {keyhandle} [{bytes:d} bytes] {attrs} from date={date}".format(
+               to=d.pop("to"), keyhandle=self.keyhandle,
+               bytes=len(d.pop("key")),
+               date=self.date,
+               attrs="; ".join(["%s=%s" % x for x in d.items()]))

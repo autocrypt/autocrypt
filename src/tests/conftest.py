@@ -3,10 +3,10 @@
 
 from click.testing import CliRunner
 import logging
+import shutil
 import os
 import itertools
 import pytest
-import py
 from _pytest.pytester import LineMatcher
 from autocrypt.bingpg import find_executable, BinGPG
 from autocrypt import mime
@@ -80,7 +80,7 @@ def bingpg_maker(request, tmpdir, gpgpath):
         if native:
             bingpg = BinGPG(gpgpath=gpgpath)
         else:
-            p = tmpdir.mkdir("bingpg%d" % next(counter))
+            p = tmpdir.join("bingpg%d" % next(counter))
             bingpg = BinGPG(p.strpath, gpgpath=gpgpath)
             bingpg.init()
         return bingpg
@@ -204,12 +204,22 @@ class DirCache:
                self.backup_path.exists()
 
     def store(self, path, ret):
-        self.backup_path.dirpath().ensure(dir=1)
-        py.path.local(path).copy(self.backup_path)
+        if self.backup_path.exists():
+            self.backup_path.remove()
+        else:
+            self.backup_path.dirpath().ensure(dir=1)
+
+        def ignore(src, names):
+            # ignore gpg socket special files
+            return [n for n in names if n.startswith("S.")]
+
+        shutil.copytree(path, self.backup_path.strpath, ignore=ignore)
         self.cache.set(self.key, ret)
 
     def restore(self, path):
-        self.backup_path.copy(py.path.local(path))
+        if os.path.exists(path):
+            shutil.rmtree(path)
+        shutil.copytree(self.backup_path.strpath, path)
         return self.cache.get(self.key, None)
 
 

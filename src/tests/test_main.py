@@ -124,7 +124,7 @@ def test_process_incoming(mycmd, datadir):
     mycmd.run_ok(["init"])
     fn = datadir.join("rsa2048-simple.eml")
     mycmd.run_ok(["process-incoming", fn], """
-        *processed mail from alice@testsuite.autocrypt.org*key: BAFC533CD993BD7F*
+        *processed mail*alice@testsuite.autocrypt.org*key*BAFC533CD993BD7F*
     """)
     out1 = mycmd.run_ok(["export-public-key", "alice@testsuite.autocrypt.org"], """
         *---BEGIN PGP*
