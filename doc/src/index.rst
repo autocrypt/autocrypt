@@ -30,3 +30,22 @@ And now you can install the autocrypt package::
 And then make sure that ``~/.local/bin`` is contained
 in your ``PATH`` variable.
 
+installation for development
+----------------------------
+
+If you plan to work/modify the sources and have
+a github checkout we recommend to create and activate
+a python virtualenv and issue **once**::
+
+    $ cd src
+    $ virtualenv venv
+    $ source venv/bin/activate
+    $ pip install -e .
+
+This creates a virtual python environment
+in the "src/venv" directory and activates it for your
+shell through the ``source venv/bin/activate`` command.
+
+Changes you subsequently make to the sources will be
+available without further installing the autocrypt
+package again.

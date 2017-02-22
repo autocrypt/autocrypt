@@ -33,3 +33,7 @@ autocrypt code major next steps:
   needs to be deleted from the original incoming one as well.
   If a mail is deleted from the arrival folders their
   cleartext versions also need to be decrypted.
+
+- as per Neal's suggestions for gpg output parsing
+  rather use "--status-fd" reporting which is more
+  stable than parsing gpg/gpg2's direct output.
