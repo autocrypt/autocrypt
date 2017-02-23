@@ -2,10 +2,11 @@
 # vim:ts=4:sw=4:expandtab
 
 from click.testing import CliRunner
+import logging
+import shutil
 import os
 import itertools
 import pytest
-import py
 from _pytest.pytester import LineMatcher
 from autocrypt.bingpg import find_executable, BinGPG
 from autocrypt import mime
@@ -45,12 +46,16 @@ def _testcache_bingpg_(request, get_next_cache, monkeypatch):
     def gen_secret_key(self, emailadr):
         basekey = request.node.nodeid
         next_cache = get_next_cache(basekey)
-        if next_cache.exists():
+        if self.homedir and next_cache.exists():
+            logging.debug("restoring homedir {}".format(self.homedir))
             return next_cache.restore(self.homedir)
         else:
+            if self.homedir is None:
+                assert "GNUPGHOME" in os.environ
             ret = old_gen_secret_key(self, emailadr)
-            if os.path.exists(self.homedir):
-                next_cache.store(self.homedir, ret)
+            if self.homedir is not None:
+                if os.path.exists(self.homedir):
+                    next_cache.store(self.homedir, ret)
             return ret
 
     monkeypatch.setattr(BinGPG, "gen_secret_key", gen_secret_key)
@@ -71,10 +76,13 @@ def bingpg_maker(request, tmpdir, gpgpath):
     """ return a function which creates initialized BinGPG instances. """
     counter = itertools.count()
 
-    def maker():
-        p = tmpdir.mkdir("bingpg%d" % next(counter))
-        bingpg = BinGPG(p.strpath, gpgpath=gpgpath)
-        bingpg.init()
+    def maker(native=False):
+        if native:
+            bingpg = BinGPG(gpgpath=gpgpath)
+        else:
+            p = tmpdir.join("bingpg%d" % next(counter))
+            bingpg = BinGPG(p.strpath, gpgpath=gpgpath)
+            bingpg.init()
         return bingpg
     return maker
 
@@ -196,12 +204,22 @@ class DirCache:
                self.backup_path.exists()
 
     def store(self, path, ret):
-        self.backup_path.dirpath().ensure(dir=1)
-        py.path.local(path).copy(self.backup_path)
+        if self.backup_path.exists():
+            self.backup_path.remove()
+        else:
+            self.backup_path.dirpath().ensure(dir=1)
+
+        def ignore(src, names):
+            # ignore gpg socket special files
+            return [n for n in names if n.startswith("S.")]
+
+        shutil.copytree(path, self.backup_path.strpath, ignore=ignore)
         self.cache.set(self.key, ret)
 
     def restore(self, path):
-        self.backup_path.copy(py.path.local(path))
+        if os.path.exists(path):
+            shutil.rmtree(path)
+        shutil.copytree(self.backup_path.strpath, path)
         return self.cache.get(self.key, None)
 
 
@@ -220,8 +238,8 @@ def account_maker(tmpdir, gpgpath):
 
     def maker(init=True):
         basedir = tmpdir.mkdir("account%d" % next(count)).strpath
-        ac = Account(basedir, gpgpath=gpgpath)
+        ac = Account(basedir)
         if init:
-            ac.init()
+            ac.init(gpgbin=gpgpath)
         return ac
     return maker

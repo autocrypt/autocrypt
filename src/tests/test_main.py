@@ -37,6 +37,7 @@ def test_init_help(cmd):
 def test_init(mycmd):
     mycmd.run_ok(["init"], """
             *account*created*
+            *gpgmode*own*
     """)
     mycmd.run_fail(["init"], """
             *account*exists*
@@ -44,6 +45,21 @@ def test_init(mycmd):
     mycmd.run_ok(["init", "--replace"], """
             *deleting account dir*
             *account*created*
+    """)
+
+
+def test_init_existing_key_native_gpg(mycmd, monkeypatch, bingpg, gpgpath):
+    adr = "x@y.org"
+    keyhandle = bingpg.gen_secret_key(adr)
+    monkeypatch.setenv("GNUPGHOME", bingpg.homedir)
+    mycmd.run_ok(["init", "--use-existing-key", adr, "--gpgbin=%s" % gpgpath], """
+            *account*created*
+            *own-keyhandle*{}*
+            *gpgbin*{}*
+            *gpgmode*system*
+    """.format(keyhandle, gpgpath))
+    mycmd.run_ok(["make-header", adr], """
+        *Autocrypt*to=x@y.org*
     """)
 
 
@@ -108,7 +124,7 @@ def test_process_incoming(mycmd, datadir):
     mycmd.run_ok(["init"])
     fn = datadir.join("rsa2048-simple.eml")
     mycmd.run_ok(["process-incoming", fn], """
-        *processed mail from alice@testsuite.autocrypt.org*key: BAFC533CD993BD7F*
+        *processed mail*alice@testsuite.autocrypt.org*key*BAFC533CD993BD7F*
     """)
     out1 = mycmd.run_ok(["export-public-key", "alice@testsuite.autocrypt.org"], """
         *---BEGIN PGP*

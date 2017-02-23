@@ -9,15 +9,13 @@ cache:
     - $HOME/lib
 install:
   - PATH="$HOME/bin:$PATH"
-  - LD_LIBRARY_PATH="$HOME/lib:${LD_LIBRARY_PATH}"
-  - export PATH LD_LIBRARY_PATH
+  - export LD_LIBRARY_PATH="$HOME/lib:${LD_LIBRARY_PATH}"
   - util/custom-gpg.sh
   - gpg2 --version
   - pip install -U tox
 
 # if we install gpg2 here we get 2.0 which does not work with the lib.
 before_install:
-    - sudo apt-get update
     - sudo apt-get install rng-tools
     - sudo rngd -r /dev/urandom
 

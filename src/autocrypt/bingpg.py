@@ -66,7 +66,7 @@ class BinGPG(object):
     """ basic wrapper for gpg command line invocations. """
     InvocationFailure = InvocationFailure
 
-    def __init__(self, homedir, gpgpath="gpg"):
+    def __init__(self, homedir=None, gpgpath="gpg"):
         self.homedir = homedir
         p = find_executable(gpgpath)
         if p is None:
@@ -74,7 +74,7 @@ class BinGPG(object):
         self.gpgpath = p
 
     def __str__(self):
-        return "BinGPG(gpgpath={gpgpath}, homedir={homedir})".format(
+        return "BinGPG(gpgpath={gpgpath!r}, homedir={homedir!r})".format(
             gpgpath=self.gpgpath, homedir=self.homedir)
 
     @cached_property
@@ -82,9 +82,13 @@ class BinGPG(object):
         return V(self.get_version()) >= min_version
 
     def init(self):
+        if self.homedir is None:
+            return
+
         if not os.path.exists(self.homedir):
             # we create the dir if the basedir exists, otherwise we fail
             os.mkdir(self.homedir)
+            os.chmod(self.homedir, 0o700)
 
         # fix bad defaults for certain gpg2 versions
         if V("2.0") <= V(self.get_version()) < V("2.1.12"):
@@ -95,9 +99,8 @@ class BinGPG(object):
 
     def killagent(self):
         if self.isgpg2:
-            args = [find_executable("gpg-connect-agent"),
-                    "--homedir", self.homedir, "--no-autostart",
-                    "KILLAGENT"]
+            args = [find_executable("gpg-connect-agent"), "--no-autostart"]
+            args += self._homedirflags + ["KILLAGENT"]
             popen = Popen(args)
             popen.wait()
 
@@ -109,6 +112,15 @@ class BinGPG(object):
             yield f.name
         finally:
             os.remove(f.name)
+
+    @property
+    def _homedirflags(self):
+        return ["--homedir", self.homedir] if self.homedir else []
+
+    @cached_property
+    def _nopassphrase(self):
+        return ((["--pinentry-mode=loopback"] if self.isgpg2 else []) +
+                ["--passphrase", "''"])
 
     def _gpg_out(self, argv, input=None, strict=False, encoding="utf8"):
         return self._gpg_outerr(argv, input=input, strict=strict, encoding=encoding)[0]
@@ -124,22 +136,23 @@ class BinGPG(object):
         while stdout output is returned decoded if encoding is set (default is "utf8").
         If you want binary stdout output specify encoding=None.
         """
-        args = [self.gpgpath, "--homedir", self.homedir, "--batch",
-                "--no-permission-warning"]
-        args.extend(["--passphrase", "''"])
-        if argv[0] != "--version" and self.isgpg2:
-            args.extend(["--pinentry-mode=loopback"])
+        args = [self.gpgpath, "--batch"] + self._homedirflags
         # make sure we use unicode for all provided arguments
-        for arg in argv:
-            if isinstance(arg, bytes):
-                arg = arg.decode("utf8")
-            args.append(arg)
 
-        # open the process, pipe everything
+        def ensure_unicode(x):
+            return x.decode("utf8") if isinstance(x, bytes) else x
+        args.extend(map(ensure_unicode, argv))
+
+        # open the process with a C locale, pipe everything
         env = os.environ.copy()
         env["LANG"] = "C"
         popen = Popen(args, stdout=PIPE, stderr=PIPE, stdin=PIPE, env=env)
-        logging.debug("exec: %s", " ".join(args))
+
+        # some debugging info
+        G = os.environ.get("GNUPGHOME")
+        extra = "" if not G else ("GNUPGHOME=" + G + " ")
+        logging.debug("$ %s%s", extra, " ".join(args))
+
         out, err = popen.communicate(input=input)
         ret = popen.wait()
         if ret == 130:
@@ -182,24 +195,38 @@ class BinGPG(object):
             "%commit"
         ]).encode("utf8")
         with self.temp_written_file(spec) as fn:
-            out, err = self._gpg_outerr(["--gen-key", fn])
+            out, err = self._gpg_outerr(self._nopassphrase + ["--gen-key", fn])
 
         keyhandle = self._find_keyhandle(err)
         logging.debug("created secret key: %s", keyhandle)
         return keyhandle
 
+    def list_secret_keyinfos(self, keyhandle=None):
+        args = ["--skip-verify", "--with-colons", "--list-secret-keys"]
+        if keyhandle is not None:
+            args.append(keyhandle)
+        return self._parse_list(args, ("sec", "ssb"))
+
     def list_public_keyinfos(self, keyhandle=None):
         args = ["--skip-verify", "--with-colons", "--list-public-keys"]
         if keyhandle is not None:
             args.append(keyhandle)
+        return self._parse_list(args, ("pub", "sub"))
+
+    def _parse_list(self, args, types):
         out = self._gpg_out(args)
         keyinfos = []
+        last_main_type_keyinfo = None
         for line in out.splitlines():
             parts = line.split(":")
-            if parts[0] in ("pub", "sub"):
+            if parts[0] in types:
                 keyinfos.append(
                     KeyInfo(type=parts[3], bits=int(parts[2]), uid=parts[9],
                             id=parts[4], date_created=parts[5]))
+                if parts[0] == types[0]:
+                    last_main_type_keyinfo = keyinfos[-1]
+            elif parts[0] == "uid":
+                last_main_type_keyinfo.uids.append(parts[9])
         return keyinfos
 
     def _find_keyhandle(self, string, _pattern=re.compile("key (?:ID )?([0-9A-F]+)")):
@@ -252,13 +279,15 @@ class BinGPG(object):
 
     def get_public_keydata(self, keyhandle, armor=False, b64=False):
         args = ["-a"] if armor else []
-        args.extend(["--export", str(keyhandle)])
+        args.extend(self._nopassphrase +
+                    ["--export-options=export-minimal", "--export", str(keyhandle)])
         out = self._gpg_out(args, strict=True, encoding=None)
         return out if not b64 else b64encode_u(out)
 
     def get_secret_keydata(self, keyhandle, armor=False):
         args = ["-a"] if armor else []
-        args.extend(["--export-secret-key", keyhandle])
+        args.extend(self._nopassphrase + ["--export-options=export-minimal",
+                    "--export-secret-key", keyhandle])
         return self._gpg_out(args, strict=True, encoding=None)
 
     def encrypt(self, data, recipients):
@@ -269,8 +298,8 @@ class BinGPG(object):
                              encoding=None)
 
     def sign(self, data, keyhandle):
-        return self._gpg_out(["--detach-sign", "-u", keyhandle], input=data,
-                             encoding=None)
+        args = self._nopassphrase + ["--detach-sign", "-u", keyhandle]
+        return self._gpg_out(args, input=data, encoding=None)
 
     def verify(self, data, signature):
         with self.temp_written_file(signature) as sig_fn:
@@ -278,8 +307,8 @@ class BinGPG(object):
         return self._find_keyhandle(err)
 
     def decrypt(self, enc_data):
-        out, err = self._gpg_outerr(["--with-colons", "--decrypt"],
-                                    input=enc_data, encoding=None)
+        args = self._nopassphrase + ["--with-colons", "--decrypt"]
+        out, err = self._gpg_outerr(args, input=enc_data, encoding=None)
         lines = err.splitlines()
         keyinfos = []
         while lines:
@@ -304,7 +333,7 @@ class KeyInfo:
         self.type = type
         self.bits = int(bits)
         self.id = id
-        self.uid = uid
+        self.uids = [uid] if uid else []
         self.date_created = date_created
 
     def match(self, other_id):
@@ -312,7 +341,7 @@ class KeyInfo:
         return self.id[-i:] == other_id[-i:]
 
     def __str__(self):
-        return "KeyInfo(id={id!r}, uid={uid!r}, bits={bits}, type={type})".format(
+        return "KeyInfo(id={id!r}, uids={uids!r}, bits={bits}, type={type})".format(
             **self.__dict__)
 
     __repr__ = __str__

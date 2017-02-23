@@ -52,6 +52,19 @@ def test_keyinfo_match(id1, id2):
     assert k.match(id2), k
 
 
+def test_bingpg_native(bingpg_maker, monkeypatch):
+    bingpg1 = bingpg_maker()
+    monkeypatch.setenv("GNUPGHOME", bingpg1.homedir)
+    bingpg2 = bingpg_maker(native=True)
+    assert not bingpg2.homedir
+    keyhandle = bingpg2.gen_secret_key("x@y.org")
+    keyinfos = bingpg1.list_public_keyinfos(keyhandle)
+    for k in keyinfos:
+        if k.match(keyhandle):
+            return
+    pytest.fail("did not find handle %r" % keyhandle)
+
+
 class TestBinGPG:
     def test_failed_invocation_outerr(self, bingpg2):
         with pytest.raises(bingpg2.InvocationFailure):
@@ -80,11 +93,15 @@ class TestBinGPG:
         assert packets[3][0] == "public sub key packet"
         assert packets[4][0] == "signature packet"
 
-    def test_list_public_keyhandles(self, bingpg):
+    def test_list_secret_keyhandles(self, bingpg):
         keyhandle = bingpg.gen_secret_key(emailadr="hello@xyz.org")
         l = bingpg.list_public_keyinfos(keyhandle)
         assert len(l) == 2
         assert l[0].id == keyhandle
+
+        l = bingpg.list_secret_keyinfos(keyhandle)
+        assert len(l) == 2
+        assert l[0].match(keyhandle)
 
     @pytest.mark.parametrize("armor", [True, False])
     def test_transfer_key_and_encrypt_decrypt_roundtrip(self, bingpg, bingpg2, armor):
