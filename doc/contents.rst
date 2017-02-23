@@ -23,8 +23,10 @@ and contributors, MUA developers and privacy enthusiasts.
      Autocrypt-capable MUAs.
 
 :doc:`dev-status`
-     a first collection of current autocrypt developments (Jan 2017) with
-     various mail programs and some development resources.
+     a first collection of current autocrypt developments (Feb 2017) with
+     various mail programs which are developing Autocrypt support.
+     See :doc:`the reference autocrypt tool <src/index>` for generating
+     and parsing Autocrypt accounts and headers.
 
 :doc:`other-crypto-interop`
      Guidance for integrating Autocrypt with other e-mail encryption
@@ -61,5 +63,8 @@ and contributors, MUA developers and privacy enthusiasts.
    backup
    cleanup
    peering
+   src/index
+   src/api
+   src/cmdline
 
 

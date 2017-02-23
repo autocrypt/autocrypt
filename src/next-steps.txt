@@ -1,0 +1,39 @@
+
+autocrypt code major next steps:
+
+- new command:
+  autocrypt process-outgoing <mail >mail_with_header_and_possibly_encrypted
+  - processes an incoming message and writes a modified one out
+  - adds own autocrypt header
+  - encrypt+sign message if encrypt recommendation is yes
+    or --encrypt=yes command line option was supplied (default is "auto"
+    which means we encrypt only if the autocrypt encrypt recommandation
+    is "yes" for all recipients and the mail is not already encrypted.
+    If we encrypt we always encrypt to ourself to keep
+    the outgoing mail readable to ourself. It's also possible to specify
+    --encrypt=no which means that we will only add an autocrypt header
+    and otherwise leave the mail untouched.
+
+- goal is to make process-outgoing and process-incoming
+  be the only things a terminal based MUA like mutt needs
+  in order to handle autocrypt encryption and decryption.
+  TODO: find out how in the mutt compose screen we can signal
+  to user if we can encrypt (e.g. on key press?) and how we can
+  enforce autocrypt encryption (so that process-outgoing fails
+  if it can't encrypt)
+
+- offlineimap: rough idea is to hardlink/copy all arriving mail
+  to a parallel folder on which mutt operates.
+
+  mutt will in this parallel folder only see autocrypt-decrypted
+  mails (which will carry an additional header indicating they
+  were encrypted).
+
+  If a mail is deleted from the parallel folder it
+  needs to be deleted from the original incoming one as well.
+  If a mail is deleted from the arrival folders their
+  cleartext versions also need to be decrypted.
+
+- as per Neal's suggestions for gpg output parsing
+  rather use "--status-fd" reporting which is more
+  stable than parsing gpg/gpg2's direct output.

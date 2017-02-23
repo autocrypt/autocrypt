@@ -1,5 +1,15 @@
+# -*- coding: utf-8 -*-
+# vim:ts=4:sw=4:expandtab
 
 from autocrypt.bot import generate_reply, send_reply
+
+
+def test_botkey_load_and_sign(bingpg, datadir):
+    keydata = datadir.read_bytes("testbot.secretkey")
+    keyhandle = bingpg.import_keydata(keydata)
+    sigdata = bingpg.sign(data=b"123", keyhandle=keyhandle)
+    bingpg.verify(data=b'123', signature=sigdata)
+
 
 def test_generate_reply(datadir, bingpg, smtpserver):
     with datadir.open("rsa2048-simple-to-bot.eml") as fp:
@@ -9,10 +19,5 @@ def test_generate_reply(datadir, bingpg, smtpserver):
     assert reply_msg["Autocrypt"]
 
     host, port = smtpserver.addr[:2]
-
     send_reply(host, port, reply_msg)
-
     assert len(smtpserver.outbox) == 1
-
-
-

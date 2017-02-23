@@ -29,7 +29,8 @@ ikey = """\
 AUTOCRYPT_HEADER = "to=bot@autocrypt.org; key=\n" + ikey
 MY_ADR = "holger@merlinux.eu"
 
-if __name__== "__main__":
+
+if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     smtp = smtplib.SMTP("localhost", 25)
 
@@ -43,4 +44,3 @@ if __name__== "__main__":
     smtp.sendmail(MY_ADR, msg["To"], msg.as_string())
     smtp.close()
     logging.info("mail sent")
-
