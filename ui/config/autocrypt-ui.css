@@ -1,0 +1,33 @@
+body {
+    font-family: sans-serif;
+}
+
+label {
+    cursor: pointer;
+}
+
+label:hover {
+    background: #ffa;
+}
+
+label.disabled {
+    color: #777;
+    cursor: default;
+}
+label.disabled:hover {
+    background: none;
+}
+
+#description {
+    font-style: italic;
+    width: 20em;
+}
+
+fieldset {
+    width: 10%;
+    margin: auto;
+}
+#title {
+    font-weight: bold;
+    font-size: larger;
+}

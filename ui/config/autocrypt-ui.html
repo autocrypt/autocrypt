@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <title>Autocrypt Essential UI Demo</title>
+        <script type="text/javascript" src="autocrypt-ui.js"></script>
+        <link rel="stylesheet" type="text/css" href="autocrypt-ui.css" />
+    </head>
+    <body onload="update_description();">
+        <form>
+            <div>
+                <fieldset>
+                    <legend><span id="title">Autocrypt Settings</span>
+                        <label>[<input type="checkbox"
+                                       value="disable"
+                                       id="disable"
+                                       onclick="autocrypt_disable();"/>disable]</label>
+                    </legend>
+
+                    <div id="autocrypt-settings">
+                        <label>
+                            <input type="checkbox"
+                                   value="yes"
+                                   name="prefer"
+                                   id="preferyes"
+                                   onclick="autocrypt_preference('yes');"/>
+                            I prefer to receive encrypted mail.
+                        </label>
+                        <br/>
+                        <label>
+                            <input type="checkbox"
+                                   value="yes"
+                                   name="prefer"
+                                   id="preferno"
+                                   onclick="autocrypt_preference('no');"/>
+                            I prefer not to receive encrypted mail.
+                        </label>
+                        <hr/>
+                        <div id="description">
+                            Description goes here.
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </form>
+    </body>
+</html>
