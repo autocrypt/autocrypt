@@ -271,30 +271,37 @@ address ``A``, the MUA should follow the following
    header in ``M``.  This is either a single Parsed Autocrypt Header,
    or ``null``.
 
- - If ``message_pah`` is ``null``, and the MUA knows about additional
-   OpenPGP keys, then we replace ``message_pah`` with a
+ - OPTIONAL: If ``message_pah`` is ``null``, and the MUA knows about
+   additional OpenPGP keys and the message is cryptographically signed
+   with a valid, verifiable message signature from a known OpenPGP
+   certificate ``K``, then we may replace ``message_pah`` with a
    ``synthesized_pah`` generated from the message itself:
 
-   - If the message is not cryptographically signed, or there is an
-     unverifiable or invalid message signature, ``synthesized_pah`` is
-     ``null``.
-
-   - Alternately, the message is cryptographically signed, and the
-     signature is verified and comes from a known OpenPGP certificate
-     ``K``: If ``K`` is not encryption-capable (i.e. if the primary
+   - If ``K`` is not encryption-capable (i.e. if the primary
      key has no encryption-capabilities marked, and no valid subkeys
      are encryption-capable), or if K does not have an OpenPGP User ID
      which contains the e-mail address in the message's ``From:``,
-     then ``synthesized_pah`` is also ``null``.  Otherwise, with an
-     encryption-capable ``K``, the ``key`` element of
-     ``synthesized_pah`` is set to ``K``.  In this case, the
-     ``prefer_encrypted`` element of ``synthesized_pah`` is set based
-     on whether the message is also encrypted in addition to being
-     signed.  If the message is encrypted, then ``prefer_encrypted``
-     is set to ``yes``.  If it is not encrypted, then
-     ``prefer_encrypted`` is set to ``nopreference``.
+     then ``synthesized_pah`` should remain ``null``.
+
+   - Otherwise, with an encryption-capable ``K``, the ``key`` element of
+     ``synthesized_pah`` is set to ``K`` and the ``prefer_encrypted``
+     element of ``synthesized_pah`` is set to ``nopreference``.
+
+   - If ``K`` is encryption-capable and one of the message headers is
+     `an OpenPGP header`_ which expresses a preference for encrypted
+     e-mail, the ``prefer_encrypted`` element of ``synthesized_pah``
+     should be set to ``yes``.
+
+   .. _`OpenPGP header`: https://tools.ietf.org/html/draft-josefsson-openpgp-mailnews-header-07
 
    .. note::
+
+      This behaviour is optional: MUAs which support non-Autocrypt OpenPGP
+      workflows may have other strategies they prefer.  Implementing the
+      ``synthesized_pah`` is not necessary to guarantee correct interop
+      with other Autocrypt implementations, but it will improve compatibility
+      with the rest of the OpenPGP ecosystem and is therefore presented here
+      as a suggestion.
 
       We do *not* synthesize the Autocrypt header from any
       ``application/pgp-keys`` message parts.  This is because it's
@@ -302,6 +309,8 @@ address ``A``, the MUA should follow the following
       sender's OpenPGP key.  For example, Alice might send Bob Carol's
       OpenPGP key in an attachment, but Bob should not interpret it as
       Carol's key.
+..
+
 
 .. todo::
 
