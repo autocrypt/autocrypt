@@ -271,6 +271,13 @@ address ``A``, the MUA should follow the following
    header in ``M``.  This is either a single Parsed Autocrypt Header,
    or ``null``.
 
+  .. note::
+
+     The agent continues this message receipt process even when
+     ``message_pah`` is ``null``, since updating the stored state with
+     ``null`` is sometimes the correct action.
+..
+
  - OPTIONAL: If ``message_pah`` is ``null``, and the MUA knows about
    additional OpenPGP keys and the message is cryptographically signed
    with a valid, verifiable message signature from a known OpenPGP
@@ -311,19 +318,12 @@ address ``A``, the MUA should follow the following
       Carol's key.
 ..
 
-
-.. todo::
+   .. todo::
 
    - Maybe move ``synthesized_pah`` into :doc:`other-crypto-interop` ?
    - Can we synthesize from attached keys, e.g. if it has a matching user id?
 
 ..
-
-  .. note::
-
-     The agent continues this message receipt process even when
-     ``message_pah`` is ``null``, since updating the stored state with
-     ``null`` is sometimes the correct action.
 
  - Next, the agent compares the ``message_pah`` with the ``pah`` stored in
    ``autocrypt_peer_state[A]``.
