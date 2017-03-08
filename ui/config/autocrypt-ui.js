@@ -162,8 +162,8 @@ changeuser = function() {
 
 switchuser = function(name) {
     user = name;
-    ui['menu-username'].innerText = "Logged in as " + name;
-    ui['from'].innerText = name;
+    ui['menu-username'].innerText = "Logged in as " + msgstore[name]['name'];
+    ui['from'].innerText = msgstore[name]['name'];
     ui['list-description'].innerText = ""; // "Mailbox for " + name;
     setupprefs(name);
     ui['showmore'].checked = false;
@@ -201,8 +201,10 @@ pane = function(choice) {
 };
 
 adduser = function(username) {
-    if (msgstore[username] == undefined) {
-        msgstore[username] = {
+    lc = username.toLowerCase();
+    if (msgstore[lc] == undefined) {
+        msgstore[lc] = {
+            'name': username,
             'autocrypt': {
                 'enabled': false,
                 'state': {}
@@ -304,7 +306,7 @@ populate_list = function() {
 };
 
 sendmail = function() {
-    if (addmail(user, ui['to'].value, ui['subject'].value, ui['body'].value, ui['encrypted'].checked)) {
+    if (addmail(msgstore[user]['name'], ui['to'].value, ui['subject'].value, ui['body'].value, ui['encrypted'].checked)) {
         clearcompose();
         pane('list');
         return false;
@@ -314,11 +316,11 @@ sendmail = function() {
 };
 
 addmail = function(from, to, subj, body, encrypted) {
-    if (msgstore[from] == undefined) {
+    if (msgstore[from.toLowerCase()] == undefined) {
         alert("Not a valid sender: " + to);
         return false;
     }
-    if (msgstore[to] == undefined) {
+    if (msgstore[to.toLowerCase()] == undefined) {
         alert("No recipient " + to);
         return false;
     }
@@ -364,8 +366,9 @@ acupdate = function(username, msg) {
 };
 
 storemail = function(username, msg) {
-    acupdate(username, msg);
-    msgstore[username]['msgs'].push(msg);
+    var lc = username.toLowerCase();
+    acupdate(lc, msg);
+    msgstore[lc]['msgs'].push(msg);
 };
 
 updatecompose = function() {
@@ -389,7 +392,7 @@ updatecompose = function() {
             if (to == '')
                 ui['explanation'].innerText = '';
             else
-                ui['explanation'].innerText = 'No key known for ' + to;
+                ui['explanation'].innerText = 'If you want to encrypt to ' + to + ', ask ' + to + ' to enable Autocrypt and send you an e-mail';
         } else {
             ui['encrypted'].checked = ac['prefer-encrypted'];
             enablecheckbox(ui['encrypted'], true);
@@ -399,8 +402,9 @@ updatecompose = function() {
 };
 
 clickencrypted = function() {
-    var to = ui['to'].value;
-    var ac = msgstore[user]['autocrypt']['state'][to];
+    var realto = ui['to'].value;
+    var lcto = realto.toLowerCase();
+    var ac = msgstore[user]['autocrypt']['state'][lcto];
     var encrypted = ui['encrypted'].checked;
 
     // FIXME: if autocrypt is disabled and we've set encrypt, prompt the user about it.
@@ -415,9 +419,9 @@ clickencrypted = function() {
         }
     }
     if (encrypted && ac['prefer-encrypted'] === false) {
-        ui['explanation'].innerText = to + ' prefers to receive unencrypted mail.  It might be hard for them to read.';
+        ui['explanation'].innerText = realto + ' prefers to receive unencrypted mail.  It might be hard for them to read.';
     } else if (!encrypted && ac['prefer-encrypted'] === true) {
-        ui['explanation'].innerText = to + ' prefers to receive encrypted mail!';
+        ui['explanation'].innerText = realto + ' prefers to receive encrypted mail!';
     } else {
         ui['explanation'].innerText = '';
     }
