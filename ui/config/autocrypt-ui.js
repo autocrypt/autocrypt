@@ -32,12 +32,14 @@ setup_page = function() {
         'view-body': document.getElementById("view-body"),
         'view-encrypted': document.getElementById("view-encrypted"),
         'encrypted': document.getElementById("encrypted"),
+        'encrypted-row': document.getElementById("encrypted-row"),
         'showmore': document.getElementById("showmore"),
         'reply': document.getElementById("reply"),
         'yes': document.getElementById("preferyes"),
         'no': document.getElementById("preferno"),
         'enable': document.getElementById("enable"),
         'description': document.getElementById("description"),
+        'explanation': document.getElementById("explanation"),
         'settings': document.getElementById("autocrypt-settings")
     };
     adduser('Alice');
@@ -102,8 +104,24 @@ setupprefs = function(username) {
 };
 
 autocrypt_enable = function() {
-    msgstore[user]['autocrypt']['enabled'] = ui['enable'].checked;
+    autocrypt_switch(user, ui['enable'].checked);
     update_description();
+};
+
+autocrypt_switch = function(username, enabled) {
+    msgstore[username]['autocrypt']['enabled'] = enabled;
+    if (enabled) {
+        if (msgstore[user]['autocrypt']['key'] === undefined)
+            msgstore[user]['autocrypt']['key'] = String(Math.random());
+    }
+};
+
+enablecheckbox = function(box, enabled) {
+    box.disabled = !enabled;
+    if (enabled)
+        box.parentElement.classList.remove('disabled');
+    else
+        box.parentElement.classList.add('disabled');
 };
 
 update_description = function() {
@@ -175,6 +193,7 @@ pane = function(choice) {
     }
     if (choice == 'compose') {
         ui['to'].focus();
+        updatecompose();
     } else if (choice == 'list') {
         populate_list();
         clearcompose();
@@ -185,7 +204,8 @@ adduser = function(username) {
     if (msgstore[username] == undefined) {
         msgstore[username] = {
             'autocrypt': {
-                'enabled': false
+                'enabled': false,
+                'state': {}
             },
             'msgs': []
         };
@@ -199,7 +219,7 @@ autocryptheader = function(username) {
     if (ac['enabled'] == false)
         return undefined;
     return { 'key': ac['key'],
-             'prefer-encrypt': ac['prefer-encrypt']
+             'prefer-encrypted': ac['prefer-encrypted']
            };
 };
 
@@ -273,12 +293,12 @@ generate_list_entry_from_msg = function(msg) {
 };
 
 populate_list = function() {
-    msgs = msgstore[user]['msgs'];
+    var msgs = msgstore[user]['msgs'];
 
     while (ui['msglist'].hasChildNodes())
         ui['msglist'].removeChild(ui['msglist'].lastChild);
 
-    for (x in msgs) {
+    for (var x in msgs) {
         ui['msglist'].appendChild(generate_list_entry_from_msg(msgs[x]));
     }
 };
@@ -302,15 +322,103 @@ addmail = function(from, to, subj, body, encrypted) {
         alert("No recipient " + to);
         return false;
     }
-    msg = { 'from': from,
+    var msg = { 'from': from,
             'to': to,
             'subject': subj,
             'body': body,
             'encrypted': encrypted,
             'autocrypt': autocryptheader(from),
-            'date': Date()
-          };
-    msgstore[to].msgs.push(msg);
-    msgstore[from].msgs.push(msg);
+            'date': new Date()
+              };
+    storemail(to, msg);
+    storemail(from, msg);
     return true;
+};
+
+acupdate = function(username, msg) {
+    var ac = msgstore[username]['autocrypt']['state'][msg['from']];
+
+    if (ac == undefined) {
+        if (msg['autocrypt'] == undefined) {
+        } else {
+            ac = {
+            'date': msg['date'],
+                'prefer-encrypted': msg['autocrypt']['prefer-encrypted'],
+                'key': msg['autocrypt']['key']
+            };
+        }
+    } else {
+        if (ac['date'].getTime() < msg['date'].getTime()) {
+            if (msg['autocrypt'] == undefined) {
+                ac = undefined;
+            } else {
+                ac = {
+                    'date': msg['date'],
+                    'prefer-encrypted': msg['autocrypt']['prefer-encrypted'],
+                    'key': msg['autocrypt']['key']
+                };
+            }
+        }
+    }
+    msgstore[username]['autocrypt']['state'][msg['from']] = ac;
+};
+
+storemail = function(username, msg) {
+    acupdate(username, msg);
+    msgstore[username]['msgs'].push(msg);
+};
+
+updatecompose = function() {
+    var to = ui['to'].value;
+    var ac = msgstore[user]['autocrypt']['state'][to];
+
+    if (!msgstore[user]['autocrypt']['enabled']) {
+        if (undefined !== ac && ac['prefer-encrypted']) {
+            ui['encrypted-row'].style.display = 'table-row';
+            ui['encrypted'].checked = false;
+            enablecheckbox(ui['encrypted'], true);
+            ui['explanation'].innerText = 'enable Autocrypt to encrypt';
+        } else {
+            ui['encrypted-row'].style.display = 'none';
+        }
+    } else {
+        ui['encrypted-row'].style.display = 'table-row';
+        if (undefined === ac) {
+            ui['encrypted'].checked = false;
+            enablecheckbox(ui['encrypted'], false);
+            if (to == '')
+                ui['explanation'].innerText = '';
+            else
+                ui['explanation'].innerText = 'No key known for ' + to;
+        } else {
+            ui['encrypted'].checked = ac['prefer-encrypted'];
+            enablecheckbox(ui['encrypted'], true);
+            ui['explanation'].innerText = '';
+        }
+    }
+};
+
+clickencrypted = function() {
+    var to = ui['to'].value;
+    var ac = msgstore[user]['autocrypt']['state'][to];
+    var encrypted = ui['encrypted'].checked;
+
+    // FIXME: if autocrypt is disabled and we've set encrypt, prompt the user about it.
+    if (encrypted && msgstore[user]['autocrypt']['enabled'] === false) {
+        if (confirm("Please only enable Autocrypt on one device.\n\n" +
+                    "Are you sure you want to enable Autocrypt on this device?")) {
+            autocrypt_switch(user, true);
+            update_description();
+        } else {
+            ui['encrypted'].checked = false;
+            encrypted = false;
+        }
+    }
+    if (encrypted && ac['prefer-encrypted'] === false) {
+        ui['explanation'].innerText = to + ' prefers to receive unencrypted mail.  It might be hard for them to read.';
+    } else if (!encrypted && ac['prefer-encrypted'] === true) {
+        ui['explanation'].innerText = to + ' prefers to receive encrypted mail!';
+    } else {
+        ui['explanation'].innerText = '';
+    }
 };

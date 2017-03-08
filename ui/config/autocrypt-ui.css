@@ -95,3 +95,15 @@ td#view-body {
     width: 90%;
     margin: auto;
 }
+
+#explanation {
+    padding-left: 2em;
+    font-style: italic;
+}
+
+input#subject {
+    width: 40em;
+}
+input#to {
+    width: 40em;
+}
