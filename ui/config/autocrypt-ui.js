@@ -66,6 +66,7 @@ autocrypt_preference = function(p) {
     } else {
         delete msgstore[user]['autocrypt']['prefer-encrypted'];
     }
+    self_sync_autocrypt_state(user);
     update_description();
 };
 
@@ -89,7 +90,7 @@ more = function() {
 };
 
 setupprefs = function(username) {
-    ac = msgstore[username]['autocrypt'];
+    ac = msgstore[username.toLowerCase()]['autocrypt'];
     ui['enable'].checked = ac['enabled'];
     if (ac['prefer-encrypted'] == undefined) {
         ui['yes'].checked = false;
@@ -111,8 +112,23 @@ autocrypt_enable = function() {
 autocrypt_switch = function(username, enabled) {
     msgstore[username]['autocrypt']['enabled'] = enabled;
     if (enabled) {
-        if (msgstore[user]['autocrypt']['key'] === undefined)
-            msgstore[user]['autocrypt']['key'] = String(Math.random());
+        if (msgstore[username]['autocrypt']['key'] === undefined)
+            msgstore[username]['autocrypt']['key'] = String(Math.random());
+    }
+    self_sync_autocrypt_state(username);
+};
+
+self_sync_autocrypt_state = function(username) {
+    if (msgstore[username]['autocrypt']['enabled']) {
+        msgstore[username]['autocrypt']['state'][username] = {
+            'date': new Date(),
+            'key': msgstore[username]['autocrypt']['key'],
+            'prefer-encrypted': msgstore[username]['autocrypt']['prefer-encrypted']
+        };
+    } else {
+        msgstore[username]['autocrypt']['state'][username] = {
+            'date': new Date()
+        };
     }
 };
 
@@ -215,9 +231,10 @@ adduser = function(username) {
 };
 
 autocryptheader = function(username) {
-    if (msgstore[username] == undefined)
+    var lc = username.toLowerCase();
+    if (msgstore[lc] == undefined)
         return undefined;
-    ac = msgstore[username]['autocrypt'];
+    ac = msgstore[lc]['autocrypt'];
     if (ac['enabled'] == false)
         return undefined;
     return { 'key': ac['key'],
@@ -337,32 +354,28 @@ addmail = function(from, to, subj, body, encrypted) {
     return true;
 };
 
-acupdate = function(username, msg) {
-    var ac = msgstore[username]['autocrypt']['state'][msg['from']];
+getacforpeer = function(username, peer) {
+    var ac = msgstore[username.toLowerCase()]['autocrypt']['state'][peer.toLowerCase()];
 
-    if (ac == undefined) {
-        if (msg['autocrypt'] == undefined) {
-        } else {
-            ac = {
-            'date': msg['date'],
-                'prefer-encrypted': msg['autocrypt']['prefer-encrypted'],
-                'key': msg['autocrypt']['key']
-            };
-        }
+    if (ac === undefined)
+        ac = { 'date': new Date("1970") };
+    return ac;
+};
+
+acupdate = function(username, msg) {
+    var ac = getacforpeer(username, msg['from']);
+    var newac = {
+        'date': msg['date']
+    };
+    if (msg['autocrypt'] === undefined) {
+        alert("no autocrypt");
     } else {
-        if (ac['date'].getTime() < msg['date'].getTime()) {
-            if (msg['autocrypt'] == undefined) {
-                ac = undefined;
-            } else {
-                ac = {
-                    'date': msg['date'],
-                    'prefer-encrypted': msg['autocrypt']['prefer-encrypted'],
-                    'key': msg['autocrypt']['key']
-                };
-            }
-        }
+        newac['prefer-encrypted'] = msg['autocrypt']['prefer-encrypted'];
+        newac['key'] =  msg['autocrypt']['key'];
+    };
+    if (ac['date'].getTime() < newac['date'].getTime()) {
+        msgstore[username]['autocrypt']['state'][msg['from'].toLowerCase()] = newac;
     }
-    msgstore[username]['autocrypt']['state'][msg['from']] = ac;
 };
 
 storemail = function(username, msg) {
@@ -373,10 +386,10 @@ storemail = function(username, msg) {
 
 updatecompose = function() {
     var to = ui['to'].value;
-    var ac = msgstore[user]['autocrypt']['state'][to];
+    var ac = getacforpeer(user,to);
 
     if (!msgstore[user]['autocrypt']['enabled']) {
-        if (undefined !== ac && ac['prefer-encrypted']) {
+        if (ac['prefer-encrypted']) {
             ui['encrypted-row'].style.display = 'table-row';
             ui['encrypted'].checked = false;
             enablecheckbox(ui['encrypted'], true);
@@ -386,25 +399,24 @@ updatecompose = function() {
         }
     } else {
         ui['encrypted-row'].style.display = 'table-row';
-        if (undefined === ac) {
+        if (ac['key'] !== undefined) {
+            ui['encrypted'].checked = ac['prefer-encrypted'];
+            enablecheckbox(ui['encrypted'], true);
+            ui['explanation'].innerText = '';
+        } else {
             ui['encrypted'].checked = false;
             enablecheckbox(ui['encrypted'], false);
             if (to == '')
                 ui['explanation'].innerText = '';
             else
                 ui['explanation'].innerText = 'If you want to encrypt to ' + to + ', ask ' + to + ' to enable Autocrypt and send you an e-mail';
-        } else {
-            ui['encrypted'].checked = ac['prefer-encrypted'];
-            enablecheckbox(ui['encrypted'], true);
-            ui['explanation'].innerText = '';
         }
     }
 };
 
 clickencrypted = function() {
-    var realto = ui['to'].value;
-    var lcto = realto.toLowerCase();
-    var ac = msgstore[user]['autocrypt']['state'][lcto];
+    var to = ui['to'].value;
+    var ac = getacforpeer(user, to);
     var encrypted = ui['encrypted'].checked;
 
     // FIXME: if autocrypt is disabled and we've set encrypt, prompt the user about it.
@@ -412,6 +424,7 @@ clickencrypted = function() {
         if (confirm("Please only enable Autocrypt on one device.\n\n" +
                     "Are you sure you want to enable Autocrypt on this device?")) {
             autocrypt_switch(user, true);
+            setupprefs(user);
             update_description();
         } else {
             ui['encrypted'].checked = false;
@@ -419,9 +432,9 @@ clickencrypted = function() {
         }
     }
     if (encrypted && ac['prefer-encrypted'] === false) {
-        ui['explanation'].innerText = realto + ' prefers to receive unencrypted mail.  It might be hard for them to read.';
+        ui['explanation'].innerText = to + ' prefers to receive unencrypted mail.  It might be hard for them to read.';
     } else if (!encrypted && ac['prefer-encrypted'] === true) {
-        ui['explanation'].innerText = realto + ' prefers to receive encrypted mail!';
+        ui['explanation'].innerText = to + ' prefers to receive encrypted mail!';
     } else {
         ui['explanation'].innerText = '';
     }
