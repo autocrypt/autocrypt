@@ -432,11 +432,13 @@ clickencrypted = function() {
             encrypted = false;
         }
     }
-    if (encrypted && ac['prefer-encrypted'] === false) {
+    if (!msgstore[user]['autocrypt']['enabled'] && !ui['encrypted'].disabled) {
+        ui['explanation'].innerText = 'enable Autocrypt to encrypt';
+    } else if (encrypted && ac['prefer-encrypted'] === false) {
         ui['explanation'].innerText = to + ' prefers to receive unencrypted mail.  It might be hard for them to read.';
     } else if (!encrypted && ac['prefer-encrypted'] === true) {
         ui['explanation'].innerText = to + ' prefers to receive encrypted mail!';
-    } else {
+    }  else {
         ui['explanation'].innerText = '';
     }
 };
