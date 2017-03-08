@@ -9,6 +9,8 @@ user = 'User';
 
 msgstore = {};
 
+replying_to = undefined;
+
 setup_page = function() {
     panes = {
         'compose': document.getElementById("compose"),
@@ -255,16 +257,26 @@ clearcompose = function() {
     ui['encrypted'].checked = false;
 };
 
+get_encryption_status_node = function(encrypted) {
+    var x = document.createElement('span');
+    if (encrypted) {
+        var sub = document.createElement('span');
+        x.appendChild(img('lock'));
+        sub.innerText = "Message was encrypted";
+        x.appendChild(sub);
+    } else {
+        x.innerText = "Message was not encrypted";
+    }
+
+    return x;
+};
+
 show_msg = function(msg) {
     ui['view-from'].innerText = msg['from'];
     ui['view-to'].innerText = msg['to'];
     ui['view-subject'].innerText = msg['subject'];
     ui['view-date'].innerText = msg['date'];
-    if (msg['encrypted'] == true) {
-        ui['view-encrypted'].innerText = 'Message was encrypted';
-    } else {
-        ui['view-encrypted'].innerText = 'Message was not encrypted';
-    }
+    ui['view-encrypted'].replaceChild(get_encryption_status_node(msg['encrypted']), ui['view-encrypted'].childNodes[0]);
     ui['view-body'].innerText = msg['body'];
 
     if (msg['from'] == user) {
@@ -285,6 +297,7 @@ reply_to_msg = function(msg) {
     ui['to'].value = msg['from'];
     ui['subject'].value = 'Re: ' + msg['subject'];
     ui['body'].value = indent(msg['body']);
+    replying_to = msg;
     pane('compose');
 };
 
