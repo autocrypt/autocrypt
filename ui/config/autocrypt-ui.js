@@ -350,7 +350,8 @@ addmail = function(from, to, subj, body, encrypted) {
             'date': new Date()
               };
     storemail(to, msg);
-    storemail(from, msg);
+    if (to.toLowerCase() != from.toLowerCase())
+        storemail(from, msg);
     return true;
 };
 
@@ -368,7 +369,6 @@ acupdate = function(username, msg) {
         'date': msg['date']
     };
     if (msg['autocrypt'] === undefined) {
-        alert("no autocrypt");
     } else {
         newac['prefer-encrypted'] = msg['autocrypt']['prefer-encrypted'];
         newac['key'] =  msg['autocrypt']['key'];
