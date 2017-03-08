@@ -18,7 +18,8 @@ setup_page = function() {
     };
     ui = {
         'more': document.getElementById("more"),
-        'list-description': document.getElementById("list-description"),
+        'list-replacement': document.getElementById("list-replacement"),
+        'msgtable': document.getElementById("msgtable"),
         'menu-username': document.getElementById("menu-username"),
         'from': document.getElementById("from"),
         'to': document.getElementById("to"),
@@ -44,7 +45,7 @@ setup_page = function() {
     };
     adduser('Alice');
     adduser('Bob');
-    ui['encrypted'].parentNode.insertBefore(lockimg(), ui['encrypted']);
+    ui['encrypted'].parentNode.insertBefore(img('lock'), ui['encrypted']);
 
     switchuser(Object.keys(msgstore)[0]);
     pane('list');
@@ -181,16 +182,20 @@ switchuser = function(name) {
     user = name;
     ui['menu-username'].innerText = "Logged in as " + msgstore[name]['name'];
     ui['from'].innerText = msgstore[name]['name'];
-    ui['list-description'].innerText = ""; // "Mailbox for " + name;
     setupprefs(name);
     ui['showmore'].checked = false;
     pane('list');
     update_description();
 };
 
-lockimg = function() {
+img = function(what) {
+    var index = {
+        'lock': 'file:///usr/share/icons/Tango/16x16/emblems/emblem-readonly.png',
+        'back': 'file:///usr/share/icons/Tango/16x16/actions/back.png',
+        'forward': 'file:///usr/share/icons/Tango/16x16/actions/forward.png'
+    };
     var lock = document.createElement('img');
-    lock.src = 'file:///usr/share/icons/Tango/16x16/emblems/emblem-readonly.png';
+    lock.src = index[what];
     return lock;
 };
 
@@ -290,7 +295,11 @@ generate_list_entry_from_msg = function(msg) {
 
     var e = document.createElement('td');
     if (msg['encrypted'])
-        e.appendChild(lockimg());
+        e.appendChild(img('lock'));
+    if (msg['to'].toLowerCase() == user)
+        e.appendChild(img('back'));
+    if (msg['from'].toLowerCase() == user)
+        e.appendChild(img('forward'));
     ret.appendChild(e);
 
     var f = document.createElement('td');
@@ -318,8 +327,15 @@ populate_list = function() {
     while (ui['msglist'].hasChildNodes())
         ui['msglist'].removeChild(ui['msglist'].lastChild);
 
-    for (var x in msgs) {
-        ui['msglist'].appendChild(generate_list_entry_from_msg(msgs[x]));
+    if (msgs.length) {
+        for (var x in msgs) {
+            ui['msglist'].appendChild(generate_list_entry_from_msg(msgs[x]));
+        }
+        ui['list-replacement'].style.display = 'none';
+        ui['msgtable'].style.display = 'table';
+    } else {
+        ui['list-replacement'].style.display = 'block';
+        ui['msgtable'].style.display = 'none';
     }
 };
 
