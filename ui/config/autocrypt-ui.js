@@ -44,6 +44,7 @@ setup_page = function() {
     };
     adduser('Alice');
     adduser('Bob');
+    ui['encrypted'].parentNode.insertBefore(lockimg(), ui['encrypted']);
 
     switchuser(Object.keys(msgstore)[0]);
     pane('list');
@@ -189,7 +190,7 @@ switchuser = function(name) {
 
 lockimg = function() {
     var lock = document.createElement('img');
-    lock.src = 'file:///usr/share/icons/Tango/scalable/emblems/emblem-readonly.svg';
+    lock.src = 'file:///usr/share/icons/Tango/16x16/emblems/emblem-readonly.png';
     return lock;
 };
 
@@ -287,6 +288,11 @@ generate_list_entry_from_msg = function(msg) {
     ret.classList.add("message");
     ret.onclick = function() { show_msg(msg); };
 
+    var e = document.createElement('td');
+    if (msg['encrypted'])
+        e.appendChild(lockimg());
+    ret.appendChild(e);
+
     var f = document.createElement('td');
     f.innerText = msg['from'];
     ret.appendChild(f);
@@ -302,11 +308,6 @@ generate_list_entry_from_msg = function(msg) {
     var d = document.createElement('td');
     d.innerText = msg['date'];
     ret.appendChild(d);
-
-    var e = document.createElement('td');
-    if (msg['encrypted'])
-        e.appendChild(lockimg());
-    ret.appendChild(e);
 
     return ret;
 };
@@ -407,7 +408,7 @@ updatecompose = function() {
             ui['encrypted'].checked = false;
             enablecheckbox(ui['encrypted'], false);
             if (to == '')
-                ui['explanation'].innerText = '';
+                ui['explanation'].innerText = 'please choose a recipient';
             else
                 ui['explanation'].innerText = 'If you want to encrypt to ' + to + ', ask ' + to + ' to enable Autocrypt and send you an e-mail';
         }
