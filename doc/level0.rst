@@ -99,7 +99,16 @@ this mechanism, to make sure that secret keys are never stuck on the
 device they were generated on, but can be retrieved by other Autocrypt
 clients in a predictable way.
 
-[technical explanation]
+- create self-sent message
+- contains secret key
+- symmetric encryption format
+- high-entropy passphrase
+  - bit strength?
+  - is s2k sufficient for a kdf? or scrypt on top?
+  - must not end up in the user's mail store!!
+- message format
+  - attachment? something else?
+- message text
 
 Header injection in outbound mail
 ---------------------------------
