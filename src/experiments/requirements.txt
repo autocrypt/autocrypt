@@ -1,1 +1,3 @@
-PGPy>=0.4.0
+# PGPy>=0.4.0
+# while PGPy generate new release, we can use this commit
+-e git+https://github.com/SecurityInnovation/PGPy.git@2514c3908d62ec6c82fcd99adf4738849667d540
