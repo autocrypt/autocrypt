@@ -1,0 +1,102 @@
+<html>
+    <head>
+        <title>Autocrypt Essential UI Demo</title>
+        <script type="text/javascript" src="autocrypt-ui.js"></script>
+        <link rel="stylesheet" type="text/css" href="autocrypt-ui.css" />
+    </head>
+    <body onload="setup_page();">
+        <div id="menu">
+            <ul>
+                <li id="tab-compose" onclick="return pane('compose');">Write mail</li>
+                <li id="tab-list" onclick="return pane('list');">Mailbox</li>
+                <li id="tab-preferences" onclick="return pane('preferences');">Preferences</li>
+            </ul>
+            <div id="login-info">
+                <span id="menu-username">Logged in as user</span> (<a href="#" onclick="return changeuser();">change</a>)
+            </div>
+        </div>
+
+        <form id="compose">
+            <div>
+                <table><tbody>
+                        <tr><th>From:</th><td id="from"></td></tr>
+                        <tr><th>To:</th><td><input onchange="return updatecompose();" id="to" /></td></tr>
+                        <tr><th>Subject:</th><td><input id="subject" /></td></tr>
+                        <tr id="encrypted-row"><td colspan="2"><label><input type="checkbox" onclick="return clickencrypted();" id="encrypted">Encrypt</label><span id="explanation"></span></td></tr>
+                        <tr><td id="compose-actions" colspan="2">
+                                <input type="button" id="send" onclick="return sendmail();" value="Send"/>
+                        </td></tr>
+                        <tr><td colspan="2">
+                                <textarea id="body"></textarea>
+                        </td></tr>
+                </tbody></table>
+            </div>
+        </form>
+
+        <div id="list">
+            <div id="list-replacement">No messages!</div>
+            <table id="msgtable">
+                <thead>
+                    <th>...</th><th>From</th><th>To</th><th>Subject</th><th>Date</th>
+                </thead>
+                <tbody id="msglist">
+                </tbody>
+            </table>
+        </div>
+
+        <div id="msg-view">
+                <table><tbody>
+                        <tr><th>From:</th><td id="view-from"></td></tr>
+                        <tr><th>To:</th><td id="view-to"></td></tr>
+                        <tr><th>Subject:</th><td id="view-subject"></td></tr>
+                        <tr><th>Date:</th><td id="view-date"></td></tr>
+                        <tr><td colspan="2" id="view-encrypted"><span></span></td></tr>
+                        <tr><td id="view-actions" colspan="2">
+                                <input type="button" id="reply" onclick="return false;" value="Reply"/>
+                        </td></tr>
+                        <tr><td colspan="2" id="view-body"></td></tr>
+                </tbody></table>
+        </div>
+
+        <form id="preferences">
+            <div>
+                <fieldset>
+                    <legend><span id="title">Autocrypt Settings</span>
+                        <label>[<input type="checkbox"
+                                       value="enable"
+                                       id="enable"
+                                       onclick="autocrypt_enable();"/>enable]</label>
+                    </legend>
+                    <div>Please only enable Autocrypt on one device.
+                    </div>
+                    <hr />
+                    <div id="more">
+                        <a id="showmore" href="#" onclick="return more();">more...</a>
+                    </div>
+                    <div id="autocrypt-settings">
+                        <label>
+                            <input type="checkbox"
+                                   value="yes"
+                                   name="prefer"
+                                   id="preferyes"
+                                   onclick="autocrypt_preference('yes');"/>
+                            I prefer to receive encrypted mail.
+                        </label>
+                        <br/>
+                        <label>
+                            <input type="checkbox"
+                                   value="yes"
+                                   name="prefer"
+                                   id="preferno"
+                                   onclick="autocrypt_preference('no');"/>
+                            I prefer not to receive encrypted mail.
+                        </label>
+                    </div>
+                    <div id="description">
+                        Description goes here.
+                    </div>
+                </fieldset>
+            </div>
+        </form>
+    </body>
+</html>

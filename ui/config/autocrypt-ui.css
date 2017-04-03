@@ -1,0 +1,109 @@
+body {
+    font-family: sans-serif;
+}
+
+label {
+    cursor: pointer;
+}
+
+label:hover {
+    background: #ffa;
+}
+
+label.disabled {
+    color: #777;
+    cursor: default;
+}
+label.disabled:hover {
+    background: none;
+}
+
+#description {
+    margin-top: 0.75em;
+    font-style: italic;
+    width: 20em;
+}
+
+form {
+    margin: auto;
+}
+fieldset {
+    width: 10%;
+    margin: auto;
+}
+#title {
+    font-weight: bold;
+    font-size: larger;
+}
+
+th {
+    text-align: right;
+}
+
+#list th {
+    text-align: left;
+}
+
+textarea {
+    width: 100%;
+    height: 10em;
+}
+
+td#compose-actions {
+    text-align: right;
+}
+
+#menu ul {
+    display: block;
+    padding: 0;
+    margin: 0;
+    background: #eee;
+}
+
+#menu li {
+    display: inline;
+    cursor: pointer;
+    padding: 0.3em 1em 0.3em  1em;
+}
+
+#menu li.selected {
+    text-decoration: underline;
+}
+
+#menu li:hover {
+    background: #ffa;
+}
+
+#login-info {
+    text-align: right;
+}
+
+tr.message {
+    cursor: pointer;
+}
+
+tr.message:hover {
+    background: #ffa;
+}
+
+td#view-body {
+    background: #ddd;
+    padding: 1em;
+}
+
+#msgtable {
+    width: 90%;
+    margin: auto;
+}
+
+#explanation {
+    padding-left: 2em;
+    font-style: italic;
+}
+
+input#subject {
+    width: 40em;
+}
+input#to {
+    width: 40em;
+}
