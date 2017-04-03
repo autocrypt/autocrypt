@@ -1,0 +1,22 @@
+sudo: required
+language: python
+dist: trusty
+python:
+    - '3.5'
+
+install:
+  - pip install sphinx
+
+script:
+  - cd doc
+  - make html
+
+#notifications:
+#  irc:
+#    channels:
+#      - "chat.freenode.net#autocrypt"
+#    on_success: change
+#    on_failure: change
+#    skip_join: true
+#  email:
+#    - pytest-commit@python.org
