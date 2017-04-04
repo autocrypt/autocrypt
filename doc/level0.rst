@@ -517,15 +517,16 @@ folder on the SMA.
 Specific User Interface Elements
 --------------------------------
 
-Ideally, Autocrypt users see very little UI.  They might never see any
-UI at all by default.  However, some UI is inevitable, even if only
-tucked away in an arcane "preferences pane".
+Ideally, Autocrypt users see very little UI.  However, some UI is
+inevitable if we want users to be able to interoperate with existing,
+non-Autocrypt users.
 
 Account Preferences
 +++++++++++++++++++
 
 Level 0 MUAs MUST allow the user to disable Autocrypt completely for
-each account they control.
+each account they control.  For level 0, we expect most MUAs to have
+Autocrypt disabled by default.
 
 If Autocrypt is enabled for a given account, the MUA SHOULD allow the
 user to specify whether they explicitly prefer encryption for inbound
