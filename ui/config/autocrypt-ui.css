@@ -74,6 +74,21 @@ td#compose-actions {
     background: #ffa;
 }
 
+#username {
+    font-size: 50px;
+    font-weight: bold;
+}
+
+#username[data-name="Alice"] {
+    color: green;
+    font-family: serif;
+}
+
+#username[data-name="Bob"] {
+    color: darkorange;
+}
+
+
 #login-info {
     text-align: right;
 }

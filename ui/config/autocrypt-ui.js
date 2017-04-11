@@ -22,7 +22,7 @@ setup_page = function() {
         'more': document.getElementById("more"),
         'list-replacement': document.getElementById("list-replacement"),
         'msgtable': document.getElementById("msgtable"),
-        'menu-username': document.getElementById("menu-username"),
+        'username': document.getElementById("username"),
         'from': document.getElementById("from"),
         'to': document.getElementById("to"),
         'subject': document.getElementById("subject"),
@@ -182,7 +182,8 @@ changeuser = function() {
 
 switchuser = function(name) {
     user = name;
-    ui['menu-username'].innerText = "Logged in as " + msgstore[name]['name'];
+    ui['username'].innerText = msgstore[name]['name'];
+    ui['username'].dataset.name = msgstore[name]['name'];
     ui['from'].innerText = msgstore[name]['name'];
     setupprefs(name);
     ui['showmore'].checked = false;
