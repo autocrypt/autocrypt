@@ -45,8 +45,8 @@ setup_page = function() {
         'explanation': document.getElementById("explanation"),
         'settings': document.getElementById("autocrypt-settings")
     };
-    adduser('Alice');
-    adduser('Bob');
+    adduser('Alice', 'green');
+    adduser('Bob', 'darkorange');
     ui['encrypted'].parentNode.insertBefore(img('lock'), ui['encrypted']);
 
     switchuser(Object.keys(msgstore)[0]);
@@ -183,7 +183,7 @@ changeuser = function() {
 switchuser = function(name) {
     user = name;
     ui['username'].innerText = msgstore[name]['name'];
-    ui['username'].dataset.name = msgstore[name]['name'];
+    ui['username'].style.color = msgstore[name]['color'];
     ui['from'].innerText = msgstore[name]['name'];
     setupprefs(name);
     ui['showmore'].checked = false;
@@ -225,11 +225,12 @@ pane = function(choice) {
     }
 };
 
-adduser = function(username) {
+adduser = function(username, color) {
     lc = username.toLowerCase();
     if (msgstore[lc] == undefined) {
         msgstore[lc] = {
             'name': username,
+            'color': color,
             'autocrypt': {
                 'enabled': false,
                 'state': {}
