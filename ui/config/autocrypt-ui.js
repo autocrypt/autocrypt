@@ -301,6 +301,7 @@ reply_to_msg = function(msg) {
     ui['body'].value = indent(msg['body']);
     replying_to = msg;
     pane('compose');
+    ui['encrypted'].checked = ui['encrypted'].checked || msg['encrypted'];
 };
 
 generate_list_entry_from_msg = function(msg) {
