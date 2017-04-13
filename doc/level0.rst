@@ -233,28 +233,28 @@ indexing only the peer's e-mail address.
 For each e-mail and type, an agent MUST store the following
 attributes:
 
- * ``pah``: Parsed Autocrypt Header, which could be ``null``
- * ``changed``: UTC Timestamp when ``pah`` was last changed
- * ``last_seen``: Most recent UTC time that ``pah`` was confirmed
+* ``pah``: Parsed Autocrypt Header, which could be ``null``
+* ``changed``: UTC Timestamp when ``pah`` was last changed
+* ``last_seen``: Most recent UTC time that ``pah`` was confirmed
 
 Autocrypt-compatible agents SHOULD track and store in
 ``autocrypt_peer_state`` a parsed interpretation ``pah``, which is not
 necessarily the literal header emitted (for the literal header, see
 next section).  The ``pah`` MUST contain the following fields:
 
- * ``key``: the raw key material, after base64 decoding
- * ``prefer_encrypted``: a quad-state: ``nopreference``, ``yes``, ``no`` or ``reset``
+* ``key``: the raw key material, after base64 decoding
+* ``prefer_encrypted``: a quad-state: ``nopreference``, ``yes``, ``no`` or ``reset``
 
 Optionally, an agent MAY store and maintain the following data in
 order to provide clearer feedback to the user:
 
- * ``counting_since``: The UTC timestamp of when we started counting
- * ``count_have_ach``: A count of parsed AutoCrypt headers
- * ``count_no_ach``: A count of messages without AutoCrypt headers
- * ``bad_user_agent``: The apparent user-agent (if known) of the last
-   message seen without AutoCrypt headers.
+* ``counting_since``: The UTC timestamp of when we started counting
+* ``count_have_ach``: A count of parsed AutoCrypt headers
+* ``count_no_ach``: A count of messages without AutoCrypt headers
+* ``bad_user_agent``: The apparent user-agent (if known) of the last
+  message seen without AutoCrypt headers.
 
-  .. note::
+.. note::
 
      These attributes are all optional, and are presented here as a
      recommendation of the type of data an AutoCrypt capable user-agent
@@ -269,7 +269,6 @@ order to provide clearer feedback to the user:
 
      This is not an exhaustive list; implementors are encouraged to
      improve upon this scheme as they see fit.
-..
 
 
 Updating internal state upon message receipt
@@ -295,43 +294,41 @@ address ``A``, the MUA should follow the following
    not require keeping track of the message would be to simply ignore
    messages whose :mailheader:`Date:` header is in the future.
 
-..
 
- - Set a local ``message_pah`` to be the :mailheader:`Autocrypt:`
+- Set a local ``message_pah`` to be the :mailheader:`Autocrypt:`
    header in ``M``.  This is either a single Parsed Autocrypt Header,
    or ``null``.
 
-  .. note::
+.. note::
 
      The agent continues this message receipt process even when
      ``message_pah`` is ``null``, since updating the stored state with
      ``null`` is sometimes the correct action.
-..
 
- - OPTIONAL: If ``message_pah`` is ``null``, and the MUA knows about
-   additional OpenPGP keys and the message is cryptographically signed
-   with a valid, verifiable message signature from a known OpenPGP
-   certificate ``K``, then we may replace ``message_pah`` with a
-   ``synthesized_pah`` generated from the message itself:
+- OPTIONAL: If ``message_pah`` is ``null``, and the MUA knows about
+  additional OpenPGP keys and the message is cryptographically signed
+  with a valid, verifiable message signature from a known OpenPGP
+  certificate ``K``, then we may replace ``message_pah`` with a
+  ``synthesized_pah`` generated from the message itself:
 
-   - If ``K`` is not encryption-capable (i.e. if the primary
-     key has no encryption-capabilities marked, and no valid subkeys
-     are encryption-capable), or if K does not have an OpenPGP User ID
-     which contains the e-mail address in the message's ``From:``,
-     then ``synthesized_pah`` should remain ``null``.
+  - If ``K`` is not encryption-capable (i.e. if the primary
+    key has no encryption-capabilities marked, and no valid subkeys
+    are encryption-capable), or if K does not have an OpenPGP User ID
+    which contains the e-mail address in the message's ``From:``,
+    then ``synthesized_pah`` should remain ``null``.
 
-   - Otherwise, with an encryption-capable ``K``, the ``key`` element of
-     ``synthesized_pah`` is set to ``K`` and the ``prefer_encrypted``
-     element of ``synthesized_pah`` is set to ``nopreference``.
+  - Otherwise, with an encryption-capable ``K``, the ``key`` element of
+    ``synthesized_pah`` is set to ``K`` and the ``prefer_encrypted``
+    element of ``synthesized_pah`` is set to ``nopreference``.
 
-   - If ``K`` is encryption-capable and one of the message headers is
-     `an OpenPGP header`_ which expresses a preference for encrypted
-     e-mail, the ``prefer_encrypted`` element of ``synthesized_pah``
-     should be set to ``yes``.
+  - If ``K`` is encryption-capable and one of the message headers is
+    an `OpenPGP header`_ which expresses a preference for encrypted
+    e-mail, the ``prefer_encrypted`` element of ``synthesized_pah``
+    should be set to ``yes``.
 
-   .. _`OpenPGP header`: https://tools.ietf.org/html/draft-josefsson-openpgp-mailnews-header-07
+.. _`OpenPGP header`: https://tools.ietf.org/html/draft-josefsson-openpgp-mailnews-header-07
 
-   .. note::
+.. note::
 
       This behaviour is optional: MUAs which support non-Autocrypt OpenPGP
       workflows may have other strategies they prefer.  Implementing the
@@ -346,14 +343,12 @@ address ``A``, the MUA should follow the following
       sender's OpenPGP key.  For example, Alice might send Bob Carol's
       OpenPGP key in an attachment, but Bob should not interpret it as
       Carol's key.
-..
 
-   .. todo::
+.. todo::
 
    - Maybe move ``synthesized_pah`` into :doc:`other-crypto-interop` ?
    - Can we synthesize from attached keys, e.g. if it has a matching user id?
 
-..
 
  - OPTIONAL: If ``counting_since`` is unset, set it to the current time.
    Otherwise, if ``message_date`` is greater than ``counting_since``:
