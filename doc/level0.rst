@@ -34,23 +34,19 @@ has credentials and capabilities to perform these network services:
   MUA can control the entire message being sent, including both
   message headers and message body.
 
-- The ability to receive e-mail where the MUA gets access to
-  the entire message being received, including both message
-  headers and message body.
+- The ability to receive e-mail where the MUA gets access to the
+  entire message being received, including both message headers and
+  message body.
 
-- Access to a special (IMAP) Shared Message Archive (SMA) folder which
-  can be accessed by all MUAs of a user's devices to co-ordinate
-  between them.  In Level 0 this is only used for :ref:`ensuring that only
-  one MUA has Autocrypt enabled for an e-mail account at once
-  <lockout>`.
+- Optionally, a way to scan the user's Sent folder for mail with
+  specific headers.
 
-If a particular e-mail account does not expose these features
-(e.g. if it only exposes a javascript-driven web interface for message
-composition that does not allow setting of e-mail headers, or if it
-only offers POP access to the incoming mail) then the e-mail account
-cannot be used with Autocrypt.  An Autocrypt-capable MUA may still
-access and control the account, but it will not be able to enable
-Autocrypt on it.
+If a particular e-mail account does not expose one of the required
+features (e.g. if it only exposes a javascript-driven web interface
+for message composition that does not allow setting of e-mail headers)
+then the e-mail account cannot be used with Autocrypt.  An
+Autocrypt-capable MUA may still access and control the account, but it
+will not be able to enable Autocrypt on it.
 
 .. todo::
 
@@ -71,40 +67,48 @@ end-to-end applications, and should be protected from access by other
 applications or co-tenants of the device, at least as well as the
 passwords the MUA retains for the user's IMAP or SMTP accounts.
 
-In Level 0 only one MUA can send and receive encrypted mail through
-Autocrypt mechanisms.  When an Autocrypt-enabled MUA configures an
-e-mail account, it first tries to "claim" the account, to :ref:`lock out
-<lockout>` other MUAs of the same users.  If the claim was
-successful, the MUA should proceed to generate secret keys and store
-them locally.
+Avoiding Client Conflicts
+-------------------------
 
-.. _lockout:
+If more than one Autocrypt-enabled client generates a key and then
+distributes it to communication peers, encrypted mail sent to the user
+is only readable by the MUA that sent the last message. This can lead
+to behavior that is unpredictable and confusing for the user.
 
-Claiming the Account
---------------------
+As a simple measure of mitigation, Level 0 MUAs SHOULD check before
+key generation whether there is evidence in the user's mailbox of
+other active Autocrypt clients. To do this, they SHOULD scan the
+user's Sent folder for mail that contains Autocrypt headers. If such
+mail exists, the MUA SHOULD warn the user and abort key generation,
+unless explicitly instructed to proceed regardless.
 
-Only one Level 0 MUA can have Autocrypt enabled for a given account at
-a time.  The Autocrypt-enabled MUA "claims" the account so that others
-disable their Autocrypt features.
+In cases where this mechanism cannot be provided, the MUA MUST inform
+the user that they should only set up one Autocrypt client.
 
-The Shared Mail Archive MUST contain a named location mechanism that
-all other Autocrypt clients can see.  For example, an IMAP mailbox
-would have a named folder.  Autocrypt uses the special name
-`_autocrypt_sma` to store "claim" announcements.
+To solve this problem in a better way, bi-directional communication
+between the user's different MUAs is required. However, this is out of
+scope for Level 0.
 
-The MUA looks in the special location for a message whose form matches
-the standard claim announcement and is valid.  If such a message is
-present, the MUA disables its Autocrypt features for this account.
+Secret Key Transfer
+-------------------
 
-If the special location does not exist, or it exists, but there are no
-valid claim announcements in it, the MUA crafts its own claim
-announcement and places it in the special location.
+Although bi-directional communication between different MUAs is out of
+scope for Level 0, self-sent email is used as a simple way to transfer
+secret key material to other clients.  A Level 0 client SHOULD support
+this mechanism, to make sure that secret keys are never stuck on the
+device they were generated on, but can be retrieved by other Autocrypt
+clients in a predictable way.
 
-.. todo::
-
-   - Document the claim announcement format and precise location
-   - Clarify concerns about race conditions, case-sensitivity, etc.
-
+- create self-sent message
+- contains secret key
+- symmetric encryption format
+- high-entropy passphrase
+  - bit strength?
+  - is s2k sufficient for a kdf? or scrypt on top?
+  - must not end up in the user's mail store!!
+- message format
+  - attachment? something else?
+- message text
 
 Header injection in outbound mail
 ---------------------------------
@@ -508,11 +512,11 @@ itself.
 
 For messages that are going to be encrypted when sent, the MUA MUST
 take care not to leak the cleartext of drafts or other
-partially-composed messages to the SMA (e.g. in the "Drafts" folder).
+partially-composed messages to their e-mail provider (e.g. in the
+"Drafts" folder).
 
-If there is any chance that the message could be encrypted, the MUA
-SHOULD encrypt drafts only to itself before storing in any Drafts
-folder on the SMA.
+If there is a chance that a message could be encrypted, the MUA
+SHOULD encrypt drafts only to itself before storing it remotely.
 
 Specific User Interface Elements
 --------------------------------
