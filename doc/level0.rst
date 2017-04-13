@@ -242,8 +242,34 @@ Autocrypt-compatible agents SHOULD track and store in
 necessarily the literal header emitted (for the literal header, see
 next section).  The ``pah`` MUST contain the following fields:
 
- * ``key`` -- the raw key material, after base64 decoding
- * ``prefer_encrypted`` -- a tri-state: ``nopreference``, ``yes``, or ``no``
+ * ``key``: the raw key material, after base64 decoding
+ * ``prefer_encrypted``: a quad-state: ``nopreference``, ``yes``, ``no`` or ``reset``
+
+Optionally, an agent MAY store and maintain the following data in
+order to provide clearer feedback to the user:
+
+ * ``counting_since``: The UTC timestamp of when we started counting
+ * ``count_have_ach``: A count of parsed AutoCrypt headers
+ * ``count_no_ach``: A count of messages without AutoCrypt headers
+ * ``bad_user_agent``: The apparent user-agent (if known) of the last
+   message seen without AutoCrypt headers.
+
+  .. note::
+
+     These attributes are all optional, and are presented here as a
+     recommendation of the type of data an AutoCrypt capable user-agent
+     might record in order to provide the user with more detailed
+     feedback and guidance when we detect a potential conflict.
+
+     The theory is that a message of the form "The recipient may not be
+     able to read encrypted mail" could be augmented with reasons such
+     as "The last 5 messages we saw from them all came from a
+     non-AutoCrypt capable e-mail application", or "Their most recent
+     message was sent on April 5th using Apple Mail on an iPad."
+
+     This is not an exhaustive list; implementors are encouraged to
+     improve upon this scheme as they see fit.
+..
 
 
 Updating internal state upon message receipt
@@ -275,30 +301,44 @@ address ``A``, the MUA should follow the following
    header in ``M``.  This is either a single Parsed Autocrypt Header,
    or ``null``.
 
- - If ``message_pah`` is ``null``, and the MUA knows about additional
-   OpenPGP keys, then we replace ``message_pah`` with a
+  .. note::
+
+     The agent continues this message receipt process even when
+     ``message_pah`` is ``null``, since updating the stored state with
+     ``null`` is sometimes the correct action.
+..
+
+ - OPTIONAL: If ``message_pah`` is ``null``, and the MUA knows about
+   additional OpenPGP keys and the message is cryptographically signed
+   with a valid, verifiable message signature from a known OpenPGP
+   certificate ``K``, then we may replace ``message_pah`` with a
    ``synthesized_pah`` generated from the message itself:
 
-   - If the message is not cryptographically signed, or there is an
-     unverifiable or invalid message signature, ``synthesized_pah`` is
-     ``null``.
-
-   - Alternately, the message is cryptographically signed, and the
-     signature is verified and comes from a known OpenPGP certificate
-     ``K``: If ``K`` is not encryption-capable (i.e. if the primary
+   - If ``K`` is not encryption-capable (i.e. if the primary
      key has no encryption-capabilities marked, and no valid subkeys
      are encryption-capable), or if K does not have an OpenPGP User ID
      which contains the e-mail address in the message's ``From:``,
-     then ``synthesized_pah`` is also ``null``.  Otherwise, with an
-     encryption-capable ``K``, the ``key`` element of
-     ``synthesized_pah`` is set to ``K``.  In this case, the
-     ``prefer_encrypted`` element of ``synthesized_pah`` is set based
-     on whether the message is also encrypted in addition to being
-     signed.  If the message is encrypted, then ``prefer_encrypted``
-     is set to ``yes``.  If it is not encrypted, then
-     ``prefer_encrypted`` is set to ``nopreference``.
+     then ``synthesized_pah`` should remain ``null``.
+
+   - Otherwise, with an encryption-capable ``K``, the ``key`` element of
+     ``synthesized_pah`` is set to ``K`` and the ``prefer_encrypted``
+     element of ``synthesized_pah`` is set to ``nopreference``.
+
+   - If ``K`` is encryption-capable and one of the message headers is
+     `an OpenPGP header`_ which expresses a preference for encrypted
+     e-mail, the ``prefer_encrypted`` element of ``synthesized_pah``
+     should be set to ``yes``.
+
+   .. _`OpenPGP header`: https://tools.ietf.org/html/draft-josefsson-openpgp-mailnews-header-07
 
    .. note::
+
+      This behaviour is optional: MUAs which support non-Autocrypt OpenPGP
+      workflows may have other strategies they prefer.  Implementing the
+      ``synthesized_pah`` is not necessary to guarantee correct interop
+      with other Autocrypt implementations, but it will improve compatibility
+      with the rest of the OpenPGP ecosystem and is therefore presented here
+      as a suggestion.
 
       We do *not* synthesize the Autocrypt header from any
       ``application/pgp-keys`` message parts.  This is because it's
@@ -306,19 +346,20 @@ address ``A``, the MUA should follow the following
       sender's OpenPGP key.  For example, Alice might send Bob Carol's
       OpenPGP key in an attachment, but Bob should not interpret it as
       Carol's key.
+..
 
-.. todo::
+   .. todo::
 
    - Maybe move ``synthesized_pah`` into :doc:`other-crypto-interop` ?
    - Can we synthesize from attached keys, e.g. if it has a matching user id?
 
 ..
 
-  .. note::
+ - OPTIONAL: If ``counting_since`` is unset, set it to the current time.
+   Otherwise, if ``message_date`` is greater than ``counting_since``:
 
-     The agent continues this message receipt process even when
-     ``message_pah`` is ``null``, since updating the stored state with
-     ``null`` is sometimes the correct action.
+   - If ``pah`` is ``null``, increment ``count_no_ac``.
+   - If ``pah`` is not ``null`` increment ``count_have_ac``.
 
  - Next, the agent compares the ``message_pah`` with the ``pah`` stored in
    ``autocrypt_peer_state[A]``.
@@ -329,11 +370,10 @@ address ``A``, the MUA should follow the following
    ``message_date``, and then terminates this receipt process.
 
  - If ``autocrypt_peer_state[A]`` has ``last_seen`` greater than or
-   equal to ``message_date``, then the agent stores ``message_pah``
-   and terminates this receipt process, since it already knows about
-   something more recent.  For example, this might be if mail is
-   delivered out of order, or if an inbox is scanned from newest to
-   oldest.
+   equal to ``message_date``, then the agent terminates this receipt
+   process, since it already knows about something more recent.  For
+   example, this might be if mail is delivered out of order, or if a
+   mailbox is scanned from newest to oldest.
 
  - If ``autocrypt_peer_state[A]`` has a ``last_seen`` less than
    ``message_date``, then we compare ``message_pah`` with the ``pah``
@@ -343,19 +383,38 @@ address ``A``, the MUA should follow the following
    ``prefer_encrypt`` fields, even if the Agent stores additional
    fields as an augmentation, as follows:
 
-   - If ``key`` is bytewise different, or if ``prefer_encrypted`` has a different value,
-     then this is an *update*.
-   - If ``key`` and ``prefer_encrypted`` match exactly, then it is considered a *match*.
+   - If ``pah`` is ``null``, or if ``key`` is bytewise different, or if
+     ``prefer_encrypted`` has a different value, then this is an *update*.
+   - If ``key`` and ``prefer_encrypted`` match exactly, then it is
+     considered a *match*.
    - If both ``pah`` and ``message_pah`` are ``null``, it is a *match*.
-   - If one is ``null`` and the other is not ``null``, it is a *update*.
+   - If ``message_pah`` is ``null`` (and ``pah`` is not), it is a *reset*.
 
  - In the case of a **match**,
    set ``autocrypt_peer_state[A].last_seen`` to ``message_date``.
 
- - In the case of an **update**,
-   set ``autocrypt_peer_state[A].pah`` to ``message_pah`` and
-   ``autocrypt_peer_state[A].last_seen`` and
-   ``autocrypt_peer_state[A].changed`` to ``message_date``.
+ - In the case of an **update**:
+
+   - set ``autocrypt_peer_state[A].pah`` to ``message_pah``
+   - set ``autocrypt_peer_state[A].last_seen`` to ``message_date``
+   - set ``autocrypt_peer_state[A].changed`` to ``message_date``
+
+ - In the case of a **reset**:
+
+   - set ``autocrypt_peer_state[A].pah.prefer_encrypted`` to ``reset``
+   - set ``autocrypt_peer_state[A].changed`` to ``message_date``
+
+ - OPTIONAL in the case of a **reset**:
+
+   - set ``autocrypt_peer_state[A].bad_user_agent`` to the apparent
+     user-agent of the message
+
+ - OPTIONAL in the case of a **reset** AND ``counting_since`` is more
+   than a month older than ``message_date``:
+
+   - set ``autocrypt_peer_state[A].counting_since`` to ``last_seen``
+   - set ``autocrypt_peer_state[A].count_have_ach`` to zero
+   - set ``autocrypt_peer_state[A].count_no_ach`` to one
 
 .. note::
 
@@ -426,11 +485,16 @@ reflect this change.
    encryption and subsequently adds a recipient whom the MUA has no
    key.
 
-Autocrypt can produce three possible recommendations to the agent
+Autocrypt can produce four possible recommendations to the agent
 during message composition:
 
  * ``disable``: Disable or hide any UI that would allow the user to
    choose to encrypt the message.  Prepare the message in cleartext.
+
+ * ``discourage``: Enable UI that would allow the user to choose to
+   encrypt the message, but do not default to encryption.  Prepare the
+   message in cleartext.  If the user manually enables encryption,
+   warn them that the recipient may not be able to read the message.
 
  * ``available``: Enable UI that would allow the user to choose to
    encrypt the message, but do not default to encryption.  Prepare the
@@ -455,6 +519,9 @@ If the ``pah`` is not ``null``, and ``prefer-encrypted`` is ``yes`` or
 the message being composed is a reply to an encrypted message, then
 the recommendation is ``encrypt``.
 
+If ``pah`` is not ``null``, and ``prefer-encrypted`` is ``reset``,
+then the recommendation is ``discourage``.
+
 If ``pah`` is not ``null``, and ``prefer-encrypted`` is either ``no``
 or ``nopreference``, then the recommendation is ``available``.
 
@@ -472,6 +539,9 @@ If the message being composed is a reply to an encrypted message, or
 if every recipient other than "myself" (the e-mail address that the
 message is ``From:``) has a recommendation of ``encrypt`` then the
 message recommendation is ``encrypt``.
+
+If any recipient has a recommendation of ``discourage`` then the message
+recommendation is ``discourage``.
 
 Otherwise, the message recommendation is ``available``.
 
@@ -509,6 +579,13 @@ keys are all of ``type=p``, and the sender has keys for all recipients
 as a :rfc:`PGP/MIME <3156>` encrypted+signed message, encrypted to all
 recipients and the public key whose secret is controlled by the MUA
 itself.
+
+If the recommendation is ``discourage`` the user SHOULD be presented
+with a clear warning explaining that there is reason to believe one or
+more recipients will not be able to read the mail if it is sent
+encrypted.  This message SHOULD state which recipients are considered
+problematic and provide useful information to help the user guage the
+risk.  The optional counters and user-agent state are intended for this.
 
 For messages that are going to be encrypted when sent, the MUA MUST
 take care not to leak the cleartext of drafts or other
