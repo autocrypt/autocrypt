@@ -15,29 +15,50 @@ Tests = function() {
             fail("   " + message);
         }
     };
+    assert.content = function(text, id) {
+        elem = document.getElementById(id);
+        assert( elem.innerText == text,
+                id + ' should contain "' + text + '".' );
+    };
+    function it(behaves, fun) {
+        log('  ' + behaves);
+        it.setup();
+        fun();
+        it.teardown();
+    };
     function run() {
         var arr = Object.entries(tests)
         log('Running ' + arr.length + ' tests...');
         arr.forEach(function(elem) {
+            it.setup = function() {};
+            it.teardown = function() {};
             log(elem[0] + '...');
-            elem[1](assert);
+            elem[1](it, assert);
         });
         log(assertions + ' assertions. ' + failures + ' failures.');
     };
     return {
-        add: function(name, fun) { tests[name] = fun },
+        describe: function(context, fun) { tests[context] = fun },
         run: run
     };
 }();
 
-Tests.add('Initial user', function(assert) {
-    username = document.getElementById("username");
-    assert(username.innerText == 'Alice', 'username should be Alice');
+Tests.describe('User switch', function(it, assert) {
+    var usertoggle = document.getElementById("usertoggle");
+    it.teardown = function() {
+        switchuser('alice');
+    };
+    it('starts with Alice', function() {
+        assert.content('Alice', 'username');
+    });
+    it('switches to Bob', function() {
+        usertoggle.click();
+        assert.content('Bob', 'username');
+    });
+    it('switches back to Alice', function() {
+        usertoggle.click();
+        usertoggle.click();
+        assert.content('Alice', 'username');
+    });
 });
 
-Tests.add('Switching users', function(assert) {
-    usertoggle = document.getElementById("usertoggle");
-    usertoggle.click();
-    username = document.getElementById("username");
-    assert(username.innerText == 'Bob', 'username should be Bob');
-});
