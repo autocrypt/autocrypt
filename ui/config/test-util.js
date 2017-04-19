@@ -1,5 +1,5 @@
 Tests = function() {
-    var suites = {};
+    var env = {specs: {}};
     var assertions = 0;
     var failures = 0;
 
@@ -26,7 +26,7 @@ Tests = function() {
     };
 
     function run() {
-        var arr = Object.entries(suites)
+        var arr = Object.entries(env.specs)
         log('Running ' + arr.length + ' suites...');
         arr.forEach(runSuite);
         log(assertions + ' assertions. ' + failures + ' failures.');
@@ -35,11 +35,9 @@ Tests = function() {
     function runSuite(suite) {
         var name = suite[0];
         var desc = suite[1];
-        var specs = {};
-        var it = function(behaves, fun) { specs[behaves] = fun };
-        var env = {};
-        desc.bind(env)(it, assert);
-        Object.entries(specs).forEach(function (spec) {
+        var env = {specs: {}};
+        desc.bind(env)(describe.bind(env), assert);
+        Object.entries(env.specs).forEach(function (spec) {
             var name = spec[0];
             var task = spec[1];
             log('  ' + name);
@@ -50,11 +48,11 @@ Tests = function() {
     };
 
     function describe(context, fun) {
-        suites[context] = fun
+        this.specs[context] = fun
     };
 
     return {
-        describe: describe,
+        describe: describe.bind(env),
         run: run
     };
 }();
