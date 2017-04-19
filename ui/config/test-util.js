@@ -30,23 +30,27 @@ Tests = function() {
         log('Running ' + arr.length + ' suites...');
         arr.forEach(function (suite) {
             var name = suite[0];
+            var desc = suite[1];
+            var env = {specs: {}};
             log('  ' + name);
-            runSuite(suite);
+            desc.bind(env)(describe.bind(env), assert);
+            runSuite.bind(env)();
         });
         log(assertions + ' assertions. ' + failures + ' failures.');
     };
 
-    function runSuite(suite) {
-        var desc = suite[1];
-        var env = {specs: {}};
-        desc.bind(env)(describe.bind(env), assert);
-        Object.entries(env.specs).forEach(function (spec) {
+    function runSuite() {
+        var arr = Object.entries(this.specs)
+        var setup = this.setup;
+        var teardown = this.teardown;
+        log('  Running ' + arr.length + ' specs...');
+        arr.forEach(function (spec) {
             var name = spec[0];
             var task = spec[1];
-            log('  ' + name);
-            if (env.setup) env.setup();
+            log('     ' + name);
+            if (setup) setup();
             task();
-            if (env.teardown) env.teardown();
+            if (teardown) teardown();
         });
     };
 
