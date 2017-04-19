@@ -2,7 +2,7 @@
     var describe = Tests.describe;
     describe('User switch', function(it, assert) {
         var usertoggle = document.getElementById("usertoggle");
-        it.teardown = function() {
+        this.teardown = function() {
             switchuser('alice');
         };
         it('starts with Alice', function() {

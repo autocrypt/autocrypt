@@ -37,16 +37,15 @@ Tests = function() {
         var desc = suite[1];
         var specs = {};
         var it = function(behaves, fun) { specs[behaves] = fun };
-        it.setup = function() {};
-        it.teardown = function() {};
-        desc(it, assert);
+        var env = {};
+        desc.bind(env)(it, assert);
         Object.entries(specs).forEach(function (spec) {
             var name = spec[0];
             var task = spec[1];
             log('  ' + name);
-            it.setup();
+            if (env.setup) env.setup();
             task();
-            it.teardown();
+            if (env.teardown) env.teardown();
         });
     };
 
