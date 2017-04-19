@@ -50,8 +50,12 @@ Tests = function() {
         });
     };
 
+    function describe(context, fun) {
+        suites[context] = fun
+    };
+
     return {
-        describe: function(context, fun) { suites[context] = fun },
+        describe: describe,
         run: run
     };
 }();
