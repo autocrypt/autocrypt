@@ -26,14 +26,17 @@ Tests = function() {
     };
 
     function run() {
-        var arr = Object.entries(env.specs)
+        var arr = Object.entries(this.specs)
         log('Running ' + arr.length + ' suites...');
-        arr.forEach(runSuite);
+        arr.forEach(function (suite) {
+            var name = suite[0];
+            log('  ' + name);
+            runSuite(suite);
+        });
         log(assertions + ' assertions. ' + failures + ' failures.');
     };
 
     function runSuite(suite) {
-        var name = suite[0];
         var desc = suite[1];
         var env = {specs: {}};
         desc.bind(env)(describe.bind(env), assert);
@@ -53,7 +56,7 @@ Tests = function() {
 
     return {
         describe: describe.bind(env),
-        run: run
+        run: run.bind(env)
     };
 }();
 
