@@ -82,8 +82,11 @@ user's Sent folder for mail that contains Autocrypt headers. If such
 mail exists, the MUA SHOULD warn the user and abort key generation,
 unless explicitly instructed to proceed regardless.
 
-In cases where this mechanism cannot be provided, the MUA MUST inform
-the user that they should only set up one Autocrypt client.
+In cases where an Autocrypt-capable MUA is unable to identify the
+user's Sent folder, or is unable to access any pre-existing message
+archive (e.g. a POP-only MUA), the MUA MUST warn the user that
+Autocrypt should be enabled on **only one** client before enabling
+Autocrypt on the given account.
 
 To solve this problem in a better way, bi-directional communication
 between the user's different MUAs is required. However, this is out of
