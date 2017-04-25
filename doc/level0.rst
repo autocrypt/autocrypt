@@ -245,30 +245,12 @@ next section).  The ``pah`` MUST contain the following fields:
 * ``key``: the raw key material, after base64 decoding
 * ``prefer_encrypted``: a quad-state: ``nopreference``, ``yes``, ``no`` or ``reset``
 
-Optionally, an agent MAY store and maintain the following data in
-order to provide clearer feedback to the user:
-
-* ``counting_since``: The UTC timestamp of when we started counting
-* ``count_have_ach``: A count of parsed AutoCrypt headers
-* ``count_no_ach``: A count of messages without AutoCrypt headers
-* ``bad_user_agent``: The apparent user-agent (if known) of the last
-  message seen without AutoCrypt headers.
-
 .. note::
 
-     These attributes are all optional, and are presented here as a
-     recommendation of the type of data an AutoCrypt capable user-agent
-     might record in order to provide the user with more detailed
-     feedback and guidance when we detect a potential conflict.
-
-     The theory is that a message of the form "The recipient may not be
-     able to read encrypted mail" could be augmented with reasons such
-     as "The last 5 messages we saw from them all came from a
-     non-AutoCrypt capable e-mail application", or "Their most recent
-     message was sent on April 5th using Apple Mail on an iPad."
-
-     This is not an exhaustive list; implementors are encouraged to
-     improve upon this scheme as they see fit.
+     The above is not an exhaustive list; implementors are encouraged
+     to improve upon this scheme as they see fit.  Suggestions for
+     additional (optional) state that an agent may want to keep about
+     a peer can be found in :doc:`optional-state`.
 
 
 Updating internal state upon message receipt
@@ -350,12 +332,6 @@ address ``A``, the MUA should follow the following
    - Can we synthesize from attached keys, e.g. if it has a matching user id?
 
 
- - OPTIONAL: If ``counting_since`` is unset, set it to the current time.
-   Otherwise, if ``message_date`` is greater than ``counting_since``:
-
-   - If ``pah`` is ``null``, increment ``count_no_ac``.
-   - If ``pah`` is not ``null`` increment ``count_have_ac``.
-
  - Next, the agent compares the ``message_pah`` with the ``pah`` stored in
    ``autocrypt_peer_state[A]``.
 
@@ -398,18 +374,6 @@ address ``A``, the MUA should follow the following
 
    - set ``autocrypt_peer_state[A].pah.prefer_encrypted`` to ``reset``
    - set ``autocrypt_peer_state[A].changed`` to ``message_date``
-
- - OPTIONAL in the case of a **reset**:
-
-   - set ``autocrypt_peer_state[A].bad_user_agent`` to the apparent
-     user-agent of the message
-
- - OPTIONAL in the case of a **reset** AND ``counting_since`` is more
-   than a month older than ``message_date``:
-
-   - set ``autocrypt_peer_state[A].counting_since`` to ``last_seen``
-   - set ``autocrypt_peer_state[A].count_have_ach`` to zero
-   - set ``autocrypt_peer_state[A].count_no_ach`` to one
 
 .. note::
 
@@ -580,7 +544,8 @@ with a clear warning explaining that there is reason to believe one or
 more recipients will not be able to read the mail if it is sent
 encrypted.  This message SHOULD state which recipients are considered
 problematic and provide useful information to help the user guage the
-risk.  The optional counters and user-agent state are intended for this.
+risk.  The optional counters and user-agent state described in
+:doc:`optional-state` are useful for this message.
 
 For messages that are going to be encrypted when sent, the MUA MUST
 take care not to leak the cleartext of drafts or other
