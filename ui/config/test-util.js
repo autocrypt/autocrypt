@@ -1,5 +1,5 @@
 Tests = function() {
-    var env = {specs: {}};
+    var env = {specs: {}, prefix: ''};
     var assertions = 0;
     var failures = 0;
 
@@ -29,13 +29,13 @@ Tests = function() {
         var arr = Object.entries(this.specs)
         var setup = this.setup;
         var teardown = this.teardown;
+        var prefix = this.prefix;
         if (arr.length == 0) return;
-        log('Running ' + arr.length + ' suites...');
         arr.forEach(function (suite) {
             var name = suite[0];
             var desc = suite[1];
-            var env = {specs: {}};
-            log('  ' + name);
+            var env = {specs: {}, prefix: prefix + '  '};
+            log(prefix + name);
             if (setup) setup();
             desc.bind(env)(describe.bind(env), assert);
             run.bind(env)();
