@@ -548,7 +548,7 @@ more recipients will not be able to read the mail if it is sent
 encrypted.  This message SHOULD state which recipients are considered
 problematic and provide useful information to help the user guage the
 risk.  The optional counters and user-agent state described in
-:doc:`optional-state` are useful for this message.
+:doc:`optional-state` can be useful for this message.
 
 For messages that are going to be encrypted when sent, the MUA MUST
 take care not to leak the cleartext of drafts or other

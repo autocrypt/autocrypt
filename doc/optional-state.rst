@@ -16,8 +16,9 @@ encountered.
 Additional state
 ----------------
 
-Optionally, an agent MAY store and maintain the following data in
-order to provide clearer feedback to the user:
+An agent MAY store additional per-peer metadata about observed
+Autocrypt messages. This can be used to provide more helpful
+information when user intervention is required.
 
 * ``counting_since``: The UTC timestamp of when we started counting
 * ``count_have_ach``: A count of parsed AutoCrypt headers
@@ -25,18 +26,11 @@ order to provide clearer feedback to the user:
 * ``bad_user_agent``: The apparent user-agent (if known) of the last
   message seen without AutoCrypt headers.
 
-.. note::
-
-     These attributes are all optional, and are presented here as a
-     recommendation of the type of data an AutoCrypt capable user-agent
-     might record in order to provide the user with more detailed
-     feedback and guidance when we detect a potential conflict.
-
-     The theory is that a message of the form "The recipient may not be
-     able to read encrypted mail" could be augmented with reasons such
-     as "The last 5 messages we saw from them all came from a
-     non-AutoCrypt capable e-mail application", or "Their most recent
-     message was sent on April 5th using Apple Mail on an iPad."
+The theory is that a message of the form "The recipient may not be
+able to read encrypted mail" could be augmented with reasons such as
+"The last 5 messages we saw from them all came from a non-AutoCrypt
+capable e-mail application", or "Their most recent message was sent on
+April 5th using Apple Mail on an iPad."
 
 Managing additional state
 -------------------------
