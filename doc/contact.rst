@@ -15,8 +15,12 @@ you may:
 
 - join chats at **#autocrypt on freenode or matrix.org**.
 
+- **Tuesdays** are "Autocrypt tuesday" where Autocrypt involved folks agreed
+  to try to be present, merge PRs and discuss any related topic.
+
 - collaborate through PRs, issues and edits on our
   `github Autocrypt repo`_
+
 
 .. _`Autocrypt mailing list`: https://lists.mayfirst.org/mailman/listinfo/autocrypt
 
