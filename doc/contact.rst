@@ -15,8 +15,12 @@ you may:
 
 - join chats at **#autocrypt on freenode or matrix.org**.
 
+- **Tuesdays** are "Autocrypt tuesday" where Autocrypt involved folks agreed
+  to try to be present, merge PRs and discuss any related topic.
+
 - collaborate through PRs, issues and edits on our
   `github Autocrypt repo`_
+
 
 .. _`Autocrypt mailing list`: https://lists.mayfirst.org/mailman/listinfo/autocrypt
 
@@ -48,11 +52,11 @@ and the ACLU_.
 Upcoming events
 ---------------
 
-- Mar 2017: Autocrypt sessions at the `Internet Freedom Festival`_
-  with hackers and users, several Autocrypt-people there.
+- June 9-12th 2017: `Autocrypt Level 0 hackathon / gathering
+  <https://lists.mayfirst.org/pipermail/autocrypt/2017-May/000093.html>`_ in
+  Freiburg im Breisgau, Germany.
 
-- April/May 2017: next Autocrypt unconf-hackathon planned roughly
-  around DE/NL/CH
+- August 4-8th 2017: something during the dutch hacker camp SHA2017?
 
 .. _`33c3`: https://events.ccc.de/congress/2016/wiki/Main_Page
 
@@ -64,6 +68,15 @@ Upcoming events
 
 Past events
 -------------
+
+- April 2017: `Autocrypt talk and session
+  <https://media.ccc.de/v/EH2017-8499-towards_automatic_end_to_end_mail_encryption>`_
+  at the EasterHegg 2017.
+
+- Mar 2017: Autocrypt sessions at the `Internet Freedom Festival`_
+  with hackers and users, several Autocrypt-people were there.
+  We also did an extra session ahead of the IFF where we removed
+  the dependency on the "SMA" (IMAP shared message archive).
 
 - Dec 2016: at `33c3`_, Hamburg, `holger's autocrypt 15min talk
   <https://fossil.net2o.de/33c3/doc/trunk/wiki/autocrypt.md>`_ and
