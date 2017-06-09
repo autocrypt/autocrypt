@@ -1,7 +1,7 @@
 Autocrypt Level 0: Enabling encryption, avoiding annoyances
 ===========================================================
 
-This document describes the basic capabilities required for a mail app (MUA)
+This document describes the basic capabilities required for a mail app
 to be Autocrypt-capable at Level 0.  The design of Level 0 is driven by
 usability concerns and by the realities of incremental deployment.  A user
 may use both Autocrypt-enabled mail apps and traditional plain ones
@@ -62,8 +62,7 @@ decrypting.  It MUST be capable of assembling these keys into an
 OpenPGP certificate (:rfc:`RFC 4880 "Transferable Public
 Key"<4880#section-11.1>`) that indicates these capabilities.
 
-The secret key material is critical for security as in other
-end-to-end applications, and should be protected from access by other
+The secret key material should be protected from access by other
 applications or co-tenants of the device, at least as well as the
 passwords the MUA retains for the user's IMAP or SMTP accounts.
 
@@ -140,7 +139,7 @@ Deriving a Parsed :mailheader:`Autocrypt` Header from a Message
 
 The :mailheader:`Autocrypt` header has the following format::
 
-    Autocrypt: to=a@b.example.org; [type=p;] [prefer-encrypted=(yes|no);] key=BASE64
+    Autocrypt: to=a@b.example.org; [type=p;] [prefer-encrypt=(yes|no);] key=BASE64
 
 The ``to`` attribute indicates the single recipient address this
 header is valid for. In case this address differs from the one the MUA
@@ -153,13 +152,15 @@ key material.  For now the only supported type is ``p``, which
 represents a specific subset of OpenPGP (see the next section), and is
 also the default.  Headers with an unknown ``type`` MUST be treated as
 invalid.  The value of the ``key`` attribute is a Base64
-representation of the public key material.  For ease of parsing, the
-``key`` attribute MUST be the last attribute in the header.
+representation of the public key material.  This is a simple
+ascii-armored key format without a checksum (which would then be Radix64)
+and without pgp message markers (``---BEGIN...`` etc.).  For ease of
+parsing, the ``key`` attribute MUST be the last attribute in the header.
 
-The ``prefer-encrypted`` attribute indicates whether agents should
+The ``prefer-encrypt`` attribute indicates whether agents should
 default to encrypting when composing e-mails to this recipient.  If
-``prefer-encrypted`` is not set, the value of ``prefer-encrypted`` is
-``nopreference``.  If ``prefer-encrypted`` is set, but neither ``yes``
+``prefer-encrypt`` is not set, the value of ``prefer-encrypt`` is
+``nopreference``.  If ``prefer-encrypt`` is set, but neither ``yes``
 nor ``no``, the MUA must skip the header as invalid.
 
 Additional attributes unspecified here are also possible before the
@@ -245,8 +246,8 @@ Autocrypt-compatible agents SHOULD track and store in
 necessarily the literal header emitted (for the literal header, see
 next section).  The ``pah`` MUST contain the following fields:
 
-* ``key``: the raw key material, after base64 decoding
-* ``prefer_encrypted``: a quad-state: ``nopreference``, ``yes``, ``no`` or ``reset``
+* ``key``: the raw key material
+* ``prefer_encrypt``: a quad-state: ``nopreference``, ``yes``, ``no`` or ``reset``
 
 .. note::
 
@@ -303,12 +304,12 @@ address ``A``, the MUA should follow the following
     then ``synthesized_pah`` should remain ``null``.
 
   - Otherwise, with an encryption-capable ``K``, the ``key`` element of
-    ``synthesized_pah`` is set to ``K`` and the ``prefer_encrypted``
+    ``synthesized_pah`` is set to ``K`` and the ``prefer_encrypt``
     element of ``synthesized_pah`` is set to ``nopreference``.
 
   - If ``K`` is encryption-capable and one of the message headers is
     an `OpenPGP header`_ which expresses a preference for encrypted
-    e-mail, the ``prefer_encrypted`` element of ``synthesized_pah``
+    e-mail, the ``prefer_encrypt`` element of ``synthesized_pah``
     should be set to ``yes``.
 
 .. _`OpenPGP header`: https://tools.ietf.org/html/draft-josefsson-openpgp-mailnews-header-07
@@ -358,8 +359,8 @@ address ``A``, the MUA should follow the following
    fields as an augmentation, as follows:
 
    - If ``pah`` is ``null``, or if ``key`` is bytewise different, or if
-     ``prefer_encrypted`` has a different value, then this is an *update*.
-   - If ``key`` and ``prefer_encrypted`` match exactly, then it is
+     ``prefer_encrypt`` has a different value, then this is an *update*.
+   - If ``key`` and ``prefer_encrypt`` match exactly, then it is
      considered a *match*.
    - If both ``pah`` and ``message_pah`` are ``null``, it is a *match*.
    - If ``message_pah`` is ``null`` (and ``pah`` is not), it is a *reset*.
@@ -375,7 +376,7 @@ address ``A``, the MUA should follow the following
 
  - In the case of a **reset**:
 
-   - set ``autocrypt_peer_state[A].pah.prefer_encrypted`` to ``reset``
+   - set ``autocrypt_peer_state[A].pah.prefer_encrypt`` to ``reset``
    - set ``autocrypt_peer_state[A].changed`` to ``message_date``
 
 .. note::
@@ -477,14 +478,14 @@ If the ``pah`` is ``null``, or if ``pah.key`` is known to be unusable
 for encryption (e.g. it is otherwise known to be revoked or expired),
 then the recommendation is ``disable``.
 
-If the ``pah`` is not ``null``, and ``prefer-encrypted`` is ``yes`` or
+If the ``pah`` is not ``null``, and ``prefer-encrypt`` is ``yes`` or
 the message being composed is a reply to an encrypted message, then
 the recommendation is ``encrypt``.
 
-If ``pah`` is not ``null``, and ``prefer-encrypted`` is ``reset``,
+If ``pah`` is not ``null``, and ``prefer-encrypt`` is ``reset``,
 then the recommendation is ``discourage``.
 
-If ``pah`` is not ``null``, and ``prefer-encrypted`` is either ``no``
+If ``pah`` is not ``null``, and ``prefer-encrypt`` is either ``no``
 or ``nopreference``, then the recommendation is ``available``.
 
 Recommendations for messages to multiple addresses

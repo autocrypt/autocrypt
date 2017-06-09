@@ -4,7 +4,7 @@ Autocrypt -- E-Mail Encryption for Everyone
 Please see here for automatically regenerated docs from this
 Autocrypt specification repository:
 
-    https://autocrypt.readthedocs.io/
+    https://autocrypt.org/
 
 If you want to read and work on the docs locally checkout the `doc
 <doc>`_ directory which contains a ``sphinx`` documentation project.
@@ -16,5 +16,5 @@ You can `install sphinx
 Implementation development repositories
 ---------------------------------------
 
-For implementation development repos, see http://autocrypt.readthedocs.io/en/latest/dev-status.html
+For implementation development repos, see http://autocrypt.org/en/latest/dev-status.html
 
