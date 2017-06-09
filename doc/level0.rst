@@ -92,7 +92,7 @@ To solve this problem in a better way, bi-directional communication
 between the user's different MUAs is required. However, this is out of
 scope for Level 0.
 
-Secret Key Transfer
+Autocrypt Setup Message
 -------------------
 
 For proper support of a multi-device scenario, it is necessary to have
@@ -102,14 +102,14 @@ this approach however, multi-device support in the sense of devices
 coordinating with each other is out of scope for Autocrypt Level 0. It
 is still important to avoid "lock-in" of secret key material on a
 particular client. For this reason, Autocrypt includes a way to
-"export" keys for other clients to pick up, with relatively direct
-user interaction and delay.
+"export" keys (and possibly other state) for other clients to pick up,
+asynchronously and with explicitly required user interaction.
 
 The key transfer mechanism is an explicit operation that can be
 initiated by the user. When this happens, the client encrypts its
-secret key material symetrically with a key derived from a secret code,
-then places the result in the user's inbox by sending it as a mail
-addressed to themself.
+secret key material symetrically with a key derived from a secret
+code, then places the result in the user's inbox by sending it as a
+mail addressed to themself.
 
 The payload itself MUST be an ASCII-armored block of OpenPGP
 symmetrically encrypted data, which contains the user's secret key as
