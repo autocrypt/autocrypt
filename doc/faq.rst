@@ -92,14 +92,14 @@ headers as invalid and fall back to the one without a ``priority``
 attribute.
 
 
-Why do you use the ``to=`` attribute rather than the uid from the key?
+Why do you use the ``addr`` attribute rather than the uid from the key?
 ----------------------------------------------------------------------
 
 We need to store state about the key to use for a given e-mail
 address. Just importing the key into a keyring won't cut it.
 
 We want to be able to handle the header without having to parse the
-key first.  We believe that using the 'to' attribute will be more
+key first.  We believe that using the 'addr' attribute will be more
 forward compatible. For example we discussed hashing the uid in the
 keys so in case they leak to pgp keyservers they do not leak the e-mail
 address. This would not be compatible with requiring the e-mail address
