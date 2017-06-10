@@ -245,7 +245,7 @@ necessarily the literal header emitted (for the literal header, see
 next section).  The ``pah`` MUST contain the following fields:
 
 * ``key``: the raw key material
-* ``prefer_encrypt``: a quad-state: ``nopreference``, ``mutual`` or ``reset``
+* ``prefer_encrypt``: a tri-state: ``nopreference``, ``mutual`` or ``reset``
 
 .. note::
 
