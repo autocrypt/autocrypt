@@ -61,5 +61,5 @@ and contributors, MUA developers and privacy enthusiasts.
    backup
    cleanup
    peering
-
-
+   transfer-format
+   optional-state

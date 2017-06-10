@@ -93,7 +93,7 @@ attribute.
 
 
 Why do you use the ``addr`` attribute rather than the uid from the key?
-----------------------------------------------------------------------
+-----------------------------------------------------------------------
 
 We need to store state about the key to use for a given e-mail
 address. Just importing the key into a keyring won't cut it.
