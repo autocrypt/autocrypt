@@ -1,0 +1,43 @@
+
+
+open issues:
+
+- refine "discourage" user interface handling: in "flip-flop" situations don't
+  give scary warning messages when users explicitely choose to encrypt.
+  (PR, azul)
+ 
+- include own prefer-encrypt setting in the autocrypt setup message 
+  so that the other client can start off from the "imported" prefer-encrypt
+  setting (so e.g. a "mutual" setting carries over and will not lead to
+  flip-flopping when sending mails to third parties which means that the
+  other client will flip-flop the "encrypt" checkbox (if it has one))
+  (Bjoern, PR)
+
+- fix own state MUST (PR, vincent)
+
+- move "pah" attributes (parsed autocrypt header) to "peerstate"
+  and "update internal state" section at least somewhat 
+  (remove TODOs, ...) (vincent, patrick, PR)
+
+Setup Message:
+
+- refine "must"/"should" wording on "setup code" (PR, dkg)
+
+- User ID does not need to match an email (it's "decorative") (PR, holger)
+
+- alphanumeric versus number "setup codes" (discussion)
+  and also consider error-correction 
+
+- refining/fixating the symmetric "setup code" encryption and Setup Message format
+  (defending particularly against secret-key-injection because if we let the user
+  go through the effort of transfering 128 bit of entropy out-of-band we should try
+  hard to protect a MITM exchanging keys)  (discussion based on a PR?)
+  two known solutions:
+  - mandate exact PGP message 
+  - put and verify Setup Code in the decrypted cleartext of the Setup Message
+  - just say "the message MUST be decrypted using the Setup Code" and
+    rely on people calling their engines/APIs correctly and note that particularly
+    gpg might appear to have decrypted symmetricatally but did something else
+
+ 
+  
