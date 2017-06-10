@@ -572,8 +572,8 @@ Level 0 MUAs MUST allow the user to disable Autocrypt completely for
 each account they control.  For level 0, we expect most MUAs to have
 Autocrypt disabled by default.
 
-Level 0 MUAs MUST maintain an internal structure ``own_state`` for each
-account on which Autocrypt is enabled.  ``own_state`` has the following
+Level 0 MUAs maintain an internal structure ``own_state`` for each
+account on which Autocrypt is enabled. ``own_state`` has the following
 members:
 
  * ``secret_key`` -- the secret key used for this account (see "Secret
