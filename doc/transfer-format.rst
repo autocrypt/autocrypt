@@ -1,11 +1,11 @@
-Key Transfer Format
-===================
+Autocrypt Setup Message Transfer Format
+=======================================
 
-This document describes a format recommendation for secret key backup
-attchments. The Autocrypt Key Transfer Format is designed to work as an
-attachment in a mail client that can be handled automatically by Autocrypt
-clients, but also strives for usability when saved as a file in agnostic
-clients.
+This document describes a format recommendation for the Autocrypt
+Setup Message payload. The Autocrypt Setup Message payload is an
+attachment in a mail client that can be handled automatically by
+Autocrypt clients, but also strives for usability when saved as a file
+in agnostic clients.
 
 This goal is achieved by two mechanisms:
 
@@ -28,7 +28,9 @@ still easily be processed by OpenPGP tools. In particular, GnuPG ignores the
 header before the armored data starts, so a regular call to :code:`gpg
 --decrypt` still works.
 
-An exemplary secret key backup MIME part would look as such:
+An exemplary Autocrypt Setup Message's MIME part would look like the
+text below.  This Autocrypt Setup Message can be unlocked with the
+Setup Code ``D9VN-RD7A-7T3B-BWG7-LEPY-3NYT``.
 
 .. code-block:: html
 
@@ -36,74 +38,73 @@ An exemplary secret key backup MIME part would look as such:
   Content-Description: OpenPGP Digital Signature
   Content-Disposition: attachment; filename="Autocrypt-Key for name-at-example.org.html"
 
-  <html><body><h1>Autocrypt Key</h1><p>
+  <html><body><h1>Autocrypt Key for <tt>example.org</tt></h1><p>
 
   This is an Autocrypt Key file. When imported into an Autocrypt capable E-Mail
   client with its backup code, it can be used to read encrypted E-Mail sent to
-  name@example.org.
+  <tt>name@example.org</tt>.
 
   </p><pre>
   -----BEGIN PGP MESSAGE-----
+  Autocrypt-Setup-Message: v1
 
-  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
-  =CwOM
+  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
+  xUbOVydoyTLaP9bQScqv4WBqVcw5k8v4i+I=
+  =k6Rc
   -----END PGP MESSAGE-----
-  </pre><hr><i><a href="http://example.org/">Generated by Autocrypt-capable Client™</a>.</i></body></html>
+  </pre><hr><i><a href="http://example.org/">Generated by Autocrypt-capable Client</a>.</i></body></html>
