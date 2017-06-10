@@ -139,7 +139,7 @@ Deriving a Parsed :mailheader:`Autocrypt` Header from a Message
 
 The :mailheader:`Autocrypt` header has the following format::
 
-    Autocrypt: to=a@b.example.org; [type=p;] [prefer-encrypt=(yes|no);] key=BASE64
+    Autocrypt: to=a@b.example.org; [type=p;] [prefer-encrypt=mutual;] key=BASE64
 
 The ``to`` attribute indicates the single recipient address this
 header is valid for. In case this address differs from the one the MUA
@@ -157,11 +157,9 @@ ascii-armored key format without a checksum (which would then be Radix64)
 and without pgp message markers (``---BEGIN...`` etc.).  For ease of
 parsing, the ``key`` attribute MUST be the last attribute in the header.
 
-The ``prefer-encrypt`` attribute indicates whether agents should
-default to encrypting when composing e-mails to this recipient.  If
-``prefer-encrypt`` is not set, the value of ``prefer-encrypt`` is
-``nopreference``.  If ``prefer-encrypt`` is set, but neither ``yes``
-nor ``no``, the MUA must skip the header as invalid.
+The ``prefer-encrypt`` attribute can only occur with the value
+``mutual``, any other value is undefined. Its presence in the header
+indicates an agreement with encryption by default.
 
 Additional attributes unspecified here are also possible before the
 ``key`` attribute.  If an attribute name starts with an underscore
@@ -247,7 +245,7 @@ necessarily the literal header emitted (for the literal header, see
 next section).  The ``pah`` MUST contain the following fields:
 
 * ``key``: the raw key material
-* ``prefer_encrypt``: a quad-state: ``nopreference``, ``yes``, ``no`` or ``reset``
+* ``prefer_encrypt``: a tri-state: ``nopreference``, ``mutual`` or ``reset``
 
 .. note::
 
@@ -310,7 +308,7 @@ address ``A``, the MUA should follow the following
   - If ``K`` is encryption-capable and one of the message headers is
     an `OpenPGP header`_ which expresses a preference for encrypted
     e-mail, the ``prefer_encrypt`` element of ``synthesized_pah``
-    should be set to ``yes``.
+    should be set to ``mutual``.
 
 .. _`OpenPGP header`: https://tools.ietf.org/html/draft-josefsson-openpgp-mailnews-header-07
 
@@ -470,23 +468,24 @@ during message composition:
 Recommendations for single-recipient messages
 +++++++++++++++++++++++++++++++++++++++++++++
 
-For level 0 MUAs, the Autocrypt recommendation for message composed to
-a single recipient with e-mail address ``A`` is derived from the value
-stored in ``autocrypt_peer_state[A]``.
+The Autocrypt recommendation for a message composed to a single
+recipient with e-mail address ``A`` depends primarily on the value
+stored in ``autocrypt_peer_state[A]``. It is derived by the following
+algorithm:
 
-If the ``pah`` is ``null``, or if ``pah.key`` is known to be unusable
-for encryption (e.g. it is otherwise known to be revoked or expired),
-then the recommendation is ``disable``.
+1. If the ``pah`` is ``null``, the recommendation is ``disable``.
+2. If ``pah.key`` is known to be unusable for encryption (e.g. it is
+  otherwise known to be revoked or expired), then the recommendation
+  is ``disable``.
+3. If the message is composed as a reply to an encrypted message, then
+  the recommendation is ``encrypt``.
+4. If ``pah.prefer_encrypt`` is ``mutual``, and the user's own
+  ``own_state.prefer_encrypt`` is ``mutual``, then the recommendation
+  is ``encrypt``.
+5. If ``pah.prefer_encrypt`` is ``reset``, then the recommendation is
+  ``discourage``.
 
-If the ``pah`` is not ``null``, and ``prefer-encrypt`` is ``yes`` or
-the message being composed is a reply to an encrypted message, then
-the recommendation is ``encrypt``.
-
-If ``pah`` is not ``null``, and ``prefer-encrypt`` is ``reset``,
-then the recommendation is ``discourage``.
-
-If ``pah`` is not ``null``, and ``prefer-encrypt`` is either ``no``
-or ``nopreference``, then the recommendation is ``available``.
+Otherwise, the recommendation is ``available``.
 
 Recommendations for messages to multiple addresses
 ++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -573,11 +572,22 @@ Level 0 MUAs MUST allow the user to disable Autocrypt completely for
 each account they control.  For level 0, we expect most MUAs to have
 Autocrypt disabled by default.
 
+Level 0 MUAs MUST maintain an internal structure ``own_state`` for each
+account on which Autocrypt is enabled.  ``own_state`` has the following
+members:
+
+ * ``secret_key`` -- the secret key used for this account (see "Secret
+   Key Generation and storage" above).
+ * ``key`` -- the OpenPGP transferable public key derived from
+   ``secret_key``.
+ * ``prefer_encrypt`` -- a boolean representing the user's own
+   preferences on this account, either ``mutual`` or ``nopreference``.
+   This SHOULD be set to ``nopreference`` by default.
+
 If Autocrypt is enabled for a given account, the MUA SHOULD allow the
-user to specify whether they explicitly prefer encryption for inbound
-messages, or explicitly prefer cleartext for inbound messages, or
-choose to express no preference.  The default SHOULD be "no
-preference".
+user to switch the setting for ``own_state.prefer_encrypt``, but this
+choice might normally be hidden in a "preferences pane" or something
+similar.
 
 Please see :doc:`ui-examples` for specific examples of how this might
 look.
