@@ -139,7 +139,7 @@ Deriving a Parsed :mailheader:`Autocrypt` Header from a Message
 
 The :mailheader:`Autocrypt` header has the following format::
 
-    Autocrypt: to=a@b.example.org; [type=p;] [prefer-encrypt=(yes|no);] key=BASE64
+    Autocrypt: to=a@b.example.org; [type=p;] [prefer-encrypt=mutual;] key=BASE64
 
 The ``to`` attribute indicates the single recipient address this
 header is valid for. In case this address differs from the one the MUA
@@ -157,11 +157,9 @@ ascii-armored key format without a checksum (which would then be Radix64)
 and without pgp message markers (``---BEGIN...`` etc.).  For ease of
 parsing, the ``key`` attribute MUST be the last attribute in the header.
 
-The ``prefer-encrypt`` attribute indicates whether agents should
-default to encrypting when composing e-mails to this recipient.  If
-``prefer-encrypt`` is not set, the value of ``prefer-encrypt`` is
-``nopreference``.  If ``prefer-encrypt`` is set, but neither ``yes``
-nor ``no``, the MUA must skip the header as invalid.
+The ``prefer-encrypt`` attribute can only occur with the value
+``mutual``, any other value is undefined. Its presence in the header
+indicates an agreement with encryption by default.
 
 Additional attributes unspecified here are also possible before the
 ``key`` attribute.  If an attribute name starts with an underscore
@@ -247,7 +245,7 @@ necessarily the literal header emitted (for the literal header, see
 next section).  The ``pah`` MUST contain the following fields:
 
 * ``key``: the raw key material
-* ``prefer_encrypt``: a quad-state: ``nopreference``, ``yes``, ``no`` or ``reset``
+* ``prefer_encrypt``: a quad-state: ``nopreference``, ``mutual`` or ``reset``
 
 .. note::
 
@@ -310,7 +308,7 @@ address ``A``, the MUA should follow the following
   - If ``K`` is encryption-capable and one of the message headers is
     an `OpenPGP header`_ which expresses a preference for encrypted
     e-mail, the ``prefer_encrypt`` element of ``synthesized_pah``
-    should be set to ``yes``.
+    should be set to ``mutual``.
 
 .. _`OpenPGP header`: https://tools.ietf.org/html/draft-josefsson-openpgp-mailnews-header-07
 
@@ -478,15 +476,16 @@ If the ``pah`` is ``null``, or if ``pah.key`` is known to be unusable
 for encryption (e.g. it is otherwise known to be revoked or expired),
 then the recommendation is ``disable``.
 
-If the ``pah`` is not ``null``, and ``prefer-encrypt`` is ``yes`` or
-the message being composed is a reply to an encrypted message, then
+If the message is composed as a reply to an encrypted message, then
 the recommendation is ``encrypt``.
 
-If ``pah`` is not ``null``, and ``prefer-encrypt`` is ``reset``,
-then the recommendation is ``discourage``.
+If ``prefer-encrypt`` is ``mutual``, and the user's own prefer-encrypt
+setting is ``mutual``, then the recommendation is ``encrypt``.
 
-If ``pah`` is not ``null``, and ``prefer-encrypt`` is either ``no``
-or ``nopreference``, then the recommendation is ``available``.
+If ``prefer-encrypt`` is ``reset``, then the recommendation is
+``discourage``.
+
+Otherwise, the recommendation is ``available``.
 
 Recommendations for messages to multiple addresses
 ++++++++++++++++++++++++++++++++++++++++++++++++++
