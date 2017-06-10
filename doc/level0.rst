@@ -119,8 +119,8 @@ During message composition, if the :mailheader:`From:` header of the
 outgoing e-mail matches an address that the Autocrypt-capable agent
 knows the secret key material for, it SHOULD include an Autocrypt
 header. This header contains the associated public key material as
-``key=`` attribute, and the same sender address that is used in the
-``From`` header in the ``to=`` attribute to confirm the
+``key`` attribute, and the same sender address that is used in the
+``From`` header in the ``addr`` attribute to confirm the
 association. The most minimal Level 0 MUA will only include these two
 attributes.
 
@@ -139,9 +139,9 @@ Deriving a Parsed :mailheader:`Autocrypt` Header from a Message
 
 The :mailheader:`Autocrypt` header has the following format::
 
-    Autocrypt: to=a@b.example.org; [type=p;] [prefer-encrypt=mutual;] key=BASE64
+    Autocrypt: addr=a@b.example.org; [type=p;] [prefer-encrypt=mutual;] key=BASE64
 
-The ``to`` attribute indicates the single recipient address this
+The ``addr`` attribute indicates the single recipient address this
 header is valid for. In case this address differs from the one the MUA
 considers the sender of the e-mail in parsing, which will usually be
 the one specified in the :mailheader:`From` header, the entire header
@@ -194,7 +194,7 @@ OpenPGP packets:
  - a binding signature over ``Ke`` by ``Kp``
 
 The content of the user id packet is only decorative. By convention, it
-contains the same address used in the ``to`` attribute in angle brackets,
+contains the same address used in the ``addr`` attribute in angle brackets,
 conforming to the :rfc:`2822` grammar ``angle-addr``.
 
 These packets MUST be assembled in binary format (not ASCII-armored),

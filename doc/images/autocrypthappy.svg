@@ -818,7 +818,7 @@
          sodipodi:role="line"
          x="112.75412"
          y="-221.617"
-         id="tspan38747">Autocrypt: to=alice@a.example; prefer-encrypted=yes; key=</tspan><tspan
+         id="tspan38747">Autocrypt: addr=alice@a.example; prefer-encrypted=yes; key=</tspan><tspan
          sodipodi:role="line"
          x="112.75412"
          y="-214.117"
@@ -855,7 +855,7 @@
          sodipodi:role="line"
          id="tspan38849"
          x="112.75412"
-         y="-71.150101">Autocrypt: to=alice@a.example; prefer-encrypted=yes; key=</tspan><tspan
+         y="-71.150101">Autocrypt: addr=alice@a.example; prefer-encrypted=yes; key=</tspan><tspan
          sodipodi:role="line"
          id="tspan38851"
          x="112.75412"
@@ -911,7 +911,7 @@
          sodipodi:role="line"
          id="tspan38966"
          x="112.75412"
-         y="-173.4501">Autocrypt: to=bob@b.example; prefer-encrypted=yes; key=</tspan><tspan
+         y="-173.4501">Autocrypt: addr=bob@b.example; prefer-encrypted=yes; key=</tspan><tspan
          sodipodi:role="line"
          id="tspan38968"
          x="112.75412"
