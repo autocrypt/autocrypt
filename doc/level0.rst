@@ -482,8 +482,8 @@ algorithm:
 4. If ``pah.prefer_encrypt`` is ``mutual``, and the user's own
    ``own_state.prefer_encrypt`` is ``mutual``, then the recommendation
    is ``encrypt``.
-5. If ``pah.prefer_encrypt`` is ``reset``, then the recommendation is
-   ``discourage``.
+5. If ``pah.prefer_encrypt`` is ``reset`` and the ``pah.last_seen`` is
+   more than one month ago, then the recommendation is ``discourage``.
 
 Otherwise, the recommendation is ``available``.
 
