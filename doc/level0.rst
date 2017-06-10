@@ -475,15 +475,15 @@ algorithm:
 
 1. If the ``pah`` is ``null``, the recommendation is ``disable``.
 2. If ``pah.key`` is known to be unusable for encryption (e.g. it is
-  otherwise known to be revoked or expired), then the recommendation
-  is ``disable``.
+   otherwise known to be revoked or expired), then the recommendation
+   is ``disable``.
 3. If the message is composed as a reply to an encrypted message, then
-  the recommendation is ``encrypt``.
+   the recommendation is ``encrypt``.
 4. If ``pah.prefer_encrypt`` is ``mutual``, and the user's own
-  ``own_state.prefer_encrypt`` is ``mutual``, then the recommendation
-  is ``encrypt``.
+   ``own_state.prefer_encrypt`` is ``mutual``, then the recommendation
+   is ``encrypt``.
 5. If ``pah.prefer_encrypt`` is ``reset``, then the recommendation is
-  ``discourage``.
+   ``discourage``.
 
 Otherwise, the recommendation is ``available``.
 
@@ -580,7 +580,7 @@ members:
    Key Generation and storage" above).
  * ``key`` -- the OpenPGP transferable public key derived from
    ``secret_key``.
- * ``prefer_encrypt`` -- a boolean representing the user's own
+ * ``prefer_encrypt`` -- the user's own
    preferences on this account, either ``mutual`` or ``nopreference``.
    This SHOULD be set to ``nopreference`` by default.
 
