@@ -479,10 +479,10 @@ algorithm:
   is ``disable``.
 3. If the message is composed as a reply to an encrypted message, then
   the recommendation is ``encrypt``.
-4. If ``prefer-encrypt`` is ``mutual``, and the user's own
-  prefer-encrypt setting is ``mutual``, then the recommendation is
-  ``encrypt``.
-5. If ``prefer-encrypt`` is ``reset``, then the recommendation is
+4. If ``pah.prefer_encrypt`` is ``mutual``, and the user's own
+  ``own_state.prefer_encrypt`` is ``mutual``, then the recommendation
+  is ``encrypt``.
+5. If ``pah.prefer_encrypt`` is ``reset``, then the recommendation is
   ``discourage``.
 
 Otherwise, the recommendation is ``available``.
@@ -572,11 +572,22 @@ Level 0 MUAs MUST allow the user to disable Autocrypt completely for
 each account they control.  For level 0, we expect most MUAs to have
 Autocrypt disabled by default.
 
+Level 0 MUAs MUST maintain an internal structure ``own_state`` for each
+account on which Autocrypt is enabled.  ``own_state`` has the following
+members:
+
+ * ``secret_key`` -- the secret key used for this account (see "Secret
+   Key Generation and storage" above).
+ * ``key`` -- the OpenPGP transferable public key derived from
+   ``secret_key``.
+ * ``prefer_encrypt`` -- a boolean representing the user's own
+   preferences on this account, either ``mutual`` or ``nopreference``.
+   This SHOULD be set to ``nopreference`` by default.
+
 If Autocrypt is enabled for a given account, the MUA SHOULD allow the
-user to specify whether they explicitly prefer encryption for inbound
-messages, or explicitly prefer cleartext for inbound messages, or
-choose to express no preference.  The default SHOULD be "no
-preference".
+user to switch the setting for ``own_state.prefer_encrypt``, but this
+choice might normally be hidden in a "preferences pane" or something
+similar.
 
 Please see :doc:`ui-examples` for specific examples of how this might
 look.
