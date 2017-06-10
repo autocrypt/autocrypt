@@ -468,22 +468,22 @@ during message composition:
 Recommendations for single-recipient messages
 +++++++++++++++++++++++++++++++++++++++++++++
 
-For level 0 MUAs, the Autocrypt recommendation for message composed to
-a single recipient with e-mail address ``A`` is derived from the value
-stored in ``autocrypt_peer_state[A]``.
+The Autocrypt recommendation for a message composed to a single
+recipient with e-mail address ``A`` depends primarily on the value
+stored in ``autocrypt_peer_state[A]``. It is derived by the following
+algorithm:
 
-If the ``pah`` is ``null``, or if ``pah.key`` is known to be unusable
-for encryption (e.g. it is otherwise known to be revoked or expired),
-then the recommendation is ``disable``.
-
-If the message is composed as a reply to an encrypted message, then
-the recommendation is ``encrypt``.
-
-If ``prefer-encrypt`` is ``mutual``, and the user's own prefer-encrypt
-setting is ``mutual``, then the recommendation is ``encrypt``.
-
-If ``prefer-encrypt`` is ``reset``, then the recommendation is
-``discourage``.
+1. If the ``pah`` is ``null``, the recommendation is ``disable``.
+2. If ``pah.key`` is known to be unusable for encryption (e.g. it is
+  otherwise known to be revoked or expired), then the recommendation
+  is ``disable``.
+3. If the message is composed as a reply to an encrypted message, then
+  the recommendation is ``encrypt``.
+4. If ``prefer-encrypt`` is ``mutual``, and the user's own
+  prefer-encrypt setting is ``mutual``, then the recommendation is
+  ``encrypt``.
+5. If ``prefer-encrypt`` is ``reset``, then the recommendation is
+  ``discourage``.
 
 Otherwise, the recommendation is ``available``.
 
