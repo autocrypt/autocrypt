@@ -323,7 +323,7 @@ The encrypted message part contains:
 Header injection in outbound mail
 ---------------------------------
 
-During message composition, if the :mailheader:`From:` header of the
+During message composition, if the ``From:`` header of the
 outgoing e-mail matches an address that the Autocrypt-capable agent
 knows the secret key material (``own_state.secret_key``) for, it
 SHOULD include an Autocrypt header. This header MUST contain the
@@ -334,10 +334,9 @@ minimal Level 1 MUA will only include these two attributes.  If
 ``own_state.prefer_encrypt`` is set to ``mutual`` then the header MUST
 have a ``prefer-encrypt`` attribute set to ``mutual``.
 
-If the :mailheader:`From:` address changes during message composition
-(E.g. if the user selects a different outbound identity), the
-Autocrypt-capable client MUST change the :mailheader:`Autocrypt`
-header appropriately.
+If the ``From`` address changes during message composition (E.g. if
+the user selects a different outbound identity), the Autocrypt-capable
+client MUST change the ``Autocrypt`` header appropriately.
 
 See :ref:`mua-happypath` for examples of outbound headers and
 the following sections for header format definitions and parsing.
@@ -354,8 +353,8 @@ The ``Autocrypt`` header has the following format::
 The ``addr`` attribute indicates the single recipient address this
 header is valid for. In case this address differs from the one the MUA
 considers the sender of the e-mail in parsing, which will usually be
-the one specified in the :mailheader:`From` header, the entire header
-MUST be treated as invalid.
+the one specified in the ``From`` header, the entire header MUST be
+treated as invalid.
 
 The ``type`` and ``key`` attributes specify the type and data of the
 key material.  For now the only supported type is ``1``, which
@@ -383,10 +382,10 @@ of the header as though the attribute does not exist, but MUST treat
 the entire header as invalid if it encounters a "critical" attribute
 it doesn't support.
 
-When parsing an incoming message, a MUA MUST examine all
-:mailheader:`Autocrypt` headers, rather than just the first one.  If
-there is more than one valid header, this MUST be treated as an error,
-and all :mailheader:`Autocrypt` headers discarded as invalid.
+When parsing an incoming message, a MUA MUST examine all ``Autocrypt``
+headers, rather than just the first one. If there is more than one
+valid header, this MUST be treated as an error, and all ``Autocrypt``
+headers discarded as invalid.
 
 .. todo::
 
@@ -428,8 +427,8 @@ Internal state storage
     following.
 
 We define the effective date of a message as the sending time of the
-message as indicated by its :mailheader:`Date` header, or the time of
-first receipt if that date is in the future or unavailable.
+message as indicated by its ``Date`` header, or the time of first
+receipt if that date is in the future or unavailable.
 
 If a remote peer disables Autocrypt or drops back to using a
 non-Autocrypt MUA only we must be able to disable sending encrypted
@@ -486,7 +485,7 @@ information. This update process depends on:
 - the "effective date" of the message.
 
 - the ``key`` and ``prefer-encrypt`` attributes of the single valid
-  parsed :mailheader:`Autocrypt` header (see above), if available.
+  parsed ``Autocrypt`` header (see above), if available.
 
 If the parsed Autocrypt header is unavailable, and the effective
 message date is more recent than the current value of ``last_seen``,
