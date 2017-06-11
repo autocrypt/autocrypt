@@ -672,7 +672,7 @@ Level 0 MUAs maintain an internal structure ``own_state`` for each
 account on which Autocrypt is enabled. ``own_state`` has the following
 members:
 
- * ``secret_key`` -- the RSA 2048-bit secret keys used for this
+ * ``secret_key`` -- the RSA 2048-bit secret key used for this
    account (see "Secret Key Generation and storage" above).
  * ``key`` -- the OpenPGP transferable public key derived from
    ``secret_key``.
