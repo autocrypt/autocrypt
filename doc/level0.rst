@@ -174,8 +174,8 @@ in the outer OpenPGP armor::
 
     Passphrase-Format: alphanumeric
 
-This attribute MUST NOT be present if the Setup Code does
-not match the format described above.
+This OpenPGP header MUST NOT be present with this value if the Setup
+Code does not match the format described above.
 
 Setup Message Creation
 ++++++++++++++++++++++
