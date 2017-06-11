@@ -396,9 +396,13 @@ These packets MUST be assembled in binary format (not ASCII-armored),
 and then base64-encoded.
 
 A Level 0 MUA MUST be capable of processing and handling 2048-bit RSA
-keys.  It SHOULD be capable of handling Curve 25519 keys (ed25519 for
-``Kp`` and cv25519 for ``Ke``), but some underlying toolkits may not
-yet support Curve 25519.  It MAY support other OpenPGP key formats.
+public keys.  It MAY support other strong OpenPGP key formats found in
+a ``type=0`` Autocrypt header.  For example, some clients might choose
+to accept Curve 25519 public keys (ed25519 for ``Kp`` and cv25519 for
+``Ke``), but some underlying toolkits may not yet support these
+algorithms, so it is not advised to send these keys in a ``type=0``
+header if the user desires to maximize the number of peers who can
+send them encrypted messages.
 
 
 Internal state storage
