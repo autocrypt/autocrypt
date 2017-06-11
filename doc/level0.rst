@@ -347,6 +347,10 @@ Internal state storage
     You should be familiar with :ref:`mua-happypath` before reading the
     following.
 
+We define the effective date of a message as the sending time of the
+message as indicated by its :mailheader:`Date` header, or the time of
+first receipt if that date is in the future or unavailable.
+
 If a remote peer disables Autocrypt or drops back to using a
 non-Autocrypt MUA only we must be able to disable sending encrypted
 mails to this peer automatically.  MUAs capable of Autocrypt level 0
@@ -365,7 +369,7 @@ e-mail address <address-canonicalization>` and key type.  In level 0,
 there is only one type, ``p``, so level 0 agents can implement this by
 indexing only the peer's e-mail address.
 
-For each e-mail and type, an agent MUST store the following
+For each e-mail address and type, an agent MUST store the following
 attributes:
 
 * ``last_seen``: UTC timestamp of the most recent effective date of
@@ -397,9 +401,7 @@ times, such as upon receipt or display. When this happens, the
 Autocrypt state for the sending peer is updated with this new
 information. This update process depends on:
 
-- the effective date of the message, which is the sending time of the
-  message as indicated by its :mailheader:`Date` header, or the time
-  of first receipt if that date is in the future or unavailable.
+- the "effective date" of the message.
 
 - the ``key`` and ``prefer-encrypt`` attributes of the single valid
   parsed :mailheader:`Autocrypt` header (see above), if available.
