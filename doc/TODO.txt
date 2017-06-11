@@ -8,28 +8,6 @@ open PRs
   (remove TODOs, ...)
   dkg, oliver, ...
 
-- PR63: Put secret key into a mime structure, add prefer-encrypt into its
-  header
-  came from: include own prefer-encrypt setting in the autocrypt setup message
-  so that the other client can start off from the "imported" prefer-encrypt
-  setting (so e.g. a "mutual" setting carries over and will not lead to
-  flip-flopping when sending mails to third parties which means that the
-  other client will flip-flop the "encrypt" checkbox (if it has one))
-
-  - morning discussion: maybe just mandate that the Setup Message
-    has a proper Autocrypt header which contains the ``prefer-encrypt``
-    settings instead of encoding it somehow into the message
-
-  - separate identifier for Setup Messages so that they are easy
-    to recognize
-
-  (reworking the PR, maybe create another PR)
-  patrick, holger, neal
-
-- PR66: clarify MUSTs/Shoulds around Setup Code
-  azul, bjoern
-
-
 Setup Message:
 
 - User ID does not need to match an email (it's "decorative") (PR, holger)
