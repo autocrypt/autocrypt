@@ -398,7 +398,7 @@ These packets MUST be assembled in binary format (not ASCII-armored),
 and then base64-encoded.
 
 A Level 0 MUA MUST be capable of processing and handling 2048-bit RSA
-public keys.  It MAY support other strong OpenPGP key formats found in
+public keys.  It MAY support other OpenPGP key formats found in
 a ``type=0`` Autocrypt header (for example, by passing it agnostically
 to an OpenPGP backend for handling).
 
