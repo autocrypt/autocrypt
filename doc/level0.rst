@@ -350,8 +350,11 @@ and without pgp message markers (``---BEGIN...`` etc.).  For ease of
 parsing, the ``key`` attribute MUST be the last attribute in the header.
 
 The ``prefer-encrypt`` attribute can only occur with the value
-``mutual``, any other value is undefined. Its presence in the header
-indicates an agreement with encryption by default.
+``mutual``.  Its presence the Autocrypt header indicates an agreement
+to encrypt by default with other peers who have the same preference.
+An Autocrypt level 0 client that sees the attribute with any other
+value (or that does not see the attribute at all) should interpret the
+value as ``nopreference``.
 
 Additional attributes unspecified here are also possible before the
 ``key`` attribute.  If an attribute name starts with an underscore
