@@ -122,8 +122,7 @@ specific format, which contains a payload protected by the setup code.
 
 - Both the To and From headers MUST be the address of the user.
 
-- The Autocrypt Setup Message MUST contain an ``Autocrypt-Setup-Message: v0`` header
-  with an optional ``input-type`` attribute as described in `setup code`_
+- The Autocrypt Setup Message MUST contain an ``Autocrypt-Setup-Message: v0`` header.
 
 - The Autocrypt Setup Message MUST have a ``multipart/mixed`` structure,
   and it MUST have as first part a human-readable description about
@@ -170,10 +169,10 @@ kept in short term memory. For instance::
     AB1D-E2GH-IJK3-4NOP-Q5ST-XYZ6
 
 An Autocrypt Setup Message payload that uses this structure for its
-setup code SHOULD include the following ``input-type`` attribute in
-the top-level ``Autocrypt-Setup-Message`` header::
+setup code SHOULD include the following ``Passphrase-Format`` header
+in the outer OpenPGP armor::
 
-    Autocrypt-Setup-Message: v0; input-type=alphanumeric
+    Passphrase-Format: alphanumeric
 
 This attribute MUST NOT be present if the Setup Code does
 not match the format described above.
@@ -223,12 +222,12 @@ characteristics, and it could alert the client if it discovers one.
 If the client finds an Autocrypt Setup Message, it should offer to
 import it to enable Autocrypt.  If the user agrees to do so:
 
- * The client prompts the user for their corresponding Setup
-   Code.  If the ``Autocrypt-Setup-Message: v0`` header contains the parameter
-   ``input-type=alphanumeric``, then the client MAY choose to present the user with a
-   specialized input dialog that better assists the user with input in
-   the particular format described above.
-   If there is no ``input-type`` attribute, or the ``input-type`` is unknown,
+ * The client prompts the user for their corresponding Setup Code.
+   If there is a ``Passphrase-Format`` header in the outer OpenPGP armor and
+   its value is ``alphanumeric``, then the client MAY present a specialized
+   input dialog assisting the user to enter a code in the format described
+   above.
+   If there is no ``Passphrase-Format`` header, or the value is unknown,
    then the client MUST provide a plain UTF-8 string text entry.
 
  * The client should try decrypting the message with the supplied
@@ -279,6 +278,7 @@ Example:
     <pre>
     -----BEGIN PGP MESSAGE-----
     Version: BCPG v1.53
+    Passphrase-Format: alphanumeric
 
     hQIMAxC7JraDy7DVAQ//SK1NltM+r6uRf2BJEg+rnpmiwfAEIiopU0LeOQ6ysmZ0
     CLlfUKAcryaxndj4sBsxLllXWzlNiFDHWw4OOUEZAZd8YRbOPfVq2I8+W4jO3Moe
