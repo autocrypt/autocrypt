@@ -335,7 +335,7 @@ Deriving a Parsed :mailheader:`Autocrypt` Header from a Message
 
 The :mailheader:`Autocrypt` header has the following format::
 
-    Autocrypt: addr=a@b.example.org; [type=p;] [prefer-encrypt=mutual;] key=BASE64
+    Autocrypt: addr=a@b.example.org; [type=0;] [prefer-encrypt=mutual;] key=BASE64
 
 The ``addr`` attribute indicates the single recipient address this
 header is valid for. In case this address differs from the one the MUA
@@ -344,7 +344,7 @@ the one specified in the :mailheader:`From` header, the entire header
 MUST be treated as invalid.
 
 The ``type`` and ``key`` attributes specify the type and data of the
-key material.  For now the only supported type is ``p``, which
+key material.  For now the only supported type is ``0``, which
 represents a specific subset of OpenPGP (see the next section), and is
 also the default.  Headers with an unknown ``type`` MUST be treated as
 invalid.  The value of the ``key`` attribute is a Base64
@@ -375,7 +375,7 @@ and all :mailheader:`Autocrypt` headers discarded as invalid.
 
    - Document why we skip on more than one valid header?
 
-``type=p``: OpenPGP Based key data
+``type=0``: OpenPGP Based key data
 ++++++++++++++++++++++++++++++++++
 
 For maximum interoperability, a certificate sent by an
@@ -429,7 +429,7 @@ here.
 Conceptually, we represent this state as a table named
 ``autocrypt_peer_state`` indexed by the peer's :doc:`canonicalized
 e-mail address <address-canonicalization>` and key type.  In level 0,
-there is only one type, ``p``, so level 0 agents can implement this by
+there is only one type, ``0``, so level 0 agents can implement this by
 indexing only the peer's e-mail address.
 
 For each e-mail address and type, an agent MUST store the following
@@ -631,7 +631,7 @@ Encrypt outbound mail as requested
 
 As the user composes mail, in some circumstances, the MUA may be
 instructed by the user to encrypt the message.  If the recipient's
-keys are all of ``type=p``, and the sender has keys for all recipients
+keys are all of ``type=0``, and the sender has keys for all recipients
 (as well as themselves), they should construct the encrypted message
 as a :rfc:`PGP/MIME <3156>` encrypted+signed message, encrypted to all
 recipients and the public key whose secret is controlled by the MUA

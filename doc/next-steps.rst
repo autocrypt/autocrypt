@@ -44,7 +44,7 @@ New Types
 .. todo::
 
    how to deal with multiple types (at least when a new type is
-   specified).  When we support types other than `p`, it's possible
+   specified).  When we support types other than `0`, it's possible
    that users will have multiple keys available, each with a different
    type.  That seems likely to introduce some awkward choices during
    message composition time, particularly for multi-recipient
@@ -90,7 +90,7 @@ Guidance on masking Key IDs
 
 If any recipients are in :mailheader:`Bcc:` (rather than
 :mailheader:`To:` or :mailheader:`Cc:`), and the key types used are
-all OpenPGP (``type=p``), then the agent SHOULD mask the recipient key
+all OpenPGP (``type=0``), then the agent SHOULD mask the recipient key
 ID in the generated PKESK packets that correspond to the Bcc'ed
 recipents.  It does not need to mask recipient key IDs of normal
 recipients.
