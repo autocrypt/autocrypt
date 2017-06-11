@@ -361,172 +361,59 @@ indexing only the peer's e-mail address.
 For each e-mail and type, an agent MUST store the following
 attributes:
 
-* ``pah``: Parsed Autocrypt Header, which could be ``null``
-* ``changed``: UTC Timestamp when ``pah`` was last changed
-* ``last_seen``: Most recent UTC time that ``pah`` was confirmed
-
-Autocrypt-compatible agents SHOULD track and store in
-``autocrypt_peer_state`` a parsed interpretation ``pah``, which is not
-necessarily the literal header emitted (for the literal header, see
-next section).  The ``pah`` MUST contain the following fields:
-
+* ``last_seen``: UTC timestamp of the most recent effective date of
+  all processed messages for this peer.
+* ``last_seen_autocrypt``: UTC timestamp of the most recent effective
+  date of all processed messages for this peer that contained a valid
+  Autocrypt header.
 * ``key``: the raw key material
-* ``prefer_encrypt``: a tri-state: ``nopreference``, ``mutual`` or ``reset``
+* ``state``: a tri-state: ``nopreference``, ``mutual`` or ``reset``
 
 .. note::
 
-     The above is not an exhaustive list; implementors are encouraged
-     to improve upon this scheme as they see fit.  Suggestions for
-     additional (optional) state that an agent may want to keep about
-     a peer can be found in :doc:`optional-state`.
+  - The above is not necessarily an exhaustive list of peer state to
+    keep; implementors are encouraged to improve upon this scheme as
+    they see fit. Suggestions for additional (optional) state that an
+    agent may want to keep about a peer can be found in
+    :doc:`optional-state`.
+  - An implementation may use keys from other sources (e.g. local
+    keyring) at own discretion.
+  - Keys from ``application/pgp-keys`` attachments should only be
+    consumed automatically if they have a matching user id.
 
 
-Updating internal state upon message receipt
---------------------------------------------
+Updating Autocrypt Peer State
+-----------------------------
 
-When first encountering an incoming e-mail ``M`` from an e-mail
-address ``A``, the MUA should follow the following
-``autocrypt_update`` algorithm:
+Incoming messages may be processed by an Autocrypt-client at different
+times, such as upon receipt or display. When this happens, the
+Autocrypt state for the sending peer is updated with this new
+information. This update process depends on:
 
- - Set a local ``message_date`` to the :mailheader:`Date:` header of ``M``.
+- the effective date of the message, which is the sending time of the
+  message as indicated by its :mailheader:`Date` header, or the time
+  of first receipt if that date is in the future or unavailable.
 
- - If ``message_date`` is in the future, set ``message_date`` to the
-   current time.
+- the ``key`` and ``prefer-encrypt`` attributes of the single valid
+  parsed :mailheader:`Autocrypt` header (see above), if available.
 
-.. todo::
+If the effective date of the message is older than or equal to the
+current ``last_seen`` value of the peer state, no changes are required
+and the update process terminates. Otherwise, continue as follows:
 
-   This implies that Autocrypt clients keep track of whether they have
-   encountered a given message before, but does not provide them with
-   guidance on how to do so.  :mailheader:`Message-ID`?  Digest of
-   full message body?  The consequences of re-triggering the message
-   receipt process should only matter for messages that are
-   erroneously marked with a future date. Another approach that would
-   not require keeping track of the message would be to simply ignore
-   messages whose :mailheader:`Date:` header is in the future.
+If the parsed Autocrypt header is unavailable:
 
+- set ``last_seen`` to the effective message date
+- set ``state`` to ``reset``
 
-- Set a local ``message_pah`` to be the :mailheader:`Autocrypt:`
-   header in ``M``.  This is either a single Parsed Autocrypt Header,
-   or ``null``.
+Otherwise, the current peer state is updated with the contents of the
+parsed Autocrypt header:
 
-.. note::
-
-     The agent continues this message receipt process even when
-     ``message_pah`` is ``null``, since updating the stored state with
-     ``null`` is sometimes the correct action.
-
-- OPTIONAL: If ``message_pah`` is ``null``, and the MUA knows about
-  additional OpenPGP keys and the message is cryptographically signed
-  with a valid, verifiable message signature from a known OpenPGP
-  certificate ``K``, then we may replace ``message_pah`` with a
-  ``synthesized_pah`` generated from the message itself:
-
-  - If ``K`` is not encryption-capable (i.e. if the primary
-    key has no encryption-capabilities marked, and no valid subkeys
-    are encryption-capable), or if K does not have an OpenPGP User ID
-    which contains the e-mail address in the message's ``From:``,
-    then ``synthesized_pah`` should remain ``null``.
-
-  - Otherwise, with an encryption-capable ``K``, the ``key`` element of
-    ``synthesized_pah`` is set to ``K`` and the ``prefer_encrypt``
-    element of ``synthesized_pah`` is set to ``nopreference``.
-
-  - If ``K`` is encryption-capable and one of the message headers is
-    an `OpenPGP header`_ which expresses a preference for encrypted
-    e-mail, the ``prefer_encrypt`` element of ``synthesized_pah``
-    should be set to ``mutual``.
-
-.. _`OpenPGP header`: https://tools.ietf.org/html/draft-josefsson-openpgp-mailnews-header-07
-
-.. note::
-
-      This behaviour is optional: MUAs which support non-Autocrypt OpenPGP
-      workflows may have other strategies they prefer.  Implementing the
-      ``synthesized_pah`` is not necessary to guarantee correct interop
-      with other Autocrypt implementations, but it will improve compatibility
-      with the rest of the OpenPGP ecosystem and is therefore presented here
-      as a suggestion.
-
-      We do *not* synthesize the Autocrypt header from any
-      ``application/pgp-keys`` message parts.  This is because it's
-      possible that an attached OpenPGP key is not intended to be the
-      sender's OpenPGP key.  For example, Alice might send Bob Carol's
-      OpenPGP key in an attachment, but Bob should not interpret it as
-      Carol's key.
-
-.. todo::
-
-   - Maybe move ``synthesized_pah`` into :doc:`other-crypto-interop` ?
-   - Can we synthesize from attached keys, e.g. if it has a matching user id?
-
-
- - Next, the agent compares the ``message_pah`` with the ``pah`` stored in
-   ``autocrypt_peer_state[A]``.
-
- - If ``autocrypt_peer_state`` has no record at all for address ``A``,
-   the MUA sets ``autocrypt_peer_state[A]`` such that ``pah`` is
-   ``message_pah`` and ``changed`` and ``last_seen`` are both
-   ``message_date``, and then terminates this receipt process.
-
- - If ``autocrypt_peer_state[A]`` has ``last_seen`` greater than or
-   equal to ``message_date``, then the agent terminates this receipt
-   process, since it already knows about something more recent.  For
-   example, this might be if mail is delivered out of order, or if a
-   mailbox is scanned from newest to oldest.
-
- - If ``autocrypt_peer_state[A]`` has a ``last_seen`` less than
-   ``message_date``, then we compare ``message_pah`` with the ``pah``
-   currently stored in ``autocrypt_peer_state[A]``.
-
-   This is done as a literal comparison using only the ``key`` and
-   ``prefer_encrypt`` fields, even if the Agent stores additional
-   fields as an augmentation, as follows:
-
-   - If ``pah`` is ``null``, or if ``key`` is bytewise different, or if
-     ``prefer_encrypt`` has a different value, then this is an *update*.
-   - If ``key`` and ``prefer_encrypt`` match exactly, then it is
-     considered a *match*.
-   - If both ``pah`` and ``message_pah`` are ``null``, it is a *match*.
-   - If ``message_pah`` is ``null`` (and ``pah`` is not), it is a *reset*.
-
- - In the case of a **match**,
-   set ``autocrypt_peer_state[A].last_seen`` to ``message_date``.
-
- - In the case of an **update**:
-
-   - set ``autocrypt_peer_state[A].pah`` to ``message_pah``
-   - set ``autocrypt_peer_state[A].last_seen`` to ``message_date``
-   - set ``autocrypt_peer_state[A].changed`` to ``message_date``
-
- - In the case of a **reset**:
-
-   - set ``autocrypt_peer_state[A].pah.prefer_encrypt`` to ``reset``
-   - set ``autocrypt_peer_state[A].changed`` to ``message_date``
-
-.. note::
-
-   The above algorithm results in a non-deterministic
-   ``autocrypt_peer_state`` if two Autocrypt headers are processed
-   using the same ``message_date`` (depending on which message is
-   encountered first).  For consistency and predictability across
-   implementations, it would be better to have a strict ordering
-   between parsed Autocrypt headers, and to always select the lower
-   header in case of equal values of ``message_date``.
-
-.. note::
-
-   OpenPGP's composable certificate format suggests that there could
-   be alternate ways to compare ``key`` values besides strict bytewise
-   comparison.  For example, this could be done by comparing only the
-   fingerprint of the OpenPGP primary key instead of the keydata.
-   However, this would miss updates of the encryption-capable subkey,
-   or updates to the capabilities advertised in the OpenPGP
-   self-signature.  Alternately, the message receipt process could
-   incorporate fancier date comparisons by integrating the timestamps
-   within the OpenPGP messages during the date comparison step.  For
-   simplicity and ease of implementation, level 0 Autocrypt-capable
-   agents are expected to avoid these approaches and to do full
-   bytestring comparisons of ``key`` data instead.
+- set ``key`` to the corresponding value of the Autocrypt header
+- set ``last_seen`` to the effective message date
+- set ``last_seen_autocrypt`` to the effective message date
+- set ``state`` to ``mutual`` if the Autocrypt header contained a
+  ``prefer-encrypt=mutual`` attribute, or ``nopreference`` otherwise
 
 .. _spam-filters:
 
@@ -599,17 +486,17 @@ recipient with e-mail address ``A`` depends primarily on the value
 stored in ``autocrypt_peer_state[A]``. It is derived by the following
 algorithm:
 
-1. If the ``pah`` is ``null``, the recommendation is ``disable``.
-2. If ``pah.key`` is known to be unusable for encryption (e.g. it is
-   otherwise known to be revoked or expired), then the recommendation
-   is ``disable``.
+1. If the ``key`` is ``null``, the recommendation is ``disable``.
+2. If the ``key`` is known for some reason to be unusable for
+   encryption (e.g. it is otherwise known to be revoked or expired),
+   then the recommendation is ``disable``.
 3. If the message is composed as a reply to an encrypted message, then
    the recommendation is ``encrypt``.
-4. If ``pah.prefer_encrypt`` is ``mutual``, and the user's own
-   ``own_state.prefer_encrypt`` is ``mutual``, then the recommendation
-   is ``encrypt``.
-5. If ``pah.prefer_encrypt`` is ``reset`` and the ``pah.last_seen`` is
-   more than one month ago, then the recommendation is ``discourage``.
+4. If ``state`` is ``mutual``, and the user's own
+   ``own_state.prefer_encrypt`` is ``mutual`` as well, then the
+   recommendation is ``encrypt``.
+5. If ``state`` is ``reset`` and the ``last_seen_autocrypt`` is more
+   than one month ago, then the recommendation is ``discourage``.
 
 Otherwise, the recommendation is ``available``.
 
@@ -637,9 +524,10 @@ Cleartext replies to encrypted mail
 +++++++++++++++++++++++++++++++++++
 
 As you can see above, in the common use case, a reply to an encrypted
-message will also be encrypted.  Due to Autocrypt's opportunistic
-approach, however, it's possible that ``pah`` is ``null`` for some
-recipient, which means the reply will be sent in the clear.
+message will also be encrypted. Due to Autocrypt's opportunistic
+approach to key discovery, however, it's possible that the ``key``
+state in the recipient's Autocrypt peer state is ``null``, which means
+the reply will be sent in the clear.
 
 To avoid leaking cleartext from the original encrypted message in this
 case, the MUA MAY prepare the cleartext reply without including any
