@@ -231,7 +231,12 @@ import it to enable Autocrypt.  If the user agrees to do so:
    then the client MUST provide a plain UTF-8 string text entry.
 
  * The client should try decrypting the message with the supplied
-   Setup Code.  If it decrypts the client SHOULD import the secret
+   Setup Code.  The Code serves both for decryption as well as authenticating
+   the message.  Extra care needs to be taken with some PGP implementations
+   that the Setup Code is actually used for decryption.
+   :doc:`Preventing against injected private keys<bad-import>`
+
+ * If it decrypts the client SHOULD import the secret
    key material as its own Autocrypt key (``own_state.secret_key`` as
    discussed in `Account Preferences`_).
 
