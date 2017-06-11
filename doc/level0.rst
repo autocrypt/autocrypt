@@ -407,21 +407,29 @@ information. This update process depends on:
 - the ``key`` and ``prefer-encrypt`` attributes of the single valid
   parsed :mailheader:`Autocrypt` header (see above), if available.
 
-If the effective date of the message is older than or equal to the
-current ``last_seen`` value of the peer state, no changes are required
-and the update process terminates. Otherwise, continue as follows:
-
-If the parsed Autocrypt header is unavailable:
+If the parsed Autocrypt header is unavailable, and the effective
+message date is more recent than the current value of ``last_seen``,
+update the state as follows and terminate:
 
 - set ``last_seen`` to the effective message date
 - set ``state`` to ``reset``
 
-Otherwise, the current peer state is updated with the contents of the
-parsed Autocrypt header:
+Otherwise, if either the effective message date is older than the
+``last_seen_autocrypt`` value, or it is older than the current value
+of ``last_seen`` plus the parsed Autocrypt header is unavailable, no
+changes are required and the update process terminates.
+
+At this point, the message in processing contains the most recent
+Autocrypt header. Update the state as follows:
 
 - set ``key`` to the corresponding value of the Autocrypt header
-- set ``last_seen`` to the effective message date
 - set ``last_seen_autocrypt`` to the effective message date
+
+If the effective date of the message is more recent than or equal to
+the current ``last_seen`` value, it is also the most recent message
+overall. Additionally update the state as follows:
+
+- set ``last_seen`` to the effective message date
 - set ``state`` to ``mutual`` if the Autocrypt header contained a
   ``prefer-encrypt=mutual`` attribute, or ``nopreference`` otherwise
 
