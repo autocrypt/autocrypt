@@ -160,22 +160,32 @@ NOT be included in the cleartext of the Autocrypt Setup Message, or
 otherwise transmitted over e-mail.
 
 An Autocrypt level 0 client MUST generate a setup code as UTF-8 string
-of 24 uppercase alphanumeric characters, divided into six blocks of
+of 36 numeric characters, divided into nine blocks of
 four, separated by dashes. The dashes are part of the secret
-code. This format holds about 124 bits of data. It is designed to be
-unambiguous, pronounceable, and split into blocks that can be easily
+code and there are no spaces. This format holds about 119 bits of entropy. It is designed to be
+unambiguous, pronounceable, script-independent (chinese, cyrillic etc.),
+easily input on a mobile device and split into blocks that are easily
 kept in short term memory. For instance::
 
-    AB1D-E2GH-IJK3-4NOP-Q5ST-XYZ6
+    1203-1923-2307- 
+    1980-7833-0983- 
+    1998-7562-1111
 
 An Autocrypt Setup Message payload that uses this structure for its
 setup code SHOULD include the following ``Passphrase-Format`` header
 in the outer OpenPGP armor::
 
-    Passphrase-Format: alphanumeric
+    Passphrase-Format: numeric9x4
 
 This OpenPGP header MUST NOT be present with this value if the Setup
 Code does not match the format described above.
+
+Note: if the autocrypt implentation makes the passphrase easier
+to read by inserting spaces around the dashes, then the implemenation
+should warn the user that spaces are not part of the passphrase, because
+not all OpenPGP implementations make it easy for the autocrypt implementation
+to filter the passphrase.  (GnuPG, for instance, uses pinentry to retreive the passphrase, which
+means the autocrypt implementation cannot check the passphrase's format.)
 
 Setup Message Creation
 ++++++++++++++++++++++
