@@ -240,9 +240,6 @@ import it to enable Autocrypt.  If the user agrees to do so:
  * If it does, the client should import the secret key material and
    announce to the user that the import was successful.
 
-The message SHOULD be kept after importing it because it can serve
-as a recovery mechanism for the secret key.
-
 Why were some of these choices made?
 ++++++++++++++++++++++++++++++++++++
 
