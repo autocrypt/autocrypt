@@ -1,8 +1,6 @@
 
 Setup Message:
 
-- User ID does not need to match an email (it's "decorative") (PR, holger)
-
 - do a PR motivating the prefer-encrypt=mutual before diving into the
   details of it (azul, oliver)
 

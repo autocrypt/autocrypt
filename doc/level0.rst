@@ -232,13 +232,9 @@ import it to enable Autocrypt.  If the user agrees to do so:
    then the client MUST provide a plain UTF-8 string text entry.
 
  * The client should try decrypting the message with the supplied
-   Setup Code.  If it decrypts:
-
- * The client should verify that the User ID on the key matches the
-   User ID on the relevant account.
-
- * If it does, the client should import the secret key material and
-   announce to the user that the import was successful.
+   Setup Code.  If it decrypts the client SHOULD import the secret
+   key material as its own Autocrypt key (``own_state.secret_key`` as
+   discussed in `Account Preferences`_).
 
 Why were some of these choices made?
 ++++++++++++++++++++++++++++++++++++
