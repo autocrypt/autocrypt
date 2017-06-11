@@ -46,7 +46,7 @@ Setup Code ``D9VN-RD7A-7T3B-BWG7-LEPY-3NYT``.
 
   </p><pre>
   -----BEGIN PGP MESSAGE-----
-  Autocrypt-Setup-Message: v1
+  Passphrase-Format: alphanumeric
 
   jA0EBwMC2FohQ7r/Yovm0usBJ2ZwYc4COaY3SpDWXKsZ6SQ8A2nDq8+PeN2mP7EK
   PtzXRiCcYh6Q+OqmYKjX1t48HhXj962hM6KGKIHsYFGVViCJTOezTp2w27aLJDjN
