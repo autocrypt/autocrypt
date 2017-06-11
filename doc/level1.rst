@@ -344,10 +344,10 @@ the following sections for header format definitions and parsing.
 
 ..  _autocryptheaderformat:
 
-Deriving a Parsed :mailheader:`Autocrypt` Header from a Message
----------------------------------------------------------------
+The ``Autocrypt`` Header
+------------------------
 
-The :mailheader:`Autocrypt` header has the following format::
+The ``Autocrypt`` header has the following format::
 
     Autocrypt: addr=a@b.example.org; [type=1;] [prefer-encrypt=mutual;] key=BASE64
 
@@ -564,9 +564,12 @@ during message composition:
    choose to encrypt the message.  Prepare the message in cleartext.
 
  * ``discourage``: Enable UI that would allow the user to choose to
-   encrypt the message, but do not default to encryption.  Prepare the
-   message in cleartext.  If the user manually enables encryption,
-   warn them that the recipient may not be able to read the message.
+   encrypt the message, but do not default to encryption. Prepare the
+   message in cleartext. If the user manually enables encryption, the
+   MUA SHOULD warn that the recipient may not be able to read the
+   message. This warning message MAY be supplemented using optional
+   counters and user-agent state as suggested in
+   :doc:`optional-state`.
 
  * ``available``: Enable UI that would allow the user to choose to
    encrypt the message, but do not default to encryption.  Prepare the
@@ -646,29 +649,30 @@ encryption means we can't guarantee encryption in every case.
 Encrypt outbound mail as requested
 ----------------------------------
 
-As the user composes mail, in some circumstances, the MUA may be
-instructed by the user to encrypt the message.  If the recipient's
-keys are all of ``type=1``, and the sender has keys for all recipients
-(as well as themselves), they should construct the encrypted message
-as a :rfc:`PGP/MIME <3156>` encrypted+signed message, encrypted to all
-recipients and the public key whose secret is controlled by the MUA
-itself.
+An outgoing e-mail will be sent encrypted in either of two cases:
 
-If the recommendation is ``discourage`` the user SHOULD be presented
-with a clear warning explaining that there is reason to believe one or
-more recipients will not be able to read the mail if it is sent
-encrypted.  This message SHOULD state which recipients are considered
-problematic and provide useful information to help the user guage the
-risk.  The optional counters and user-agent state described in
-:doc:`optional-state` can be useful for this message.
+- the Autocrypt recommendation for the list of recipients is
+  ``encrypt``, and not explicitly overridden by the user
+- the Autocrypt recommendation is ``available`` or ``discouraged``,
+  and the user chose to encrypt.
+
+In this case, the MUA MUST construct the encrypted message as a
+:rfc:`PGP/MIME <3156>` message that is signed by the user's Autocrypt
+key, and encrypted to each currently known Autocrypt key of all
+recipients, as well as the sender's.
 
 For messages that are going to be encrypted when sent, the MUA MUST
 take care not to leak the cleartext of drafts or other
 partially-composed messages to their e-mail provider (e.g. in the
-"Drafts" folder).
+"Drafts" folder). If there is a chance that a message could be
+encrypted, the MUA SHOULD encrypt drafts only to itself before storing
+it remotely.
 
-If there is a chance that a message could be encrypted, the MUA
-SHOULD encrypt drafts only to itself before storing it remotely.
+.. note::
+
+   An e-mail that is said to be "encrypted" here will be both signed
+   and encrypted in the cryptographic sense.
+
 
 Specific User Interface Elements
 --------------------------------
