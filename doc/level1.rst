@@ -458,7 +458,8 @@ attributes:
   date of all processed messages for this peer that contained a valid
   Autocrypt header.
 * ``key``: the raw key material
-* ``state``: a tri-state: ``nopreference``, ``mutual`` or ``reset``
+* ``state``: a quad-state: ``nopreference``, ``mutual``, ``reset``, or
+  ``gossip``.
 
 .. note::
 
@@ -596,7 +597,8 @@ algorithm:
 4. If ``state`` is ``mutual``, and the user's own
    ``own_state.prefer_encrypt`` is ``mutual`` as well, then the
    recommendation is ``encrypt``.
-5. If ``state`` is ``reset`` and the ``last_seen_autocrypt`` is more
+5. If ``state`` is ``gossip``, the recommendation is ``discourage``.
+6. If ``state`` is ``reset`` and the ``last_seen_autocrypt`` is more
    than one month ago, then the recommendation is ``discourage``.
 
 Otherwise, the recommendation is ``available``.
@@ -673,6 +675,48 @@ it remotely.
    An e-mail that is said to be "encrypted" here will be both signed
    and encrypted in the cryptographic sense.
 
+Key Gossip
+----------
+
+It is a common use case to send an encrypted mail to a group of
+recipients. To ensure that these recipients can encrypt messages when
+replying to that same group, the keys of all recipients can be
+included in the encrypted payload.
+
+The ``Autocrypt-Gossip`` header has the format as the ``Autocrypt``
+header (see `autocryptheaderformat`_). Its ``addr`` attribute
+indicates the recipient address this header is valid for as usual, but
+may relate to any recipient in the ``To`` or ``Cc`` header.
+
+Key Gossip Injection in Outbound Mail
++++++++++++++++++++++++++++++++++++++
+
+An Autocrypt MUA MAY include ``Autocrypt-Gossip`` headers in messages
+with more than one recipient. These headers MUST be placed in the root
+MIME part of the encrypted message payload. The encrypted payload in
+this case contains one Autocrypt-Gossip header for each recipient,
+which MUST include ``addr`` and ``key`` attributes with the relevant
+data from the recipient's Autocrypt peer state.
+
+Updating Autocrypt Peer State from Key Gossip
++++++++++++++++++++++++++++++++++++++++++++++
+
+An incoming message may contain one or more Autocrypt-Gossip headers
+in the encrypted payload. Each of these headers may update the
+Autocrypt peer state of the recipient indicated by its ``addr`` value,
+in the following way:
+
+1. If the ``addr`` value does not match any recipient in the mail's
+   ``To`` or ``Cc`` header, the entire header MUST be ignored.
+
+2. If the existing ``last_seen_autocrypt`` value is older than the
+   effective message date and the existing ``state`` is ``gossip``, or
+   the ``last_seen_autocrypt`` value is null:
+
+    - set ``key`` to the corresponding value of the
+      ``Autocrypt-Gossip`` header
+    - set ``last_seen`` to the effective message date
+    - set ``state`` to ``gossip``
 
 Specific User Interface Elements
 --------------------------------
