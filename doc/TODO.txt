@@ -1,21 +1,16 @@
 
-
-open PRs
-
-- PR62: rework autocrypt peer state update description
-  came from: move "pah" attributes (parsed autocrypt header) to "peerstate"
-  and "update internal state" section at least somewhat
-  (remove TODOs, ...)
-  dkg, oliver, ...
-
 Setup Message:
 
 - User ID does not need to match an email (it's "decorative") (PR, holger)
 
-- alphanumeric versus number "setup codes" (discussion)
-  and also consider error-correction
+- do a PR motivating the prefer-encrypt=mutual before diving into the
+  details of it (azul, oliver)
 
-- refining/fixating the symmetric "setup code" encryption and Setup Message format
+- move "input-type" from Autocrypt-Setup-Message header to
+  a header of the PGP secret key, maybe "Passphrase-Format"
+  (azul, oliver) #80
+
+- #81 refining/fixating the symmetric "setup code" encryption and Setup Message format
   (defending particularly against secret-key-injection because if we let the user
   go through the effort of transfering 128 bit of entropy out-of-band we should try
   hard to protect a MITM exchanging keys)  (discussion based on a PR?)
@@ -26,13 +21,24 @@ Setup Message:
     rely on people calling their engines/APIs correctly and note that particularly
     gpg might appear to have decrypted symmetricatally but did something else
 
-- do a PR motivating the prefer-encrypt=mutual before diving into the
-  details of it (dkg)
+  -> at least improve the baseline along the last/third bullet point
+  see issue #81
+  (patrick, neal)
 
 - gossiping keys
+  (vincent, holger)
 
-- Phase in new keys  (ed25559)
+- #82 Phase in new keys  (ed25559)
+  consider using type=0 and type=1 instead of "p" etc.
 
+- alphanumeric versus number "setup codes" (discussion)
+  and also consider error-correction
+
+  setup code numeric: 1203 1923 1230 1980 7893 0983 1098 7562 0931
+  setup code numeric:  12035 1923 12307 1980
+                       78393 0983 10998 7562
+
+  (bjoern, neal)
 
 
 roadmapping / milestones / next steps
