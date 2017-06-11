@@ -387,10 +387,11 @@ attributes:
     they see fit. Suggestions for additional (optional) state that an
     agent may want to keep about a peer can be found in
     :doc:`optional-state`.
-  - An implementation may use keys from other sources (e.g. local
-    keyring) at own discretion.
-  - Keys from ``application/pgp-keys`` attachments should only be
-    consumed automatically if they have a matching user id.
+  - An implementation MAY also choose to use keys from other sources
+    (e.g. local keyring) at own discretion.
+  - If an implementation chooses to automatically ingest keys from a
+    ``application/pgp-keys`` attachment, it should only do so if they
+    have a matching user id.
 
 
 Updating Autocrypt Peer State
