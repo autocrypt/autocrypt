@@ -101,7 +101,7 @@ this approach however, multi-device support in the sense of devices
 coordinating with each other is out of scope for Autocrypt Level 0. It
 is still important to avoid "lock-in" of secret key material on a
 particular client. For this reason, Autocrypt includes a way to
-"export" keys (and possibly other state) for other clients to pick up,
+"export" the user's keys and the user's prefer-encrypt state for other clients to pick up,
 asynchronously and with explicitly required user interaction.
 
 The mechanism available in Autocrypt level 0 is a specially-formatted
@@ -121,27 +121,36 @@ The Autocrypt Setup Message itself is an e-mail message with a
 specific format, which contains a payload protected by the setup code.
 
 - Both the To and From headers MUST be the address of the user.
-- The Autocrypt Setup Message MUST have a `multipart/mixed` structure,
-  with the first part a `text/plain` or `text/html` part that provides
-  a human-readable description to the user about the purpose of the
-  message.
-- The "payload" of the Autocrypt setup message is a MIME part that is
-  a direct child of the root part, with a Content-Type of
-  `application/pgp-key-backup`.  There MUST be exactly one payload
-  part of this Content-Type in the message.
+
+- The Autocrypt Setup Message MUST contain an ``Autocrypt-Setup-Message: v0`` header
+  with an optional ``input-type`` attribute as described in `setup code`_
+
+- The Autocrypt Setup Message MUST have a ``multipart/mixed`` structure,
+  and it MUST have as first part a human-readable description about
+  the purpose of the message (e.g. ``text/plain`` or ``text/html`` or
+  ``multipart/alternative``).
+
+- The second mime part (called "payload") of the Autocrypt setup message
+  MUST be of Content-Type ``application/autocrypt-setup``.  There MUST NOT
+  be another part with the same content-type.
+
 - The payload MUST contain a single ASCII-armored block of OpenPGP
   symmetrically encrypted data, and MAY include other text above or
   below the ASCII-armored data, which MUST be ignored while
-  processing.
-- Decrypting the payload should produce an ASCII-armored OpenPGP
-  transferable secret key.
-- The encryption algorithm used MUST be at least as strong as 128-bit
-  symmetric encryption.  It SHOULD be AES-128.  The passphrase MUST be
-  the Setup Code (see below) represented as a UTF-8 string, used under
-  OpenPGP's salted+iterated S2K algorithm.
+  processing. Implementors MAY choose to provide human-readable
+  explanations as discussed in
+  :doc:`suggestions for key-transfer format<transfer-format>`.
 
-The payload MIME part MAY optionally use the OpenPGP Transfer Format
-(see :doc:`transfer-format`) for improved usability.
+- Decrypting the payload MUST produce a ``multipart/mixed`` mime structure
+  which MUST have an ``Autocrypt-Prefer-Encrypt`` header containing the value
+  of the user's prefer-encrypt setting. The first embedded mime part
+  MUST be of content-type ``application/autocrypt-key-backup`` containing
+  an ASCII-armored OpenPGP transferable secret key in the Mime body.
+
+- The symmetric encryption algorithm used MUST be AES-128.
+  The passphrase MUST be the Setup Code (see below), used
+  with `OpenPGP's salted+iterated S2K algorithm
+  <https://tools.ietf.org/html/rfc4880#section-3.7.1.3>`_.
 
 Setup Code
 ++++++++++
@@ -161,13 +170,13 @@ kept in short term memory. For instance::
     AB1D-E2GH-IJK3-4NOP-Q5ST-XYZ6
 
 An Autocrypt Setup Message payload that uses this structure for its
-setup code SHOULD include the following header in the outer OpenPGP
-armor::
+setup code SHOULD include the following ``input-type`` attribute in
+the top-level ``Autocrypt-Setup-Message`` header::
 
-    Autocrypt-Setup-Message: v1
+    Autocrypt-Setup-Message: v0; input-type=alphanumeric
 
-This header MUST NOT be present in an Autocrypt Setup Message if the
-setup code does not match the format described above.
+This attribute MUST NOT be present if the Setup Code does
+not match the format described above.
 
 Setup Message Creation
 ++++++++++++++++++++++
@@ -184,7 +193,9 @@ specific account, the client:
    actually written down and the Autocrypt Setup Message is not
    rendered useless.
  * Produces an ASCII-armored, minimized OpenPGP transferable secret
-   key out of the key associated with that account.
+   key out of the key associated with that account embedded into a
+   multipart/mixed structure also containing a header with the user's
+   prefer-encrypt state.
  * Symmetrically encrypts the OpenPGP transferable secret key using
    the secret code as the password.
  * Composes a new self-addressed e-mail message that contains the
@@ -202,7 +213,7 @@ a different Autocrypt-capable client in the future.
 Setup Message Import
 ++++++++++++++++++++
 
-An Autocrypt-capable client SHOULD support the ability to scan for and
+An Autocrypt-capable client SHOULD support the ability to wait for and
 import an Autocrypt Setup Message when the user has not yet configured
 Autocrypt.  This could happen either when a user of an unconfigured
 Autocrypt client decides to enable Autocrypt, or the client could
@@ -212,24 +223,25 @@ characteristics, and it could alert the client if it discovers one.
 If the client finds an Autocrypt Setup Message, it should offer to
 import it to enable Autocrypt.  If the user agrees to do so:
 
- * The client should prompt the user for their corresponding Setup
-   Code as a UTF-8 string.  If there is an ``Autocrypt-Setup-Message:
-   v1`` OpenPGP header, the client MAY present the user with a
+ * The client prompts the user for their corresponding Setup
+   Code.  If the ``Autocrypt-Setup-Message: v0`` header contains the parameter
+   ``input-type=alphanumeric``, then the client MAY choose to present the user with a
    specialized input dialog that better assists the user with input in
-   the particular format described above.  If no
-   ``Autocrypt-Setup-Message: v1`` OpenPGP header is present, the
-   client MUST provide a plain UTF-8 string text entry.
+   the particular format described above.
+   If there is no ``input-type`` attribute, or the ``input-type`` is unknown,
+   then the client MUST provide a plain UTF-8 string text entry.
+
  * The client should try decrypting the message with the supplied
    Setup Code.  If it decrypts:
+
  * The client should verify that the User ID on the key matches the
    User ID on the relevant account.
+
  * If it does, the client should import the secret key material and
    announce to the user that the import was successful.
 
-.. todo::
-
-   should we delete the message after import?  if the user declines to
-   import it, should we delete it?
+The message SHOULD be kept after importing it because it can serve
+as a recovery mechanism for the secret key.
 
 Why were some of these choices made?
 ++++++++++++++++++++++++++++++++++++
@@ -244,6 +256,60 @@ While the message structure is complex, it's actually fairly easy to
 pack and unpack with common OpenPGP tools.  It was selected to ease
 implementation and deployment, not for cleanliness or purity :)
 
+Example:
+
+::
+
+	To: me@mydomain.com
+	From: me@mydomain.com
+	Autocrypt-Setup-Message: v0
+	Content-type: multipart/mixed; boundary="==break0=="
+
+	--==break0==
+	Content-Type: text/plain
+
+	This is the Autocrypt setup message.
+
+	--==break0==
+	Content-Type: application/autocrypt-key-backup
+    Content-Disposition: attachment; filename="autocrypt-key-backup.html"
+
+	<html>
+	<body>
+	<p>
+	    This is the Autocrypt setup file used to transfer keys between clients.
+	</p>
+    <pre>
+    -----BEGIN PGP MESSAGE-----
+    Version: BCPG v1.53
+
+    hQIMAxC7JraDy7DVAQ//SK1NltM+r6uRf2BJEg+rnpmiwfAEIiopU0LeOQ6ysmZ0
+    CLlfUKAcryaxndj4sBsxLllXWzlNiFDHWw4OOUEZAZd8YRbOPfVq2I8+W4jO3Moe
+    -----END PGP MESSAGE-----
+    </pre>
+	</body>
+	</html>
+	--==break0==--
+
+The encrypted message part contains:
+
+::
+
+	Content-type: multipart/mixed; boundary="==break2=="
+	Autocrypt-Prefer-Encrypt: mutual
+
+	--==break2==
+	Content-type: application/autocrypt-key-backup
+
+	-----BEGIN PGP PRIVATE KEY BLOCK-----
+	Version: GnuPG v1.2.3 (GNU/Linux)
+
+	xcLYBFke7/8BCAD0TTmX9WJm9elc7/xrT4/lyzUDMLbuAuUqRINtCoUQPT2P3Snfx/jou1YcmjDgwT
+	Ny9ddjyLcdSKL/aR6qQ1UBvlC5xtriU/7hZV6OZEmW2ckF7UgGd6ajE+UEjUwJg2+eKxGWFGuZ1P7a
+	4Av1NXLayZDsYa91RC5hCsj+umLN2s+68ps5pzLP3NoK2zIFGoCRncgGI/pTAVmYDirhVoKh14hCh5
+	.....
+	-----END PGP PRIVATE KEY BLOCK-----
+	--==break2==--
 
 Header injection in outbound mail
 ---------------------------------
