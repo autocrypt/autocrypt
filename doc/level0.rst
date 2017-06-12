@@ -324,12 +324,14 @@ Header injection in outbound mail
 
 During message composition, if the :mailheader:`From:` header of the
 outgoing e-mail matches an address that the Autocrypt-capable agent
-knows the secret key material for, it SHOULD include an Autocrypt
-header. This header contains the associated public key material as
-``key`` attribute, and the same sender address that is used in the
-``From`` header in the ``addr`` attribute to confirm the
-association. The most minimal Level 0 MUA will only include these two
-attributes.
+knows the secret key material (``own_state.secret_key``) for, it
+SHOULD include an Autocrypt header. This header MUST contain the
+associated public key material (``own_state.key``) as ``key``
+attribute, and the same sender address that is used in the ``From``
+header in the ``addr`` attribute to confirm the association.  The most
+minimal Level 0 MUA will only include these two attributes.  If
+``own_state.prefer_encrypt`` is set to ``mutual`` then the header MUST
+have a ``prefer-encrypt`` attribute set to ``mutual``.
 
 If the :mailheader:`From:` address changes during message composition
 (E.g. if the user selects a different outbound identity), the
@@ -411,9 +413,9 @@ These packets MUST be assembled in binary format (not ASCII-armored),
 and then base64-encoded.
 
 A Level 0 MUA MUST be capable of processing and handling 2048-bit RSA
-keys.  It SHOULD be capable of handling Curve 25519 keys (ed25519 for
-``Kp`` and cv25519 for ``Ke``), but some underlying toolkits may not
-yet support Curve 25519.  It MAY support other OpenPGP key formats.
+public keys.  It MAY support other OpenPGP key formats found in
+a ``type=0`` Autocrypt header (for example, by passing it agnostically
+to an OpenPGP backend for handling).
 
 
 Internal state storage
@@ -685,8 +687,8 @@ Level 0 MUAs maintain an internal structure ``own_state`` for each
 account on which Autocrypt is enabled. ``own_state`` has the following
 members:
 
- * ``secret_key`` -- the secret key used for this account (see "Secret
-   Key Generation and storage" above).
+ * ``secret_key`` -- the RSA 2048-bit secret key used for this
+   account (see "Secret Key Generation and storage" above).
  * ``key`` -- the OpenPGP transferable public key derived from
    ``secret_key``.
  * ``prefer_encrypt`` -- the user's own
