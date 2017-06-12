@@ -323,7 +323,7 @@ The encrypted message part contains:
 Header injection in outbound mail
 ---------------------------------
 
-During message composition, if the :mailheader:`From:` header of the
+During message composition, if the ``From:`` header of the
 outgoing e-mail matches an address that the Autocrypt-capable agent
 knows the secret key material (``own_state.secret_key``) for, it
 SHOULD include an Autocrypt header. This header MUST contain the
@@ -334,28 +334,27 @@ minimal Level 1 MUA will only include these two attributes.  If
 ``own_state.prefer_encrypt`` is set to ``mutual`` then the header MUST
 have a ``prefer-encrypt`` attribute set to ``mutual``.
 
-If the :mailheader:`From:` address changes during message composition
-(E.g. if the user selects a different outbound identity), the
-Autocrypt-capable client MUST change the :mailheader:`Autocrypt`
-header appropriately.
+If the ``From`` address changes during message composition (E.g. if
+the user selects a different outbound identity), the Autocrypt-capable
+client MUST change the ``Autocrypt`` header appropriately.
 
 See :ref:`mua-happypath` for examples of outbound headers and
 the following sections for header format definitions and parsing.
 
 ..  _autocryptheaderformat:
 
-Deriving a Parsed :mailheader:`Autocrypt` Header from a Message
----------------------------------------------------------------
+The ``Autocrypt`` Header
+------------------------
 
-The :mailheader:`Autocrypt` header has the following format::
+The ``Autocrypt`` header has the following format::
 
     Autocrypt: addr=a@b.example.org; [type=1;] [prefer-encrypt=mutual;] key=BASE64
 
 The ``addr`` attribute indicates the single recipient address this
 header is valid for. In case this address differs from the one the MUA
 considers the sender of the e-mail in parsing, which will usually be
-the one specified in the :mailheader:`From` header, the entire header
-MUST be treated as invalid.
+the one specified in the ``From`` header, the entire header MUST be
+treated as invalid.
 
 The ``type`` and ``key`` attributes specify the type and data of the
 key material.  For now the only supported type is ``1``, which
@@ -383,10 +382,10 @@ of the header as though the attribute does not exist, but MUST treat
 the entire header as invalid if it encounters a "critical" attribute
 it doesn't support.
 
-When parsing an incoming message, a MUA MUST examine all
-:mailheader:`Autocrypt` headers, rather than just the first one.  If
-there is more than one valid header, this MUST be treated as an error,
-and all :mailheader:`Autocrypt` headers discarded as invalid.
+When parsing an incoming message, a MUA MUST examine all ``Autocrypt``
+headers, rather than just the first one. If there is more than one
+valid header, this MUST be treated as an error, and all ``Autocrypt``
+headers discarded as invalid.
 
 .. todo::
 
@@ -428,8 +427,8 @@ Internal state storage
     following.
 
 We define the effective date of a message as the sending time of the
-message as indicated by its :mailheader:`Date` header, or the time of
-first receipt if that date is in the future or unavailable.
+message as indicated by its ``Date`` header, or the time of first
+receipt if that date is in the future or unavailable.
 
 If a remote peer disables Autocrypt or drops back to using a
 non-Autocrypt MUA only we must be able to disable sending encrypted
@@ -458,7 +457,8 @@ attributes:
   date of all processed messages for this peer that contained a valid
   Autocrypt header.
 * ``key``: the raw key material
-* ``state``: a tri-state: ``nopreference``, ``mutual`` or ``reset``
+* ``state``: a quad-state: ``nopreference``, ``mutual``, ``reset``, or
+  ``gossip``.
 
 .. note::
 
@@ -485,7 +485,7 @@ information. This update process depends on:
 - the "effective date" of the message.
 
 - the ``key`` and ``prefer-encrypt`` attributes of the single valid
-  parsed :mailheader:`Autocrypt` header (see above), if available.
+  parsed ``Autocrypt`` header (see above), if available.
 
 If the parsed Autocrypt header is unavailable, and the effective
 message date is more recent than the current value of ``last_seen``,
@@ -564,9 +564,12 @@ during message composition:
    choose to encrypt the message.  Prepare the message in cleartext.
 
  * ``discourage``: Enable UI that would allow the user to choose to
-   encrypt the message, but do not default to encryption.  Prepare the
-   message in cleartext.  If the user manually enables encryption,
-   warn them that the recipient may not be able to read the message.
+   encrypt the message, but do not default to encryption. Prepare the
+   message in cleartext. If the user manually enables encryption, the
+   MUA SHOULD warn that the recipient may not be able to read the
+   message. This warning message MAY be supplemented using optional
+   counters and user-agent state as suggested in
+   :doc:`optional-state`.
 
  * ``available``: Enable UI that would allow the user to choose to
    encrypt the message, but do not default to encryption.  Prepare the
@@ -593,7 +596,8 @@ algorithm:
 4. If ``state`` is ``mutual``, and the user's own
    ``own_state.prefer_encrypt`` is ``mutual`` as well, then the
    recommendation is ``encrypt``.
-5. If ``state`` is ``reset`` and the ``last_seen_autocrypt`` is more
+5. If ``state`` is ``gossip``, the recommendation is ``discourage``.
+6. If ``state`` is ``reset`` and the ``last_seen_autocrypt`` is more
    than one month ago, then the recommendation is ``discourage``.
 
 Otherwise, the recommendation is ``available``.
@@ -646,29 +650,72 @@ encryption means we can't guarantee encryption in every case.
 Encrypt outbound mail as requested
 ----------------------------------
 
-As the user composes mail, in some circumstances, the MUA may be
-instructed by the user to encrypt the message.  If the recipient's
-keys are all of ``type=1``, and the sender has keys for all recipients
-(as well as themselves), they should construct the encrypted message
-as a :rfc:`PGP/MIME <3156>` encrypted+signed message, encrypted to all
-recipients and the public key whose secret is controlled by the MUA
-itself.
+An outgoing e-mail will be sent encrypted in either of two cases:
 
-If the recommendation is ``discourage`` the user SHOULD be presented
-with a clear warning explaining that there is reason to believe one or
-more recipients will not be able to read the mail if it is sent
-encrypted.  This message SHOULD state which recipients are considered
-problematic and provide useful information to help the user guage the
-risk.  The optional counters and user-agent state described in
-:doc:`optional-state` can be useful for this message.
+- the Autocrypt recommendation for the list of recipients is
+  ``encrypt``, and not explicitly overridden by the user
+- the Autocrypt recommendation is ``available`` or ``discouraged``,
+  and the user chose to encrypt.
+
+In this case, the MUA MUST construct the encrypted message as a
+:rfc:`PGP/MIME <3156>` message that is signed by the user's Autocrypt
+key, and encrypted to each currently known Autocrypt key of all
+recipients, as well as the sender's.
 
 For messages that are going to be encrypted when sent, the MUA MUST
 take care not to leak the cleartext of drafts or other
 partially-composed messages to their e-mail provider (e.g. in the
-"Drafts" folder).
+"Drafts" folder). If there is a chance that a message could be
+encrypted, the MUA SHOULD encrypt drafts only to itself before storing
+it remotely.
 
-If there is a chance that a message could be encrypted, the MUA
-SHOULD encrypt drafts only to itself before storing it remotely.
+.. note::
+
+   An e-mail that is said to be "encrypted" here will be both signed
+   and encrypted in the cryptographic sense.
+
+Key Gossip
+----------
+
+It is a common use case to send an encrypted mail to a group of
+recipients. To ensure that these recipients can encrypt messages when
+replying to that same group, the keys of all recipients can be
+included in the encrypted payload.
+
+The ``Autocrypt-Gossip`` header has the format as the ``Autocrypt``
+header (see `autocryptheaderformat`_). Its ``addr`` attribute
+indicates the recipient address this header is valid for as usual, but
+may relate to any recipient in the ``To`` or ``Cc`` header.
+
+Key Gossip Injection in Outbound Mail
++++++++++++++++++++++++++++++++++++++
+
+An Autocrypt MUA MAY include ``Autocrypt-Gossip`` headers in messages
+with more than one recipient. These headers MUST be placed in the root
+MIME part of the encrypted message payload. The encrypted payload in
+this case contains one Autocrypt-Gossip header for each recipient,
+which MUST include ``addr`` and ``key`` attributes with the relevant
+data from the recipient's Autocrypt peer state.
+
+Updating Autocrypt Peer State from Key Gossip
++++++++++++++++++++++++++++++++++++++++++++++
+
+An incoming message may contain one or more Autocrypt-Gossip headers
+in the encrypted payload. Each of these headers may update the
+Autocrypt peer state of the recipient indicated by its ``addr`` value,
+in the following way:
+
+1. If the ``addr`` value does not match any recipient in the mail's
+   ``To`` or ``Cc`` header, the entire header MUST be ignored.
+
+2. If the existing ``last_seen_autocrypt`` value is older than the
+   effective message date and the existing ``state`` is ``gossip``, or
+   the ``last_seen_autocrypt`` value is null:
+
+    - set ``key`` to the corresponding value of the
+      ``Autocrypt-Gossip`` header
+    - set ``last_seen`` to the effective message date
+    - set ``state`` to ``gossip``
 
 Specific User Interface Elements
 --------------------------------
