@@ -270,14 +270,14 @@ Example:
 	To: me@mydomain.com
 	From: me@mydomain.com
 	Autocrypt-Setup-Message: v0
-	Content-type: multipart/mixed; boundary="==break0=="
+	Content-type: multipart/mixed; boundary="==break1=="
 
-	--==break0==
+	--==break1==
 	Content-Type: text/plain
 
 	This is the Autocrypt setup message.
 
-	--==break0==
+	--==break1==
 	Content-Type: application/autocrypt-key-backup
     Content-Disposition: attachment; filename="autocrypt-key-backup.html"
 
@@ -297,7 +297,7 @@ Example:
     </pre>
 	</body>
 	</html>
-	--==break0==--
+	--==break1==--
 
 The encrypted message part contains:
 
