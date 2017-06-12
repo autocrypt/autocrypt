@@ -18,8 +18,8 @@ and contributors, MUA developers and privacy enthusiasts.
      easiest place to get started with the concrete ideas behind
      Autocrypt.
 
-:doc:`level0`
-     Minimum requirements and implementer guidance for Level 0
+:doc:`level1`
+     Minimum requirements and implementer guidance for Level 1
      Autocrypt-capable MUAs.
 
 :doc:`dev-status`
@@ -31,7 +31,7 @@ and contributors, MUA developers and privacy enthusiasts.
      mechanisms and UI for existing MUAs.
 
 :doc:`next-steps`
-     Future improvements for Autocrypt, beyond Level 0.
+     Future improvements for Autocrypt, beyond Level 1.
 
 :doc:`ecosystem-dangers`
      Some documented risks and dangers to the mail ecosystem,

@@ -30,7 +30,7 @@ from previous ones here are some of its features:
   tell each other how and when to encrypt to each other
   by attaching necessary information along with mails.
 
-- **Implement and specify "Level 0" support in several mail apps in spring
-  2017.** Keep Level 0 minimal enough that it's easy for developers to
+- **Implement and specify "Level 1" support in several mail apps in spring
+  2017.** Keep Level 1 minimal enough that it's easy for developers to
   adopt it and we can start to drive efforts from real-life experiences.
   Please see :doc:`level0`.

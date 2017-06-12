@@ -30,7 +30,7 @@ Responder
 We deploy a preliminary auto-responder which accepts and sends mails
 with Autocrypt headers.  Just sent a mail to ``bot at autocrypt dot
 org`` and wait for the reply and look at the headers.  As of Janury
-2017, the Bot does not implement the full level-0 protocol.
+2017, the Bot does not implement the full level-1 protocol.
 
 Bot Dovecot IMAP
 ++++++++++++++++
