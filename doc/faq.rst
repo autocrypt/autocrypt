@@ -147,7 +147,7 @@ What about spammers accidentally downgrading encryption?
 
 A spammer who forges mail from a given address could potentially
 downgrade encryption for that person as a side effect.  Please see
-:ref:`the Level 0 documentation <spam-filters>` for details
+:ref:`the Level 1 documentation <spam-filters>` for details
 about expected interaction with spam filters.
 
 How does Autocrypt interact with today's mailing list managers?
@@ -174,12 +174,12 @@ receiving client.  For example, what if one client gets multiple
 different keys for a target address from different gossiping peers --
 should the client encrypt to all keys or just some?  How should those
 keys interact with keys received from the end peer directly? Because
-of these complications, we're sidestepping this problem for level 0.
+of these complications, we're sidestepping this problem for level 1.
 
 We welcome drafts proposing sensible ways to manage key gossip in
 group e-mail communication for future levels of Autocrypt.
 
-Why can only one Level 0 MUA to "claim" an e-mail account for Autocrypt?
+Why can only one Level 1 MUA to "claim" an e-mail account for Autocrypt?
 ------------------------------------------------------------------------
 
 In the event that two Autocrypt-enabled agents operate a single
@@ -197,14 +197,14 @@ For level 1 and higher, we aim to provide a synchronization mechanism
 so that all Autocrypt-enabled MUAs connected to a single account are
 capable of reading encrypted mail.
 
-For simplicitly, level 0 does not require or define synchronization
+For simplicitly, level 1 does not require or define synchronization
 mechanisms, but instead allows an Autocrypt-enable client to "lock"
 the account so that multiple Autocrypt-enabled clients don't end up
 sending different keys.
 
 .. todo::
 
-   Describe the tradeoffs and workflow for level-0 agents sharing an
+   Describe the tradeoffs and workflow for level-1 agents sharing an
    account with future level-1 clients, or failure modes (e.g. lockout
    by an agent you no longer use)
 
@@ -272,6 +272,6 @@ Why RSA2048 and not 25519?
 
 Curve 25519 keys are shorter, cheaper to compute on, and likely to be
 stronger than RSA 2048 against non-quantum attackers.  However, we
-want level 0 to be implementable in late 2016, and more toolkits
+want level 1 to be implementable in late 2016, and more toolkits
 support RSA 2048 than 25519.  Future versions are likely to encourage
 25519 over RSA 2048.

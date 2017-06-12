@@ -7,7 +7,7 @@ of its peers.
 This document attempts to describe additional optional state that can
 improve the user experience in some corner cases.
 
-Unlike the standard Autocrypt level 0 state management, some of these
+Unlike the standard Autocrypt level 1 state management, some of these
 rules depend on a client being able to keep track of whether it has
 seen a given message before or not, and these guidelines may cause
 non-deterministic results depending on the order that messages are

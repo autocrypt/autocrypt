@@ -1,17 +1,18 @@
-Autocrypt Level 0: Enabling encryption, avoiding annoyances
+Autocrypt Level 1: Enabling encryption, avoiding annoyances
 ===========================================================
 
 This document describes the basic capabilities required for a mail app
-to be Autocrypt-capable at Level 0.  The design of Level 0 is driven by
-usability concerns and by the realities of incremental deployment.  A user
-may use both Autocrypt-enabled mail apps and traditional plain ones
-and we'd like to avoid annoyances like unexpected unreadable mails
-while supporting users who want to explicitly turn on encryption.
+to be Autocrypt-capable at Level 1. The design of Level 1 is driven by
+usability concerns and by the realities of incremental deployment. A
+user may use both Autocrypt-enabled mail apps and traditional plain
+ones and we'd like to avoid annoyances like unexpected unreadable
+mails while supporting users who want to explicitly turn on
+encryption.
 
-For ease of implementation and deployment, Level 0 does not support
+For ease of implementation and deployment, Level 1 does not support
 multi-device configurations.  We intend to :doc:`support the multi-device
 use case (and other features) as part of Level 1<next-steps>`.  We
-want to keep Level 0 minimal enough that it's easy for developers to
+want to keep Level 1 minimal enough that it's easy for developers to
 adopt it and we can start to drive efforts from real-life experiences
 as soon as possible.
 
@@ -74,7 +75,7 @@ distributes it to communication peers, encrypted mail sent to the user
 is only readable by the MUA that sent the last message. This can lead
 to behavior that is unpredictable and confusing for the user.
 
-As a simple measure of mitigation, Level 0 MUAs SHOULD check before
+As a simple measure of mitigation, Level 1 MUAs SHOULD check before
 key generation whether there is evidence in the user's mailbox of
 other active Autocrypt clients. To do this, they SHOULD scan the
 user's Sent folder for mail that contains Autocrypt headers. If such
@@ -89,7 +90,7 @@ Autocrypt on the given account.
 
 To solve this problem in a better way, bi-directional communication
 between the user's different MUAs is required. However, this is out of
-scope for Level 0.
+scope for Level 1.
 
 Autocrypt Setup Message
 -----------------------
@@ -98,13 +99,13 @@ For proper support of a multi-device scenario, it is necessary to have
 bi-directional communication between different MUAs. This is possible
 e.g. via access to a shared IMAP mailbox. Because of the complexity of
 this approach however, multi-device support in the sense of devices
-coordinating with each other is out of scope for Autocrypt Level 0. It
+coordinating with each other is out of scope for Autocrypt Level 1. It
 is still important to avoid "lock-in" of secret key material on a
 particular client. For this reason, Autocrypt includes a way to
 "export" the user's keys and the user's prefer-encrypt state for other clients to pick up,
 asynchronously and with explicitly required user interaction.
 
-The mechanism available in Autocrypt level 0 is a specially-formatted
+The mechanism available in Autocrypt level 1 is a specially-formatted
 e-mail message called the Autocrypt Setup Message.  An
 already-configured Autocrypt client can generate an Autocrypt Setup
 Message, and send it to itself.  A not-yet-configured Autocrypt client
@@ -122,7 +123,7 @@ specific format, which contains a payload protected by the setup code.
 
 - Both the To and From headers MUST be the address of the user.
 
-- The Autocrypt Setup Message MUST contain an ``Autocrypt-Setup-Message: v0`` header.
+- The Autocrypt Setup Message MUST contain an ``Autocrypt-Setup-Message: v1`` header.
 
 - The Autocrypt Setup Message MUST have a ``multipart/mixed`` structure,
   and it MUST have as first part a human-readable description about
@@ -159,7 +160,7 @@ CSPRNG, and presented directly to the user for safekeeping. It MUST
 NOT be included in the cleartext of the Autocrypt Setup Message, or
 otherwise transmitted over e-mail.
 
-An Autocrypt level 0 client MUST generate a setup code as UTF-8 string
+An Autocrypt Level 1 client MUST generate a setup code as UTF-8 string
 of 36 numeric characters, divided into nine blocks of
 four, separated by dashes. The dashes are part of the secret
 code and there are no spaces. This format holds about 119 bits of entropy. It is designed to be
@@ -167,8 +168,8 @@ unambiguous, pronounceable, script-independent (chinese, cyrillic etc.),
 easily input on a mobile device and split into blocks that are easily
 kept in short term memory. For instance::
 
-    1203-1923-2307- 
-    1980-7833-0983- 
+    1203-1923-2307-
+    1980-7833-0983-
     1998-7562-1111
 
 An Autocrypt Setup Message payload that uses this structure for its
@@ -214,7 +215,7 @@ specific account, the client:
  * Suggests to the user to either back up the message or to import it
    from another Autocrypt-capable client.
 
-A Level 0 client MUST be able to create an Autocrypt Setup Message, to
+A Level 1 client MUST be able to create an Autocrypt Setup Message, to
 preserve users' ability to recover from disaster, and to choose to use
 a different Autocrypt-capable client in the future.
 
@@ -269,7 +270,7 @@ Example:
 
 	To: me@mydomain.com
 	From: me@mydomain.com
-	Autocrypt-Setup-Message: v0
+	Autocrypt-Setup-Message: v1
 	Content-type: multipart/mixed; boundary="==break1=="
 
 	--==break1==
@@ -329,7 +330,7 @@ SHOULD include an Autocrypt header. This header MUST contain the
 associated public key material (``own_state.key``) as ``key``
 attribute, and the same sender address that is used in the ``From``
 header in the ``addr`` attribute to confirm the association.  The most
-minimal Level 0 MUA will only include these two attributes.  If
+minimal Level 1 MUA will only include these two attributes.  If
 ``own_state.prefer_encrypt`` is set to ``mutual`` then the header MUST
 have a ``prefer-encrypt`` attribute set to ``mutual``.
 
@@ -348,7 +349,7 @@ Deriving a Parsed :mailheader:`Autocrypt` Header from a Message
 
 The :mailheader:`Autocrypt` header has the following format::
 
-    Autocrypt: addr=a@b.example.org; [type=0;] [prefer-encrypt=mutual;] key=BASE64
+    Autocrypt: addr=a@b.example.org; [type=1;] [prefer-encrypt=mutual;] key=BASE64
 
 The ``addr`` attribute indicates the single recipient address this
 header is valid for. In case this address differs from the one the MUA
@@ -357,7 +358,7 @@ the one specified in the :mailheader:`From` header, the entire header
 MUST be treated as invalid.
 
 The ``type`` and ``key`` attributes specify the type and data of the
-key material.  For now the only supported type is ``0``, which
+key material.  For now the only supported type is ``1``, which
 represents a specific subset of OpenPGP (see the next section), and is
 also the default.  Headers with an unknown ``type`` MUST be treated as
 invalid.  The value of the ``key`` attribute is a Base64
@@ -369,7 +370,7 @@ parsing, the ``key`` attribute MUST be the last attribute in the header.
 The ``prefer-encrypt`` attribute can only occur with the value
 ``mutual``.  Its presence the Autocrypt header indicates an agreement
 to encrypt by default with other peers who have the same preference.
-An Autocrypt level 0 client that sees the attribute with any other
+An Autocrypt Level 1 client that sees the attribute with any other
 value (or that does not see the attribute at all) should interpret the
 value as ``nopreference``.
 
@@ -391,11 +392,11 @@ and all :mailheader:`Autocrypt` headers discarded as invalid.
 
    - Document why we skip on more than one valid header?
 
-``type=0``: OpenPGP Based key data
+``type=1``: OpenPGP Based key data
 ++++++++++++++++++++++++++++++++++
 
 For maximum interoperability, a certificate sent by an
-Autocrypt-enabled Level 0 MUA MUST consist of an :rfc:`OpenPGP
+Autocrypt-enabled Level 1 MUA MUST consist of an :rfc:`OpenPGP
 "Transferable Public Key"<4880#section-11.1>`) containing exactly these five
 OpenPGP packets:
 
@@ -412,9 +413,9 @@ conforming to the :rfc:`2822` grammar ``angle-addr``.
 These packets MUST be assembled in binary format (not ASCII-armored),
 and then base64-encoded.
 
-A Level 0 MUA MUST be capable of processing and handling 2048-bit RSA
+A Level 1 MUA MUST be capable of processing and handling 2048-bit RSA
 public keys.  It MAY support other OpenPGP key formats found in
-a ``type=0`` Autocrypt header (for example, by passing it agnostically
+a ``type=1`` Autocrypt header (for example, by passing it agnostically
 to an OpenPGP backend for handling).
 
 
@@ -432,7 +433,7 @@ first receipt if that date is in the future or unavailable.
 
 If a remote peer disables Autocrypt or drops back to using a
 non-Autocrypt MUA only we must be able to disable sending encrypted
-mails to this peer automatically.  MUAs capable of Autocrypt level 0
+mails to this peer automatically.  MUAs capable of Autocrypt Level 1
 therefore MUST store state about the capabilities of their remote
 peers.
 
@@ -444,8 +445,8 @@ here.
 
 Conceptually, we represent this state as a table named
 ``autocrypt_peer_state`` indexed by the peer's :doc:`canonicalized
-e-mail address <address-canonicalization>` and key type.  In level 0,
-there is only one type, ``0``, so level 0 agents can implement this by
+e-mail address <address-canonicalization>` and key type.  In level 1,
+there is only one type, ``1``, so level 1 agents can implement this by
 indexing only the peer's e-mail address.
 
 For each e-mail address and type, an agent MUST store the following
@@ -600,7 +601,7 @@ Otherwise, the recommendation is ``available``.
 Recommendations for messages to multiple addresses
 ++++++++++++++++++++++++++++++++++++++++++++++++++
 
-For level 0 agents, the Autocrypt recommendation for a message
+For level 1 agents, the Autocrypt recommendation for a message
 composed to multiple recipients is derived from the recommendations
 for each recipient individually.
 
@@ -638,7 +639,7 @@ lines of::
   future messages in this thread will be encrypted.
 
 The above recommendations are only "MAY" and not "SHOULD" or "MUST"
-because we want to accomodate a user-friendly level 0 MUA that stays
+because we want to accomodate a user-friendly level 1 MUA that stays
 silent and does not impede the user's ability to reply.  Opportunistic
 encryption means we can't guarantee encryption in every case.
 
@@ -647,7 +648,7 @@ Encrypt outbound mail as requested
 
 As the user composes mail, in some circumstances, the MUA may be
 instructed by the user to encrypt the message.  If the recipient's
-keys are all of ``type=0``, and the sender has keys for all recipients
+keys are all of ``type=1``, and the sender has keys for all recipients
 (as well as themselves), they should construct the encrypted message
 as a :rfc:`PGP/MIME <3156>` encrypted+signed message, encrypted to all
 recipients and the public key whose secret is controlled by the MUA
@@ -679,11 +680,11 @@ non-Autocrypt users.
 Account Preferences
 +++++++++++++++++++
 
-Level 0 MUAs MUST allow the user to disable Autocrypt completely for
-each account they control.  For level 0, we expect most MUAs to have
+Level 1 MUAs MUST allow the user to disable Autocrypt completely for
+each account they control.  For level 1, we expect most MUAs to have
 Autocrypt disabled by default.
 
-Level 0 MUAs maintain an internal structure ``own_state`` for each
+Level 1 MUAs maintain an internal structure ``own_state`` for each
 account on which Autocrypt is enabled. ``own_state`` has the following
 members:
 

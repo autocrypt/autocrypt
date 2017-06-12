@@ -45,7 +45,7 @@ cornerstones.
 
 We are following this approach step-by-step using different "Levels"
 of implementation compliance.  Driven by usability concerns, we are
-refining and implementing :doc:`Level 0 <level0>` in several mail apps
+refining and implementing :doc:`Level 1 <level0>` in several mail apps
 during Spring 2017.  If you are interested to help please :doc:`join our
 channels and look at where we meet next <contact>`.
 

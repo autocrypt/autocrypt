@@ -52,7 +52,7 @@ and the ACLU_.
 Upcoming events
 ---------------
 
-- June 9-12th 2017: `Autocrypt Level 0 hackathon / gathering
+- June 9-12th 2017: `Autocrypt Level 1 hackathon / gathering
   <https://lists.mayfirst.org/pipermail/autocrypt/2017-May/000093.html>`_ in
   Freiburg im Breisgau, Germany.
 
