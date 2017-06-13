@@ -327,7 +327,7 @@ During message composition, if the ``From:`` header of the
 outgoing e-mail matches an address that the Autocrypt-capable agent
 knows the secret key material (``own_state.secret_key``) for, it
 SHOULD include an Autocrypt header. This header MUST contain the
-associated public key material (``own_state.key``) as ``key``
+associated public key material (``own_state.public_key``) as ``keydata``
 attribute, and the same sender address that is used in the ``From``
 header in the ``addr`` attribute to confirm the association.  The most
 minimal Level 1 MUA will only include these two attributes.  If
@@ -356,15 +356,15 @@ considers the sender of the e-mail in parsing, which will usually be
 the one specified in the ``From`` header, the entire header MUST be
 treated as invalid.
 
-The ``type`` and ``key`` attributes specify the type and data of the
+The ``type`` and ``keydata`` attributes specify the type and data of the
 key material.  For now the only supported type is ``1``, which
 represents a specific subset of OpenPGP (see the next section), and is
 also the default.  Headers with an unknown ``type`` MUST be treated as
-invalid.  The value of the ``key`` attribute is a Base64
+invalid.  The value of the ``keydata`` attribute is a Base64
 representation of the public key material.  This is a simple
 ascii-armored key format without a checksum (which would then be Radix64)
 and without pgp message markers (``---BEGIN...`` etc.).  For ease of
-parsing, the ``key`` attribute MUST be the last attribute in the header.
+parsing, the ``keydata`` attribute MUST be the last attribute in the header.
 
 The ``prefer-encrypt`` attribute can only occur with the value
 ``mutual``.  Its presence the Autocrypt header indicates an agreement
@@ -374,7 +374,7 @@ value (or that does not see the attribute at all) should interpret the
 value as ``nopreference``.
 
 Additional attributes unspecified here are also possible before the
-``key`` attribute.  If an attribute name starts with an underscore
+``keydata`` attribute.  If an attribute name starts with an underscore
 (``_``), it is a "non-critical" attribute.  An attribute name without
 a leading underscore is a "critical" attribute.  The MUA SHOULD ignore
 any unsupported non-critical attribute and continue parsing the rest
@@ -458,15 +458,15 @@ e-mail address <address-canonicalization>` and key type.  In level 1,
 there is only one type, ``1``, so level 1 agents can implement this by
 indexing only the peer's e-mail address.
 
-For each e-mail address and type, an agent MUST store the following
-attributes:
+For each e-mail address ``A`` and type, an agent MUST store the following
+attributes as ``autocrypt_peer_state[A]``:
 
 * ``last_seen``: UTC timestamp of the most recent effective date of
   all processed messages for this peer.
 * ``last_seen_autocrypt``: UTC timestamp of the most recent effective
   date of all processed messages for this peer that contained a valid
   Autocrypt header.
-* ``key``: the raw key material
+* ``public_key``: the public key of the recipient
 * ``state``: a quad-state: ``nopreference``, ``mutual``, ``reset``, or
   ``gossip``.
 
@@ -494,7 +494,7 @@ information. This update process depends on:
 
 - the "effective date" of the message.
 
-- the ``key`` and ``prefer-encrypt`` attributes of the single valid
+- the ``keydata`` and ``prefer-encrypt`` attributes of the single valid
   parsed ``Autocrypt`` header (see above), if available.
 
 If the parsed Autocrypt header is unavailable, and the effective
@@ -512,7 +512,7 @@ changes are required and the update process terminates.
 At this point, the message in processing contains the most recent
 Autocrypt header. Update the state as follows:
 
-- set ``key`` to the corresponding value of the Autocrypt header
+- set ``public_key`` to the corresponding ``keydata`` value of the Autocrypt header
 - set ``last_seen_autocrypt`` to the effective message date
 
 If the effective date of the message is more recent than or equal to
@@ -597,8 +597,8 @@ recipient with e-mail address ``A`` depends primarily on the value
 stored in ``autocrypt_peer_state[A]``. It is derived by the following
 algorithm:
 
-1. If the ``key`` is ``null``, the recommendation is ``disable``.
-2. If the ``key`` is known for some reason to be unusable for
+1. If the ``public_key`` is ``null``, the recommendation is ``disable``.
+2. If the ``public_key`` is known for some reason to be unusable for
    encryption (e.g. it is otherwise known to be revoked or expired),
    then the recommendation is ``disable``.
 3. If the message is composed as a reply to an encrypted message, then
@@ -637,9 +637,9 @@ Cleartext replies to encrypted mail
 
 As you can see above, in the common use case, a reply to an encrypted
 message will also be encrypted. Due to Autocrypt's opportunistic
-approach to key discovery, however, it's possible that the ``key``
-state in the recipient's Autocrypt peer state is ``null``, which means
-the reply will be sent in the clear.
+approach to key discovery, however, it is possible that
+``state`` in the recipient's Autocrypt peer state is ``null``,
+which means the reply will be sent in the clear.
 
 To avoid leaking cleartext from the original encrypted message in this
 case, the MUA MAY prepare the cleartext reply without including any
@@ -704,7 +704,7 @@ An Autocrypt MUA MAY include ``Autocrypt-Gossip`` headers in messages
 with more than one recipient. These headers MUST be placed in the root
 MIME part of the encrypted message payload. The encrypted payload in
 this case contains one Autocrypt-Gossip header for each recipient,
-which MUST include ``addr`` and ``key`` attributes with the relevant
+which MUST include ``addr`` and ``keydata`` attributes with the relevant
 data from the recipient's Autocrypt peer state.
 
 Updating Autocrypt Peer State from Key Gossip
@@ -722,7 +722,7 @@ in the following way:
    effective message date and the existing ``state`` is ``gossip``, or
    the ``last_seen_autocrypt`` value is null:
 
-    - set ``key`` to the corresponding value of the
+    - set ``keydata`` to the corresponding value of the
       ``Autocrypt-Gossip`` header
     - set ``last_seen`` to the effective message date
     - set ``state`` to ``gossip``
@@ -747,8 +747,8 @@ members:
 
  * ``secret_key`` -- the RSA 2048-bit secret key used for this
    account (see "Secret Key Generation and storage" above).
- * ``key`` -- the OpenPGP transferable public key derived from
-   ``secret_key``.
+ * ``public_key`` -- the OpenPGP transferable public key derived
+   from the secret key.
  * ``prefer_encrypt`` -- the user's own
    preferences on this account, either ``mutual`` or ``nopreference``.
    This SHOULD be set to ``nopreference`` by default.
