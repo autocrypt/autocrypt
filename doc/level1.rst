@@ -417,6 +417,15 @@ public keys.  It MAY support other OpenPGP key formats found in
 a ``type=1`` Autocrypt header (for example, by passing it agnostically
 to an OpenPGP backend for handling).
 
+Secret key protection at rest
+-----------------------------
+
+The MUA SHOULD NOT protect the private key with a password. All
+encrypted outgoing messages MUST also be signed, which would require the
+user to enter their password for both reading and sending mail. This
+introduces too much friction to become part of a routine daily workflow.
+Protection of the user's keys at rest and other files is achieved more
+easily and securely with full-disk encryption.
 
 Internal state storage
 ----------------------
