@@ -770,6 +770,18 @@ similar.
 Please see :doc:`ui-examples` for specific examples of how this might
 look.
 
+Aliases
+-------
+
+If a user sends emails with multiple aliases throught the same account
+the client SHOULD use the same autocrypt key for all aliases.  The
+Autocrypt Setup Message is not designed to handle multiple keys.  In
+addition syncronisation issues arrise if new keys for aliases are
+created on different devices.
+
+A client MAY allow to enable autocrypt only for a subset of the aliases
+and allow configuring ``prefer_encrypt`` on a per alias basis.
+
 Message Composition
 +++++++++++++++++++
 
