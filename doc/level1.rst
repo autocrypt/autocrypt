@@ -777,7 +777,3 @@ If the Autocrypt recommendation is either ``available`` or
 ``encrypt``, the MUA SHOULD expose this UI during message composition
 to allow the user to make a different decision.
 
-.. todo::
-
-   - Should we really recommend hiding the encrypt UI? This reduces UI
-     consistency!
