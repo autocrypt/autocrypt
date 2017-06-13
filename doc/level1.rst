@@ -161,32 +161,40 @@ NOT be included in the cleartext of the Autocrypt Setup Message, or
 otherwise transmitted over e-mail.
 
 An Autocrypt Level 1 client MUST generate a setup code as UTF-8 string
-of 36 numeric characters, divided into nine blocks of
-four, separated by dashes. The dashes are part of the secret
-code and there are no spaces. This format holds about 119 bits of entropy. It is designed to be
-unambiguous, pronounceable, script-independent (chinese, cyrillic etc.),
-easily input on a mobile device and split into blocks that are easily
-kept in short term memory. For instance::
+of 36 numeric characters, divided into nine blocks of four, separated
+by dashes. The dashes are part of the secret code and there are no
+spaces. This format holds about 119 bits of entropy. It is designed to
+be unambiguous, pronounceable, script-independent (chinese, cyrillic
+etc.), easily input on a mobile device and split into blocks that are
+easily kept in short term memory. For instance::
 
-    1203-1923-2307-
+    9503-1923-2307-
     1980-7833-0983-
     1998-7562-1111
 
 An Autocrypt Setup Message payload that uses this structure for its
-setup code SHOULD include the following ``Passphrase-Format`` header
-in the outer OpenPGP armor::
+setup code SHOULD include a ``Passphrase-Format`` header with value
+``numeric9x4`` in the ASCII-armored data. This allows providing a
+specialized input form during decryption, with greatly improved
+usability.
+
+As a further measure to improve usability, it is RECOMMENDED to reveal
+the first two digits of the first block in a ``Passphrase-Begin``
+header, sacrificing about 7 bits of entropy. Those digits can be
+pre-filled during decryption, which reassures the user that they have
+the correct code before typing the full 36 digits. It also helps
+mitigate a possible type of phishing attack that asks the user to
+input their setup code.
+
+The headers might look like this::
 
     Passphrase-Format: numeric9x4
+    Passphrase-Begin: 95
 
-This OpenPGP header MUST NOT be present with this value if the Setup
-Code does not match the format described above.
+If those digits are included in the headers like this, they may also
+be used in the descriptive text that is part of the Setup Message, to
+distinguish different messages.
 
-Note: if the autocrypt implentation makes the passphrase easier
-to read by inserting spaces around the dashes, then the implemenation
-should warn the user that spaces are not part of the passphrase, because
-not all OpenPGP implementations make it easy for the autocrypt implementation
-to filter the passphrase.  (GnuPG, for instance, uses pinentry to retreive the passphrase, which
-means the autocrypt implementation cannot check the passphrase's format.)
 
 Setup Message Creation
 ++++++++++++++++++++++
@@ -290,7 +298,8 @@ Example:
     <pre>
     -----BEGIN PGP MESSAGE-----
     Version: BCPG v1.53
-    Passphrase-Format: alphanumeric
+    Passphrase-Format: numeric9x4
+    Passphrase-Begin: 12
 
     hQIMAxC7JraDy7DVAQ//SK1NltM+r6uRf2BJEg+rnpmiwfAEIiopU0LeOQ6ysmZ0
     CLlfUKAcryaxndj4sBsxLllXWzlNiFDHWw4OOUEZAZd8YRbOPfVq2I8+W4jO3Moe
