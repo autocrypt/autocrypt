@@ -188,6 +188,16 @@ not all OpenPGP implementations make it easy for the autocrypt implementation
 to filter the passphrase.  (GnuPG, for instance, uses pinentry to retreive the passphrase, which
 means the autocrypt implementation cannot check the passphrase's format.)
 
+To make sure the user uses the correct setup code and to differ from phishing
+mails that might look similar, the Autocrypt Setup Message SHOULD add the first
+two characters of the setup code in the ``Passphrase-Begin`` header so that the receiving MUA can display
+a message as "Please type in the Setup code starting with 12..."::
+
+    Passphrase-Begin: 12
+    
+Non-Ascii characters in the ``Passphrase-Begin`` header MUST be encoded using the 
+encoded-word syntax (RFC 2047).  This becomes important when free UTF-8 strings are used and not `numeric9x4`.
+
 Setup Message Creation
 ++++++++++++++++++++++
 
@@ -290,7 +300,8 @@ Example:
     <pre>
     -----BEGIN PGP MESSAGE-----
     Version: BCPG v1.53
-    Passphrase-Format: alphanumeric
+    Passphrase-Format: numeric9x4
+    Passphrase-Begin: 12
 
     hQIMAxC7JraDy7DVAQ//SK1NltM+r6uRf2BJEg+rnpmiwfAEIiopU0LeOQ6ysmZ0
     CLlfUKAcryaxndj4sBsxLllXWzlNiFDHWw4OOUEZAZd8YRbOPfVq2I8+W4jO3Moe
