@@ -188,7 +188,7 @@ input their setup code.
 
 The headers might look like this::
 
-    Passphrase-Begin: numeric9x4
+    Passphrase-Format: numeric9x4
     Passphrase-Begin: 95
 
 If those digits are included in the headers like this, they may also
