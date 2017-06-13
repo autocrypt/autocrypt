@@ -407,7 +407,8 @@ OpenPGP packets:
 
 The content of the user id packet is only decorative. By convention, it
 contains the same address used in the ``addr`` attribute in angle brackets,
-conforming to the :rfc:`2822` grammar ``angle-addr``.
+conforming to the :rfc:`2822` grammar ``angle-addr``. It MUST NOT be an empty
+string as this triggers a `bug in gnupg <https://dev.gnupg.org/T3203>`_.
 
 These packets MUST be assembled in binary format (not ASCII-armored),
 and then base64-encoded.
