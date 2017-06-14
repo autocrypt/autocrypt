@@ -437,100 +437,81 @@ introduces too much friction to become part of a routine daily workflow.
 Protection of the user's keys at rest and other files is achieved more
 easily and securely with full-disk encryption.
 
-Internal state storage
+
+.. _`autocryptpeermap`:
+
+The autocrypt peer map
 ----------------------
 
-.. note::
+MUAs SHOULD maintain an ``autocrypt_peer_map`` which maps a
+:doc:`canonicalized e-mail address <address-canonicalization>` to a
+``peer_entry`` which summarizes what we know from processing the
+flow of incoming messages.  This knowledge is used for computing an
+`encryption recommendation <encryption-recommendation>`_ for mail
+composition.   It is expected that future Autocrypt specifications
+mandate synchronization of the ``autocrypt_peer_map`` among
+multiple devices of a user.
 
-    You should be familiar with :ref:`mua-happypath` before reading the
-    following.
+Peer Entry attributes
++++++++++++++++++++++
 
-We define the effective date of a message as the sending time of the
-message as indicated by its ``Date`` header, or the time of first
-receipt if that date is in the future or unavailable.
-
-If a remote peer disables Autocrypt or drops back to using a
-non-Autocrypt MUA only we must be able to disable sending encrypted
-mails to this peer automatically.  MUAs capable of Autocrypt Level 1
-therefore MUST store state about the capabilities of their remote
-peers.
-
-Agents MAY also store additional information gathered for heuristic
-purposes, or for other cryptographic schemes.  However, in order to
-support future syncing of Autocrypt state between agents, it is
-critical that Autocrypt-capable agents maintain the state specified
-here.
-
-Conceptually, we represent this state as a table named
-``autocrypt_peer_state`` indexed by the peer's :doc:`canonicalized
-e-mail address <address-canonicalization>` and key type.  In level 1,
-there is only one type, ``1``, so level 1 agents can implement this by
-indexing only the peer's e-mail address.
-
-For each e-mail address ``A`` and type, an agent MUST store the following
-attributes as ``autocrypt_peer_state[A]``:
+Each ``peer_entry`` has the following attributes:
 
 * ``last_seen``: UTC timestamp of the most recent effective date of
   all processed messages for this peer.
 * ``last_seen_autocrypt``: UTC timestamp of the most recent effective
   date of all processed messages for this peer that contained a valid
   Autocrypt header.
-* ``public_key``: the public key of the recipient
-* ``state``: a quad-state: ``nopreference``, ``mutual``, ``reset``, or
+* ``public_key``: the public key for this e-mail address, ``null`` if
+  none exists or if the key is invalid.
+* ``key_status``: a quad-state: ``nopreference``, ``mutual``, ``reset``, or
   ``gossip``.
+
+Agents MAY also store additional information like the complete chronology
+of keys seen from a peer, or statistical information about incoming messages
+which might be used for determining how likely the other side can read
+encrypted messages.  See :doc:`optional-state` for related considerations.
+
+Updating a peer entry from an incoming message
+++++++++++++++++++++++++++++++++++++++++++++++
+
+Updating a ``peer_entry`` depends on the ``effective_date`` and the
+Autocrypt header of each incoming message.  The ``effective_date`` is
+defined by the ``Date`` header or, if it is in the future or invalid,
+the current date.  Updating can happen at arrival or display time of
+a message and messages may be processed in non-chronological order.
+A MUA updates a ``peer_entry`` by following all of the following steps:
+
+- If the incoming message contains no Autocrypt header and ``effective_date``
+  is more recent than ``last_seen`` then update as follows:
+
+  * set ``last_seen`` to the effective message date
+  * set ``key_status`` to ``reset``
+
+- If the message contains an Autocrypt header and the
+  ``effective_date`` is more recent than ``last_seen_autocrypt``,
+  then:
+
+  * set ``public_key`` from the corresponding ``keydata`` value of
+    the Autocrypt header
+  * set ``last_seen_autocrypt`` to ``effective_date``
+
+- If the message contains an Autocrypt header and the
+  ``effective_date`` is at least as recent as ``last_seen``,
+  then:
+
+  * set ``last_seen`` to ``effective_date``
+  * set ``key_status`` to ``mutual`` if the Autocrypt header contains
+    a ``prefer-encrypt=mutual`` attribute, or ``nopreference`` otherwise
 
 .. note::
 
-  - The above is not necessarily an exhaustive list of peer state to
-    keep; implementors are encouraged to improve upon this scheme as
-    they see fit. Suggestions for additional (optional) state that an
-    agent may want to keep about a peer can be found in
-    :doc:`optional-state`.
-  - An implementation MAY also choose to use keys from other sources
-    (e.g. local keyring) at own discretion.
+  - An implementation MAY also choose to obtain public keys from other sources
+    (e.g. local keyring).
+
   - If an implementation chooses to automatically ingest keys from a
-    ``application/pgp-keys`` attachment, it should only do so if they
-    have a matching user id.
-
-
-Updating Autocrypt Peer State
------------------------------
-
-Incoming messages may be processed by an Autocrypt-client at different
-times, such as upon receipt or display. When this happens, the
-Autocrypt state for the sending peer is updated with this new
-information. This update process depends on:
-
-- the "effective date" of the message.
-
-- the ``keydata`` and ``prefer-encrypt`` attributes of the single valid
-  parsed ``Autocrypt`` header (see above), if available.
-
-If the parsed Autocrypt header is unavailable, and the effective
-message date is more recent than the current value of ``last_seen``,
-update the state as follows and terminate:
-
-- set ``last_seen`` to the effective message date
-- set ``state`` to ``reset``
-
-Otherwise, if either the effective message date is older than the
-``last_seen_autocrypt`` value, or it is older than the current value
-of ``last_seen`` plus the parsed Autocrypt header is unavailable, no
-changes are required and the update process terminates.
-
-At this point, the message in processing contains the most recent
-Autocrypt header. Update the state as follows:
-
-- set ``public_key`` to the corresponding ``keydata`` value of the Autocrypt header
-- set ``last_seen_autocrypt`` to the effective message date
-
-If the effective date of the message is more recent than or equal to
-the current ``last_seen`` value, it is also the most recent message
-overall. Additionally update the state as follows:
-
-- set ``last_seen`` to the effective message date
-- set ``state`` to ``mutual`` if the Autocrypt header contained a
-  ``prefer-encrypt=mutual`` attribute, or ``nopreference`` otherwise
+    ``application/pgp-keys`` attachment, it SHOULD do so only if the
+    contained public key has a user id which matches the ``From``.
 
 .. _spam-filters:
 
@@ -542,8 +523,10 @@ overall. Additionally update the state as follows:
    if the message is believed to be spam?
 
 
-Provide a recommendation for message encryption
------------------------------------------------
+.. _`encryption-recommendation`:
+
+Encryption recommendation for message composition
+--------------------------------------------------
 
 On message composition, an Autocrypt-capable agent also has an
 opportunity to decide whether to try to encrypt an e-mail.  Autocrypt
@@ -602,21 +585,22 @@ Recommendations for single-recipient messages
 +++++++++++++++++++++++++++++++++++++++++++++
 
 The Autocrypt recommendation for a message composed to a single
-recipient with e-mail address ``A`` depends primarily on the value
-stored in ``autocrypt_peer_state[A]``. It is derived by the following
-algorithm:
+e-mail address is computed from the ``own_state`` of an Autocrypt
+account, the ``peer_entry`` as found in the ``autocrypt_peer_map``
+for the e-mail address, and a boolean ``is_reply_to_encrypted``
+indicating whether this is a reply to an encrypted message.
+A MUA SHOULD implement the following algorithm:
 
 1. If the ``public_key`` is ``null``, the recommendation is ``disable``.
-2. If the ``public_key`` is known for some reason to be unusable for
-   encryption (e.g. it is otherwise known to be revoked or expired),
-   then the recommendation is ``disable``.
-3. If the message is composed as a reply to an encrypted message, then
-   the recommendation is ``encrypt``.
-4. If ``state`` is ``mutual``, and the user's own
-   ``own_state.prefer_encrypt`` is ``mutual`` as well, then the
-   recommendation is ``encrypt``.
-5. If ``state`` is ``gossip``, the recommendation is ``discourage``.
-6. If ``state`` is ``reset`` and the ``last_seen_autocrypt`` is more
+
+2. If ``is_reply_to_encrypted`` is True, the recommendation is ``encrypt``.
+
+3. If ``key_status`` is ``mutual`` and ``own_state.prefer_encrypt`` is
+   ``mutual``, then the recommendation is ``encrypt``.
+
+4. If ``key_status`` is ``gossip``, the recommendation is ``discourage``.
+
+5. If ``key_status`` is ``reset`` and the ``last_seen_autocrypt`` is more
    than one month ago, then the recommendation is ``discourage``.
 
 Otherwise, the recommendation is ``available``.
@@ -626,20 +610,15 @@ Recommendations for messages to multiple addresses
 
 For level 1 agents, the Autocrypt recommendation for a message
 composed to multiple recipients is derived from the recommendations
-for each recipient individually.
+for each recipient individually:
 
-If any recipient has a recommendation of ``disable`` then the message
-recommendation is ``disable``.
+1. If any recipient has a recommendation of ``disable`` or ``discourage``
+   then the overall recommendation is ``disable`` or ``discourage`` respectively.
 
-If the message being composed is a reply to an encrypted message, or
-if every recipient other than "myself" (the e-mail address that the
-message is ``From:``) has a recommendation of ``encrypt`` then the
-message recommendation is ``encrypt``.
+2. If all recipients have a recommendation of ``encrypt`` then the overall
+   recommendation is ``encrypt``.
 
-If any recipient has a recommendation of ``discourage`` then the message
-recommendation is ``discourage``.
-
-Otherwise, the message recommendation is ``available``.
+3. Otherwise, the recommendation is ``available``.
 
 Cleartext replies to encrypted mail
 +++++++++++++++++++++++++++++++++++
@@ -647,8 +626,8 @@ Cleartext replies to encrypted mail
 As you can see above, in the common use case, a reply to an encrypted
 message will also be encrypted. Due to Autocrypt's opportunistic
 approach to key discovery, however, it is possible that
-``state`` in the recipient's Autocrypt peer state is ``null``,
-which means the reply will be sent in the clear.
+``peer_entry.public_key`` is ``null`` which means the reply will be
+sent in the clear.
 
 To avoid leaking cleartext from the original encrypted message in this
 case, the MUA MAY prepare the cleartext reply without including any
@@ -728,13 +707,13 @@ in the following way:
    ``To`` or ``Cc`` header, the entire header MUST be ignored.
 
 2. If the existing ``last_seen_autocrypt`` value is older than the
-   effective message date and the existing ``state`` is ``gossip``, or
+   effective message date and the existing ``key_status`` is ``gossip``, or
    the ``last_seen_autocrypt`` value is null:
 
     - set ``keydata`` to the corresponding value of the
       ``Autocrypt-Gossip`` header
     - set ``last_seen`` to the effective message date
-    - set ``state`` to ``gossip``
+    - set ``key_status`` to ``gossip``
 
 Specific User Interface Elements
 --------------------------------

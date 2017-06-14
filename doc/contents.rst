@@ -49,7 +49,7 @@ and contributors, MUA developers and privacy enthusiasts.
    features
    contact
    examples
-   level0
+   level1
    dev-status
    address-canonicalization
    ecosystem-dangers
