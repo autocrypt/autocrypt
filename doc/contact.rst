@@ -1,5 +1,4 @@
 
-
 Channels and Contact possibilities
 ==================================
 
@@ -52,11 +51,9 @@ and the ACLU_.
 Upcoming events
 ---------------
 
-- June 9-12th 2017: `Autocrypt Level 1 hackathon / gathering
-  <https://lists.mayfirst.org/pipermail/autocrypt/2017-May/000093.html>`_ in
-  Freiburg im Breisgau, Germany.
-
 - August 4-8th 2017: something during the dutch hacker camp SHA2017?
+
+- End September/October 2017: Level 1 release party in Freiburg?
 
 .. _`33c3`: https://events.ccc.de/congress/2016/wiki/Main_Page
 
@@ -68,6 +65,12 @@ Upcoming events
 
 Past events
 -------------
+
+- June 9-12th 2017: `Autocrypt Level 1 hackathon / gathering
+  <https://lists.mayfirst.org/pipermail/autocrypt/2017-May/000093.html>`_ in
+  Freiburg im Breisgau, Germany. See `this post on what happened
+  during the multi-day gathering in Freiburg
+  <https://lists.mayfirst.org/pipermail/autocrypt/2017-June/000152.html>`_.
 
 - April 2017: `Autocrypt talk and session
   <https://media.ccc.de/v/EH2017-8499-towards_automatic_end_to_end_mail_encryption>`_
