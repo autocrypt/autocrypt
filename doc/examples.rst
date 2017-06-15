@@ -64,32 +64,25 @@ Consider a blank state and a first outgoing message from Alice to Bob::
 Upon sending this mail, Alice's MUA will add a header which contains her
 encryption key::
 
-    Autocrypt: addr=alice@a.example; type=0; prefer-encrypted=yes; key=...
+    Autocrypt: addr=alice@a.example; type=1; prefer-encrypt=mutual; keydata=...
 
 Bob's MUA will scan the incoming mail, find Alice's key and store it
 associated to the ``alice@a.example`` address taken from the
-``to``-attribute.  When Bob now composes a mail to Alice his MUA will
+``addr``-attribute.  When Bob now composes a mail to Alice his MUA will
 find the key and signal to Bob that the mail will be encrypted and
 after finalization of the mail encrypt it.  Moreover, Bob's MUA will
 add its own encryption info::
 
-    Autocrypt: addr=bob@b.example; type=0; prefer-encrypted=yes; key=...
+    Autocrypt: addr=bob@b.example; type=1; prefer-encrypt=mutual; keydata=...
 
 When Alice's MUA now scans the incoming mail from Bob it will store
 Bob's key and the fact that Bob sent an encrypted mail.  Subsequently
 both Alice and Bob will have their MUAs encrypt mails to each other.
 
-If ``prefer-encrypted`` is sent as ``yes`` the MUA MUST default to
-encrypting the next e-mail. If it is set as ``no`` the MUA MUST
-default to plaintext.  If ``prefer-encrypted`` is not sent the MUA
-should stick to what it was doing before. If the attribute has never
-been sent it's up to the MUA to decide. The safe way to go about it is
-to default to plaintext to make sure the recipient can read the
-e-mail.
+If ``prefer-encrypted`` is sent as ``mutual`` and this is also the choice set for the MUA,
+the MUA MUST default to encrypting the next e-mail.  In all other cases, the MUA MUST
+default to plaintext to make sure the recipient can read the e-mail.
 
-We encourage MUA developers to propose heuristics for handling the
-undirected case. We will document the best approaches to develop a
-shared understanding.
 
 
 Group mail communication (1:N)

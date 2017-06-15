@@ -143,7 +143,7 @@ specific format, which contains a payload protected by the setup code.
 
 - Decrypting the payload MUST produce a ``multipart/mixed`` mime structure
   which MUST have an ``Autocrypt-Prefer-Encrypt`` header containing the value
-  of the user's prefer-encrypt setting. The first embedded mime part
+  of the user's prefer-encrypt setting (either `mutual` or `nopreference`). The first embedded mime part
   MUST be of content-type ``application/autocrypt-key-backup`` containing
   an ASCII-armored OpenPGP transferable secret key in the Mime body.
 
@@ -243,7 +243,7 @@ import it to enable Autocrypt.  If the user agrees to do so:
 
  * The client prompts the user for their corresponding Setup Code.
    If there is a ``Passphrase-Format`` header in the outer OpenPGP armor and
-   its value is ``alphanumeric``, then the client MAY present a specialized
+   its value is ``numeric9x4``, then the client MAY present a specialized
    input dialog assisting the user to enter a code in the format described
    above.
    If there is no ``Passphrase-Format`` header, or the value is unknown,
@@ -357,7 +357,7 @@ The ``Autocrypt`` Header
 
 The ``Autocrypt`` header has the following format::
 
-    Autocrypt: addr=a@b.example.org; [type=1;] [prefer-encrypt=mutual;] key=BASE64
+    Autocrypt: addr=a@b.example.org; [type=1;] [prefer-encrypt=mutual;] keydata=BASE64
 
 The ``addr`` attribute indicates the single recipient address this
 header is valid for. In case this address differs from the one the MUA
