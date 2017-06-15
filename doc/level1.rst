@@ -143,7 +143,7 @@ specific format, which contains a payload protected by the setup code.
 
 - Decrypting the payload MUST produce a ``multipart/mixed`` mime structure
   which MUST have an ``Autocrypt-Prefer-Encrypt`` header containing the value
-  of the user's prefer-encrypt setting. The first embedded mime part
+  of the user's prefer-encrypt setting (either `mutual` or `nopreference`). The first embedded mime part
   MUST be of content-type ``application/autocrypt-key-backup`` containing
   an ASCII-armored OpenPGP transferable secret key in the Mime body.
 
