@@ -27,10 +27,11 @@ hackers and researchers who are willing to take fresh approaches, learn from
 past mistakes, and collectively aim to increase the overall encryption
 of e-mail in the net.  The group effort was born and named "Autocrypt"
 on December 17th 2016 by ~20 people during a 5-day meeting at the
-OnionSpace in Berlin. It's a dynamic, fun process which is open to
-new people, influences and contributions.  See :doc:`contact channels
-and upcoming events <contact>` on how you may talk with us and who
-"we" are currently.
+OnionSpace in Berlin. Follow up meetings took place in March 2017 around the
+Internet Freedom festival and during a subsequent gathering in Freiburg, Germany.
+It remains a dynamic, fun process which is open to new people, influences and
+contributions.  See :doc:`contact channels and upcoming events <contact>` on
+how you may talk with us and who "we" are currently.
 
 
 The technical Autocrypt approach
@@ -45,8 +46,10 @@ cornerstones.
 
 We are following this approach step-by-step using different "Levels"
 of implementation compliance.  Driven by usability concerns, we are
-refining and implementing :doc:`Level 1 <level0>` in several mail apps
-during Spring 2017.  If you are interested to help please :doc:`join our
-channels and look at where we meet next <contact>`.
+refining and implementing :doc:`Level 1 <level1>` in several mail apps
+during summer 2017, aiming for a release party during autumn 2017 which
+marks the first `real-life implementation milestone <https://github.com/autocrypt/autocrypt/milestone/1>`_.
+If you are interested to learn more or want to help please :doc:`join our channels and look at
+where we meet next <contact>`.
 
 See :doc:`contents` for an index of all docs and discussion results so far.
