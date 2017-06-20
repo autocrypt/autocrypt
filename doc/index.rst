@@ -1,5 +1,5 @@
-Introducing Autocrypt: E-Mail Encryption for Everyone
-=====================================================
+Introducing Autocrypt: E-Mail Encryption for Humans
+===================================================
 
 **If users ask how they can secure their e-mail the answer
 should be as simple as: use an Autocrypt-enabled mail app!**
