@@ -92,6 +92,8 @@ To solve this problem in a better way, bi-directional communication
 between the user's different MUAs is required. However, this is out of
 scope for Level 1.
 
+.. _`setup-message`:
+
 Autocrypt Setup Message
 -----------------------
 
