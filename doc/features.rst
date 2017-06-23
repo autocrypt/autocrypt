@@ -17,20 +17,17 @@ from previous ones here are some of its features:
   will be both Autocrypt-enabled mail apps and traditional plain ones,
   interacting with each other.
 
-- **Don't ask users anything about keys, ever.** And minimize and
+- **Don't ask users anything about keys, ever.** Minimize and
   usability-test what needs to be decided by users and include
-  resulting UI guidance in the specs.  Minimize friction for people
+  resulting UI guidance in the specs. Minimize friction for people
   using multiple mail apps with their accounts.
 
 - **Go for mail app changes only**, don't require changes from mail
-  providers or depend on third party services, allowing fluid development
-  of deployable code and specs.
+  providers or don't depend on third party services, allowing fluid
+  development of deployable code and specs. Ensure mail implementors
+  can actually implement and influence the spec.
 
 - **Use decentralized, in-band key discovery.**  Make mail apps
   tell each other how and when to encrypt to each other
-  by attaching necessary information along with mails.
-
-- **Implement and specify "Level 1" support in several mail apps in spring
-  2017.** Keep Level 1 minimal enough that it's easy for developers to
-  adopt it and we can start to drive efforts from real-life experiences.
-  Please see :doc:`level0`.
+  by attaching necessary information along with mails without
+  causing attachments which are displayed strangely in many mail apps.
