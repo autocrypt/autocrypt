@@ -28,6 +28,7 @@ from previous ones here are some of its features:
   can actually implement and influence the spec.
 
 - **Use decentralized, in-band key discovery.**  Make mail apps
-  tell each other how and when to encrypt to each other
-  by attaching necessary information along with mails without
-  causing attachments which are displayed strangely in many mail apps.
+  tell each other how and when to encrypt to each other. Send this
+  information in a way that is hidden from users of non-autocrypt mail
+  clients to avoid confusing them.
+  
