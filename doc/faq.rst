@@ -138,7 +138,7 @@ last-received message.
 Level 1 therefore defines an Autocrypt setup process which involes sending
 and receiving a :ref:`setup message`. This allows two Autocrypt MUAs to share
 secret key material so that mails can be decrypted and read on both devices.
-This transfer of secret key material currently requires the user to memorize
+This transfer of secret key material currently requires the user to type in
 a long :ref:`setup code`.  For level 2, we aim to provide a pairing mechanism
 which only uses a short number to secure the peering.
 
