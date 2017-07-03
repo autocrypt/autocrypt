@@ -6,7 +6,7 @@ should be as simple as: use an Autocrypt-enabled mail app!**
 
 **Why improve e-mail?** E-Mail has been declared dead many times but
 refuses to die. It remains the largest open federated identity and
-messaging eco-system, anchors the web, mobiles and continues to relay
+messaging ecosystem, anchors the web and mobile phones. E-Mail continues to relay
 sensitive information between people and organisations. It has
 problems but do you prefer the proprietary, easy-to-track mobile phone
 number system to become the single source of digital identification?
@@ -25,7 +25,7 @@ The social Autocrypt approach
 The Autocrypt project is driven by a diverse group of mail app developers,
 hackers and researchers who are willing to take fresh approaches, learn from
 past mistakes, and collectively aim to increase the overall encryption
-of e-mail in the net.  The group effort was born and named "Autocrypt"
+of E-Mail in the net.  The group effort was born and named "Autocrypt"
 on December 17th 2016 by ~20 people during a 5-day meeting at the
 OnionSpace in Berlin. Follow up meetings took place in March 2017 around the
 Internet Freedom festival and during a subsequent gathering in Freiburg, Germany.
@@ -37,9 +37,9 @@ how you may talk with us and who "we" are currently.
 The technical Autocrypt approach
 --------------------------------------
 
-Autocrypt uses regular e-mail messages between people to piggyback
+Autocrypt uses regular E-Mail messages between people to piggyback
 necessary information to allow encrypting subsequent messages; it adds
-a new :mailheader:`Autocrypt` e-mail header for transferring public
+a new :mailheader:`Autocrypt` E-Mail header for transferring public
 keys and driving encryption behaviour. By default, key management is
 not visible to users. See :doc:`features` for more technical and UI
 cornerstones.
