@@ -10,8 +10,8 @@ mails while supporting users who want to explicitly turn on
 encryption.
 
 For ease of implementation and deployment, Level 1 does not support
-multi-device configurations.  We intend to :doc:`support the multi-device
-use case (and other features) as part of Level 1<next-steps>`.  We
+multi-device synchronisation.  We intend to :doc:`support the multi-device
+use case (and other features) as part of Level 2<next-steps>`.  We
 want to keep Level 1 minimal enough that it's easy for developers to
 adopt it and we can start to drive efforts from real-life experiences
 as soon as possible.
