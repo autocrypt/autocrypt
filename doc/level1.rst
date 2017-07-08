@@ -269,17 +269,18 @@ information. This update process depends on:
 - the ``keydata`` and ``prefer-encrypt`` attributes of the single valid
   parsed ``Autocrypt`` header (see above), if available.
 
+If the effective message date is older than the ``last_seen_autocrypt``
+value no changes are required and the update process terminates.
+
 If the parsed Autocrypt header is unavailable, and the effective
 message date is more recent than the current value of ``last_seen``,
-update the state as follows and terminate:
+update the state as follows:
 
 - set ``last_seen`` to the effective message date
 - set ``state`` to ``reset``
 
-Otherwise, if either the effective message date is older than the
-``last_seen_autocrypt`` value, or it is older than the current value
-of ``last_seen`` plus the parsed Autocrypt header is unavailable, no
-changes are required and the update process terminates.
+If the parsed Autocrypt header is unavailable no further changes
+are required and the update process terminates.
 
 At this point, the message in processing contains the most recent
 Autocrypt header. Update the state as follows:
