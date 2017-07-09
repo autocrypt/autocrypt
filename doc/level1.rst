@@ -631,9 +631,9 @@ specified in OpenPGP so far, and it is a bigger concern to preserve
 compatibility and avoid friction with presently deployed OpenPGP
 software.
 
-While the message structure is complex, it's actually fairly easy to
-pack and unpack with common OpenPGP tools.  It was selected to ease
-implementation and deployment, not for cleanliness or purity :)
+While the message structure is complex, it is designed to be easy to
+pack and unpack using common OpenPGP tools, both programmatically and
+manually.
 
 Example:
 
@@ -674,22 +674,15 @@ Example:
 The encrypted message part contains:
 
 ::
-
-	Content-type: multipart/mixed; boundary="==break2=="
-	Autocrypt-Prefer-Encrypt: mutual
-
-	--==break2==
-	Content-type: application/autocrypt-key-backup
-
 	-----BEGIN PGP PRIVATE KEY BLOCK-----
-	Version: GnuPG v1.2.3 (GNU/Linux)
 
 	xcLYBFke7/8BCAD0TTmX9WJm9elc7/xrT4/lyzUDMLbuAuUqRINtCoUQPT2P3Snfx/jou1YcmjDgwT
 	Ny9ddjyLcdSKL/aR6qQ1UBvlC5xtriU/7hZV6OZEmW2ckF7UgGd6ajE+UEjUwJg2+eKxGWFGuZ1P7a
 	4Av1NXLayZDsYa91RC5hCsj+umLN2s+68ps5pzLP3NoK2zIFGoCRncgGI/pTAVmYDirhVoKh14hCh5
 	.....
 	-----END PGP PRIVATE KEY BLOCK-----
-	--==break2==--
+
+	Possibly trailing data…
 
 Key Gossip
 ----------
