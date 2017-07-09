@@ -486,7 +486,9 @@ Message Structure
 +++++++++++++++++
 
 The Autocrypt Setup Message itself is an e-mail message with a
-specific format:
+specific format. While the message structure is complex, it is
+designed to be easy to pack and unpack using common OpenPGP tools,
+both programmatically and manually.
 
 - Both the To and From headers MUST be the address of the user.
 
@@ -560,6 +562,12 @@ If those digits are included in the headers like this, they may also
 be used in the descriptive text that is part of the Setup Message, to
 distinguish different messages.
 
+.. note::
+
+    While the use of a memory-hard KDF like scrypt or argon2 would be
+    desirable in the future, this is not specified in OpenPGP so far.
+    It is a bigger concern to preserve compatibility and avoid
+    friction with presently deployed OpenPGP software.
 
 Setup Message Creation
 ++++++++++++++++++++++
@@ -622,67 +630,50 @@ import it to enable Autocrypt.  If the user agrees to do so:
    key material as its own Autocrypt key (``own_state.secret_key`` as
    discussed in `Account Preferences`_).
 
-Why were some of these choices made?
-++++++++++++++++++++++++++++++++++++
 
-We chose salted+iterated S2K.  While the use of a memory-hard KDF like
-scrypt or argon2 would be desirable in the future, this is not
-specified in OpenPGP so far, and it is a bigger concern to preserve
-compatibility and avoid friction with presently deployed OpenPGP
-software.
-
-While the message structure is complex, it is designed to be easy to
-pack and unpack using common OpenPGP tools, both programmatically and
-manually.
-
-Example:
+Example
++++++++
 
 ::
 
-	To: me@mydomain.com
-	From: me@mydomain.com
-	Autocrypt-Setup-Message: v1
-	Content-type: multipart/mixed; boundary="==break1=="
+   To: me@mydomain.com
+   From: me@mydomain.com
+   Autocrypt-Setup-Message: v1
+   Content-type: multipart/mixed; boundary="==break1=="
 
-	--==break1==
-	Content-Type: text/plain
+   --==break1==
+   Content-Type: text/plain
 
-	This is the Autocrypt setup message.
+   This is the Autocrypt setup message.
 
-	--==break1==
-	Content-Type: application/autocrypt-key-backup
-    Content-Disposition: attachment; filename="autocrypt-key-backup.html"
+   --==break1==
+   Content-Type: application/autocrypt-key-backup
+   Content-Disposition: attachment
 
-	<html>
-	<body>
-	<p>
-	    This is the Autocrypt setup file used to transfer keys between clients.
-	</p>
-    <pre>
-    -----BEGIN PGP MESSAGE-----
-    Passphrase-Format: numeric9x4
-    Passphrase-Begin: 12
+   Possibly a descriptive text, informing users about this file's
+   contents.
+   -----BEGIN PGP MESSAGE-----
+   Passphrase-Format: numeric9x4
+   Passphrase-Begin: 31
 
-    hQIMAxC7JraDy7DVAQ//SK1NltM+r6uRf2BJEg+rnpmiwfAEIiopU0LeOQ6ysmZ0
-    CLlfUKAcryaxndj4sBsxLllXWzlNiFDHWw4OOUEZAZd8YRbOPfVq2I8+W4jO3Moe
-    -----END PGP MESSAGE-----
-    </pre>
-	</body>
-	</html>
-	--==break1==--
+   hQIMAxC7JraDy7DVAQ//SK1NltM+r6uRf2BJEg+rnpmiwfAEIiopU0LeOQ6ysmZ0
+   CLlfUKAcryaxndj4sBsxLllXWzlNiFDHWw4OOUEZAZd8YRbOPfVq2I8+W4jO3Moe
+   -----END PGP MESSAGE-----
+   Possibly trailing data.
+   --==break1==--
 
 The encrypted message part contains:
 
 ::
-	-----BEGIN PGP PRIVATE KEY BLOCK-----
+   -----BEGIN PGP PRIVATE KEY BLOCK-----
 
-	xcLYBFke7/8BCAD0TTmX9WJm9elc7/xrT4/lyzUDMLbuAuUqRINtCoUQPT2P3Snfx/jou1YcmjDgwT
-	Ny9ddjyLcdSKL/aR6qQ1UBvlC5xtriU/7hZV6OZEmW2ckF7UgGd6ajE+UEjUwJg2+eKxGWFGuZ1P7a
-	4Av1NXLayZDsYa91RC5hCsj+umLN2s+68ps5pzLP3NoK2zIFGoCRncgGI/pTAVmYDirhVoKh14hCh5
-	.....
-	-----END PGP PRIVATE KEY BLOCK-----
+   xcLYBFke7/8BCAD0TTmX9WJm9elc7/xrT4/lyzUDMLbuAuUqRINtCoUQPT2P3Snfx/jou1YcmjDgwT
+   Ny9ddjyLcdSKL/aR6qQ1UBvlC5xtriU/7hZV6OZEmW2ckF7UgGd6ajE+UEjUwJg2+eKxGWFGuZ1P7a
+   4Av1NXLayZDsYa91RC5hCsj+umLN2s+68ps5pzLP3NoK2zIFGoCRncgGI/pTAVmYDirhVoKh14hCh5
+   .....
+   -----END PGP PRIVATE KEY BLOCK-----
 
-	Possibly trailing data…
+   Possibly trailing data…
 
 Key Gossip
 ----------
