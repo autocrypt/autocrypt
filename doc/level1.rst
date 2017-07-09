@@ -486,7 +486,7 @@ Message Structure
 +++++++++++++++++
 
 The Autocrypt Setup Message itself is an e-mail message with a
-specific format, which contains a payload protected by the setup code.
+specific format:
 
 - Both the To and From headers MUST be the address of the user.
 
@@ -497,22 +497,20 @@ specific format, which contains a payload protected by the setup code.
   the purpose of the message (e.g. ``text/plain`` or ``text/html`` or
   ``multipart/alternative``).
 
-- The second mime part (called "payload") of the Autocrypt setup message
-  MUST be of Content-Type ``application/autocrypt-setup``.  There MUST NOT
-  be another part with the same content-type.
+- The second mime part of the message MUST have the type
+  ``application/autocrypt-setup``. It consists of the user's
+  ASCII-armored secret key, encrypted in an ASCII-armored OpenPGP
+  symmetrically encrypted data packet.
 
-- The payload MUST contain a single ASCII-armored block of OpenPGP
-  symmetrically encrypted data, and MAY include other text above or
-  below the ASCII-armored data, which MUST be ignored while
-  processing. Implementors MAY choose to provide human-readable
-  explanations as discussed in
-  :doc:`suggestions for key-transfer format<transfer-format>`.
+- There MAY be text above or below the ASCII-armored encrypted data in
+  the second MIME part, which MUST be ignored while processing. This
+  allows implementations to optionally add a human-readable
+  explanation as discussed in :doc:`suggestions for key-transfer
+  format<transfer-format>`.
 
-- Decrypting the payload MUST produce a ``multipart/mixed`` mime structure
-  which MUST have an ``Autocrypt-Prefer-Encrypt`` header containing the value
-  of the user's prefer-encrypt setting. The first embedded mime part
-  MUST be of content-type ``application/autocrypt-key-backup`` containing
-  an ASCII-armored OpenPGP transferable secret key in the Mime body.
+- The encrypted payload MUST begin with an ASCII-armored OpenPGP
+  transferable secret key. All trailing data after the ASCII-armor
+  ending delimiter MUST be stripped before processing the secret key.
 
 - The symmetric encryption algorithm used MUST be AES-128.
   The passphrase MUST be the Setup Code (see below), used
@@ -539,8 +537,8 @@ easily kept in short term memory. For instance::
     1980-7833-0983-
     1998-7562-1111
 
-An Autocrypt Setup Message payload that uses this structure for its
-setup code SHOULD include a ``Passphrase-Format`` header with value
+An Autocrypt Setup Message that uses this structure for its setup code
+SHOULD include a ``Passphrase-Format`` header with value
 ``numeric9x4`` in the ASCII-armored data. This allows providing a
 specialized input form during decryption, with greatly improved
 usability.
@@ -578,9 +576,7 @@ specific account, the client:
    actually written down and the Autocrypt Setup Message is not
    rendered useless.
  * Produces an ASCII-armored, minimized OpenPGP transferable secret
-   key out of the key associated with that account embedded into a
-   multipart/mixed structure also containing a header with the user's
-   prefer-encrypt state.
+   key out of the key associated with that account.
  * Symmetrically encrypts the OpenPGP transferable secret key using
    the secret code as the password.
  * Composes a new self-addressed e-mail message that contains the
@@ -664,7 +660,6 @@ Example:
 	</p>
     <pre>
     -----BEGIN PGP MESSAGE-----
-    Version: BCPG v1.53
     Passphrase-Format: numeric9x4
     Passphrase-Begin: 12
 
@@ -800,4 +795,3 @@ composition at all.
 If the Autocrypt recommendation is either ``available`` or
 ``encrypt``, the MUA SHOULD expose this UI during message composition
 to allow the user to make a different decision.
-
