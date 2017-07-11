@@ -296,6 +296,11 @@ overall. Additionally update the state as follows:
 - set ``state`` to ``mutual`` if the Autocrypt header contained a
   ``prefer-encrypt=mutual`` attribute, or ``nopreference`` otherwise
 
+A message with a content-type of ``multipart/report`` can be assumed
+to be auto-generated, and SHOULD be ignored if it does not contain an
+``Autocrypt`` header. This in particular avoids triggering a ``reset``
+state from received Message Disposition Notifications (:rfc:`3798`).
+
 .. _spam-filters:
 
 .. todo::
