@@ -120,7 +120,7 @@ The ``Autocrypt`` Header
 
 The ``Autocrypt`` header has the following format::
 
-    Autocrypt: addr=a@b.example.org; [type=1;] [prefer-encrypt=mutual;] keydata=BASE64
+    Autocrypt: addr=a@b.example.org; type=1; prefer-encrypt=mutual; keydata=BASE64
 
 The ``addr`` attribute indicates the single recipient address this
 header is valid for. In case this address differs from the one the MUA
@@ -805,4 +805,3 @@ composition at all.
 If the Autocrypt recommendation is either ``available`` or
 ``encrypt``, the MUA SHOULD expose this UI during message composition
 to allow the user to make a different decision.
-
