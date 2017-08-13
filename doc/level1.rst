@@ -707,7 +707,9 @@ Key Gossip
 It is a common use case to send an encrypted mail to a group of
 recipients. To ensure that these recipients can encrypt messages when
 replying to that same group, the keys of all recipients can be
-included in the encrypted payload.
+included in the encrypted payload. This does not include BCC
+recipients, which by definition must not be revealed to other
+recipients.
 
 The ``Autocrypt-Gossip`` header has the format as the ``Autocrypt``
 header (see `autocryptheaderformat`_). Its ``addr`` attribute
