@@ -442,7 +442,7 @@ An outgoing e-mail will be sent encrypted in either of two cases:
 
 - the Autocrypt recommendation for the list of recipients is
   ``encrypt``, and not explicitly overridden by the user
-- the Autocrypt recommendation is ``available`` or ``discouraged``,
+- the Autocrypt recommendation is ``available`` or ``discourage``,
   and the user chose to encrypt.
 
 In this case, the MUA MUST construct the encrypted message as a
@@ -807,4 +807,3 @@ composition at all.
 If the Autocrypt recommendation is either ``available`` or
 ``encrypt``, the MUA SHOULD expose this UI during message composition
 to allow the user to make a different decision.
-
