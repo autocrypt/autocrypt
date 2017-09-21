@@ -29,7 +29,7 @@ you may:
 See :doc:`dev-status` for links to ongoing development.
 Currently involved are developers from `K9/Android`_,
 `OpenKeyChain/Android`_, `Enigmail`_, `Mailpile`_, `Bitmask/LEAP`_ as
-well as people from the `nextleap`_, `enzevalos`_ research projects
+well as people from the `nextleap`_, `enzevalos`_ and panoramix_ research projects
 and the ACLU_.
 
 
@@ -40,6 +40,7 @@ and the ACLU_.
 .. _`Bitmask/LEAP`: https://leap.se/en/docs/client
 .. _`nextleap`: https://nextleap.eu
 .. _`enzevalos`: https://www.inf.fu-berlin.de/groups/ag-si/enzevalos.html
+.. _`panoramix`: https://panoramix-project.eu/
 .. _`OpenKeyChain/Android`: https://www.openkeychain.org/
 
 .. _`Python`: https://www.python.org/
