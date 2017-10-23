@@ -5,7 +5,7 @@ Example Data Flows and State Transitions
 Autocrypt key discovery happens through headers of mail messages sent
 between mail apps. Similar to TLS's machine to machine handshake,
 users first need to have a cleartext mail exchange.  Subsequent mails
-from the receiving peer will may then be encrypted.  Mail apps show
+from the receiving peer may then be encrypted.  Mail apps show
 encryptability to their users at "compose-mail" time and give them a
 choice of encryption or cleartext, defaulting to what the other side
 has specified in their header.
