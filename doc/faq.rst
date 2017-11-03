@@ -35,11 +35,15 @@ we opted for readability.
 
 
 Why do you drop all headers if there is more than one?
-------------------------------------------------------
+-------------------------------------------------------------
 
-Because of multi-agent usage we may have to handle an inconsistent stream of
-headers already. Making this an inconsistent stream of multiple keys with
-priorities sounds like a lot of pain.
+We could come up with rules which header to pick. But whatever we do,
+it has to be deterministic, clear and agreed upon by all clients so the
+behaviour is predictable.
+Dropping all headers is the simplest way to avoid an ambiguous state in
+level 1. Once we have more experience from the field we'll know how this
+fails and at that point we'll be in a position to draft more complicated
+rules.
 
 
 What if I want my MUA to announce two different keys?

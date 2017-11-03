@@ -106,6 +106,9 @@ minimal Level 1 MUA will only include these two attributes.  If
 ``own_state.prefer_encrypt`` is set to ``mutual`` then the header MUST
 have a ``prefer-encrypt`` attribute set to ``mutual``.
 
+The client MUST NOT include more than one valid Level 1 ``Autocrypt``
+header.
+
 If the ``From`` address changes during message composition (E.g. if
 the user selects a different outbound identity), the Autocrypt-capable
 client MUST change the ``Autocrypt`` header appropriately.
@@ -164,15 +167,6 @@ any unsupported non-critical attribute and continue parsing the rest
 of the header as though the attribute does not exist, but MUST treat
 the entire header as invalid if it encounters a "critical" attribute
 it doesn't support.
-
-When parsing an incoming message, a MUA MUST examine all ``Autocrypt``
-headers, rather than just the first one. If there is more than one
-valid header, this MUST be treated as an error, and all ``Autocrypt``
-headers discarded as invalid.
-
-.. todo::
-
-   - Document why we skip on more than one valid header?
 
 ``type=1``: OpenPGP Based key data
 ++++++++++++++++++++++++++++++++++
@@ -271,6 +265,11 @@ Updating Autocrypt Peer State
 -----------------------------
 
 Incoming messages may be processed by a MUA at receive or display time.
+
+When parsing an incoming message, a MUA SHOULD examine all ``Autocrypt``
+headers, rather than just the first one. If there is more than one
+valid header, this SHOULD be treated as an error, and all ``Autocrypt``
+headers discarded as invalid.
 
 If an incoming message contains more than one address in the ``From``
 header a MUA SHOULD NOT update any Autocrypt peer state.
