@@ -110,6 +110,12 @@ If the ``From`` address changes during message composition (E.g. if
 the user selects a different outbound identity), the Autocrypt-capable
 client MUST change the ``Autocrypt`` header appropriately.
 
+An MUA SHOULD send out the same ``keydata`` value in all messages from
+a given outbound identity, irrespective of message recipients.  If a
+new OpenPGP certificate is generated (e.g., key-rotation or OpenPGP
+metadata update) then all subsequent outbound Autocrypt headers SHOULD
+use the new certificate for the ``keydata`` attribute.
+
 See :ref:`mua-happypath` for examples of outbound headers and
 the following sections for header format definitions and parsing.
 
