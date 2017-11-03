@@ -120,7 +120,14 @@ The ``Autocrypt`` Header
 
 The ``Autocrypt`` header has the following format::
 
-    Autocrypt: addr=a@b.example.org; [type=1;] [prefer-encrypt=mutual;] keydata=BASE64
+    Autocrypt: [type=1;] addr=a@b.example.org; [prefer-encrypt=mutual;] keydata=BASE64
+
+The ``type`` parameter defines the meaning of the rest of the header.
+For now the only defined type is ``1``, which implies the meaning as
+described here. This is also the default, if the header is absent.
+Headers with an unknown ``type`` MUST be treated as invalid. If
+present, this parameter MUST come before any other, to ensure forward
+compatibility.
 
 The ``addr`` attribute indicates the single recipient address this
 header is valid for. In case this address differs from the one the MUA
@@ -128,15 +135,13 @@ considers the sender of the e-mail in parsing, which will usually be
 the one specified in the ``From`` header, the entire header MUST be
 treated as invalid.
 
-The ``type`` and ``keydata`` attributes specify the type and data of the
-key material.  For now the only supported type is ``1``, which
-represents a specific subset of OpenPGP (see the next section), and is
-also the default.  Headers with an unknown ``type`` MUST be treated as
-invalid.  The value of the ``keydata`` attribute is a Base64
+The ``keydata`` attributes specify the type and data of the key
+material.  The value of the ``keydata`` attribute is a Base64
 representation of the public key material.  This is a simple
-ascii-armored key format without a checksum (which would then be Radix64)
-and without pgp message markers (``---BEGIN...`` etc.).  For ease of
-parsing, the ``keydata`` attribute MUST be the last attribute in the header.
+ascii-armored key format without a checksum (which would then be
+Radix64) and without pgp message markers (``---BEGIN...`` etc.).  For
+ease of parsing, the ``keydata`` attribute MUST be the last attribute
+in the header.
 
 The ``prefer-encrypt`` attribute can only occur with the value
 ``mutual``.  Its presence the Autocrypt header indicates an agreement
