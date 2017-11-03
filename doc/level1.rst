@@ -264,10 +264,11 @@ attributes as ``autocrypt_peer_state[A]``:
 Updating Autocrypt Peer State
 -----------------------------
 
-Incoming messages may be processed by an Autocrypt-client at different
-times, such as upon receipt or display. When this happens, the
-Autocrypt state for the sending peer is updated with this new
-information. This update process depends on:
+Incoming messages may be processed by a MUA at receive or display time.
+
+If an incoming message contains more than one address in the ``From`` header a MUA SHOULD NOT update any Autocrypt peer state.
+
+If a message contains exactly one address in the ``FROM`` header a MUA must update the Autocrypt state for the single sending peer.  This update process depends on:
 
 - the "effective date" of the message.
 
