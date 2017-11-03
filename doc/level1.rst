@@ -153,11 +153,11 @@ ease of parsing, the ``keydata`` attribute MUST be the last attribute
 in the header.
 
 The ``prefer-encrypt`` attribute can only occur with the value
-``mutual``.  Its presence the Autocrypt header indicates an agreement
-to encrypt by default with other peers who have the same preference.
-An Autocrypt Level 1 client that sees the attribute with any other
-value (or that does not see the attribute at all) should interpret the
-value as ``nopreference``.
+``mutual``.  Its presence in the Autocrypt header indicates an
+agreement to encrypt by default with other peers who have the same
+preference. An Autocrypt Level 1 client that sees the attribute with
+any other value (or that does not see the attribute at all) should
+interpret the value as ``nopreference``.
 
 Additional attributes unspecified here are also possible before the
 ``keydata`` attribute.  If an attribute name starts with an underscore
