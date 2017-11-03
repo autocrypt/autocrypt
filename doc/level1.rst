@@ -678,6 +678,7 @@ The encrypted message part contains:
 
 ::
    -----BEGIN PGP PRIVATE KEY BLOCK-----
+   Autocrypt-Prefer-Encrypt: mutual
 
    xcLYBFke7/8BCAD0TTmX9WJm9elc7/xrT4/lyzUDMLbuAuUqRINtCoUQPT2P3Snfx/jou1YcmjDgwT
    Ny9ddjyLcdSKL/aR6qQ1UBvlC5xtriU/7hZV6OZEmW2ckF7UgGd6ajE+UEjUwJg2+eKxGWFGuZ1P7a
