@@ -701,9 +701,9 @@ both programmatically and manually.
 - The encrypted payload MUST begin with an ASCII-armored :rfc:`RFC
   4880 Transferable Secret Key<4880#section-11.2>`. All trailing data
   after the ASCII-armor ending delimiter MUST be stripped before
-  processing the secret key.  The ASCII-armored secret key SHOULD have
-  an ``Autocrypt-Prefer-Encrypt`` header containing the value of the
-  user's prefer-encrypt setting.
+  processing the secret key. The ASCII-armored secret key SHOULD have
+  an ``Autocrypt-Prefer-Encrypt`` header that contains the current
+  ``own_state.prefer_encrypt`` setting.
 
 - The symmetric encryption algorithm used MUST be AES-128.
   The passphrase MUST be the Setup Code (see below), used
