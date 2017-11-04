@@ -91,10 +91,10 @@ Autocrypt Internal State
 
 .. todo::
 
-    TODO
+   TODO
 
 Own State TODO
-++++++++++++++
+~~~~~~~~~~~~~~
 
 Level 1 MUAs maintain an internal structure ``own_state`` for each
 account on which Autocrypt is enabled. ``own_state`` has the following
@@ -116,40 +116,19 @@ similar.
 Please see :doc:`ui-examples` for specific examples of how this might
 look.
 
+.. todo::
+
+    TODO
+
+Peer State TODO
+~~~~~~~~~~
+
+.. todo::
+
+   TODO
+
 Public Peer Key State Management TODO
 --------------------------------
-
-Header injection in outbound mail
-+++++++++++++++++++++++++++++++++
-
-During message composition, if the ``From:`` header of the
-outgoing e-mail matches an address that the Autocrypt-capable agent
-knows the secret key material (``own_state.secret_key``) for, it
-SHOULD include an Autocrypt header. This header MUST contain the
-associated public key material (``own_state.public_key``) as ``keydata``
-attribute, and the same sender address that is used in the ``From``
-header in the ``addr`` attribute to confirm the association.  The most
-minimal Level 1 MUA will only include these two attributes.  If
-``own_state.prefer_encrypt`` is set to ``mutual`` then the header MUST
-have a ``prefer-encrypt`` attribute set to ``mutual``.
-
-The client MUST NOT include more than one valid Level 1 ``Autocrypt``
-header.
-
-If the ``From`` address changes during message composition (E.g. if
-the user selects a different outbound identity), the Autocrypt-capable
-client MUST change the ``Autocrypt`` header appropriately.
-
-An MUA SHOULD send out the same ``keydata`` value in all messages from
-a given outbound identity, irrespective of message recipients.  If a
-new OpenPGP certificate is generated (e.g., key-rotation or OpenPGP
-metadata update) then all subsequent outbound Autocrypt headers SHOULD
-use the new certificate for the ``keydata`` attribute.
-
-See :ref:`mua-happypath` for examples of outbound headers and
-the following sections for header format definitions and parsing.
-
-..  _autocryptheaderformat:
 
 The ``Autocrypt`` Header
 ++++++++++++++++++++++++
@@ -214,6 +193,38 @@ A Level 1 MUA MUST be capable of processing and handling 2048-bit and
 3072-bit RSA public keys.  It MAY support other OpenPGP key formats
 found in an Autocrypt header (for example, by passing it agnostically
 to an OpenPGP backend for handling).
+
+Header injection in outbound mail
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+During message composition, if the ``From:`` header of the
+outgoing e-mail matches an address that the Autocrypt-capable agent
+knows the secret key material (``own_state.secret_key``) for, it
+SHOULD include an Autocrypt header. This header MUST contain the
+associated public key material (``own_state.public_key``) as ``keydata``
+attribute, and the same sender address that is used in the ``From``
+header in the ``addr`` attribute to confirm the association.  The most
+minimal Level 1 MUA will only include these two attributes.  If
+``own_state.prefer_encrypt`` is set to ``mutual`` then the header MUST
+have a ``prefer-encrypt`` attribute set to ``mutual``.
+
+The client MUST NOT include more than one valid Level 1 ``Autocrypt``
+header.
+
+If the ``From`` address changes during message composition (E.g. if
+the user selects a different outbound identity), the Autocrypt-capable
+client MUST change the ``Autocrypt`` header appropriately.
+
+An MUA SHOULD send out the same ``keydata`` value in all messages from
+a given outbound identity, irrespective of message recipients.  If a
+new OpenPGP certificate is generated (e.g., key-rotation or OpenPGP
+metadata update) then all subsequent outbound Autocrypt headers SHOULD
+use the new certificate for the ``keydata`` attribute.
+
+See :ref:`mua-happypath` for examples of outbound headers and
+the following sections for header format definitions and parsing.
+
+..  _autocryptheaderformat:
 
 Internal state storage
 ++++++++++++++++++++++
