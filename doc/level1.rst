@@ -54,6 +54,35 @@ will not be able to enable Autocrypt on it.
     Discuss with webmail developers how to work with, refine
     the interactions.
 
+Approach and High Level Overview
+--------------------------------
+
+The core goal of Autocrypt is to fully automate the management of both
+secret and public keys, so that users can encrypt mail without
+specialized knowledge.
+
+This spec introduces an Autocrypt header that transfers information
+about a sender's public keys in all their emails. Autocrypt provides a
+simple set of rules to track this information per communication peer.
+This provides unambiguous information during message composition on
+whether encryption is a) possible and b) recommended for a given set
+of recipients. The design relies on in-band communication for key
+discovery, thereby avoiding a dependency on external infrastructure
+like OpenPGP keyservers or PKI.
+
+Autocrypt facilitates opportunistic key distribution, but recognizes
+that aggressively opportunistic encryption can be disruptive to
+established email workflows. For this reason, emails are only
+encrypted if either:
+
+1) The sender specifically requests encryption during message
+   composition
+2) When replying to an encrypted message
+3) If all participants have explicitly expressed a preference to
+   always encrypt.
+
+
+
 Secret key generation and storage
 ---------------------------------
 
