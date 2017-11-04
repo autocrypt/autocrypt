@@ -61,10 +61,10 @@ The core goal of Autocrypt is to fully automate the management of both
 secret and public keys, so that users can encrypt mail without
 specialized knowledge.
 
-An Autocrypt header is introduced that transfers information about a
-sender's public keys in all their emails. Autocrypt provides a simple
-set of rules to track this information per communication peer. This
-provides unambiguous information during composition on whether
+This spec introduces an Autocrypt header that transfers information
+about a sender's public keys in all their emails. Autocrypt provides a
+simple set of rules to track this information per communication peer.
+This provides unambiguous information during composition on whether
 encryption is a) possible and b) recommended for a given set of
 recipients. The design relies on in-band communication for key
 discovery, thereby avoiding a dependency on external infrastructure
