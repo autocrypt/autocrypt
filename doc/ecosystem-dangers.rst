@@ -24,7 +24,7 @@ communication.
 Message Deliverability
 ----------------------
 
-:mailheader:`Autocrypt` headers that use RSA 2048 are large enough
+:mailheader:`Autocrypt` headers that use RSA 3072 are large enough
 that, when unwrapped, they exceed the SMTP line length limit of 1000
 ASCII characters.
 
