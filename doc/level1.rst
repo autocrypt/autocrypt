@@ -879,9 +879,30 @@ Appendix
 Example Autocrypt headers
 +++++++++++++++++++++++++
 
-.. todo::
+::
 
-   TODO
+    Delivered-To: <bob@autocrypt.example>
+    From: Alice <alice@autocrypt.example>
+    To: Bob <bob@autocrypt.example>
+    Subject: an Autocrypt header exapmple using RSA 3072 key
+    Autocrypt: addr=alice@autocrypt.example; keydata=
+     mQGNBFn+L+YBDAC3jsOXmFKwKfUh/WxaOErSMMdL1NJzzFCDf4oo0XD5b4ldfVGP09PsNXg5bzUW
+     NP1eGiINWCnQlPYmdFR+mCn/mvG50tCiZ0ij4qiFqTv4easAgKNn0dCvqoLY0tpsMLo2Kv9lM9m5
+     Fi9NrK0xNUgw/nX0LgE58VmGhT0tA1VRlnmdu/yKHWLqjOyuueYRVMlT8prGGNsxtplOdjTlFUN+
+     QEjc/YcnX+EKXHQmIXOFW82sRB2p9m7dcjhqCjgjaFdZ0YtVZ4y9XJs+9MyzqceUy3WjmHz4YBKv
+     F32S34xns3C95kEuH+Qgp+xMQt/7QpFQSgWsddeKeR7lI1nLd5DnOgzlw6vyiiG91JWs2JqFSWxz
+     FwIpUctgOayNhce5RWsbewL9m+PuBHPHB6bsTadDWH6o2INRkcCQj1n5fuL9HGA6FSXu7NWNYfJr
+     PA+Rxc5gd1/qSYgGFIsSVLnkGoeRnpIv3PndPVe4N0SZLJ/3r18wtNIpWv8Isd3LtLbes50AEQEA
+     AbQXYWxpY2VAYXV0b2NyeXB0LmV4YW1wbGWJAdMEEwEKAD0WIQTYxrHIMQydyu0aBH2r8IzzOTtm
+     BgUCWf4v5gIbAwUJA8JnAAQLCQgHBRUKCQgLBRYCAwEAAh4BAheAAAoJEKvwjPM5O2YGfl8L/Rew
+     fvGqOyDgveMaGZ7m4icDKwAmbDUAdQH6R0vQ9RPezT+PPhLTkYkciIT7weDL4v3YO63lqVgFjuFV
+    Date: Sat, 17 Dec 2016 10:07:48 +0100
+    Message-ID: <rsa-3072@autocrypt.example>
+    MIME-Version: 1.0
+    Content-Type: text/plain
+
+    This is an example e-mail with Autocrypt header and RSA 3072 key
+    as defined in Level 1.
 
 .. _client-conflict-example:
 
