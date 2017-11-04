@@ -37,13 +37,18 @@ much. So we opted for readability.
 Why do you drop all headers if there is more than one?
 -------------------------------------------------------------
 
-We could come up with rules which header to pick. But whatever we do,
-it has to be deterministic, clear and agreed upon by all clients so the
-behaviour is predictable.
-Dropping all headers is the simplest way to avoid an ambiguous state in
-level 1. Once we have more experience from the field we'll know how this
-fails and at that point we'll be in a position to draft more complicated
-rules.
+We could come up with rules on which header to pick. But whatever we
+do, it has to be deterministic, clear and agreed upon by all clients
+so their behaviour is predictable and stable for users who might try
+multiple clients.
+
+Dropping all headers is the simplest way to avoid an ambiguous state
+in level 1. Once we have more experience from the field we'll know how
+this fails and at that point we'll be in a position to draft more
+complicated rules.
+
+Forcibly rejecting multiple headers deters MUAs from gratiutously
+sending conflicting headers which may confuse recipients.
 
 
 What if I want my MUA to announce two different keys?
