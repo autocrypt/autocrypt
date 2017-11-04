@@ -779,7 +779,7 @@ look.
 Aliases
 -------
 
-If a user sends emails with multiple aliases throught the same account
+If a user sends emails with multiple aliases through the same account
 the client SHOULD use the same autocrypt key for all aliases.  The
 Autocrypt Setup Message is not designed to handle multiple keys.  In
 addition syncronisation issues arrise if new keys for aliases are
