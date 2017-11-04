@@ -185,6 +185,12 @@ the header as though the attribute does not exist, but MUST treat the
 entire Autocrypt header as invalid if it encounters a "critical" attribute it
 doesn't support.
 
+Future extensions of Autocrypt can use critical attributes to
+facilitate incompatible changes. These headers will then be discarded
+entirely as invalid by clients that implement an older version,
+providing a simple update path.
+
+
 OpenPGP Based key data
 ~~~~~~~~~~~~~~~~~~~~~~
 
