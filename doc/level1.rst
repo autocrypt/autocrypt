@@ -95,11 +95,11 @@ Communication Peers
 The state for each peer is tracked by e-mail address.
 
 Conceptually, we represent this state as a table named
-``autocrypt_peer_state`` indexed by the peer's :doc:`canonicalized
+``peer_state`` indexed by the peer's :doc:`canonicalized
 e-mail address <address-canonicalization>`.
 
 For each e-mail address ``A``, an agent MUST store the following
-attributes as ``autocrypt_peer_state[A]``:
+attributes as ``peer_state[A]``:
 
 * ``last_seen``: UTC timestamp of the most recent effective date of
   all processed messages for this peer.
@@ -408,7 +408,7 @@ Recommendations for single-recipient messages
 
 The Autocrypt recommendation for a message composed to a single
 recipient with e-mail address ``A`` depends primarily on the value
-stored in :ref:`autocrypt_peer_state[A] <peer-state>`. It is derived
+stored in :ref:`peer_state[A] <peer-state>`. It is derived
 by the following algorithm:
 
 1. If there is no peer state, the recommendation is ``disable``.
