@@ -375,8 +375,7 @@ the same Autocrypt recommendation due to their internal state.
 
 The Autocrypt recommendation depends on the list of recipient
 addresses for the message being composed.  When the user edits the
-list of recipients, the recommendation may change.  The MUA should
-reflect this change.
+list of recipients, the recommendation may change.
 
 .. note::
 
@@ -385,33 +384,24 @@ reflect this change.
    SHOULD retain the user's manual choices for a given message even if
    the Autcrypt recommendation changes.
 
-.. todo::
-
-   Discuss how to deal with the case where the user manually selects
-   encryption and subsequently adds a recipient whom the MUA has no
-   key.
-
 Autocrypt can produce four possible recommendations to the agent
 during message composition:
 
  * ``disable``: Disable or hide any UI that would allow the user to
-   choose to encrypt the message.  Prepare the message in cleartext.
+   choose to encrypt the message.
 
  * ``discourage``: Enable UI that would allow the user to choose to
-   encrypt the message, but do not default to encryption. Prepare the
-   message in cleartext. If the user manually enables encryption, the
-   MUA SHOULD warn that the recipient may not be able to read the
-   message. This warning message MAY be supplemented using optional
-   counters and user-agent state as suggested in
-   :doc:`optional-state`.
+   encrypt the message, but do not default to encryption. If the user
+   manually enables encryption, the MUA SHOULD warn that the recipient
+   may not be able to read the message. This warning message MAY be
+   supplemented using optional counters and user-agent state as
+   suggested in :doc:`optional-state`.
 
  * ``available``: Enable UI that would allow the user to choose to
-   encrypt the message, but do not default to encryption.  Prepare the
-   message in cleartext.
+   encrypt the message, but do not default to encryption.
 
  * ``encrypt``: Enable UI that would allow the user to choose to send
-   the message in cleartext, and default to encryption.  Prepare the
-   message as an encrypted message.
+   the message in cleartext, and default to encryption.
 
 Recommendations for single-recipient messages
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -442,20 +432,26 @@ Recommendations for messages to multiple addresses
 
 For level 1 agents, the Autocrypt recommendation for a message
 composed to multiple recipients is derived from the recommendations
-for each recipient individually.
+for each recipient individually:
 
-If any recipient has a recommendation of ``disable`` then the message
-recommendation is ``disable``.
-
-If the message being composed is a reply to an encrypted message, or
-if every recipient other than "myself" (the e-mail address that the
-message is ``From:``) has a recommendation of ``encrypt`` then the
-message recommendation is ``encrypt``.
-
-If any recipient has a recommendation of ``discourage`` then the message
-recommendation is ``discourage``.
+1. If any recipient has a recommendation of ``disable`` then the
+   message recommendation is ``disable``.
+2. If the message being composed is a reply to an encrypted message,
+   or if every recipient has a recommendation of ``encrypt`` then the
+   message recommendation is ``encrypt``.
+3. If any recipient has a recommendation of ``discourage`` then the
+   message recommendation is ``discourage``.
 
 Otherwise, the message recommendation is ``available``.
+
+While composing a message, a situation might occur where the
+recommendation is ``available``, the user has explicitly enabled
+encryption, and then modifies the list of recipients in a way the
+changes the recommendation to ``disable``. When that happens, the MUA
+should not disable encryption without communicating this to the user.
+A graceful way to handle this situation is to save the enabled state,
+and only prompt the user about the issue when they want to send the
+mail.
 
 Cleartext replies to encrypted mail
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
