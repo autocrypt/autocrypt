@@ -67,12 +67,12 @@ Deletable ("forward secure") encrypted mail
    reason we couldn't define a mechanism for pairwise, ratcheted,
    session-key establishment for e-mail.
 
-RSA2048 to Curve 25519
+RSA3072 to Curve 25519
 ----------------------
 
 .. todo::
 
-   Document change in preference for keys from RSA 2048 to Curve 25519.
+   Document change in preference for keys from RSA 3072 to Curve 25519.
 
 
 Backups

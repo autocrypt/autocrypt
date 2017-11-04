@@ -16,22 +16,22 @@ requires the MUA to keep the information who announced Autocrypt and
 who they requested keys from.
 
 
-Why RSA2048 and 25519 only later?
+Why RSA3072 and 25519 only later?
 ---------------------------------
 
 Curve 25519 keys are shorter, cheaper to compute on, and likely to be
-stronger than RSA 2048 against non-quantum attackers.  You can even
-write them down as a backup code.  However, we want level 1 to be
-implementable in 2017, and more toolkits support RSA 2048 than 25519.
-Future versions are likely to encourage 25519 over RSA 2048.
+at least as strong as RSA 3072 against non-quantum attackers.  You can
+even write them down as a backup code.  However, we want level 1 to be
+implementable in 2017, and more toolkits support RSA 3072 than 25519.
+Future versions are likely to encourage 25519 over RSA 3072.
 
 
 So you say you care about header size... but then you type out prefer-encrypt?
 ------------------------------------------------------------------------------
 
-An ECC key is roughly 500 bytes formatted in Base64 and RSA 2048 key is
-1750 bytes.  The Length of attribute name does not matter so much. So
-we opted for readability.
+An ECC key is roughly 500 bytes formatted in Base64 and RSA 3072 key
+is about 2350 bytes.  The Length of attribute name does not matter so
+much. So we opted for readability.
 
 
 Why do you drop all headers if there is more than one?
@@ -168,4 +168,3 @@ Why do you always encrypt-to-self?
 
 Users expect to be able to read their outbox or Sent Messages folders.
 Autocrypt should not get in the way of that.
-

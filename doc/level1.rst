@@ -57,10 +57,12 @@ will not be able to enable Autocrypt on it.
 Secret key generation and storage
 ---------------------------------
 
-The MUA MUST be capable of generating and storing two RSA 2048-bit
-secret keys, one for signing and self-certification and the other for
-decrypting.  It MUST be capable of assembling these keys into an
-OpenPGP certificate (:rfc:`RFC 4880 "Transferable Public
+The MUA SHOULD generate and store two RSA 3072-bit secret keys for the
+user, one for signing and self-certification and the other for
+decrypting.  An MUA with hardware constraints (e.g., using an external
+crypto token) MAY choose to generate and store 2048-bit RSA secret
+keys instead.  The MUA MUST be capable of assembling these keys into
+an OpenPGP certificate (:rfc:`RFC 4880 "Transferable Public
 Key"<4880#section-11.1>`) that indicates these capabilities.
 
 The secret key material should be protected from access by other
@@ -183,9 +185,9 @@ concerns the user id SHOULD NOT be an empty string.
 These packets MUST be assembled in binary format (not ASCII-armored),
 and then base64-encoded.
 
-A Level 1 MUA MUST be capable of processing and handling 2048-bit RSA
-public keys.  It MAY support other OpenPGP key formats found in
-an Autocrypt header (for example, by passing it agnostically
+A Level 1 MUA MUST be capable of processing and handling 2048-bit and
+3072-bit RSA public keys.  It MAY support other OpenPGP key formats
+found in an Autocrypt header (for example, by passing it agnostically
 to an OpenPGP backend for handling).
 
 Secret key protection at rest
@@ -751,8 +753,8 @@ Level 1 MUAs maintain an internal structure ``own_state`` for each
 account on which Autocrypt is enabled. ``own_state`` has the following
 members:
 
- * ``secret_key`` -- the RSA 2048-bit secret key used for this
-   account (see "Secret Key Generation and storage" above).
+ * ``secret_key`` -- the 2048- or 3072-bit RSA secret keys used for
+   this account (see "Secret Key Generation and storage" above).
  * ``public_key`` -- the OpenPGP transferable public key derived
    from the secret key.
  * ``prefer_encrypt`` -- the user's own
