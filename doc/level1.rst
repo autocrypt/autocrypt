@@ -535,7 +535,8 @@ with more than one recipient. These headers MUST be placed in the root
 MIME part of the encrypted message payload. The encrypted payload in
 this case contains one Autocrypt-Gossip header for each recipient,
 which MUST include ``addr`` and ``keydata`` attributes with the relevant
-data from the recipient's Autocrypt :ref:`peer state <peer-state>`.
+data from the sender's Autocrypt :ref:`peer state <peer-state>` about
+the recipient.
 
 Updating Autocrypt Peer State from Key Gossip
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
