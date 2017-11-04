@@ -1,26 +1,26 @@
 Autocrypt Level 1: Enabling encryption, avoiding annoyances
 ===========================================================
 
-This document describes the basic capabilities required for a mail app
-to be Autocrypt-capable at Level 1. The design of Level 1 is driven by
-usability concerns and by the realities of incremental deployment. A
-user may use both Autocrypt-enabled mail apps and traditional plain
-ones and we'd like to avoid annoyances like unexpected unreadable
-mails while supporting users who want to explicitly turn on
-encryption.
+Autocrypt makes it easy for people to encrypt email.  This document
+describes the basic capabilities required for a mail app to be
+Autocrypt-capable at Level 1.
 
-For ease of implementation and deployment, Level 1 does not support
-multi-device synchronisation.  We intend to :doc:`support the multi-device
-use case (and other features) as part of Level 2<next-steps>`.  We
-want to keep Level 1 minimal enough that it's easy for developers to
-adopt it and we can start to drive efforts from real-life experiences
-as soon as possible.
+The design of Level 1 is driven by usability concerns and by the
+realities of incremental deployment. A user may use both
+Autocrypt-enabled mail apps and traditional plain ones and we'd like to
+avoid annoyances like unexpected unreadable mails while supporting users
+who want to explicitly turn on encryption.
+
+For ease of implementation and deployment, Level 1 only contemplates the
+use of Autocrypt on a single device.  We intend to :doc:`support
+multi-device synchronization (and other features) as part of Level
+2<next-steps>`.  We want to keep Level 1 minimal enough that it's easy
+for developers to adopt it and we can start to drive efforts from
+real-life experiences as soon as possible.
 
 Throughout this document, we refer to a mail app or Mail User Agent (MUA)
-as though it was only capable of controlling a single e-mail account.  An
-MUA that is capable of connecting to multiple e-mail accounts should
-have a separate Autocrypt state for each e-mail account it has access
-to.
+as though it was only capable of controlling a single e-mail account
+(see `multiaccounts`_ for more detail).
 
 .. contents::
 
@@ -35,13 +35,13 @@ secret and public keys, so that users can encrypt mail without
 specialized knowledge.
 
 This spec introduces an Autocrypt header that transfers information
-about a sender's public keys in all their emails. Autocrypt provides a
-simple set of rules to track this information per communication peer.
-This provides unambiguous information during message composition on
-whether encryption is a) possible and b) recommended for a given set
+about a sender's :term:`public key` in all their emails. Autocrypt
+provides a set of rules to track this information per communication
+peer.  This provides unambiguous information during message composition
+on whether encryption is a) possible and b) recommended for a given set
 of recipients. The design relies on in-band communication for key
-discovery, thereby avoiding a dependency on external infrastructure
-like OpenPGP keyservers or PKI.
+discovery, thereby avoiding a dependency on external infrastructure like
+OpenPGP keyservers or PKI.
 
 Autocrypt facilitates opportunistic key distribution, but recognizes
 that aggressively opportunistic encryption can be disruptive to
@@ -58,7 +58,7 @@ encrypted if either:
 Requirements on MUA/E-mail Provider interactions
 ++++++++++++++++++++++++++++++++++++++++++++++++
 
-Autocrypt tries to impose minimal requirements on how MUAs and
+Autocrypt tries to impose minimal requirements on how :term:`MUA` s and
 e-mail services interact.  We assume that an Autocrypt-capable MUA
 has credentials and capabilities to perform these network services:
 
@@ -80,32 +80,26 @@ then the e-mail account cannot be used with Autocrypt.  An
 Autocrypt-capable MUA may still access and control the account, but it
 will not be able to enable Autocrypt on it.
 
-.. todo::
-
-    Discuss with webmail developers how to work with, refine
-    the interactions.
-
 
 Autocrypt Internal State
 ++++++++++++++++++++++++
 
-.. todo::
+An Autocrypt client needs to associate information with the accounts it
+controls and the peers it communicates with.
 
-   TODO
+Accounts controlled by the MUA
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Own State TODO
-~~~~~~~~~~~~~~
-
-Level 1 MUAs maintain an internal structure ``own_state`` for each
+A Level 1 MUA maintains an internal structure ``own_state`` for each
 account on which Autocrypt is enabled. ``own_state`` has the following
 members:
 
- * ``secret_key`` -- the 2048- or 3072-bit RSA secret keys used for
-   this account (see "Secret Key Generation and storage" above).
+ * ``secret_key`` -- the RSA secret key material used for
+   the account (see `secretkeys`_ ).
  * ``public_key`` -- the OpenPGP transferable public key derived
    from the secret key.
  * ``prefer_encrypt`` -- the user's own
-   preferences on this account, either ``mutual`` or ``nopreference``.
+   preferences on the account, either ``mutual`` or ``nopreference``.
    This SHOULD be set to ``nopreference`` by default.
 
 If Autocrypt is enabled for a given account, the MUA SHOULD allow the
@@ -549,6 +543,7 @@ Secret Own Key State Management TODO
 
    TODO
 
+.. _secretkeys
 Secret key generation and storage
 +++++++++++++++++++++++++++++++++
 
@@ -564,8 +559,9 @@ The secret key material should be protected from access by other
 applications or co-tenants of the device, at least as well as the
 passwords the MUA retains for the user's IMAP or SMTP accounts.
 
-Aliases
-+++++++
+.. _multiaccounts::
+Handling Multiple Accounts and Aliases
+++++++++++++++++++++++++++++++++++++++
 
 If a user sends emails with multiple aliases through the same account
 the client SHOULD use the same autocrypt key for all aliases.  The
@@ -579,6 +575,10 @@ and allow configuring ``prefer_encrypt`` on a per alias basis.
 .. todo::
 
    relationship aliases / multiple accounts
+
+An MUA that is capable of connecting to multiple e-mail accounts should
+have a separate Autocrypt state for each e-mail account it has access
+to.
 
 Onboarding
 ++++++++++
