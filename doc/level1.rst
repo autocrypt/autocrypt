@@ -328,7 +328,7 @@ update the state as follows:
 - set ``last_seen`` to the effective message date
 - set ``state`` to ``reset``
 
-If the Autocrypt header is unavailable no further changes
+If the Autocrypt header is unavailable, no further changes
 are required and the update process terminates.
 
 At this point, the message in processing contains the most recent
@@ -847,7 +847,7 @@ If the Autocrypt recommendation is either ``available`` or
 to allow the user to make a different decision.
 
 If the Autocrypt recommendation is ``discourage``, then the MUA SHOULD
-expose the UI in an unactive state, but if the user chooses to
+expose the UI in an unactive state.  But if the user chooses to
 activate it (e.g., clicking on the checkbox), then the UI should
 display a warning to the user and ask them to confirm the choice to
 encrypt.
