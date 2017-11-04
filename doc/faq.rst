@@ -168,3 +168,27 @@ Why do you always encrypt-to-self?
 
 Users expect to be able to read their outbox or Sent Messages folders.
 Autocrypt should not get in the way of that.
+
+
+Why ``prefer-encrypt=mutual`` and not more aggressive choices?
+--------------------------------------------------------------
+
+We considered and discarded several other designs for
+``prefer-encrypt`` before settling on ``prefer-encrypt=mutual``.  The
+other designs we considered tended to have a scenario where e-mail was
+automatically encrypted with greater frequency.
+
+We opted for the less-aggressive design because we wanted to avoid
+annoyances for users who want to be able to get encrypted e-mail when
+they need it, but who actually have logistical trouble with handling
+encrypted messages (e.g. the user often uses a liimted e-mail client
+that cannot decrypt).  In particular, unpleasant surprises (unwanted
+encrypted mail) tended to happen when the communicating peers have
+different preferences, which can demotivate the very people for whom
+encrypted mail capability is marginal anyway.
+
+We want to broaden the group of people who might be able to use
+encrypted mail; to reduce the pressure to uninstall mail encryption
+capabilities; and to reduce the human-to-human pushback ("please quit
+sending me encrypted mail").  So we only automatically encrypt between
+peers who have both opted in.
