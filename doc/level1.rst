@@ -6,20 +6,20 @@ describes the basic capabilities required for a mail app to be
 Autocrypt-capable at Level 1.
 
 The design of Level 1 is driven by usability concerns and by the
-realities of incremental deployment. A user may use both
-Autocrypt-enabled mail apps and traditional plain ones and we'd like to
-avoid annoyances like unexpected unreadable mails while supporting users
-who want to explicitly turn on encryption.
+realities of incremental deployment. A user may mix both
+Autocrypt-enabled mail clients and traditional mail clients and we'd
+like to avoid annoyances like unexpectedly unreadable mails while also
+supporting users who want to explicitly turn on encryption.
 
-For ease of implementation and deployment, Level 1 only contemplates the
-use of Autocrypt on a single device.  We intend to :doc:`support
+For ease of implementation and deployment, Level 1 focuses on the use
+of Autocrypt on a single device.  We intend to :doc:`support
 multi-device synchronization (and other features) as part of Level
-2<next-steps>`.  We want to keep Level 1 minimal enough that it's easy
-for developers to adopt it and we can start to drive efforts from
-real-life experiences as soon as possible.
+2<next-steps>`.  We want to keep Level 1 simple enough that it's easy
+for developers to adopt it so we can drive efforts from real-life
+experiences as soon as possible.
 
 Throughout this document, we refer to a mail app or Mail User Agent (MUA)
-as though it was only capable of controlling a single e-mail account
+as though it were only capable of controlling a single e-mail account
 (see :ref:`multiaccounts` for more detail).
 
 .. contents::
@@ -154,20 +154,20 @@ The ``Autocrypt`` header has the following format::
 
     Autocrypt: addr=a@b.example.org; [prefer-encrypt=mutual;] keydata=BASE64
 
-The ``addr`` attribute is mandatory and contains the single recipient address
-this header is valid for. In case this address differs from the one the MUA
-considers the sender of the e-mail in parsing, which will usually be
-the one specified in the ``From`` header, the entire header MUST be
-treated as invalid.
+The ``addr`` attribute is mandatory and contains the single recipient
+address this header is valid for. In case this address differs from
+the one the MUA considers the sender of the e-mail (i.e., the one in
+the ``From`` header), the entire ``Autocrypt`` header MUST be treated
+as invalid.
 
 .. _prefer-encrypt:
 
-The ``prefer-encrypt`` attribute is optional and can only occur with the value
-``mutual``.  Its presence in the autocrypt header indicates an agreement to encrypt by default
-with other peers who have the same preference.  An Autocrypt Level 1
-client that sees the attribute with any other value (or that does not
-see the attribute at all) should interpret the value as
-``nopreference``.
+The ``prefer-encrypt`` attribute is optional and can only occur with
+the value ``mutual``.  Its presence in the ``Autocrypt`` header
+indicates an agreement to encrypt by default with other peers who have
+the same preference.  An Autocrypt Level 1 client that sees the
+attribute with any other value (or that does not see the attribute at
+all) should interpret the value as ``nopreference``.
 
 The ``keydata`` attribute is mandatory and contains the key data for
 the specified ``addr`` recipient address.  The value of the
@@ -182,8 +182,8 @@ is a "non-critical" attribute.  An attribute name without a leading
 underscore is a "critical" attribute.  The MUA SHOULD ignore any
 unsupported non-critical attribute and continue parsing the rest of
 the header as though the attribute does not exist, but MUST treat the
-entire Autocrypt header as invalid if it encounters a "critical" attribute it
-doesn't support.
+entire ``Autocrypt`` header as invalid if it encounters a "critical"
+attribute it doesn't support.
 
 OpenPGP Based key data
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -194,7 +194,7 @@ containing exactly these five OpenPGP packets:
 
  - a signing-capable primary key
  - a user id
- - a self signature
+ - a self signature over the user id by the primary key
  - an encryption-capable subkey
  - a binding signature over the subkey by the primary key
 
@@ -316,19 +316,19 @@ Updating the Autocrypt state for the sending peer depends on:
   of first receipt if that date is in the future or unavailable.
 
 - the ``keydata`` and ``prefer-encrypt`` attributes of the single valid
-  parsed ``Autocrypt`` header (see above), if available.
+  ``Autocrypt`` header (see above), if available.
 
 If the effective message date is older than the ``last_seen_autocrypt``
 value no changes are required and the update process terminates.
 
-If the parsed Autocrypt header is unavailable, and the effective
+If the Autocrypt header is unavailable, and the effective
 message date is more recent than the current value of ``last_seen``,
 update the state as follows:
 
 - set ``last_seen`` to the effective message date
 - set ``state`` to ``reset``
 
-If the parsed Autocrypt header is unavailable no further changes
+If the Autocrypt header is unavailable no further changes
 are required and the update process terminates.
 
 At this point, the message in processing contains the most recent
@@ -361,8 +361,8 @@ Provide a recommendation for message encryption
 +++++++++++++++++++++++++++++++++++++++++++++++
 
 On message composition, an Autocrypt-capable agent also has an
-opportunity to decide whether to try to encrypt an e-mail.  Autocrypt
-aims to provide a reasonable recommendation for the agent.
+opportunity to decide whether to try to encrypt the new e-mail
+message.  Autocrypt provides a recommendation for the agent.
 
 Any Autocrypt-capable agent may have other means for making this
 decision outside of Autocrypt (see :doc:`other-crypto-interop`).
@@ -382,7 +382,7 @@ list of recipients, the recommendation may change.
    It's possible that the user manually overriddes the Autocrypt
    recommendation and then edits the list of recipients.  The MUA
    SHOULD retain the user's manual choices for a given message even if
-   the Autcrypt recommendation changes.
+   the Autocrypt recommendation changes.
 
 Autocrypt can produce four possible recommendations to the agent
 during message composition:
@@ -456,11 +456,12 @@ mail.
 Cleartext replies to encrypted mail
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-As you can see above, in the common use case, a reply to an encrypted
-message will also be encrypted. Due to Autocrypt's opportunistic
-approach to key discovery, however, it is possible that
-``state`` in the recipient's Autocrypt peer state is ``null``,
-which means the reply will be sent in the clear.
+In the common use case, a reply to an encrypted message will also be
+encrypted. Due to Autocrypt's opportunistic approach to key discovery,
+however, it is possible that the ``peer_state`` for one of
+the recipients may be missing, or that it is present, but the
+``keydata`` is missing, which means the reply can only be sent in the
+clear.
 
 To avoid leaking cleartext from the original encrypted message in this
 case, the MUA MAY prepare the cleartext reply without including any
@@ -505,8 +506,8 @@ For messages that are going to be encrypted when sent, the MUA MUST
 take care not to leak the cleartext of drafts or other
 partially-composed messages to their e-mail provider (e.g. in the
 "Drafts" folder). If there is a chance that a message could be
-encrypted, the MUA SHOULD encrypt drafts only to itself before storing
-it remotely.
+encrypted, the MUA SHOULD encrypt the draft only to itself before storing
+it remotely. The MUA SHOULD NOT sign drafts.
 
 Key Gossip
 ++++++++++
@@ -598,12 +599,12 @@ Handling Multiple Accounts and Aliases
 ++++++++++++++++++++++++++++++++++++++
 
 If a user sends emails with multiple aliases through the same account
-the client SHOULD use the same autocrypt key for all aliases.  The
+the client SHOULD use the same Autocrypt key for all aliases.  The
 Autocrypt Setup Message is not designed to handle multiple keys.  In
 addition syncronisation issues arrise if new keys for aliases are
 created on different devices.
 
-A client MAY allow to enable autocrypt only for a subset of the aliases
+A client MAY allow to enable Autocrypt only for a subset of the aliases
 and allow configuring ``prefer_encrypt`` on a per alias basis.
 
 .. todo::
@@ -809,10 +810,11 @@ import it to enable Autocrypt.  If the user agrees to do so:
    then the client MUST provide a plain UTF-8 string text entry.
 
  * The client should try decrypting the message with the supplied
-   Setup Code.  The Code serves both for decryption as well as authenticating
-   the message.  Extra care needs to be taken with some PGP implementations
-   that the Setup Code is actually used for decryption.
-   :doc:`Preventing against injected private keys<bad-import>`
+   Setup Code.  The Code serves both for decryption as well as
+   authenticating the message.  Extra care needs to be taken with some
+   PGP implementations that the Setup Code is actually used for
+   decryption. See :doc:`bad-import` for more explanation and an
+   example.
 
  * If it decrypts the client SHOULD import the secret
    key material as its own Autocrypt (``own_state`` as
@@ -843,6 +845,12 @@ composition at all.
 If the Autocrypt recommendation is either ``available`` or
 ``encrypt``, the MUA SHOULD expose this UI with the :ref:`recommended default <recommendation>` during message composition
 to allow the user to make a different decision.
+
+If the Autocrypt recommendation is ``discourage``, then the MUA SHOULD
+expose the UI in an unactive state, but if the user chooses to
+activate it (e.g., clicking on the checkbox), then the UI should
+display a warning to the user and ask them to confirm the choice to
+encrypt.
 
 .. _preference-ui:
 

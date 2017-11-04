@@ -63,3 +63,4 @@ and contributors, MUA developers and privacy enthusiasts.
    peering
    transfer-format
    optional-state
+   bad-import
