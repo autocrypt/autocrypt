@@ -289,31 +289,31 @@ here.
 Updating Autocrypt Peer State
 +++++++++++++++++++++++++++++
 
-Incoming messages may be processed by a MUA at receive or display time.
+Incoming messages may be processed to update Autocrypt peer state by a
+MUA at receive or display time.
 
-A message with a content-type of ``multipart/report`` can be assumed
-to be auto-generated, and SHOULD be ignored (the MUA SHOULD NOT update
-any Autocrypt peer state) if it does not contain an ``Autocrypt``
-header. This in particular avoids triggering a ``reset`` state from
-received Message Disposition Notifications (:rfc:`3798`).
+Messages SHOULD be ignored and the peer state SHOULD NOT be updated in
+the following cases:
 
-We define the ``effective date`` of a message as the sending time of
-the message as indicated by its ``Date`` header, or the time of first
-receipt if that date is in the future or unavailable.
+  - The content-type is ``multipart/report``. It can be assumed to be
+    auto-generated. This in particular avoids triggering a ``reset``
+    state from received Message Disposition Notifications (:rfc:`3798`).
 
-If an incoming message contains more than one address in the ``From``
-header a MUA SHOULD NOT update any Autocrypt peer state.
+  - There is more than one address in the ``From`` header.
+
+  - The MUA believes the message to be spam. If the user marks the
+    message as not being spam the header MAY be processed at that point.
 
 When parsing an incoming message, a MUA SHOULD examine all ``Autocrypt``
 headers, rather than just the first one. If there is more than one
 valid header, this SHOULD be treated as an error, and all ``Autocrypt``
 headers discarded as invalid.
 
-If a message contains exactly one address in the ``From`` header a MUA
-must update the Autocrypt state for the single sending peer.  This
-update process depends on:
+Updating the Autocrypt state for the sending peer depends on:
 
-- the "effective date" of the message.
+- the ``effective date`` of the message.  We define it as the sending
+  time of the message as indicated by its ``Date`` header, or the time
+  of first receipt if that date is in the future or unavailable.
 
 - the ``keydata`` and ``prefer-encrypt`` attributes of the single valid
   parsed ``Autocrypt`` header (see above), if available.
