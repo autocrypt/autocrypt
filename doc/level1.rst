@@ -110,7 +110,7 @@ attributes as ``autocrypt_peer_state[A]``:
 * ``state``: a quad-state: ``nopreference``, ``mutual``, ``reset``, or
   ``gossip``.
 
-How this information is managed is covered in :ref:`peer-state-management`.
+How this information is managed and used is covered in :ref:`peer-state-management`.
 
 .. _own-state:
 
@@ -135,14 +135,15 @@ choice might normally be hidden in a "preferences pane" or something
 similar.  Please see :ref:`preference-ui` for a specific example of
 how this might look.
 
-How this information is managed is covered in :ref:`own-state-management`.
+How this information is managed and used is covered in :ref:`own-state-management`.
 
 .. _peer-state-management:
 
 Peer State Management
 ---------------------
 
-Peer state management is transferred in-band using e-mail headers.
+Autocrypt clients update state about their communications peers based
+on information gathered from received e-mail headers.
 
 .. _autocrypt-header:
 
@@ -534,7 +535,8 @@ with more than one recipient. These headers MUST be placed in the root
 MIME part of the encrypted message payload. The encrypted payload in
 this case contains one Autocrypt-Gossip header for each recipient,
 which MUST include ``addr`` and ``keydata`` attributes with the relevant
-data from the recipient's Autocrypt :ref:`peer state <peer-state>`.
+data from the sender's Autocrypt :ref:`peer state <peer-state>` about
+the recipient.
 
 Updating Autocrypt Peer State from Key Gossip
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

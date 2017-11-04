@@ -1,7 +1,7 @@
 Future Enhancements to Autocrypt
 ================================
 
-Please see :doc:`level0` for information about Level 1 requirements.
+Please see :doc:`level1` for information about Level 1 requirements.
 Here, we document future improvements, which we hope will be
 incorporated in Level 1, or possibly some later Level.  This is an
 unordered list.  If you have ideas about how to address one of these
