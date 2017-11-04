@@ -757,13 +757,6 @@ If those digits are included in the headers, they may also
 be used in the descriptive text that is part of the Setup Message, to
 distinguish different messages.
 
-.. note::
-
-    While the use of a memory-hard KDF like scrypt or argon2 would be
-    desirable in the future, this is not specified in OpenPGP so far.
-    It is a bigger concern to preserve compatibility and avoid
-    friction with presently deployed OpenPGP software.
-
 Setup Message Creation
 ~~~~~~~~~~~~~~~~~~~~~~
 

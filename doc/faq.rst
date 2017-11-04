@@ -190,3 +190,11 @@ encrypted mail; to reduce the pressure to uninstall mail encryption
 capabilities; and to reduce the human-to-human pushback ("please quit
 sending me encrypted mail").  So we only automatically encrypt between
 peers who have both opted in.
+
+Why not use a better KDF for symmetric encryption of the Setup Message?
+-----------------------------------------------------------------------
+
+Use of a memory-hard KDF like scrypt or argon2 would be desirable in the future.
+However, at the point of this writing this is not specified in OpenPGP. It is a
+bigger concern to preserve compatibility and avoid friction with presently
+deployed OpenPGP software.
