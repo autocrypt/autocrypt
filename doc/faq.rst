@@ -88,8 +88,6 @@ Future levels of the Autocrypt specification may support different
 encryption technologies, but the main immediate goal is to get wider
 adoption, not to re-invent the encryption mechanism itself.
 
-Please see :ref:`key-formats` for more discussion.
-
 Why don't you use the ``User-Agent`` header to detect different mail apps?
 ------------------------------------------------------------------------------------
 
@@ -139,11 +137,11 @@ certain mails will be unreadable with certain agents, in an
 apparently-arbitrary pattern based on the origin of the remote peer's
 last-received message.
 
-Level 1 therefore defines an Autocrypt setup process which involes sending
-and receiving a :ref:`setup message`. This allows two Autocrypt MUAs to share
+Level 1 therefore defines an Autocrypt setup process which involves sending
+and receiving a :ref:`setup message <setup-message>`. This allows two Autocrypt MUAs to share
 secret key material so that mails can be decrypted and read on both devices.
 This transfer of secret key material currently requires the user to type in
-a long :ref:`setup code`.  For level 2, we aim to provide a pairing mechanism
+a long :ref:`setup code <setup-code>`.  For level 2, we aim to provide a pairing mechanism
 which only uses a short number to secure the peering.
 
 
