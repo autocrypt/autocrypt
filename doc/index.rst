@@ -53,3 +53,10 @@ If you are interested to learn more or want to help please :doc:`join our channe
 where we meet next <contact>`.
 
 See :doc:`contents` for an index of all docs and discussion results so far.
+
+Appendix
+=========
+
+.. TODO: this should be in the sidebar
+
+:doc:`appendix`
