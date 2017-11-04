@@ -200,11 +200,11 @@ Autocrypt-enabled Level 1 MUA MUST consist of an :rfc:`OpenPGP
 "Transferable Public Key"<4880#section-11.1>`) containing exactly these five
 OpenPGP packets:
 
- - a signing-capable primary key ``Kp``
+ - a signing-capable primary key
  - a user id
  - a self signature
- - an encryption-capable subkey ``Ke``
- - a binding signature over ``Ke`` by ``Kp``
+ - an encryption-capable subkey
+ - a binding signature over the subkey by the primary key
 
 The content of the user id packet is only decorative. By convention, it
 contains the same address used in the ``addr`` attribute in angle brackets,
