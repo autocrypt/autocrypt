@@ -142,7 +142,8 @@ How this information is managed is covered in :ref:`own-state-management`.
 Peer State Management
 ---------------------
 
-Peer state management is transferred in-band using e-mail headers.
+Autocrypt clients update state about their communications peers based
+on information gathered from received e-mail headers.
 
 .. _autocrypt-header:
 
