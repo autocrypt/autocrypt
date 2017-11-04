@@ -129,13 +129,7 @@ The ``Autocrypt`` Header
 
 The ``Autocrypt`` header has the following format::
 
-    Autocrypt: [type=1;] addr=a@b.example.org; [prefer-encrypt=mutual;] keydata=BASE64
-
-The ``type`` parameter is optional and defines the meaning of the rest of the header.
-For now the only valid value is ``1`` which is also the default if the
-header is absent.  If present, this parameter MUST come before any
-other, to ensure forward compatibility.  Headers with an unknown
-``type`` MUST be treated as invalid.
+    Autocrypt: addr=a@b.example.org; [prefer-encrypt=mutual;] keydata=BASE64
 
 The ``addr`` attribute is mandatory and contains the single recipient address
 this header is valid for. In case this address differs from the one the MUA
@@ -167,8 +161,8 @@ of the header as though the attribute does not exist, but MUST treat
 the entire header as invalid if it encounters a "critical" attribute
 it doesn't support.
 
-``type=1``: OpenPGP Based key data
-++++++++++++++++++++++++++++++++++
+OpenPGP Based key data
+++++++++++++++++++++++
 
 For maximum interoperability, a certificate sent by an
 Autocrypt-enabled Level 1 MUA MUST consist of an :rfc:`OpenPGP
@@ -191,7 +185,7 @@ and then base64-encoded.
 
 A Level 1 MUA MUST be capable of processing and handling 2048-bit RSA
 public keys.  It MAY support other OpenPGP key formats found in
-a ``type=1`` Autocrypt header (for example, by passing it agnostically
+an Autocrypt header (for example, by passing it agnostically
 to an OpenPGP backend for handling).
 
 Secret key protection at rest
@@ -230,11 +224,9 @@ here.
 
 Conceptually, we represent this state as a table named
 ``autocrypt_peer_state`` indexed by the peer's :doc:`canonicalized
-e-mail address <address-canonicalization>` and key type.  In level 1,
-there is only one type, ``1``, so level 1 agents can implement this by
-indexing only the peer's e-mail address.
+e-mail address <address-canonicalization>`.
 
-For each e-mail address ``A`` and type, an agent MUST store the following
+For each e-mail address ``A``, an agent MUST store the following
 attributes as ``autocrypt_peer_state[A]``:
 
 * ``last_seen``: UTC timestamp of the most recent effective date of
