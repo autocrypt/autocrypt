@@ -20,7 +20,7 @@ real-life experiences as soon as possible.
 
 Throughout this document, we refer to a mail app or Mail User Agent (MUA)
 as though it was only capable of controlling a single e-mail account
-(see `multiaccounts`_ for more detail).
+(see :ref:`multiaccounts` for more detail).
 
 .. contents::
 
@@ -95,7 +95,7 @@ account on which Autocrypt is enabled. ``own_state`` has the following
 members:
 
  * ``secret_key`` -- the RSA secret key material used for
-   the account (see `secretkeys`_ ).
+   the account (see :ref:`secretkeys` ).
  * ``public_key`` -- the OpenPGP transferable public key derived
    from the secret key.
  * ``prefer_encrypt`` -- the user's own
@@ -543,7 +543,8 @@ Secret Own Key State Management TODO
 
    TODO
 
-.. _secretkeys
+.. _secretkeys:
+
 Secret key generation and storage
 +++++++++++++++++++++++++++++++++
 
@@ -559,7 +560,8 @@ The secret key material should be protected from access by other
 applications or co-tenants of the device, at least as well as the
 passwords the MUA retains for the user's IMAP or SMTP accounts.
 
-.. _multiaccounts::
+.. _multiaccounts:
+
 Handling Multiple Accounts and Aliases
 ++++++++++++++++++++++++++++++++++++++
 
