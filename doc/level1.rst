@@ -110,7 +110,7 @@ attributes as ``autocrypt_peer_state[A]``:
 * ``state``: a quad-state: ``nopreference``, ``mutual``, ``reset``, or
   ``gossip``.
 
-How this information is managed is covered in :ref:`peer-state-management`.
+How this information is managed and used is covered in :ref:`peer-state-management`.
 
 .. _own-state:
 
@@ -135,7 +135,7 @@ choice might normally be hidden in a "preferences pane" or something
 similar.  Please see :ref:`preference-ui` for a specific example of
 how this might look.
 
-How this information is managed is covered in :ref:`own-state-management`.
+How this information is managed and used is covered in :ref:`own-state-management`.
 
 .. _peer-state-management:
 
