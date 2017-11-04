@@ -131,33 +131,31 @@ The ``Autocrypt`` header has the following format::
 
     Autocrypt: [type=1;] addr=a@b.example.org; [prefer-encrypt=mutual;] keydata=BASE64
 
-The ``type`` parameter defines the meaning of the rest of the header.
-For now the only defined type is ``1``, which implies the meaning as
-described here. This is also the default, if the header is absent.
-Headers with an unknown ``type`` MUST be treated as invalid. If
-present, this parameter MUST come before any other, to ensure forward
-compatibility.
+The ``type`` parameter is optional and defines the meaning of the rest
+of the header.  For now the only valid value is ``1`` which is also
+the default if the header is absent.  Headers with an unknown ``type``
+MUST be treated as invalid.
 
-The ``addr`` attribute indicates the single recipient address this
-header is valid for. In case this address differs from the one the MUA
+The ``addr`` attribute is mandatory and contains the single recipient address
+this header is valid for. In case this address differs from the one the MUA
 considers the sender of the e-mail in parsing, which will usually be
 the one specified in the ``From`` header, the entire header MUST be
 treated as invalid.
 
-The ``keydata`` attributes specify the type and data of the key
-material.  The value of the ``keydata`` attribute is a Base64
-representation of the public key material.  This is a simple
+The ``prefer-encrypt`` attribute is optional and can only occur with the value
+``mutual``.  Its presence in the autocrypt header indicates an agreement to encrypt by default
+with other peers who have the same preference.  An Autocrypt Level 1
+client that sees the attribute with any other value (or that does not
+see the attribute at all) should interpret the value as
+``nopreference``.
+
+The ``keydata`` attribute is mandatory and contains the key data for the
+specified ``addr`` recipient address.  The value of the ``keydata`` attribute is
+a Base64 representation of the public key material.  This is a simple
 ascii-armored key format without a checksum (which would then be
 Radix64) and without pgp message markers (``---BEGIN...`` etc.).  For
 ease of parsing, the ``keydata`` attribute MUST be the last attribute
 in the header.
-
-The ``prefer-encrypt`` attribute can only occur with the value
-``mutual``.  Its presence in the Autocrypt header indicates an
-agreement to encrypt by default with other peers who have the same
-preference. An Autocrypt Level 1 client that sees the attribute with
-any other value (or that does not see the attribute at all) should
-interpret the value as ``nopreference``.
 
 Additional attributes unspecified here are also possible before the
 ``keydata`` attribute.  If an attribute name starts with an underscore
