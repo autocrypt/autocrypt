@@ -4,6 +4,9 @@ dist: trusty
 python:
     - '3.5'
 
+env:
+  - DEPLOY_USER=autocrypt DEPLOY_SERVER="autocrypt.org"
+
 addons:
   apt:
     packages:
@@ -11,7 +14,12 @@ addons:
     - texlive-fonts-recommended
     - texlive-latex-extra
     - latexmk
+    - inkscape
 
+before_install:
+  - openssl aes-256-cbc -K $encrypted_ee89c1e228aa_key -iv $encrypted_ee89c1e228aa_iv -in autocrypt.id_rsa.enc -out $TRAVIS_BUILD_DIR/id_rsa -d
+  - chmod 600 $TRAVIS_BUILD_DIR/id_rsa
+  - md5sum $TRAVIS_BUILD_DIR/id_rsa
 install:
   - pip install sphinx
 
@@ -19,6 +27,15 @@ script:
   - cd doc
   - make html
   - make latexpdf
+  - cd ..
+
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: scripts/deploy.sh
+  on:
+    branch: ci/render
+
 
 #notifications:
 #  irc:
