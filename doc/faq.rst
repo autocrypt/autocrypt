@@ -38,9 +38,9 @@ Why do you drop all headers if there is more than one?
 -------------------------------------------------------------
 
 We could come up with rules on which header to pick. But whatever we
-do, it has to be deterministic, clear and agreed upon by all clients
+do, it has to be deterministic, clear and agreed upon by all MUAs
 so their behaviour is predictable and stable for users who might try
-multiple clients.
+multiple MUAs.
 
 Dropping all headers is the simplest way to avoid an ambiguous state
 in level 1. Once we have more experience from the field we'll know how
@@ -184,7 +184,7 @@ automatically encrypted with greater frequency.
 We opted for the less-aggressive design because we wanted to avoid
 annoyances for users who want to be able to get encrypted e-mail when
 they need it, but who actually have logistical trouble with handling
-encrypted messages (e.g. the user often uses a liimted e-mail client
+encrypted messages (e.g. the user often uses a liimted MUA
 that cannot decrypt).  In particular, unpleasant surprises (unwanted
 encrypted mail) tended to happen when the communicating peers have
 different preferences, which can demotivate the very people for whom

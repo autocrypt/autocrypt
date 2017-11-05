@@ -24,7 +24,7 @@ For current OpenPGP users
 
   * You can still create a compatible header with a tool we will
     provide. We are targeting users who have not used pgp
-    before. Nevertheless most clients will still support other key
+    before. Nevertheless most MUAs will still support other key
     formats. But they are not required to.
 
 

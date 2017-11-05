@@ -7,7 +7,7 @@ Autocrypt-capable at Level 1.
 
 The design of Level 1 is driven by usability concerns and by the
 realities of incremental deployment. A user may mix both
-Autocrypt-enabled mail clients and traditional mail clients and we'd
+Autocrypt-enabled MUAs and traditional MUAs and we'd
 like to avoid annoyances like unexpectedly unreadable mails while also
 supporting users who want to explicitly turn on encryption.
 
@@ -84,7 +84,7 @@ will not be able to enable Autocrypt on it.
 Autocrypt Internal State
 ++++++++++++++++++++++++
 
-An Autocrypt client needs to associate information with the accounts it
+An Autocrypt MUA needs to associate information with the accounts it
 controls and the peers it communicates with.
 
 .. _peer-state:
@@ -142,7 +142,7 @@ How this information is managed and used is covered in :ref:`own-state-managemen
 Peer State Management
 ---------------------
 
-Autocrypt clients update state about their communications peers based
+Autocrypt MUAs update state about their communications peers based
 on information gathered from received e-mail headers.
 
 .. _autocrypt-header:
@@ -165,7 +165,7 @@ as invalid.
 The ``prefer-encrypt`` attribute is optional and can only occur with
 the value ``mutual``.  Its presence in the ``Autocrypt`` header
 indicates an agreement to encrypt by default with other peers who have
-the same preference.  An Autocrypt Level 1 client that sees the
+the same preference.  An Autocrypt Level 1 MUA that sees the
 attribute with any other value (or that does not see the attribute at
 all) should interpret the value as ``nopreference``.
 
@@ -225,7 +225,7 @@ minimal Level 1 MUA will only include these two attributes.  If
 ``own_state.prefer_encrypt`` is set to ``mutual`` then the header MUST
 have a ``prefer-encrypt`` attribute set to ``mutual``.
 
-The client MUST NOT include more than one valid Level 1 ``Autocrypt``
+The MUA MUST NOT include more than one valid Level 1 ``Autocrypt``
 header (see :ref:`update-peer-state`).
 
 If the ``From`` address changes during message composition (E.g. if
@@ -247,9 +247,9 @@ Internal state storage
 ++++++++++++++++++++++
 
 See :ref:`peer-state` for a definition of the structure of
-information stored about the client's communications peers.
+information stored about the MUA's communications peers.
 
-Autocrypt clients keep state about their peers, to be able to handle
+Autocrypt MUAs keep state about their peers, to be able to handle
 several nuanced situations that have caused trouble/annoyance in the
 past.  This state is updated even when the peer sends mail without an
 ``Autocrypt`` header.
@@ -284,13 +284,13 @@ The ``state`` variable of a particular peer's ``peer_state`` data is
 selected from a set range of values:
 
   - ``nopreference`` means the peer has not opted into mutual
-    encryption.  The client may or may not know a key for such a peer.
+    encryption.  The MUA may or may not know a key for such a peer.
   - ``mutual`` means we know a key for the peer, and the peer has
     expressed agreement to encrypt by default if all parties involved
     also agree.
   - ``reset`` means we used to know a key for a peer, and it is still
     available in ``keydata``.  But we have more recently seen an
-    e-mail message from the peer from a non-autocrypt-enabled client,
+    e-mail message from the peer from a non-autocrypt-enabled MUA,
     so encrypted mail is more likely to be unreadable for them.
   - ``gossip`` means we have never seen a key from this peer directly,
     but we've learned about a possible key for this peer from a third
@@ -569,7 +569,7 @@ Own State Management
 --------------------
 
 See :ref:`own-state` for a definition of the structure of
-information stored about the client's own e-mail accounts.
+information stored about the MUA's own e-mail accounts.
 
 
 .. _secretkeys:
@@ -626,7 +626,7 @@ is not designed to handle multiple keys for a single account.  In
 addition, synchronization issues arise if new keys for aliases are
 created on different devices.
 
-A client MAY allow the user to enable Autocrypt only for a subset of
+A MUA MAY allow the user to enable Autocrypt only for a subset of
 the aliases, or MAY allow the user to configure
 ``own_state.prefer_encrypt`` on a per-alias basis, though this will
 likely complicate the UI.
@@ -639,17 +639,17 @@ Onboarding
 
    todo
 
-Avoiding Client Conflicts
+Avoiding MUA Conflicts
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If more than one Autocrypt-enabled client generates a key and then
+If more than one Autocrypt-enabled MUA generates a key and then
 distributes it to communication peers, encrypted mail sent to the user
 is only readable by the MUA that sent the last message. This can lead
 to behavior that is unpredictable and confusing for the user.
 
 As a simple measure of mitigation, Level 1 MUAs SHOULD check before
 key generation whether there is evidence in the user's mailbox of
-other active Autocrypt clients. To do this, they SHOULD scan the
+other active Autocrypt MUAs. To do this, they SHOULD scan the
 user's Sent folder for mail that contains Autocrypt headers. If such
 mail exists, the MUA SHOULD warn the user and abort key generation,
 unless explicitly instructed to proceed regardless (see
@@ -658,7 +658,7 @@ unless explicitly instructed to proceed regardless (see
 In cases where an Autocrypt-capable MUA is unable to identify the
 user's Sent folder, or is unable to access any pre-existing message
 archive (e.g. a POP-only MUA), the MUA MUST warn the user that
-Autocrypt should be enabled on **only one** client before enabling
+Autocrypt should be enabled on **only one** MUA before enabling
 Autocrypt on the given account.
 
 To solve this problem in a better way, bi-directional communication
@@ -672,15 +672,15 @@ scope for Level 1.
 Autocrypt Setup Message
 +++++++++++++++++++++++
 
-To avoid "lock-in" of secret key material on a particular client,
+To avoid "lock-in" of secret key material on a particular MUA,
 Autocrypt level 1 includes a way to "export" the user's keys and her
-:ref:`prefer-encrypt state <own-state>` for other clients to pick up,
+:ref:`prefer-encrypt state <own-state>` for other MUAs to pick up,
 asynchronously and with explicitly required user interaction.
 
 The mechanism available is a specially-formatted e-mail message called
-the Autocrypt Setup Message.  An already-configured Autocrypt client
+the Autocrypt Setup Message.  An already-configured Autocrypt MUA
 can generate an Autocrypt Setup Message, and send it to itself.  A
-not-yet-configured Autocrypt client (a new client in a multi-device
+not-yet-configured Autocrypt MUA (a new MUA in a multi-device
 case, or recovering from device failure or loss) can import the
 Autocrypt Setup Message and recover the ability to read existing
 messages.
@@ -740,7 +740,7 @@ and presented directly to the user for safekeeping. It MUST NOT be
 included in the cleartext of the Autocrypt Setup Message, or otherwise
 transmitted over e-mail.
 
-An Autocrypt Level 1 client MUST generate a Setup Code as UTF-8 string
+An Autocrypt Level 1 MUA MUST generate a Setup Code as UTF-8 string
 of 36 numeric characters, divided into nine blocks of four, separated
 by dashes. The dashes are part of the secret code and there are no
 spaces. This format holds about 119 bits of entropy. It is designed to
@@ -778,9 +778,9 @@ distinguish different messages.
 Setup Message Creation
 ~~~~~~~~~~~~~~~~~~~~~~
 
-An Autocrypt client MUST NOT create an Autocrypt Setup Message without
+An Autocrypt MUA MUST NOT create an Autocrypt Setup Message without
 explicit user interaction.  When the user takes this action for a
-specific account, the client:
+specific account, the MUA:
 
  * Generates a Setup Code.
  * Optionally, displays the Setup Code to the user, prompts the user
@@ -798,42 +798,42 @@ specific account, the client:
    headers.
  * Sends the generated e-mail message to its own account.
  * Suggests to the user to either back up the message or to import it
-   from another Autocrypt-capable client.
+   from another Autocrypt-capable MUA.
 
-A Level 1 client MUST be able to create an Autocrypt Setup Message, to
+A Level 1 MUA MUST be able to create an Autocrypt Setup Message, to
 preserve users' ability to recover from disaster, and to choose to use
-a different Autocrypt-capable client in the future.
+a different Autocrypt-capable MUA in the future.
 
 
 Setup Message Import
 ~~~~~~~~~~~~~~~~~~~~
 
-An Autocrypt-capable client SHOULD support the ability to wait for and
+An Autocrypt-capable MUA SHOULD support the ability to wait for and
 import an Autocrypt Setup Message when the user has not yet configured
 Autocrypt.  This could happen either when a user of an unconfigured
-Autocrypt client decides to enable Autocrypt, or the client could
-proactively scan the client's mailbox for a message that matches these
-characteristics, and it could alert the client if it discovers one.
+Autocrypt MUA decides to enable Autocrypt, or the MUA could
+proactively scan the MUA's mailbox for a message that matches these
+characteristics, and it could alert the MUA if it discovers one.
 
-If the client finds an Autocrypt Setup Message, it should offer to
+If the MUA finds an Autocrypt Setup Message, it should offer to
 import it to enable Autocrypt.  If the user agrees to do so:
 
- * The client prompts the user for their corresponding Setup Code.
+ * The MUA prompts the user for their corresponding Setup Code.
    If there is a ``Passphrase-Format`` header in the outer OpenPGP armor and
-   its value is ``numeric9x4``, then the client MAY present a specialized
+   its value is ``numeric9x4``, then the MUA MAY present a specialized
    input dialog assisting the user to enter a code in the format described
    above.
    If there is no ``Passphrase-Format`` header, or the value is unknown,
-   then the client MUST provide a plain UTF-8 string text entry.
+   then the MUA MUST provide a plain UTF-8 string text entry.
 
- * The client should try decrypting the message with the supplied
+ * The MUA should try decrypting the message with the supplied
    Setup Code.  The Code serves both for decryption as well as
    authenticating the message.  Extra care needs to be taken with some
    PGP implementations that the Setup Code is actually used for
    decryption. See :doc:`bad-import` for more explanation and an
    example.
 
- * If it decrypts the client SHOULD import the secret
+ * If it decrypts the MUA SHOULD import the secret
    key material as its own Autocrypt (``own_state`` as
    discussed in :ref:`own-state`).
 
@@ -920,7 +920,7 @@ Example Autocrypt headers
 
 .. _client-conflict-example:
 
-Example when clients conflict
+Example when MUAs conflict
 +++++++++++++++++++++++++++++
 
 .. todo::

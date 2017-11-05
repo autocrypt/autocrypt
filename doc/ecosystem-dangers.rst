@@ -17,8 +17,8 @@ potential risks.
 Failures of Search
 ------------------
 
-If Autocrypt clients are incapable of searching encrypted mail, users of
-Autocrypt-capable clients may find e-mail less useful for normal
+If Autocrypt MUAs are incapable of searching encrypted mail, users of
+Autocrypt-capable MUAs may find e-mail less useful for normal
 communication.
 
 Message Deliverability
@@ -48,7 +48,7 @@ An active attacker who wants to interrupt communication between two
 parties can do so if they know that one party uses an Autocrypt-capable
 agent.  Consider the case where Mallory wants to interrupt
 communications between Alice and Bob, and she knows that Bob uses an
-Autocrypt-capable client.
+Autocrypt-capable MUA.
 
 Mallory crafts a new key K.  She can throw away the secret key
 material entirely if she wants to.  She then forges an e-mail from
@@ -59,11 +59,11 @@ legitimate message to Alice, his message will be encrypted to a key
 that Alice cannot read.
 
 this represents a risk to Alice, even if she has never adopted an
-Autocrypt-capable client in the first place.
+Autocrypt-capable MUA in the first place.
 
 Mitigations:
 
- - Alice's next mail to Bob will correct Bob's client's state so that
+ - Alice's next mail to Bob will correct Bob's MUA's state so that
    futre mails will be back to Alice's actually preferred state.  So
    the attacker must sustain a series of forgeries if the denial of
    service attack is intended to be sustained.

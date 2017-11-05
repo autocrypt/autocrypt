@@ -17,7 +17,7 @@ Expiry
 .. todo::
 
    We need documentation about sensible key expiry
-   policies. Autocrypt-capable clients that choose to have an expiry
+   policies. Autocrypt-capable MUAs that choose to have an expiry
    policy on their secret key material should use message composition
    as an opportunity to refresh their secret key material or update
    the expiration dates in their public certificate.
@@ -31,7 +31,7 @@ Please see :doc:`peering`
 .. todo::
 
    We need to specify how to sync internal Autocrypt state between
-   clients.  We want to be able to sync the state without sending sync
+   MUAs.  We want to be able to sync the state without sending sync
    data for every message processed, while we also want all synced
    peers to have the same internal state as much as possible.  We
    currently believe that syncing updates to ``pah`` and ``changed``

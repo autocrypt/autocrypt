@@ -127,7 +127,7 @@ your mail") Bob's MUA will see the new key and subsequently use it.
 
 .. todo::
 
-    Check if we can encrypt a MIME e-mail such that non-decrypt-capable clients
+    Check if we can encrypt a MIME e-mail such that non-decrypt-capable MUAs
     will show a message that helps Alice to reply in the suggested way.  We don't
     want people to read handbooks before using Autocrypt so any guidance we can
     "automatically" provide in case of errors is good.
