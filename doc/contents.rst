@@ -26,7 +26,7 @@ and contributors, MUA developers and privacy enthusiasts.
      a first collection of current autocrypt developments (Jan 2017) with
      various mail programs and some development resources.
 
-:doc:``
+:doc:`implementations`
     table with Autocrypt-capable MUAs level 1 implementation status
     (Nov 2017)
 

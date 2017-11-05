@@ -1,6 +1,8 @@
 Autocrypt-capable MUAs level 1 implementation status
 =====================================================
 
+Last updated: ``2017/11/03``
+
 ================= ======== ======== ======== ======== ======== ======== ======== ======== ========
  MUA/feature      header   keygen   peer     header   recommen encrypt  setup    setup    uid
                   parsing           state    inject   dation            message  process  decorat
@@ -12,7 +14,6 @@ Autocrypt-capable MUAs level 1 implementation status
  `notmuch`_       y        n        n        n        n        n        n        n        y
  `mailpile`_
 ================= ======== ======== ======== ======== ======== ======== ======== ======== ========
-Last updated: ``2017/11/03``
 
 Leyend: TBD
 
