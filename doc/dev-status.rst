@@ -1,7 +1,7 @@
 Autocrypt-capable MUAs level 1 implementation status
 =====================================================
 
-Last updated: ``2017/11/03``
+Last updated: ``2017-11-03``
 
 ================= ======== ======== ======== ======== ======== ======== ======== ======== ========
  MUA/feature      header   keygen   peer     header   recommen encrypt  setup    setup    uid
@@ -15,7 +15,7 @@ Last updated: ``2017/11/03``
  `mailpile`_
 ================= ======== ======== ======== ======== ======== ======== ======== ======== ========
 
-Leyend: TBD
+Leyend: TODO @hpk42
 
 .. [1] require passphrase
 .. [2] always send
