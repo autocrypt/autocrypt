@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{%- block htmltitle -%}
+<title>{{ shorttitle }}</title>
+{%- endblock -%}
+{% block body %}
+<div class="article">
+    <img src="../../images/autocrypt_title.png">
+    <h2>ENCRYPTED E-MAIL FOR HUMANS</h4>
+    <br />
+    <img src="../../images/title_image.png">
+    <!-- <p>Write to everyone you know - encrypted, if you both use autocrypt. We build security which gets out of your way. You can help building a world free of surveillance.</p> -->
+    <table>
+        <tr>
+            <td>
+                <img src="../../images/email_logo.png" alt="E-Mail Logo" width=30% align="left" style="padding:3em; padding-bottom:0">
+            </td>
+            <td>
+                <a href="clients.html" class="installbutton"><img src="../../images/get_it_now.png" alt="Get it now!" align="center" width=1500px><a>
+            </td>
+            <td>
+                <img src="../../images/encrypted_logo.png" alt="Encryption Logo" width=30% align="right" style="padding:3em; padding-bottom:0">
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td style="padding-right:1em">
+                <h3>Powered by E-Mail</h3>
+                <p>autocrypt messages are sent with E-Mail, the largest independent network of the internet. This means you can communicate with everyone, not only other autocrypt users.
+            </td>
+            <td style="padding-left:1em">
+                <h3 align="right">End-to-End-Encrypted</h3>
+                <p align="right">autocrypt messages are encrypted with openPGP. We turned an unbeaten, but unnecessary complicated encryption standard into seamless privacy, usable by everyone.</p>
+            </td>
+        </tr>
+    </table>
+    <h2>Our Mission</h2>
+    <p>We believe that surveillance is bad for a free society. Not only governments, but also big corporations are spying on as every day, taking our rights away piece by piece. We believe that people should be able to communicate privately, without censorship, independent from the powerful, decentralized, with software they can trust.</p>
+    <p>Until now, it was way too hard to encrypt communication. Either you had to install a messenger none of your friends used, or you had to be a crypto expert (which already beats the rocket science metaphor). With autocrypt, you can finally communicate with everyone who has an E-Mail address, and encrypt automatically with other autocrypt users.</p>
+</div>
+{% endblock %}
