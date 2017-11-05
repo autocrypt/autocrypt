@@ -23,12 +23,7 @@ and contributors, MUA developers and privacy enthusiasts.
      Autocrypt-capable MUAs.
 
 :doc:`dev-status`
-     a first collection of current autocrypt developments (Jan 2017) with
-     various mail programs and some development resources.
-
-:doc:`implementations`
-    table with Autocrypt-capable MUAs level 1 implementation status
-    (Nov 2017)
+     Client implementation status.
 
 :doc:`other-crypto-interop`
      Guidance for integrating Autocrypt with other e-mail encryption
