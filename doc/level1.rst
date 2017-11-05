@@ -26,6 +26,10 @@ as though it were only capable of controlling a single e-mail account
 
    .. contents::
 
+.. only:: builder_readthedocs
+
+   .. contents::
+
 Overview
 --------
 
