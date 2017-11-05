@@ -127,18 +127,18 @@ remote key updates
     interfaces) as long as they offer some sort of namespaced shared
     storage.  Using :rfc:`IMAP METADATA <5464>` would tie Autocrypt more
     tightly to IMAP, and would also limit the number of IMAP
-    implementations that Autocrypt-enabled clients could connect to
+    implementations that Autocrypt-enabled MUAs could connect to
     (METADATA is `not widely supported by today's IMAP server
     implementations <http://www.imapwiki.org/Specs>`_).
 
     If we wanted Autocrypt to use METADATA where it was available on the
     server, but allow for fallback to normal folders for IMAP servers that
     don't support METADATA, then we'd be adding an implementation
-    requirement for clients that might not already know how to use the
+    requirement for MUAs that might not already know how to use the
     METADATA extension, which makes adoption harder.
 
-    And without initially requiring it for clients, we don't see a way to
-    transition once non-METADATA capable clients exist in the wild,
+    And without initially requiring it for MUAs, we don't see a way to
+    transition once non-METADATA capable MUAs exist in the wild,
     either, since lockout and sync become difficult to do.  So we don't
     see a good story for METADATA deployment, sadly, despite it targeting
     our use case fairly neatly.
