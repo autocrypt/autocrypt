@@ -9,6 +9,7 @@ Last updated: ``2017-11-03``
 ================= ======== ======== ======== ======== ======== ======== ======== ======== ========
  `delta-chat`_    y        y        y        y        y        y        started  y        y
  `k9`_            y        y [1]_   y        y        y        y        branch   branch   y
+ .. image:: images/images/EnigmailIcon64x64.png
  `enigmail`_      y        y        y        y [2]_   n        y        y        y        n
  `py-autocrypt`_  y        y        y        y        n        n        n        n        y
  `notmuch`_       y        n        n        n        n        n        n        n        y
@@ -19,7 +20,7 @@ Last updated: ``2017-11-03``
 
     TODO @hpk42
 
-Leyend:
+Legend:
 
 .. [1] require passphrase
 .. [2] always send
