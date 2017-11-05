@@ -134,11 +134,11 @@ Help welcome.
 Why do you require MUAs to detect if another is using Autocrypt already?
 ------------------------------------------------------------------------
 
-In the event that two Autocrypt-enabled agents operate a single
+In the event that two Autocrypt-enabled MUAs operate a single
 e-mail account, they could clash and cause usability problems:
 If they each manage their own secret key material, communicating peers
 might arbitrarily choose one key or another to encrypt to, and then
-certain mails will be unreadable with certain agents, in an
+certain mails will be unreadable with certain MUAs, in an
 apparently-arbitrary pattern based on the origin of the remote peer's
 last-received message.
 

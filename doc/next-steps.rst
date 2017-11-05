@@ -90,7 +90,7 @@ Guidance on masking Key IDs
 
 If any recipients are in :mailheader:`Bcc:` (rather than
 :mailheader:`To:` or :mailheader:`Cc:`), and the key types used are
-all OpenPGP (``type=0``), then the agent SHOULD mask the recipient key
+all OpenPGP (``type=0``), then the MUA SHOULD mask the recipient key
 ID in the generated PKESK packets that correspond to the Bcc'ed
 recipents.  It does not need to mask recipient key IDs of normal
 recipients.

@@ -9,7 +9,7 @@ We have concrete guidance for those MUAs that we hope is useful.
 Message encryption recommendations
 ----------------------------------
 
-An Autocrypt-capable agent that also incorporates the OpenPGP "Web of
+An Autocrypt-capable MUA that also incorporates the OpenPGP "Web of
 Trust" might already know about a non-Autocrypt public key that it
 considers to be correctly bound to the recipient e-mail address.  It
 may wish to prefer such a key, and to decide to use for a given

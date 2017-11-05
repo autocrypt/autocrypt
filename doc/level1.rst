@@ -18,7 +18,7 @@ multi-device synchronization (and other features) as part of Level
 for developers to adopt it so we can drive efforts from real-life
 experiences as soon as possible.
 
-Throughout this document, we refer to a mail app or Mail User Agent (MUA)
+Throughout this document, we refer to a mail app or :term:`Mail User Agent (MUA)`
 as though it were only capable of controlling a single e-mail account
 (see :ref:`multiaccounts` for more detail).
 
@@ -98,7 +98,7 @@ Conceptually, we represent this state as a table named
 ``peer_state`` indexed by the peer's :doc:`canonicalized
 e-mail address <address-canonicalization>`.
 
-For each e-mail address ``A``, an agent MUST store the following
+For each e-mail address ``A``, an MUA MUST store the following
 attributes as ``peer_state[A]``:
 
 * ``last_seen``: UTC timestamp of the most recent effective date of
@@ -215,7 +215,7 @@ Header injection in outbound mail
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 During message composition, if the ``From:`` header of the
-outgoing e-mail matches an address that the Autocrypt-capable agent
+outgoing e-mail matches an address that the Autocrypt-capable MUA
 knows the secret key material (``own_state.secret_key``) for, it
 SHOULD include an Autocrypt header. This header MUST contain the
 associated public key material (``own_state.public_key``) as ``keydata``
@@ -259,12 +259,12 @@ using a non-Autocrypt MUA only we must be able to disable sending
 encrypted mails to this peer automatically.
 
 In addition to the per-peer state described in :ref:`peer-state`,
-agents MAY also store other information gathered for heuristic
+MUAs MAY also store other information gathered for heuristic
 purposes, or for other cryptographic schemes (see
 :doc:`optional-state` for some example ideas).
 
 However, in order to support future syncing of Autocrypt state between
-agents, it is critical that Autocrypt-capable agents maintain the
+MUAs, it is critical that Autocrypt-capable MUAs maintain the
 state specified here, regardless of what additional state they track.
 
 .. note::
@@ -367,17 +367,17 @@ overall. Additionally update the state as follows:
 Provide a recommendation for message encryption
 +++++++++++++++++++++++++++++++++++++++++++++++
 
-On message composition, an Autocrypt-capable agent also has an
+On message composition, an Autocrypt-capable MUA also has an
 opportunity to decide whether to try to encrypt the new e-mail
-message.  Autocrypt provides a recommendation for the agent.
+message.  Autocrypt provides a recommendation for the MUA.
 
-Any Autocrypt-capable agent may have other means for making this
+Any Autocrypt-capable MUA may have other means for making this
 decision outside of Autocrypt (see :doc:`other-crypto-interop`).
 Autocrypt provides a recommendation to this process, but there is no
-requirement for Autocrypt-capable agents to always follow the
+requirement for Autocrypt-capable MUAs to always follow the
 Autocrypt recommendation.
 
-That said, all Autocrypt-capable agents should be able to calculate
+That said, all Autocrypt-capable MUAs should be able to calculate
 the same Autocrypt recommendation due to their internal state.
 
 The Autocrypt recommendation depends on the list of recipient
@@ -391,7 +391,7 @@ list of recipients, the recommendation may change.
    SHOULD retain the user's manual choices for a given message even if
    the Autocrypt recommendation changes.
 
-Autocrypt can produce four possible recommendations to the agent
+Autocrypt can produce four possible recommendations to the MUA
 during message composition:
 
  * ``disable``: Disable or hide any UI that would allow the user to
@@ -437,7 +437,7 @@ Otherwise, the recommendation is ``available``.
 Recommendations for messages to multiple addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-For level 1 agents, the Autocrypt recommendation for a message
+For level 1 MUAs, the Autocrypt recommendation for a message
 composed to multiple recipients is derived from the recommendations
 for each recipient individually:
 

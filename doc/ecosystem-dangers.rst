@@ -73,7 +73,7 @@ Mitigations:
    :mailheader:`Autocrypt` headers, so that Mallory needs to craft a
    sufficiently-plausible message (including DKIM and whatever other
    indicators the filters care about) to make it into the
-   Autocrypt-capable agent's internal state storage.
+   Autocrypt-capable MUA's internal state storage.
 
 Killing off strong encryption
 -----------------------------
