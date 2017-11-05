@@ -50,17 +50,16 @@ and contributors, MUA developers and privacy enthusiasts.
    contact
    examples
    level1
+   glossary
    dev-status
    address-canonicalization
    ecosystem-dangers
    other-crypto-interop
    faq
    ui-examples
-   glossary
    next-steps
    backup
    cleanup
    peering
-   transfer-format
    optional-state
    bad-import
