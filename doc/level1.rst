@@ -249,40 +249,56 @@ Internal state storage
 See :ref:`peer-state` for a definition of the structure of
 information stored about the client's communications peers.
 
-.. todo::
+Autocrypt clients keep state about their peers, to be able to handle
+several nuanced situations that have caused trouble/annoyance in the
+past.  This state is updated even when the peer sends mail without an
+``Autocrypt`` header.
 
-   Explain why we keep peer state.  because we want to handle weird cases like the following...
+For example, if a remote peer disables Autocrypt or drops back to
+using a non-Autocrypt MUA only we must be able to disable sending
+encrypted mails to this peer automatically.
 
-If a remote peer disables Autocrypt or drops back to using a
-non-Autocrypt MUA only we must be able to disable sending encrypted
-mails to this peer automatically.  MUAs capable of Autocrypt Level 1
-therefore MUST store state about the capabilities of their remote
-peers.
+In addition to the per-peer state described in :ref:`peer-state`,
+agents MAY also store other information gathered for heuristic
+purposes, or for other cryptographic schemes (see
+:doc:`optional-state` for some example ideas).
 
-Agents MAY also store additional information gathered for heuristic
-purposes, or for other cryptographic schemes.  However, in order to
-support future syncing of Autocrypt state between agents, it is
-critical that Autocrypt-capable agents maintain the state specified
-here.
-
-.. todo::
-
-   Explain the values for each of the known ``state`` options:
-   ``nopreference``, ``mutual``, ``reset``, and ``gossip``.
+However, in order to support future syncing of Autocrypt state between
+agents, it is critical that Autocrypt-capable agents maintain the
+state specified here, regardless of what additional state they track.
 
 .. note::
 
-  - The above is not necessarily an exhaustive list of peer state to
-    keep; implementors are encouraged to improve upon this scheme as
-    they see fit. Suggestions for additional (optional) state that an
-    agent may want to keep about a peer can be found in
-    :doc:`optional-state`.
   - An implementation MAY also choose to use keys from other sources
     (e.g. local keyring) at own discretion.
-  - If an implementation chooses to automatically ingest keys from a
-    ``application/pgp-keys`` attachment, it should only do so if they
-    have a matching user id.
+  - If an implementation chooses to automatically ingest a key from a
+    ``application/pgp-keys`` attachment as though it was found in an
+    ``Autocrypt`` header, it should only do so if the attached key has
+    a :rfc:`User ID <4880#section-5.11>` which matches the message's
+    ``From`` address.
 
+``peer_state[A].state`` semantics
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The ``state`` variable of a particular peer's ``peer_state`` data is
+selected from a set range of values:
+
+  - ``nopreference`` means the peer has not opted into mutual
+    encryption.  The client may or may not know a key for such a peer.
+  - ``mutual`` means we know a key for the peer, and the peer has
+    expressed agreement to encrypt by default if all parties involved
+    also agree.
+  - ``reset`` means we used to know a key for a peer, and it is still
+    available in ``keydata``.  But we have more recently seen an
+    e-mail message from the peer from a non-autocrypt-enabled client,
+    so encrypted mail is more likely to be unreadable for them.
+  - ``gossip`` means we have never seen a key from this peer directly,
+    but we've learned about a possible key for this peer from a third
+    party.
+
+The rough descriptions outlined above are not normative -- they're
+intended to motivate the specific rules for updating and using the
+``state`` described over the next few sections.
 
 .. _update-peer-state:
 
@@ -302,7 +318,8 @@ the following cases:
   - There is more than one address in the ``From`` header.
 
   - The MUA believes the message to be spam. If the user marks the
-    message as not being spam the header MAY be processed at that point.
+    message as not being spam the message MAY be processed for
+    ``Autocrypt`` headers at that point.
 
 When parsing an incoming message, a MUA SHOULD examine all ``Autocrypt``
 headers, rather than just the first one. If there is more than one
@@ -344,16 +361,6 @@ overall. Additionally update the state as follows:
 - set ``last_seen`` to the effective message date
 - set ``state`` to ``mutual`` if the Autocrypt header contained a
   ``prefer-encrypt=mutual`` attribute, or ``nopreference`` otherwise
-
-.. _spam-filters:
-
-.. todo::
-
-   the spec currently doesn't say how to integrate Autocrypt
-   processing on message receipt with spam filtering.  Should we say
-   something about not doing Autocrypt processing on message receipt
-   if the message is believed to be spam?
-
 
 .. _recommendation:
 
