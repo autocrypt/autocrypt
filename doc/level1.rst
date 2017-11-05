@@ -7,7 +7,7 @@ Autocrypt-capable at Level 1.
 
 The design of Level 1 is driven by usability concerns and by the
 realities of incremental deployment. A user may mix both
-Autocrypt-enabled MUAs and traditional MUAs and we'd
+Autocrypt-enabled MUAs and traditional MUAs, and we'd
 like to avoid annoyances like unexpectedly unreadable mails while also
 supporting users who want to explicitly turn on encryption.
 
@@ -67,24 +67,24 @@ encryption is possible, and:
 Requirements on MUA/E-mail Provider interactions
 ++++++++++++++++++++++++++++++++++++++++++++++++
 
-Autocrypt tries to impose minimal requirements on how :term:`MUA` s and
-e-mail services interact.  We assume that an Autocrypt-capable MUA
-has credentials and capabilities to perform these network services:
+Autocrypt tries to impose minimal requirements on :term:`MUA` and
+e-mail service interactions.  Specifically, an Autocrypt-capable MUA
+needs to be able to:
 
-- The ability to send e-mail (e.g. via SMTP or Submission) where the
-  MUA can control the entire message being sent, including both
-  message headers and message body.
+- Control the contents of outgoing e-mail including the ability to set
+  custom e-mail headers;
 
-- The ability to receive e-mail where the MUA gets access to the
-  entire message being received, including both message headers and
-  message body.
+- Send e-mail on its own (required by the :ref:`Autocrypt Setup
+  Message <setup-message>`);
 
-- Optionally, a way to scan the user's mailbox for mail with
+- Read whole, raw e-mails including message headers; and,
+
+- Optionally, scan the user's mailbox for mail with
   specific headers.
 
 If a particular e-mail account does not expose one of the required
-features (e.g. if it only exposes a javascript-driven web interface
-for message composition that does not allow setting of e-mail headers)
+features (e.g., if it only exposes a javascript-driven web interface
+for message composition that does not allow setting e-mail headers),
 then the e-mail account cannot be used with Autocrypt.  An
 Autocrypt-capable MUA may still access and control the account, but it
 will not be able to enable Autocrypt on it.
@@ -101,25 +101,25 @@ controls and the peers it communicates with.
 Communication Peers
 ~~~~~~~~~~~~~~~~~~~
 
-The state for each peer is tracked by e-mail address.
-
-Conceptually, we represent this state as a table named
+An e-mail address is a communication peer.  Autocrypt associates state
+with each peer.  Conceptually, we represent this state as a table named
 ``peer_state`` indexed by the peer's :doc:`canonicalized
 e-mail address <address-canonicalization>`.
 
-For each e-mail address ``A``, an MUA MUST store the following
-attributes as ``peer_state[A]``:
+For each e-mail address ``A``, an MUA MUST associate the following
+attributes with ``peer_state[A]``:
 
-* ``last_seen``: UTC timestamp of the most recent effective date of
-  all processed messages for this peer.
-* ``last_seen_autocrypt``: UTC timestamp of the most recent effective
-  date of all processed messages for this peer that contained a valid
-  Autocrypt header.
-* ``public_key``: the public key of the recipient
-* ``state``: a quad-state: ``nopreference``, ``mutual``, ``reset``, or
+* ``last_seen``: The UTC timestamp of the most recent effective date
+  (:ref:`definition <effective_date>`) of all messages that the MUA has
+  processed for this peer.
+* ``last_seen_autocrypt``: The UTC timestamp of the most recent effective
+  date of all messages with a valid Autocrypt header that the MUA has
+  processed for this peer.
+* ``public_key``: The public key of the peer.
+* ``state``: A quad-state: ``nopreference``, ``mutual``, ``reset``, or
   ``gossip``.
 
-How this information is managed and used is covered in :ref:`peer-state-management`.
+How this information is managed and used is discussed in :ref:`peer-state-management`.
 
 .. _own-state:
 
@@ -128,31 +128,32 @@ Accounts controlled by the MUA
 
 A Level 1 MUA maintains an internal structure ``own_state`` for each
 account on which Autocrypt is enabled. ``own_state`` has the following
-members:
+attributes:
 
- * ``secret_key`` -- the RSA secret key material used for
-   the account (see :ref:`secretkeys` ).
- * ``public_key`` -- the OpenPGP transferable public key derived
+ * ``secret_key``: The RSA secret key material used for
+   the account (see :ref:`secretkeys`).
+ * ``public_key``: The OpenPGP transferable public key (:rfc:`OpenPGP
+   "Transferable Public Key"<4880#section-11.1>`) derived
    from the secret key.
- * ``prefer_encrypt`` -- the user's own
-   preferences on the account, either ``mutual`` or ``nopreference``.
-   This SHOULD be set to ``nopreference`` by default.
+ * ``prefer_encrypt``: The user's encryption 
+   preference for this account.  This is either ``mutual`` or ``nopreference``.
+   This SHOULD default to ``nopreference``.
 
 If Autocrypt is enabled for a given account, the MUA SHOULD allow the
-user to switch the setting for ``own_state.prefer_encrypt``, but this
-choice might normally be hidden in a "preferences pane" or something
-similar.  Please see :ref:`preference-ui` for a specific example of
-how this might look.
+user to switch the setting for ``own_state.prefer_encrypt``.  This
+choice might be hidden in something like a "preferences pane".  See
+:ref:`preference-ui` for a specific example of how this could look.
 
-How this information is managed and used is covered in :ref:`own-state-management`.
+How this information is managed and used is discussed in :ref:`own-state-management`.
 
 .. _peer-state-management:
 
 Peer State Management
 ---------------------
 
-Autocrypt MUAs update state about their communications peers based
-on information gathered from received e-mail headers.
+An Autocrypt MUA updates the state it holds for each communication
+peer using the e-mails received from that peer.  Specifically,
+Autocrypt updates the state using the ``Autocrypt`` e-mail header.
 
 .. _autocrypt-header:
 
@@ -163,43 +164,42 @@ The ``Autocrypt`` header has the following format::
 
     Autocrypt: addr=a@b.example.org; [prefer-encrypt=mutual;] keydata=BASE64
 
-The ``addr`` attribute is mandatory and contains the single recipient
-address this header is valid for. In case this address differs from
-the one the MUA considers the sender of the e-mail (i.e., the one in
-the ``From`` header), the entire ``Autocrypt`` header MUST be treated
+The ``addr`` attribute is mandatory, and contains the single recipient
+address this header is valid for.  If this address differs from
+the one in the ``From`` header, the entire ``Autocrypt`` header MUST be treated
 as invalid.
 
 .. _prefer-encrypt:
 
 The ``prefer-encrypt`` attribute is optional and can only occur with
 the value ``mutual``.  Its presence in the ``Autocrypt`` header
-indicates an agreement to encrypt by default with other peers who have
+indicates an agreement to enable encryption by default with other peers who have
 the same preference.  An Autocrypt Level 1 MUA that sees the
 attribute with any other value (or that does not see the attribute at
 all) should interpret the value as ``nopreference``.
 
-The ``keydata`` attribute is mandatory and contains the key data for
+The ``keydata`` attribute is mandatory, and contains the key data for
 the specified ``addr`` recipient address.  The value of the
 ``keydata`` attribute is a Base64 representation of the binary
 :rfc:`OpenPGP "Transferable Public Key"<4880#section-11.1>`. For ease
 of parsing, the ``keydata`` attribute MUST be the last attribute in
-the header.
+this header.
 
-Additional attributes are also possible before the ``keydata``
+Additional attributes are possible before the ``keydata``
 attribute.  If an attribute name starts with an underscore (``_``), it
 is a "non-critical" attribute.  An attribute name without a leading
 underscore is a "critical" attribute.  The MUA SHOULD ignore any
-unsupported non-critical attribute and continue parsing the rest of
-the header as though the attribute does not exist, but MUST treat the
+unsupported non-critical attributes and continue parsing the rest of
+the header as though the attribute does not exist.  It MUST treat the
 entire ``Autocrypt`` header as invalid if it encounters a "critical"
-attribute it doesn't support.
+attribute that it doesn't support.
 
-Future extensions of Autocrypt can use critical attributes to
-facilitate incompatible changes. These headers will then be discarded
-entirely as invalid by clients that implement an older version,
-providing a simple update path. Such an update to the spec should also
-describe how receiving updated clients deal with the resulting
-multiple valid headers.
+To introduce incompatible changes, future versions of Autocrypt may
+send multiple Autocrypt headers, and hide the incompatible headers
+from Level 1 MUAs by using critical attributes.  According to the
+above rules, such headers will be judged invalid, and discarded by
+level 1 clients.  Such an update to the specification will also have
+to describe how clients deal with multiple valid headers.
 
 
 OpenPGP Based key data
@@ -216,9 +216,9 @@ containing exactly these five OpenPGP packets:
  - a binding signature over the subkey by the primary key
 
 The content of the user id packet is only decorative. By convention, it
-contains the same address used in the ``addr`` attribute in angle brackets,
-conforming to the :rfc:`5322` grammar ``angle-addr``. For compatibility
-concerns the user id SHOULD NOT be an empty string.
+contains the same address used in the ``addr`` attribute placed in angle brackets.
+(This makes it conform to the :rfc:`5322` grammar ``angle-addr``.) For compatibility
+concerns, the user id SHOULD NOT be an empty string.
 
 These packets MUST be assembled in binary format (not ASCII-armored),
 and then base64-encoded.
@@ -232,28 +232,28 @@ Header injection in outbound mail
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 During message composition, if the ``From:`` header of the
-outgoing e-mail matches an address that the Autocrypt-capable MUA
-knows the secret key material (``own_state.secret_key``) for, it
+outgoing e-mail (the ``sender address``) matches an address for which the Autocrypt-capable MUA
+has secret key material (``own_state.secret_key``), it
 SHOULD include an Autocrypt header. This header MUST contain the
-associated public key material (``own_state.public_key``) as ``keydata``
-attribute, and the same sender address that is used in the ``From``
-header in the ``addr`` attribute to confirm the association.  The most
-minimal Level 1 MUA will only include these two attributes.  If
-``own_state.prefer_encrypt`` is set to ``mutual`` then the header MUST
-have a ``prefer-encrypt`` attribute set to ``mutual``.
+corresponding public key material (``own_state.public_key``) as the ``keydata``
+attribute, and the ``sender address`` as the ``addr`` attribute.  The most
+minimal Level 1 compliant MUA will only include these two attributes.  If
+``own_state.prefer_encrypt`` is set to ``mutual``, then the header MUST
+have a ``prefer-encrypt`` attribute with the value ``mutual``.
 
 The MUA MUST NOT include more than one valid Level 1 ``Autocrypt``
 header (see :ref:`update-peer-state`).
 
-If the ``From`` address changes during message composition (E.g. if
-the user selects a different outbound identity), the Autocrypt-capable
-client MUST change the ``Autocrypt`` header appropriately.
+If the ``From`` address changes during message composition (e.g., if
+the user selects a different outbound identity), then the MUA MUST
+change the ``Autocrypt`` header accordingly.
 
 An MUA SHOULD send out the same ``keydata`` value in all messages from
-a given outbound identity, irrespective of message recipients.  If a
-new OpenPGP certificate is generated (e.g., key-rotation or OpenPGP
-metadata update) then all subsequent outbound Autocrypt headers SHOULD
-use the new certificate for the ``keydata`` attribute.
+a given outbound identity, irrespective of the message's recipients.
+If a new OpenPGP certificate is generated (e.g., if the user has a new
+key, or updates some OpenPGP metadata), then all subsequent outbound
+Autocrypt headers SHOULD use the new certificate for the ``keydata``
+attribute.
 
 See :ref:`example-headers` for examples of outbound headers and
 the following sections for header format definitions and parsing.
@@ -263,16 +263,16 @@ the following sections for header format definitions and parsing.
 Internal state storage
 ++++++++++++++++++++++
 
-See :ref:`peer-state` for a definition of the structure of
-information stored about the MUA's communications peers.
+See :ref:`peer-state` for the information stored for each
+communication peer.
 
-Autocrypt MUAs keep state about their peers, to be able to handle
-several nuanced situations that have caused trouble/annoyance in the
+Autocrypt MUAs keep state about each peer, to handle
+several nuanced situations that have caused trouble or annoyance in the
 past.  This state is updated even when the peer sends mail without an
 ``Autocrypt`` header.
 
 For example, if a remote peer disables Autocrypt or drops back to
-using a non-Autocrypt MUA only we must be able to disable sending
+only using a non-Autocrypt MUA, we must stop sending
 encrypted mails to this peer automatically.
 
 In addition to the per-peer state described in :ref:`peer-state`,
@@ -280,18 +280,18 @@ MUAs MAY also store other information gathered for heuristic
 purposes, or for other cryptographic schemes (see
 :doc:`optional-state` for some example ideas).
 
-However, in order to support future syncing of Autocrypt state between
-MUAs, it is critical that Autocrypt-capable MUAs maintain the
+However, in order to support future synchronization of Autocrypt state
+between MUAs, it is critical that Autocrypt-capable MUAs maintain the
 state specified here, regardless of what additional state they track.
 
 .. note::
 
   - An implementation MAY also choose to use keys from other sources
-    (e.g. local keyring) at own discretion.
-  - If an implementation chooses to automatically ingest a key from a
+    (e.g., a local keyring) at its own discretion.
+  - If an implementation chooses to automatically ingest a key from an
     ``application/pgp-keys`` attachment as though it was found in an
     ``Autocrypt`` header, it should only do so if the attached key has
-    a :rfc:`User ID <4880#section-5.11>` which matches the message's
+    a :rfc:`User ID <4880#section-5.11>` that matches the message's
     ``From`` address.
 
 ``peer_state[A].state`` semantics
@@ -306,9 +306,10 @@ selected from a set range of values:
     expressed agreement to encrypt by default if all parties involved
     also agree.
   - ``reset`` means we used to know a key for a peer, and it is still
-    available in ``keydata``.  But we have more recently seen an
-    e-mail message from the peer from a non-autocrypt-enabled MUA,
-    so encrypted mail is more likely to be unreadable for them.
+    available in ``keydata``, but we have more recently seen an
+    e-mail message from the peer from a non-Autocrypt-enabled MUA,
+    which suggests that encrypted mail is more likely to be unreadable
+    for them on this MUA.
   - ``gossip`` means we have never seen a key from this peer directly,
     but we've learned about a possible key for this peer from a third
     party.
@@ -325,18 +326,18 @@ Updating Autocrypt Peer State
 Incoming messages may be processed to update Autocrypt peer state by a
 MUA at receive or display time.
 
-Messages SHOULD be ignored and the peer state SHOULD NOT be updated in
+Messages SHOULD be ignored, and the peer state SHOULD NOT be updated in
 the following cases:
 
-  - The content-type is ``multipart/report``. It can be assumed to be
-    auto-generated. This in particular avoids triggering a ``reset``
+  - The content-type is ``multipart/report``. In this case, it can be assumed
+    the message was auto-generated. This avoids triggering a ``reset``
     state from received Message Disposition Notifications (:rfc:`3798`).
 
   - There is more than one address in the ``From`` header.
 
   - The MUA believes the message to be spam. If the user marks the
-    message as not being spam the message MAY be processed for
-    ``Autocrypt`` headers at that point.
+    message as not being spam the message MAY then be processed for
+    ``Autocrypt`` headers.
 
 When parsing an incoming message, a MUA SHOULD examine all ``Autocrypt``
 headers, rather than just the first one. If there is more than one
@@ -345,19 +346,21 @@ headers discarded as invalid.
 
 Updating the Autocrypt state for the sending peer depends on:
 
-- the ``effective date`` of the message.  We define it as the sending
+.. _effective_date:
+
+- the ``effective date`` of the message, which we define as the sending
   time of the message as indicated by its ``Date`` header, or the time
-  of first receipt if that date is in the future or unavailable.
+  of receipt if that date is in the future or unavailable.
 
 - the ``keydata`` and ``prefer-encrypt`` attributes of the single valid
   ``Autocrypt`` header (see above), if available.
 
 If the effective message date is older than the ``last_seen_autocrypt``
-value no changes are required and the update process terminates.
+value, then no changes are required, and the update process terminates.
 
 If the Autocrypt header is unavailable, and the effective
 message date is more recent than the current value of ``last_seen``,
-update the state as follows:
+then the peer state should be updated as follows:
 
 - set ``last_seen`` to the effective message date
 - set ``state`` to ``reset``
@@ -365,15 +368,15 @@ update the state as follows:
 If the Autocrypt header is unavailable, no further changes
 are required and the update process terminates.
 
-At this point, the message in processing contains the most recent
-Autocrypt header. Update the state as follows:
+At this point, the message being processed contains the most recent
+Autocrypt header, and the peer state should be updated as follows:
 
 - set ``public_key`` to the corresponding ``keydata`` value of the Autocrypt header
 - set ``last_seen_autocrypt`` to the effective message date
 
 If the effective date of the message is more recent than or equal to
 the current ``last_seen`` value, it is also the most recent message
-overall. Additionally update the state as follows:
+overall. Additionally, update the peer state as follows:
 
 - set ``last_seen`` to the effective message date
 - set ``state`` to ``mutual`` if the Autocrypt header contained a
@@ -384,25 +387,24 @@ overall. Additionally update the state as follows:
 Provide a recommendation for message encryption
 +++++++++++++++++++++++++++++++++++++++++++++++
 
-On message composition, an Autocrypt-capable MUA also has an
-opportunity to decide whether to try to encrypt the new e-mail
+On message composition, an Autocrypt-capable MUA
+can decide whether to try to encrypt the new e-mail
 message.  Autocrypt provides a recommendation for the MUA.
 
 Any Autocrypt-capable MUA may have other means for making this
 decision outside of Autocrypt (see :doc:`other-crypto-interop`).
-Autocrypt provides a recommendation to this process, but there is no
-requirement for Autocrypt-capable MUAs to always follow the
-Autocrypt recommendation.
+Autocrypt provides a recommendation, but there is no
+requirement for Autocrypt-capable MUAs to follow this
+recommendation.
 
 That said, all Autocrypt-capable MUAs should be able to calculate
-the same Autocrypt recommendation due to their internal state.
+the same Autocrypt recommendation.
 
-The Autocrypt recommendation depends on the list of recipient
-addresses for the message being composed.  When the user edits the
-list of recipients, the recommendation may change.
+The Autocrypt recommendation depends on the recipient
+addresses of the draft message.  When the user changes the
+recipients, the Autocrypt recommendation may change.
 
-Autocrypt can produce four possible recommendations to the MUA
-during message composition:
+Autocrypt can produce four possible recommendations:
 
  * ``disable``: Disable or hide any UI that would allow the user to
    choose to encrypt the message.
@@ -424,21 +426,21 @@ Recommendations for single-recipient messages
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The Autocrypt recommendation for a message composed to a single
-recipient with e-mail address ``A`` depends primarily on the value
+recipient with the e-mail address ``A`` depends primarily on the value
 stored in :ref:`peer_state[A] <peer-state>`. It is derived
 by the following algorithm:
 
 1. If there is no peer state, the recommendation is ``disable``.
 2. If there is no ``public_key``, the recommendation is ``disable``.
 3. If the ``public_key`` is known for some reason to be unusable for
-   encryption (e.g. it is otherwise known to be revoked or expired),
+   encryption (e.g., it is otherwise known to be revoked or expired),
    then the recommendation is ``disable``.
 4. If the message is composed as a reply to an encrypted message, then
    the recommendation is ``encrypt``.
-5. If ``state`` is ``mutual``, and the user's own
-   ``own_state.prefer_encrypt`` is ``mutual`` as well, then the
+5. If both ``state`` is ``mutual`` and
+   ``own_state.prefer_encrypt`` is ``mutual``, then the
    recommendation is ``encrypt``.
-6. If ``state`` is ``gossip``, the recommendation is ``discourage``.
+6. If ``state`` is ``gossip``, then the recommendation is ``discourage``.
 7. If ``state`` is ``reset`` and the ``last_seen_autocrypt`` is more
    than one month ago, then the recommendation is ``discourage``.
 
@@ -451,24 +453,23 @@ For level 1 MUAs, the Autocrypt recommendation for a message
 composed to multiple recipients is derived from the recommendations
 for each recipient individually:
 
-1. If any recipient has a recommendation of ``disable`` then the
+1. If any recipient has a recommendation of ``disable``, then the
    message recommendation is ``disable``.
 2. If the message being composed is a reply to an encrypted message,
-   or if every recipient has a recommendation of ``encrypt`` then the
+   or if every recipient has a recommendation of ``encrypt``, then the
    message recommendation is ``encrypt``.
-3. If any recipient has a recommendation of ``discourage`` then the
+3. If any recipient has a recommendation of ``discourage``, then the
    message recommendation is ``discourage``.
 
 Otherwise, the message recommendation is ``available``.
 
 While composing a message, a situation might occur where the
 recommendation is ``available``, the user has explicitly enabled
-encryption, and then modifies the list of recipients in a way the
-changes the recommendation to ``disable``. When that happens, the MUA
+encryption, and then modifies the list of recipients in a way that
+changes the recommendation to ``disable``. When this happens, the MUA
 should not disable encryption without communicating this to the user.
 A graceful way to handle this situation is to save the enabled state,
-and only prompt the user about the issue when they want to send the
-mail.
+and only prompt the user about the issue when they send the mail.
 
 Cleartext replies to encrypted mail
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -483,7 +484,7 @@ clear.
 To avoid leaking cleartext from the original encrypted message in this
 case, the MUA MAY prepare the cleartext reply without including any
 of the typically quoted and attributed text from the previous message.
-Additionally, the MUA MAY include brief text in message body along the
+Additionally, the MUA MAY include brief text in the message body along the
 lines of::
 
   The message this is a reply to was sent encrypted, but this reply is
@@ -492,7 +493,7 @@ lines of::
   future messages in this thread will be encrypted.
 
 The above recommendations are only "MAY" and not "SHOULD" or "MUST"
-because we want to accomodate a user-friendly level 1 MUA that stays
+because we want to accommodate a user-friendly Level 1 MUA that stays
 silent and does not impede the user's ability to reply.  Opportunistic
 encryption means we can't guarantee encryption in every case.
 
@@ -507,21 +508,21 @@ Mail Encryption
 An outgoing e-mail will be sent encrypted in either of two cases:
 
 - the Autocrypt recommendation for the list of recipients is
-  ``encrypt``, and not explicitly overridden by the user
+  ``encrypt``, and not explicitly overridden by the user, or
 - the Autocrypt recommendation is ``available`` or ``discourage``,
   and the user chose to encrypt.
 
 When encrypting, the MUA MUST construct the encrypted message as a
 :rfc:`PGP/MIME <3156>` message that is signed by the user's Autocrypt
-key, and encrypted to each currently known Autocrypt key of all
-recipients, as well as the sender's.
+key, and encrypted to the currently known Autocrypt key of each
+recipient, as well as the sender's Autocrypt key.
 
 E-mail Drafts
 ~~~~~~~~~~~~~
 
 For messages that are going to be encrypted when sent, the MUA MUST
-take care not to leak the cleartext of drafts or other
-partially-composed messages to their e-mail provider (e.g. in the
+take care to not leak the cleartext of drafts or other
+partially composed messages to their e-mail provider (e.g., in the
 "Drafts" folder). If there is a chance that a message could be
 encrypted, the MUA SHOULD encrypt the draft only to itself before storing
 it remotely. The MUA SHOULD NOT sign drafts.
@@ -562,11 +563,11 @@ Updating Autocrypt Peer State from Key Gossip
 
 An incoming message may contain one or more Autocrypt-Gossip headers
 in the encrypted payload. Each of these headers may update the
-Autocrypt peer state of the recipient indicated by its ``addr`` value,
+Autocrypt peer state of the recipient indicated by its ``addr`` value
 in the following way:
 
 1. If the ``addr`` value does not match any recipient in the mail's
-   ``To`` or ``Cc`` header, the entire header MUST be ignored.
+   ``To`` or ``Cc`` header, the header MUST be ignored.
 
 2. If the existing ``last_seen_autocrypt`` value is older than the
    effective message date and the existing ``state`` is ``gossip``, or
@@ -593,23 +594,23 @@ Secret key generation and storage
 +++++++++++++++++++++++++++++++++
 
 The MUA SHOULD generate and store two RSA 3072-bit secret keys for the
-user, one for signing and self-certification and the other for
-decrypting.  An MUA with hardware constraints (e.g., using an external
+user, one for signing and self-certification, and the other for
+decrypting.  An MUA with hardware constraints (e.g., one using an external
 crypto token) MAY choose to generate and store 2048-bit RSA secret
 keys instead.  The MUA MUST be capable of assembling these keys into
 an OpenPGP certificate (:rfc:`RFC 4880 "Transferable Public
 Key"<4880#section-11.1>`) that indicates these capabilities.
 
 The secret key material should be protected from access by other
-applications or co-tenants of the device, at least as well as the
+applications or co-tenants of the device at least as well as the
 passwords the MUA retains for the user's IMAP or SMTP accounts.
 
 Secret key protection at rest
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The MUA SHOULD NOT protect the private key with a password. All
-encrypted outgoing messages MUST also be signed, which would require the
-user to enter their password for both reading and sending mail. This
+The MUA SHOULD NOT protect the secret key with a password. All
+encrypted outgoing messages MUST be signed, which would require the
+user to enter the password for both reading and sending mail. This
 introduces too much friction to become part of a routine daily workflow.
 Protection of the user's keys at rest and other files is achieved more
 easily and securely with full-disk encryption.
@@ -622,28 +623,28 @@ Handling Multiple Accounts and Aliases
 
 An MUA that is capable of connecting to multiple e-mail accounts
 SHOULD have a separate and distinct Autocrypt ``own_state`` for each
-e-mail account it has access to.
+e-mail account.
 
-However, a multi-account MUA MAY maintain a single ``peer_state``
+A multi-account MUA MAY maintain a single ``peer_state``
 table that merges information from e-mail received across all accounts
 for the sake of implementation simplicity.  While this results in some
 linkability between accounts (the effect of mails sent to one account
-can be observed by the activity on the other account), it provides a
+can be observed by activity on the other account), it provides a
 more uniform and predictable user experience.  Any linkability
 concerns introduced by Autocrypt can be mitigated by using a different
 client for each e-mail account.
 
 Sometimes a user may be able to send and receive emails with multiple
-distinct e-mail addresses ("aliases") via a single account.  When
-using such an account SHOULD use the same ``own_state.secret_key`` and
-``own_state.public_key`` for all aliases.  The :ref:`Autocrypt Setup Message <setup-message>`
+distinct e-mail addresses via a single account ("aliases").  When
+using such an account, the MUA SHOULD use the same ``own_state.secret_key`` and
+``own_state.public_key`` for all of the aliases.  The :ref:`Autocrypt Setup Message <setup-message>`
 is not designed to handle multiple keys for a single account.  In
 addition, synchronization issues arise if new keys for aliases are
 created on different devices.
 
 A MUA MAY allow the user to enable Autocrypt only for a subset of
 the aliases, or MAY allow the user to configure
-``own_state.prefer_encrypt`` on a per-alias basis, though this will
+``own_state.prefer_encrypt`` on a per-alias basis though this will
 likely complicate the UI.
 
 
@@ -651,10 +652,10 @@ Avoiding MUA Conflicts
 ++++++++++++++++++++++
 
 If more than one Autocrypt-enabled MUA generates a key and then
-distributes it to communication peers, encrypted messages sent
-to the user is only readable by the MUA that sent the last message.
-This can lead to behavior that is unpredictable and confusing for
-the user.
+distributes it to communication peers, encrypted mail sent to the user
+is only readable by the MUA that sent the last message. This can lead
+to behavior that is unpredictable and confusing for the user.
+
 
 See section :ref:`getting_started` for guidance on how to detect and
 avoid such a situation.
