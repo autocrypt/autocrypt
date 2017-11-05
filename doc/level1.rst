@@ -7,7 +7,7 @@ Autocrypt-capable at Level 1.
 
 The design of Level 1 is driven by usability concerns and by the
 realities of incremental deployment. A user may mix both
-Autocrypt-enabled mail clients and traditional mail clients and we'd
+Autocrypt-enabled MUAs and traditional MUAs and we'd
 like to avoid annoyances like unexpectedly unreadable mails while also
 supporting users who want to explicitly turn on encryption.
 
@@ -18,11 +18,17 @@ multi-device synchronization (and other features) as part of Level
 for developers to adopt it so we can drive efforts from real-life
 experiences as soon as possible.
 
-Throughout this document, we refer to a mail app or Mail User Agent (MUA)
+Throughout this document, we refer to a mail app or :term:`Mail User Agent (MUA)`
 as though it were only capable of controlling a single e-mail account
 (see :ref:`multiaccounts` for more detail).
 
-.. contents::
+.. only:: builder_html
+
+   .. contents::
+
+.. only:: builder_readthedocs
+
+   .. contents::
 
 Overview
 --------
@@ -30,29 +36,32 @@ Overview
 Approach and High Level Overview
 ++++++++++++++++++++++++++++++++
 
-The core goal of Autocrypt is to fully automate the management of both
-secret and public keys, so that users can encrypt mail without
-specialized knowledge.
+Autocrypt's primary goal is to automate both secret and public key
+management so that users can encrypt mail without specialized
+knowledge.
 
-This spec introduces an :ref:`Autocrypt header <autocrypt-header>` that transfers information
-about a sender's :term:`public key` in all their emails. Autocrypt
-provides a :ref:`set of rules <update-peer-state>` to track this information per communication
-peer.  This provides :ref:`guidance <recommendation>` during message composition
-on whether encryption is a) possible and b) recommended for a given set
-of recipients. The design relies on in-band communication for key
-discovery, thereby avoiding a dependency on external infrastructure like
-OpenPGP keyservers or PKI.
+This specification adds an :ref:`Autocrypt-specific mail header
+<autocrypt-header>` to outgoing mails, which contains, among other
+information, the sender's :term:`public key`.  Transferring public
+keys in-band means that key discovery in Autocrypt does not require
+external infrastructure like OpenPGP keyservers or x509 PKI.
 
-Autocrypt facilitates opportunistic key distribution, but recognizes
-that aggressively opportunistic encryption can be disruptive to
-established email workflows. For this reason, emails are only
-encrypted if:
+Autocrypt provides a :ref:`set of rules <update-peer-state>` that
+tracks this information for each communication peer.  Autocrypt uses
+this information to determine whether encryption is possible and makes
+a :ref:`recommendation <recommendation>` about whether encryption
+should be enabled for a given set of recipients.
+
+Autocrypt aggressively distributes keys, but conservatively recommends
+encryption to avoid disruption to established email workflows.
+Specifically, Autocrypt only recommends that an email be encrypted if
+encryption is possible, and:
 
 1) The sender specifically requests encryption during message
    composition;
-2) When replying to an encrypted message; or,
-3) If all participants have explicitly expressed a :ref:`preference <prefer-encrypt>` to
-   always encrypt.
+2) The email is in reply to an encrypted message; or,
+3) The sender and the recipients have explicitly stated that they
+   :ref:`prefer <prefer-encrypt>` encrypted email.
 
 
 Requirements on MUA/E-mail Provider interactions
@@ -84,7 +93,7 @@ will not be able to enable Autocrypt on it.
 Autocrypt Internal State
 ++++++++++++++++++++++++
 
-An Autocrypt client needs to associate information with the accounts it
+An Autocrypt MUA needs to associate information with the accounts it
 controls and the peers it communicates with.
 
 .. _peer-state:
@@ -98,7 +107,7 @@ Conceptually, we represent this state as a table named
 ``peer_state`` indexed by the peer's :doc:`canonicalized
 e-mail address <address-canonicalization>`.
 
-For each e-mail address ``A``, an agent MUST store the following
+For each e-mail address ``A``, an MUA MUST store the following
 attributes as ``peer_state[A]``:
 
 * ``last_seen``: UTC timestamp of the most recent effective date of
@@ -142,7 +151,7 @@ How this information is managed and used is covered in :ref:`own-state-managemen
 Peer State Management
 ---------------------
 
-Autocrypt clients update state about their communications peers based
+Autocrypt MUAs update state about their communications peers based
 on information gathered from received e-mail headers.
 
 .. _autocrypt-header:
@@ -165,7 +174,7 @@ as invalid.
 The ``prefer-encrypt`` attribute is optional and can only occur with
 the value ``mutual``.  Its presence in the ``Autocrypt`` header
 indicates an agreement to encrypt by default with other peers who have
-the same preference.  An Autocrypt Level 1 client that sees the
+the same preference.  An Autocrypt Level 1 MUA that sees the
 attribute with any other value (or that does not see the attribute at
 all) should interpret the value as ``nopreference``.
 
@@ -184,6 +193,14 @@ unsupported non-critical attribute and continue parsing the rest of
 the header as though the attribute does not exist, but MUST treat the
 entire ``Autocrypt`` header as invalid if it encounters a "critical"
 attribute it doesn't support.
+
+Future extensions of Autocrypt can use critical attributes to
+facilitate incompatible changes. These headers will then be discarded
+entirely as invalid by clients that implement an older version,
+providing a simple update path. Such an update to the spec should also
+describe how receiving updated clients deal with the resulting
+multiple valid headers.
+
 
 OpenPGP Based key data
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -215,7 +232,7 @@ Header injection in outbound mail
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 During message composition, if the ``From:`` header of the
-outgoing e-mail matches an address that the Autocrypt-capable agent
+outgoing e-mail matches an address that the Autocrypt-capable MUA
 knows the secret key material (``own_state.secret_key``) for, it
 SHOULD include an Autocrypt header. This header MUST contain the
 associated public key material (``own_state.public_key``) as ``keydata``
@@ -225,7 +242,7 @@ minimal Level 1 MUA will only include these two attributes.  If
 ``own_state.prefer_encrypt`` is set to ``mutual`` then the header MUST
 have a ``prefer-encrypt`` attribute set to ``mutual``.
 
-The client MUST NOT include more than one valid Level 1 ``Autocrypt``
+The MUA MUST NOT include more than one valid Level 1 ``Autocrypt``
 header (see :ref:`update-peer-state`).
 
 If the ``From`` address changes during message composition (E.g. if
@@ -247,9 +264,9 @@ Internal state storage
 ++++++++++++++++++++++
 
 See :ref:`peer-state` for a definition of the structure of
-information stored about the client's communications peers.
+information stored about the MUA's communications peers.
 
-Autocrypt clients keep state about their peers, to be able to handle
+Autocrypt MUAs keep state about their peers, to be able to handle
 several nuanced situations that have caused trouble/annoyance in the
 past.  This state is updated even when the peer sends mail without an
 ``Autocrypt`` header.
@@ -259,12 +276,12 @@ using a non-Autocrypt MUA only we must be able to disable sending
 encrypted mails to this peer automatically.
 
 In addition to the per-peer state described in :ref:`peer-state`,
-agents MAY also store other information gathered for heuristic
+MUAs MAY also store other information gathered for heuristic
 purposes, or for other cryptographic schemes (see
 :doc:`optional-state` for some example ideas).
 
 However, in order to support future syncing of Autocrypt state between
-agents, it is critical that Autocrypt-capable agents maintain the
+MUAs, it is critical that Autocrypt-capable MUAs maintain the
 state specified here, regardless of what additional state they track.
 
 .. note::
@@ -284,13 +301,13 @@ The ``state`` variable of a particular peer's ``peer_state`` data is
 selected from a set range of values:
 
   - ``nopreference`` means the peer has not opted into mutual
-    encryption.  The client may or may not know a key for such a peer.
+    encryption.  The MUA may or may not know a key for such a peer.
   - ``mutual`` means we know a key for the peer, and the peer has
     expressed agreement to encrypt by default if all parties involved
     also agree.
   - ``reset`` means we used to know a key for a peer, and it is still
     available in ``keydata``.  But we have more recently seen an
-    e-mail message from the peer from a non-autocrypt-enabled client,
+    e-mail message from the peer from a non-autocrypt-enabled MUA,
     so encrypted mail is more likely to be unreadable for them.
   - ``gossip`` means we have never seen a key from this peer directly,
     but we've learned about a possible key for this peer from a third
@@ -367,17 +384,17 @@ overall. Additionally update the state as follows:
 Provide a recommendation for message encryption
 +++++++++++++++++++++++++++++++++++++++++++++++
 
-On message composition, an Autocrypt-capable agent also has an
+On message composition, an Autocrypt-capable MUA also has an
 opportunity to decide whether to try to encrypt the new e-mail
-message.  Autocrypt provides a recommendation for the agent.
+message.  Autocrypt provides a recommendation for the MUA.
 
-Any Autocrypt-capable agent may have other means for making this
+Any Autocrypt-capable MUA may have other means for making this
 decision outside of Autocrypt (see :doc:`other-crypto-interop`).
 Autocrypt provides a recommendation to this process, but there is no
-requirement for Autocrypt-capable agents to always follow the
+requirement for Autocrypt-capable MUAs to always follow the
 Autocrypt recommendation.
 
-That said, all Autocrypt-capable agents should be able to calculate
+That said, all Autocrypt-capable MUAs should be able to calculate
 the same Autocrypt recommendation due to their internal state.
 
 The Autocrypt recommendation depends on the list of recipient
@@ -391,7 +408,7 @@ list of recipients, the recommendation may change.
    SHOULD retain the user's manual choices for a given message even if
    the Autocrypt recommendation changes.
 
-Autocrypt can produce four possible recommendations to the agent
+Autocrypt can produce four possible recommendations to the MUA
 during message composition:
 
  * ``disable``: Disable or hide any UI that would allow the user to
@@ -437,7 +454,7 @@ Otherwise, the recommendation is ``available``.
 Recommendations for messages to multiple addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-For level 1 agents, the Autocrypt recommendation for a message
+For level 1 MUAs, the Autocrypt recommendation for a message
 composed to multiple recipients is derived from the recommendations
 for each recipient individually:
 
@@ -569,7 +586,7 @@ Own State Management
 --------------------
 
 See :ref:`own-state` for a definition of the structure of
-information stored about the client's own e-mail accounts.
+information stored about the MUA's own e-mail accounts.
 
 
 .. _secretkeys:
@@ -626,7 +643,7 @@ is not designed to handle multiple keys for a single account.  In
 addition, synchronization issues arise if new keys for aliases are
 created on different devices.
 
-A client MAY allow the user to enable Autocrypt only for a subset of
+A MUA MAY allow the user to enable Autocrypt only for a subset of
 the aliases, or MAY allow the user to configure
 ``own_state.prefer_encrypt`` on a per-alias basis, though this will
 likely complicate the UI.
@@ -639,17 +656,17 @@ Onboarding
 
    todo
 
-Avoiding Client Conflicts
+Avoiding MUA Conflicts
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If more than one Autocrypt-enabled client generates a key and then
+If more than one Autocrypt-enabled MUA generates a key and then
 distributes it to communication peers, encrypted mail sent to the user
 is only readable by the MUA that sent the last message. This can lead
 to behavior that is unpredictable and confusing for the user.
 
 As a simple measure of mitigation, Level 1 MUAs SHOULD check before
 key generation whether there is evidence in the user's mailbox of
-other active Autocrypt clients. To do this, they SHOULD scan the
+other active Autocrypt MUAs. To do this, they SHOULD scan the
 user's Sent folder for mail that contains Autocrypt headers. If such
 mail exists, the MUA SHOULD warn the user and abort key generation,
 unless explicitly instructed to proceed regardless (see
@@ -658,7 +675,7 @@ unless explicitly instructed to proceed regardless (see
 In cases where an Autocrypt-capable MUA is unable to identify the
 user's Sent folder, or is unable to access any pre-existing message
 archive (e.g. a POP-only MUA), the MUA MUST warn the user that
-Autocrypt should be enabled on **only one** client before enabling
+Autocrypt should be enabled on **only one** MUA before enabling
 Autocrypt on the given account.
 
 To solve this problem in a better way, bi-directional communication
@@ -672,15 +689,15 @@ scope for Level 1.
 Autocrypt Setup Message
 +++++++++++++++++++++++
 
-To avoid "lock-in" of secret key material on a particular client,
+To avoid "lock-in" of secret key material on a particular MUA,
 Autocrypt level 1 includes a way to "export" the user's keys and her
-:ref:`prefer-encrypt state <own-state>` for other clients to pick up,
+:ref:`prefer-encrypt state <own-state>` for other MUAs to pick up,
 asynchronously and with explicitly required user interaction.
 
 The mechanism available is a specially-formatted e-mail message called
-the Autocrypt Setup Message.  An already-configured Autocrypt client
+the Autocrypt Setup Message.  An already-configured Autocrypt MUA
 can generate an Autocrypt Setup Message, and send it to itself.  A
-not-yet-configured Autocrypt client (a new client in a multi-device
+not-yet-configured Autocrypt MUA (a new MUA in a multi-device
 case, or recovering from device failure or loss) can import the
 Autocrypt Setup Message and recover the ability to read existing
 messages.
@@ -740,7 +757,7 @@ and presented directly to the user for safekeeping. It MUST NOT be
 included in the cleartext of the Autocrypt Setup Message, or otherwise
 transmitted over e-mail.
 
-An Autocrypt Level 1 client MUST generate a Setup Code as UTF-8 string
+An Autocrypt Level 1 MUA MUST generate a Setup Code as UTF-8 string
 of 36 numeric characters, divided into nine blocks of four, separated
 by dashes. The dashes are part of the secret code and there are no
 spaces. This format holds about 119 bits of entropy. It is designed to
@@ -778,9 +795,9 @@ distinguish different messages.
 Setup Message Creation
 ~~~~~~~~~~~~~~~~~~~~~~
 
-An Autocrypt client MUST NOT create an Autocrypt Setup Message without
+An Autocrypt MUA MUST NOT create an Autocrypt Setup Message without
 explicit user interaction.  When the user takes this action for a
-specific account, the client:
+specific account, the MUA:
 
  * Generates a Setup Code.
  * Optionally, displays the Setup Code to the user, prompts the user
@@ -798,42 +815,42 @@ specific account, the client:
    headers.
  * Sends the generated e-mail message to its own account.
  * Suggests to the user to either back up the message or to import it
-   from another Autocrypt-capable client.
+   from another Autocrypt-capable MUA.
 
-A Level 1 client MUST be able to create an Autocrypt Setup Message, to
+A Level 1 MUA MUST be able to create an Autocrypt Setup Message, to
 preserve users' ability to recover from disaster, and to choose to use
-a different Autocrypt-capable client in the future.
+a different Autocrypt-capable MUA in the future.
 
 
 Setup Message Import
 ~~~~~~~~~~~~~~~~~~~~
 
-An Autocrypt-capable client SHOULD support the ability to wait for and
+An Autocrypt-capable MUA SHOULD support the ability to wait for and
 import an Autocrypt Setup Message when the user has not yet configured
 Autocrypt.  This could happen either when a user of an unconfigured
-Autocrypt client decides to enable Autocrypt, or the client could
-proactively scan the client's mailbox for a message that matches these
-characteristics, and it could alert the client if it discovers one.
+Autocrypt MUA decides to enable Autocrypt, or the MUA could
+proactively scan the MUA's mailbox for a message that matches these
+characteristics, and it could alert the MUA if it discovers one.
 
-If the client finds an Autocrypt Setup Message, it should offer to
+If the MUA finds an Autocrypt Setup Message, it should offer to
 import it to enable Autocrypt.  If the user agrees to do so:
 
- * The client prompts the user for their corresponding Setup Code.
+ * The MUA prompts the user for their corresponding Setup Code.
    If there is a ``Passphrase-Format`` header in the outer OpenPGP armor and
-   its value is ``numeric9x4``, then the client MAY present a specialized
+   its value is ``numeric9x4``, then the MUA MAY present a specialized
    input dialog assisting the user to enter a code in the format described
    above.
    If there is no ``Passphrase-Format`` header, or the value is unknown,
-   then the client MUST provide a plain UTF-8 string text entry.
+   then the MUA MUST provide a plain UTF-8 string text entry.
 
- * The client should try decrypting the message with the supplied
+ * The MUA should try decrypting the message with the supplied
    Setup Code.  The Code serves both for decryption as well as
    authenticating the message.  Extra care needs to be taken with some
    PGP implementations that the Setup Code is actually used for
    decryption. See :doc:`bad-import` for more explanation and an
    example.
 
- * If it decrypts the client SHOULD import the secret
+ * If it decrypts the MUA SHOULD import the secret
    key material as its own Autocrypt (``own_state`` as
    discussed in :ref:`own-state`).
 
@@ -878,12 +895,49 @@ Level 1 MUAs MUST allow the user to disable Autocrypt completely for
 each account they control.  For level 1, we expect most MUAs to have
 Autocrypt disabled by default.
 
-Onboarding
-++++++++++
 
-.. todo::
+Helping Users get Started
++++++++++++++++++++++++++
 
-   TODO
+This section provides recommendations for MUA
+implementations to help users start Autocrypt immediately
+after an account was set up.
+
+The MUA SHOULD scan the mailbox for messages sent by the user
+(wherever the messages might be) that show evidence of OpenPGP or
+Autocrypt usage. It is likely sufficient to only scan the messages
+sent during the last 30 days, as it is unlikely that the user
+used Autocrypt or OpenPGP actively if no such message was sent in
+the recent past.
+
+From the set of all found sent messages, the MUA should
+determine the best action to take from the following list of choices.
+Earlier choices are better than later ones.
+
+1. If an Autocrypt Setup Message was found:
+
+   Start a setup process suggesting the user to import the
+   setup message. If multiple Autocrypt Setup Messages are
+   found, the most recent message should be preferred.
+
+2. If a sent message with an Autocrypt header was found:
+
+   Provide guidance for creating an Autocrypt Setup Message
+   on the MUA that created the message.
+
+3. If there is evidence of actively used OpenPGP software
+   (for example if a secret key is available, some
+   specific software is installed, etc.) or if encrypted
+   mails are found:
+
+   Inform the user about Autocrypt on <https://autocrypt.org/pgp-users>.
+
+4. If no evidence for Autocrypt was found:
+
+   Create a key with default settings and without a password
+   in the background. Set your ``own_state.prefer_encrypt`` to
+   ``nopreference`` and start sending Autocrypt headers.
+
 
 Appendix
 --------
@@ -920,7 +974,7 @@ Example Autocrypt headers
 
 .. _client-conflict-example:
 
-Example when clients conflict
+Example when MUAs conflict
 +++++++++++++++++++++++++++++
 
 .. todo::
