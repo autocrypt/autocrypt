@@ -121,13 +121,13 @@ attributes as ``peer_data[A]``:
 
 How this information is managed and used is covered in :ref:`peer-data-management`.
 
-.. _own-state:
+.. _account-data:
 
 Accounts controlled by the MUA
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-A Level 1 MUA maintains an internal structure ``own_state`` for each
-account on which Autocrypt is enabled. ``own_state`` has the following
+A Level 1 MUA maintains an internal structure ``account_data`` for each
+account on which Autocrypt is enabled. ``account_data`` has the following
 members:
 
  * ``secret_key`` -- the RSA secret key material used for
@@ -139,12 +139,12 @@ members:
    This SHOULD be set to ``nopreference`` by default.
 
 If Autocrypt is enabled for a given account, the MUA SHOULD allow the
-user to switch the setting for ``own_state.prefer_encrypt``, but this
+user to switch the setting for ``account_data.prefer_encrypt``, but this
 choice might normally be hidden in a "preferences pane" or something
 similar.  Please see :ref:`preference-ui` for a specific example of
 how this might look.
 
-How this information is managed and used is covered in :ref:`own-state-management`.
+How this information is managed and used is covered in :ref:`account-data-management`.
 
 .. _peer-data-management:
 
@@ -233,13 +233,13 @@ Header injection in outbound mail
 
 During message composition, if the ``From:`` header of the
 outgoing e-mail matches an address that the Autocrypt-capable MUA
-knows the secret key material (``own_state.secret_key``) for, it
+knows the secret key material (``account_data.secret_key``) for, it
 SHOULD include an Autocrypt header. This header MUST contain the
-associated public key material (``own_state.public_key``) as ``keydata``
+associated public key material (``account_data.public_key``) as ``keydata``
 attribute, and the same sender address that is used in the ``From``
 header in the ``addr`` attribute to confirm the association.  The most
 minimal Level 1 MUA will only include these two attributes.  If
-``own_state.prefer_encrypt`` is set to ``mutual`` then the header MUST
+``account_data.prefer_encrypt`` is set to ``mutual`` then the header MUST
 have a ``prefer-encrypt`` attribute set to ``mutual``.
 
 The MUA MUST NOT include more than one valid Level 1 ``Autocrypt``
@@ -436,7 +436,7 @@ by the following algorithm:
 4. If the message is composed as a reply to an encrypted message, then
    the recommendation is ``encrypt``.
 5. If ``state`` is ``mutual``, and the user's own
-   ``own_state.prefer_encrypt`` is ``mutual`` as well, then the
+   ``account_data.prefer_encrypt`` is ``mutual`` as well, then the
    recommendation is ``encrypt``.
 6. If ``state`` is ``gossip``, the recommendation is ``discourage``.
 7. If ``state`` is ``reset`` and the ``last_seen_autocrypt`` is more
@@ -578,12 +578,12 @@ in the following way:
     - set ``state`` to ``gossip``
 
 
-.. _own-state-management:
+.. _account-data-management:
 
-Own State Management
---------------------
+Account Data Management
+-----------------------
 
-See :ref:`own-state` for a definition of the structure of
+See :ref:`account-data` for a definition of the structure of
 information stored about the MUA's own e-mail accounts.
 
 
@@ -621,7 +621,7 @@ Handling Multiple Accounts and Aliases
 ++++++++++++++++++++++++++++++++++++++
 
 An MUA that is capable of connecting to multiple e-mail accounts
-SHOULD have a separate and distinct Autocrypt ``own_state`` for each
+SHOULD have a separate and distinct Autocrypt ``account_data`` for each
 e-mail account it has access to.
 
 However, a multi-account MUA MAY maintain a single ``peer_data``
@@ -635,15 +635,15 @@ client for each e-mail account.
 
 Sometimes a user may be able to send and receive emails with multiple
 distinct e-mail addresses ("aliases") via a single account.  When
-using such an account SHOULD use the same ``own_state.secret_key`` and
-``own_state.public_key`` for all aliases.  The :ref:`Autocrypt Setup Message <setup-message>`
+using such an account SHOULD use the same ``account_data.secret_key`` and
+``account_data.public_key`` for all aliases.  The :ref:`Autocrypt Setup Message <setup-message>`
 is not designed to handle multiple keys for a single account.  In
 addition, synchronization issues arise if new keys for aliases are
 created on different devices.
 
 A MUA MAY allow the user to enable Autocrypt only for a subset of
 the aliases, or MAY allow the user to configure
-``own_state.prefer_encrypt`` on a per-alias basis, though this will
+``account_data.prefer_encrypt`` on a per-alias basis, though this will
 likely complicate the UI.
 
 
@@ -667,7 +667,7 @@ Autocrypt Setup Message
 
 To avoid "lock-in" of secret key material on a particular MUA,
 Autocrypt level 1 includes a way to "export" the user's keys and her
-:ref:`prefer-encrypt state <own-state>` for other MUAs to pick up,
+:ref:`prefer-encrypt state <account-data>` for other MUAs to pick up,
 asynchronously and with explicitly required user interaction.
 
 The mechanism available is a specially-formatted e-mail message called
@@ -713,7 +713,7 @@ both programmatically and manually.
   after the ASCII-armor ending delimiter MUST be stripped before
   processing the secret key. The ASCII-armored secret key SHOULD have
   an ``Autocrypt-Prefer-Encrypt`` header that contains the current
-  ``own_state.prefer_encrypt`` setting.
+  ``account_data.prefer_encrypt`` setting.
 
 - The symmetric encryption algorithm used MUST be AES-128.
   The passphrase MUST be the Setup Code (see below), used
@@ -826,8 +826,8 @@ import it to enable Autocrypt.  If the user agrees to do so:
    example.
 
  * If it decrypts the MUA SHOULD import the secret
-   key material as its own Autocrypt (``own_state`` as
-   discussed in :ref:`own-state`).
+   key material as its own Autocrypt (``account_data`` as
+   discussed in :ref:`account-data`).
 
 See :ref:`setup-message-example`.
 
@@ -911,7 +911,7 @@ Earlier choices are better than later ones.
 4. If no evidence for Autocrypt was found:
 
    Create a key with default settings and without a password
-   in the background. Set your ``own_state.prefer_encrypt`` to
+   in the background. Set your ``account_data.prefer_encrypt`` to
    ``nopreference`` and start sending Autocrypt headers.
 
 
