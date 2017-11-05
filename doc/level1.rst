@@ -135,7 +135,7 @@ attributes:
  * ``public_key``: The OpenPGP transferable public key (:rfc:`OpenPGP
    "Transferable Public Key"<4880#section-11.1>`) derived
    from the secret key.
- * ``prefer_encrypt``: The user's encryption 
+ * ``prefer_encrypt``: The user's encryption
    preference for this account.  This is either ``mutual`` or ``nopreference``.
    This SHOULD default to ``nopreference``.
 
@@ -635,17 +635,9 @@ concerns introduced by Autocrypt can be mitigated by using a different
 client for each e-mail account.
 
 Sometimes a user may be able to send and receive emails with multiple
-distinct e-mail addresses via a single account ("aliases").  When
-using such an account, the MUA SHOULD use the same ``own_state.secret_key`` and
-``own_state.public_key`` for all of the aliases.  The :ref:`Autocrypt Setup Message <setup-message>`
-is not designed to handle multiple keys for a single account.  In
-addition, synchronization issues arise if new keys for aliases are
-created on different devices.
-
-A MUA MAY allow the user to enable Autocrypt only for a subset of
-the aliases, or MAY allow the user to configure
-``own_state.prefer_encrypt`` on a per-alias basis though this will
-likely complicate the UI.
+distinct e-mail addresses ("aliases") via a single account.  For the
+purposes of Autocrypt, the MUA SHOULD treat each specific alias as a
+distinct account.
 
 
 Avoiding MUA Conflicts
