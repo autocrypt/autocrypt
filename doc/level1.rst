@@ -2,25 +2,32 @@ Autocrypt Level 1: Enabling encryption, avoiding annoyances
 ===========================================================
 
 Autocrypt makes it easy for people to encrypt email.  This document
-describes the basic capabilities required for a mail app to be
-Autocrypt-capable at Level 1.
+specifies the requirements for Autocrypt Level 1 capable mail apps.
 
-The design of Level 1 is driven by usability concerns and by the
-realities of incremental deployment. A user may mix both
-Autocrypt-enabled mail clients and traditional mail clients and we'd
-like to avoid annoyances like unexpectedly unreadable mails while also
-supporting users who want to explicitly turn on encryption.
+The design of Autocrypt Level 1 is driven by usability concerns, and
+the realities of incremental deployment.  First, an Autocrypt-capable
+client can coexist with transitional mail clients.  That is, if
+someone uses an Autocrypt-capable mail client on her Desktop, she can
+continue to use a traditional mail client on her phone; she doesn't
+need to also use an Autocrypt capable client on phone.  (In fact, only
+a single Level 1 capable mail client can be used per mail account.)
+Second, Autocrypt tries to avoid annoyances like mails that are
+unexpectedly unreadable while also allowing a sender to explicitly
+enable encryption even if the message might not be readable on all of
+a recipient's devices.
 
-For ease of implementation and deployment, Level 1 focuses on the use
-of Autocrypt on a single device.  We intend to :doc:`support
-multi-device synchronization (and other features) as part of Level
-2<next-steps>`.  We want to keep Level 1 simple enough that it's easy
-for developers to adopt it so we can drive efforts from real-life
-experiences as soon as possible.
+These design decisions mean that most mail will remain unencrypted.
+But, this approach simplifies implementations, which quickens the
+initial deployment, and facilitates encryption of sensitive
+information.  We intend to add support for multiple Autocrypt-capable
+clients per mail account as part of :doc:`Level 2
+support<next-steps>`, which will enable significantly more mail to be
+opportunistically encrypted.
 
-Throughout this document, we refer to a mail app or Mail User Agent (MUA)
-as though it were only capable of controlling a single e-mail account
-(see :ref:`multiaccounts` for more detail).
+To simplify the exposition, this text is written as if a mail app or
+Mail User Agent (MUA) only accesses a single e-mail account.
+Autocrypt-capable mail clients can (and should) work with multiple
+mail accounts.  :ref:`multiaccounts` addresses this scenario.
 
 .. contents::
 
