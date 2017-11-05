@@ -882,19 +882,26 @@ Autocrypt disabled by default.
 Helping Users getting Started
 +++++++++++++++++++++++++++++
 
-The following paragraph provides recommendations for MUA
-implementations to help users start Autocrypt after an
-account was set up.
+This section provides recommendations for MUA
+implementations to help users start Autocrypt immediately
+after an account was set up.
 
-The MUA SHOULD scan the mailbox for sent mails (wherever
-they might be) that show evidence of OpenPGP/Autocrypt
-usage.
+The MUA SHOULD scan the mailbox for messages sent by the user
+(wherever the messages might be) that show evidence of OpenPGP or
+Autocrypt usage. It is likely sufficient to only scan the messages
+sent during the last 30 days, as it is unlikely that the user
+used Autocrypt or OpenPGP actively if no such message was sent in
+the recent past.
 
+From the set of all found sent messages, the MUA should
+determine the best action to take from the following list of choices.
+Earlier choices are better than later ones.
 
 1. If an Autocrypt Setup Message was found:
 
    Start a setup process suggesting the user to import the
-   settings.
+   setup message. If multiple Autocrypt Setup Messages are
+   found, the most recent message should be preferred.
 
 2. If a sent message with an Autocrypt header was found:
 
@@ -913,7 +920,6 @@ usage.
    Create a key with default settings and without a password
    in the background. Set your ``own_state.prefer_encrypt`` to
    ``nopreference`` and start sending Autocrypt headers.
-
 
 
 Appendix
