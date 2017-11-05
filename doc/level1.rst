@@ -1023,17 +1023,13 @@ Example Setup Message
     and store it securely.
     --Y6fyGi9SoGeH8WwRaEdC6bbBcYOedDzrQ
     Content-Type: application/autocrypt-setup
-    Content-Disposition: attachment; filename="autocrypt-setup-message.html"
+    Content-Disposition: attachment
 
-    <html><body>
-    <p>
     This is the Autocrypt setup file used to transfer settings and
     keys between clients. You can decrypt it using the Setup Code
     presented on your old device, and then import the contained key
     into your keyring.
-    </p>
 
-    <pre>
     -----BEGIN PGP MESSAGE-----
     Passphrase-Format: numeric9x4
     Passphrase-Begin: 17
@@ -1159,7 +1155,6 @@ Example Setup Message
     mngm1QCMMw2v/j8=
     =9sJE
     -----END PGP MESSAGE-----
-    </pre></body></html>
     --Y6fyGi9SoGeH8WwRaEdC6bbBcYOedDzrQ--
 
 The encrypted message part contains:
