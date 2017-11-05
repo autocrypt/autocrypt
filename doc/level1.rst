@@ -713,8 +713,7 @@ both programmatically and manually.
 - There MAY be text above or below the ASCII-armored encrypted data in
   the second MIME part, which MUST be ignored while processing. This
   allows implementations to optionally add another human-readable
-  explanation as discussed in :doc:`suggestions for key-transfer
-  format<transfer-format>`.
+  explanation.
 
 - The encrypted payload MUST begin with an ASCII-armored :rfc:`RFC
   4880 Transferable Secret Key<4880#section-11.2>`. All trailing data
