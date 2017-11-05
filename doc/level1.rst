@@ -188,7 +188,9 @@ doesn't support.
 Future extensions of Autocrypt can use critical attributes to
 facilitate incompatible changes. These headers will then be discarded
 entirely as invalid by clients that implement an older version,
-providing a simple update path.
+providing a simple update path. Such an update to the spec should also 
+describe how receiving updated clients deal the resulting multiple valid
+headers.
 
 
 OpenPGP Based key data
