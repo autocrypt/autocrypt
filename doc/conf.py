@@ -290,7 +290,7 @@ latex_elements = {
 latex_documents = [
 #    (master_doc, 'autocrypt-web.tex', u'Autocrypt Website', u'autocrypt team', 'manual'),
     ('level1', 'autocrypt-spec-{}.tex'.format(specversion),
-     u'Autocrypt Specification', u'autocrypt team',
+     u'Autocrypt Specification', u'Autocrypt team, licensed CC0',
      'howto', False),
 ]
 
