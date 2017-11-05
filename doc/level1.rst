@@ -22,7 +22,13 @@ Throughout this document, we refer to a mail app or :term:`Mail User Agent (MUA)
 as though it were only capable of controlling a single e-mail account
 (see :ref:`multiaccounts` for more detail).
 
-.. contents::
+.. only:: builder_html
+
+   .. contents::
+
+.. only:: builder_readthedocs
+
+   .. contents::
 
 Overview
 --------
