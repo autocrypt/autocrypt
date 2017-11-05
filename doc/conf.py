@@ -136,7 +136,9 @@ html_theme = 'alabaster'
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
-# html_theme_options = {}
+html_theme_options = {
+        'logo':'../images/autocrypt_logo.png'
+        }
 
 # Add any paths that contain custom themes here, relative to this directory.
 # html_theme_path = []
@@ -204,7 +206,7 @@ html_sidebars = {
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
 #
-# html_additional_pages = {}
+html_additional_pages = { 'index':'customindex.html' }
 
 # If false, no module index is generated.
 #
@@ -361,3 +363,6 @@ epub_exclude_files = ['search.html']
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'https://docs.python.org/': None}
+
+def setup(app):
+        app.add_stylesheet('custom.css')

@@ -1,14 +1,21 @@
 
-<h3><a href="{{ pathto('contents') }}">{{ _('Table Of Contents') }}</a></h3>
+<!-- <h3><a href="{{ pathto('contents') }}">{{ _('Table Of Contents') }}</a></h3> -->
 
 <ul>
-  <li><a href="{{ pathto('index') }}">Introduction</a></li>
-  <li><a href="{{ pathto('features') }}">Features</a></li>
-  <li><a href="{{ pathto('level1') }}">Level 1 spec</a> [<a href="https://media.readthedocs.org/pdf/autocrypt/latest/autocrypt.pdf">PDF<a/>]
-
-</li>
-  <li><a href="{{ pathto('examples') }}">Example mail flows</a></li>
-  <li><a href="{{ pathto('dev-status') }}">Development Repos</a></li>
-  <li><a href="{{ pathto('contact') }}">Contact and Events</a></li>
-  <li><a href="{{ pathto('contents') }}">All Docs</a></li>
+  <li><a href="{{ pathto('clients') }}" class="sidemenu">Install</a></li>
+  <li><a href="{{ pathto('news') }}" class="sidemenu">News</a></li>
+  <li><a href="{{ pathto('contact') }}" class="sidemenu">Contact and Events</a></li>
+  <li><a href="{{ pathto('details') }}" class="sidemenu">What is autocrypt?</a></li>
 </ul>
+<ul>
+    <li><strong><a href="{{ pathto('level1') }}" class="sidemenu">Level 1 spec</a></strong></li>
+</ul>
+<ul>
+    <li><a href="{{ pathto('examples') }}" class="sidemenu">Example mail flows</a></li>
+    <li><a href="{{ pathto('features') }}" class="sidemenu">Features</a></li>
+    <li><a href="{{ pathto('faq') }}" class="sidemenu">FAQ</a></li>
+    <li><a href="{{ pathto('dev-status') }}" class="sidemenu">Development Repos</a></li>
+    <li><a href="{{ pathto('contents') }}" class="sidemenu">All Docs</a></li>
+</ul>
+
+<br />
