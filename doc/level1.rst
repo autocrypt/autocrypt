@@ -318,7 +318,8 @@ the following cases:
   - There is more than one address in the ``From`` header.
 
   - The MUA believes the message to be spam. If the user marks the
-    message as not being spam the header MAY be processed at that point.
+    message as not being spam the message MAY be processed for
+    ``Autocrypt`` headers at that point.
 
 When parsing an incoming message, a MUA SHOULD examine all ``Autocrypt``
 headers, rather than just the first one. If there is more than one
@@ -360,16 +361,6 @@ overall. Additionally update the state as follows:
 - set ``last_seen`` to the effective message date
 - set ``state`` to ``mutual`` if the Autocrypt header contained a
   ``prefer-encrypt=mutual`` attribute, or ``nopreference`` otherwise
-
-.. _spam-filters:
-
-.. todo::
-
-   the spec currently doesn't say how to integrate Autocrypt
-   processing on message receipt with spam filtering.  Should we say
-   something about not doing Autocrypt processing on message receipt
-   if the message is believed to be spam?
-
 
 .. _recommendation:
 
