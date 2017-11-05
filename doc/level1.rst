@@ -555,9 +555,14 @@ An Autocrypt MUA MAY include ``Autocrypt-Gossip`` headers in messages
 with more than one recipient. These headers MUST be placed in the root
 MIME part of the encrypted message payload. The encrypted payload in
 this case contains one Autocrypt-Gossip header for each recipient,
-which MUST include ``addr`` and ``keydata`` attributes with the relevant
-data from the sender's Autocrypt :ref:`peer state <peer-state>` about
-the recipient.
+which MUST include ``addr`` and ``keydata`` attributes with the
+relevant data from the sender's Autocrypt :ref:`peer state
+<peer-state>` about the recipient. It SHOULD NOT contain a
+``prefer-encrypt`` attribute.
+
+To avoid leaking metadata about a third party in the clear, an
+``Autocrypt-Gossip`` header SHOULD NOT be added outside an encrypted
+MIME part.
 
 Updating Autocrypt Peer State from Key Gossip
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
