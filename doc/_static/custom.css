@@ -1,0 +1,55 @@
+body {
+    font-family: Verdana, Arial, Helvetica, sans-serif !important;
+    background-color: #ffffff, #ccedf5;
+    background: linear-gradient(#ffffff 100px, #1b64b8 2000px);
+}
+
+.sidemenu {
+    font-family: Verdana, Arial, Helvetica, sans-serif !important;
+    font-size: 120% !important;
+    color: #1b64b8 !important;
+    border-bottom: 0 !important;
+}
+
+div .body {
+    background: transparent, #ccedf5 !important;
+    padding-bottom: 30px;
+    padding-top: 2em !important;
+}
+
+div.footer {
+    color: #ffffff;
+}
+
+div.footer a {
+    color: #ffffff;
+}
+
+#searchbox h3 {
+    font-size: 16px;
+}
+
+.headline {
+    font-size: 350% !important;
+}
+
+h1 {
+    color: #1b64b8 !important;
+    font-family: Verdana, Arial, Helvetica, sans-serif !important;
+}
+
+h2 {
+    color: #1b64b8 !important;
+    font-family: Verdana, Arial, Helvetica, sans-serif !important;
+}
+
+h3 {
+    color: #1b64b8 !important;
+    font-family: Verdana, Arial, Helvetica, sans-serif !important;
+}
+
+h4 {
+    color: #1b64b8 !important;
+    font-family: Verdana, Arial, Helvetica, sans-serif !important;
+}
+
