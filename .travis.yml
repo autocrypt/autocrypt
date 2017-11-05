@@ -18,6 +18,7 @@ install:
 script:
   - cd doc
   - make html
+  - make latexpdf
 
 #notifications:
 #  irc:
