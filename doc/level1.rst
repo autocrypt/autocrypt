@@ -949,8 +949,8 @@ Example Autocrypt headers
     as defined in Level 1.
 
 
-Example Setup Message User Interaction
-++++++++++++++++++++++++++++++++++++++
+Example User Interaction for Setup Message Creation
++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 The Setup Code shown in this example can be used with
 :ref:`setup-message-example` below.
@@ -964,6 +964,29 @@ The Setup Code shown in this example can be used with
         1303-7016-8412-
         3581-4441-0597
 
+
+Example User Interaction for Setup Message Receipt
+++++++++++++++++++++++++++++++++++++++++++++++++++
+
+To initiate the import of the Autocrypt Setup Message, the MUA
+can display a message like the example below:
+
+::
+
+    We detected a message created by one of your other email
+    applications that contains the setup information for
+    Autocrypt. By importing these settings, you can apply
+    the same settings in (your application).
+
+    Please enter the Setup Code displayed by your other email
+    application to proceed:
+
+                     17__ - ____ - ____ -
+                     ____ - ____ - ____ -
+                     ____ - ____ - ____
+
+
+               [   Cancel   ]     [ Import Settings ]
 
 .. _setup-message-example:
 
