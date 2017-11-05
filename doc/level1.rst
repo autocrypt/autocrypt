@@ -605,22 +605,32 @@ easily and securely with full-disk encryption.
 Handling Multiple Accounts and Aliases
 ++++++++++++++++++++++++++++++++++++++
 
-If a user sends emails with multiple aliases through the same account
-the client SHOULD use the same Autocrypt key for all aliases.  The
-Autocrypt Setup Message is not designed to handle multiple keys.  In
-addition syncronisation issues arrise if new keys for aliases are
+An MUA that is capable of connecting to multiple e-mail accounts
+SHOULD have a separate and distinct Autocrypt ``own_state`` for each
+e-mail account it has access to.
+
+However, a multi-account MUA MAY maintain a single ``peer_state``
+table that merges information from e-mail received across all accounts
+for the sake of implementation simplicity.  While this results in some
+linkability between accounts (the effect of mails sent to one account
+can be observed by the activity on the other account), it provides a
+more uniform and predictable user experience.  Any linkability
+concerns introduced by Autocrypt can be mitigated by using a different
+client for each e-mail account.
+
+Sometimes a user may be able to send and receive emails with multiple
+distinct e-mail addresses ("aliases") via a single account.  When
+using such an account SHOULD use the same ``own_state.secret_key`` and
+``own_state.public_key`` for all aliases.  The Autocrypt Setup Message
+is not designed to handle multiple keys for a single account.  In
+addition, synchronization issues arise if new keys for aliases are
 created on different devices.
 
-A client MAY allow to enable Autocrypt only for a subset of the aliases
-and allow configuring ``prefer_encrypt`` on a per alias basis.
+A client MAY allow the user to enable Autocrypt only for a subset of
+the aliases, or MAY allow the user to configure
+``own_state.prefer_encrypt`` on a per-alias basis, though this will
+likely complicate the UI.
 
-.. todo::
-
-   relationship aliases / multiple accounts
-
-An MUA that is capable of connecting to multiple e-mail accounts should
-have a separate Autocrypt own state for each e-mail account it has access
-to.
 
 Onboarding
 ++++++++++
