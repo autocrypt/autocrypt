@@ -15,7 +15,11 @@ Last updated: ``2017-11-03``
  `mailpile`_
 ================= ======== ======== ======== ======== ======== ======== ======== ======== ========
 
-Leyend: TODO @hpk42
+.. todo::
+
+    TODO @hpk42
+
+Leyend:
 
 .. [1] require passphrase
 .. [2] always send
@@ -27,31 +31,34 @@ Leyend: TODO @hpk42
 .. _notmuch: https://notmuchmail.org/
 .. _mailpile: https://www.mailpile.is/
 
-Mail Program Autocrypt Development Branches
--------------------------------------------
+For developers
+--------------
 
-Last updated: 17th January 2017
+Source code:
 
-Enigmail: `Enigmail autocrypt branch <https://sourceforge.net/p/enigmail/source/ci/master/tree/>`_
+- `py-autocrypt code <https://github.com/autocrypt/py-autocrypt>`_`
 
-Android K9: `K9 autocrypt branch <https://github.com/k9mail/k-9/commits/trust-id>`_
+- `Enigmail code <https://sourceforge.net/p/enigmail/source/ci/master/tree/>`_
 
-Mailpile: XXX to-be-filled-in
+- K9: TODO
 
-Notmuch/Alot: XXX to-be-filled-in
+- Mailpile: TODO
 
-Bitmask/LEAP: `ongoing refactorings <https://0xacab.org/leap/bitmask-dev/merge_requests/55/diffs>`_
+- Notmuch/Alot: TODO
 
-Go: `Go Autocrypt <https://github.com/autocrypt/go-autocrypt>`_
+- `Bitmask/LEAP refactorings <https://0xacab.org/leap/bitmask-dev/merge_requests/55/diffs>`_
 
-**Please-fill-in-your-development-branch here**
+- `Go Autocrypt <https://github.com/autocrypt/go-autocrypt>`_
 
+- Delta-Chat: TODO
 
 Autocrypt bot
--------------
++++++++++++++++
+
+Implemented using py-autocrypt.
 
 Responder
-+++++++++
+~~~~~~~~~~
 
 We deploy a preliminary auto-responder which accepts and sends mails
 with Autocrypt headers.  Just sent a mail to ``bot at autocrypt dot
@@ -59,7 +66,7 @@ org`` and wait for the reply and look at the headers.  As of Janury
 2017, the Bot does not implement the full level-1 protocol.
 
 Bot Dovecot IMAP
-++++++++++++++++
+~~~~~~~~~~~~~~~~
 
 You can login to IMAP/Dovecot (port 993, TLS mandatory) with the
 username "bot" and the password as stored in ``gitcrypt/credentials.txt``.
@@ -67,7 +74,7 @@ Ask on IRC or the mailing list and provide your gpg public key for access to
 the password credentials using `git-crypt <https://www.agwa.name/projects/git-crypt/>`_.
 
 ssh access to bot account
-+++++++++++++++++++++++++
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can ssh to the bot account: ``ssh -l bot mail.autocrypt.org``,
 ECDSA key fingerprint is ``SHA256:4RWh81zOd/Pgq3mHhKpyLdVZJfOpq+DgqKheUIhJgWQ``.
