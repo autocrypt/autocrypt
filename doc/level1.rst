@@ -1032,3 +1032,13 @@ Example Setup Message User Interaction
 .. todo::
 
    TODO
+
+.. this code decrypts the example Autocrypt Setup Message
+
+::
+
+    This is the Setup Code to decrypt your Autocrypt Setup Message:
+
+    1742-0185-6197-
+    1303-7016-8412-
+    3581-4441-0597
