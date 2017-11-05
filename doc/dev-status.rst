@@ -8,7 +8,7 @@ Last updated: ``2017-11-03``
 |                                      |parsing |        |state   |inject  |during compose|        |message |process |decorative|
 |                                      |        |        |        |        |              |        |        |        |          |
 +======================================+========+========+========+========+==============+========+========+========+==========+
-|.. image:: images/logos/deltachat.png |y       |y       |y       |y       |y             |y       |started |y       |y         |
+|.. image:: images/logos/deltachat.png |y       |y       |y       |y       |y             |y       |started |started |y         |
 |                                      |        |        |        |        |              |        |        |        |          |
 |`delta.chat`_                         |        |        |        |        |              |        |        |        |          |
 +--------------------------------------+--------+--------+--------+--------+--------------+--------+--------+--------+----------+
