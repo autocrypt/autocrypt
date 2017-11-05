@@ -895,12 +895,49 @@ Level 1 MUAs MUST allow the user to disable Autocrypt completely for
 each account they control.  For level 1, we expect most MUAs to have
 Autocrypt disabled by default.
 
-Onboarding
-++++++++++
 
-.. todo::
+Helping Users get Started
++++++++++++++++++++++++++
 
-   TODO
+This section provides recommendations for MUA
+implementations to help users start Autocrypt immediately
+after an account was set up.
+
+The MUA SHOULD scan the mailbox for messages sent by the user
+(wherever the messages might be) that show evidence of OpenPGP or
+Autocrypt usage. It is likely sufficient to only scan the messages
+sent during the last 30 days, as it is unlikely that the user
+used Autocrypt or OpenPGP actively if no such message was sent in
+the recent past.
+
+From the set of all found sent messages, the MUA should
+determine the best action to take from the following list of choices.
+Earlier choices are better than later ones.
+
+1. If an Autocrypt Setup Message was found:
+
+   Start a setup process suggesting the user to import the
+   setup message. If multiple Autocrypt Setup Messages are
+   found, the most recent message should be preferred.
+
+2. If a sent message with an Autocrypt header was found:
+
+   Provide guidance for creating an Autocrypt Setup Message
+   on the MUA that created the message.
+
+3. If there is evidence of actively used OpenPGP software
+   (for example if a secret key is available, some
+   specific software is installed, etc.) or if encrypted
+   mails are found:
+
+   Inform the user about Autocrypt on <https://autocrypt.org/pgp-users>.
+
+4. If no evidence for Autocrypt was found:
+
+   Create a key with default settings and without a password
+   in the background. Set your ``own_state.prefer_encrypt`` to
+   ``nopreference`` and start sending Autocrypt headers.
+
 
 Appendix
 --------
