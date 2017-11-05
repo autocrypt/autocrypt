@@ -36,29 +36,32 @@ Overview
 Approach and High Level Overview
 ++++++++++++++++++++++++++++++++
 
-The core goal of Autocrypt is to fully automate the management of both
-secret and public keys, so that users can encrypt mail without
-specialized knowledge.
+Autocrypt's primary goal is to automate both secret and public key
+management so that users can encrypt mail without specialized
+knowledge.
 
-This spec introduces an :ref:`Autocrypt header <autocrypt-header>` that transfers information
-about a sender's :term:`public key` in all their emails. Autocrypt
-provides a :ref:`set of rules <update-peer-state>` to track this information per communication
-peer.  This provides :ref:`guidance <recommendation>` during message composition
-on whether encryption is a) possible and b) recommended for a given set
-of recipients. The design relies on in-band communication for key
-discovery, thereby avoiding a dependency on external infrastructure like
-OpenPGP keyservers or PKI.
+This specification adds an :ref:`Autocrypt-specific mail header
+<autocrypt-header>` to outgoing mails, which contains, among other
+information, the sender's :term:`public key`.  Transferring public
+keys in-band means that key discovery in Autocrypt does not require
+external infrastructure like OpenPGP keyservers or x509 PKI.
 
-Autocrypt facilitates opportunistic key distribution, but recognizes
-that aggressively opportunistic encryption can be disruptive to
-established email workflows. For this reason, emails are only
-encrypted if:
+Autocrypt provides a :ref:`set of rules <update-peer-state>` that
+tracks this information for each communication peer.  Autocrypt uses
+this information to determine whether encryption is possible and makes
+a :ref:`recommendation <recommendation>` about whether encryption
+should be enabled for a given set of recipients.
+
+Autocrypt aggressively distributes keys, but conservatively recommends
+encryption to avoid disruption to established email workflows.
+Specifically, Autocrypt only recommends that an email be encrypted if
+encryption is possible, and:
 
 1) The sender specifically requests encryption during message
    composition;
-2) When replying to an encrypted message; or,
-3) If all participants have explicitly expressed a :ref:`preference <prefer-encrypt>` to
-   always encrypt.
+2) The email is in reply to an encrypted message; or,
+3) The sender and the recipients have explicitly stated that they
+   :ref:`prefer <prefer-encrypt>` encrypted email.
 
 
 Requirements on MUA/E-mail Provider interactions
