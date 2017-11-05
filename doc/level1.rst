@@ -401,13 +401,6 @@ The Autocrypt recommendation depends on the list of recipient
 addresses for the message being composed.  When the user edits the
 list of recipients, the recommendation may change.
 
-.. note::
-
-   It's possible that the user manually overriddes the Autocrypt
-   recommendation and then edits the list of recipients.  The MUA
-   SHOULD retain the user's manual choices for a given message even if
-   the Autocrypt recommendation changes.
-
 Autocrypt can produce four possible recommendations to the MUA
 during message composition:
 
