@@ -647,39 +647,17 @@ the aliases, or MAY allow the user to configure
 likely complicate the UI.
 
 
-Onboarding
-++++++++++
-
-.. todo::
-
-   todo
-
 Avoiding MUA Conflicts
-~~~~~~~~~~~~~~~~~~~~~~~~~
+++++++++++++++++++++++
 
 If more than one Autocrypt-enabled MUA generates a key and then
-distributes it to communication peers, encrypted mail sent to the user
-is only readable by the MUA that sent the last message. This can lead
-to behavior that is unpredictable and confusing for the user.
+distributes it to communication peers, encrypted messages sent
+to the user is only readable by the MUA that sent the last message.
+This can lead to behavior that is unpredictable and confusing for
+the user.
 
-As a simple measure of mitigation, Level 1 MUAs SHOULD check before
-key generation whether there is evidence in the user's mailbox of
-other active Autocrypt MUAs. To do this, they SHOULD scan the
-user's Sent folder for mail that contains Autocrypt headers. If such
-mail exists, the MUA SHOULD warn the user and abort key generation,
-unless explicitly instructed to proceed regardless (see
-:ref:`client-conflict-example`).
-
-In cases where an Autocrypt-capable MUA is unable to identify the
-user's Sent folder, or is unable to access any pre-existing message
-archive (e.g. a POP-only MUA), the MUA MUST warn the user that
-Autocrypt should be enabled on **only one** MUA before enabling
-Autocrypt on the given account.
-
-To solve this problem in a better way, bi-directional communication
-between the user's different MUAs is required. This is possible
-e.g. via access to a shared IMAP mailbox. However, this is out of
-scope for Level 1.
+See section :ref:`getting_started` for guidance on how to detect and
+avoid such a situation.
 
 
 .. _`setup-message`:
@@ -851,7 +829,7 @@ import it to enable Autocrypt.  If the user agrees to do so:
    key material as its own Autocrypt (``own_state`` as
    discussed in :ref:`own-state`).
 
-See :ref:`setup-key-example`.
+See :ref:`setup-message-example`.
 
 
 User Interface
@@ -892,6 +870,7 @@ Level 1 MUAs MUST allow the user to disable Autocrypt completely for
 each account they control.  For level 1, we expect most MUAs to have
 Autocrypt disabled by default.
 
+.. _getting_started:
 
 Helping Users get Started
 +++++++++++++++++++++++++
@@ -969,16 +948,24 @@ Example Autocrypt headers
     This is an example e-mail with Autocrypt header and RSA 3072 key
     as defined in Level 1.
 
-.. _client-conflict-example:
 
-Example when MUAs conflict
-+++++++++++++++++++++++++++++
+Example Setup Message User Interaction
+++++++++++++++++++++++++++++++++++++++
 
-.. todo::
+The Setup Code shown in this example can be used with
+:ref:`setup-message-example` below.
 
-   TODO
+::
 
-.. _setup-key-example:
+    You'll need to use this Setup Code in your other e-mail program to
+    use the Autocrypt Setup Message:
+
+        1742-0185-6197-
+        1303-7016-8412-
+        3581-4441-0597
+
+
+.. _setup-message-example:
 
 Example Setup Message
 +++++++++++++++++++++
@@ -995,17 +982,28 @@ Example Setup Message
     --Y6fyGi9SoGeH8WwRaEdC6bbBcYOedDzrQ
     Content-Type: text/plain
 
-    This message contains all information to transfer your Autocrypt settings along with your secret key securely from your original device.
+    This message contains all information to transfer your Autocrypt
+    settings along with your secret key securely from your original
+    device.
 
-    To set up your new device for Autocrypt, please follow the instuctions that should be presented by your new device.
+    To set up your new device for Autocrypt, please follow the
+    instuctions that should be presented by your new device.
 
-    You can keep this message and use it as a backup for your secret key. If you want to do this, you should write down the Setup Code and store it securely.
+    You can keep this message and use it as a backup for your secret
+    key. If you want to do this, you should write down the Setup Code
+    and store it securely.
     --Y6fyGi9SoGeH8WwRaEdC6bbBcYOedDzrQ
     Content-Type: application/autocrypt-setup
     Content-Disposition: attachment; filename="autocrypt-setup-message.html"
 
     <html><body>
-    <p>This is the Autocrypt setup file used to transfer settings and keys between clients. You can decrypt it using the Setup Code presented on your old device, and then import the contained key into your keyring.</p>
+    <p>
+    This is the Autocrypt setup file used to transfer settings and
+    keys between clients. You can decrypt it using the Setup Code
+    presented on your old device, and then import the contained key
+    into your keyring.
+    </p>
+
     <pre>
     -----BEGIN PGP MESSAGE-----
     Passphrase-Format: numeric9x4
@@ -1222,20 +1220,3 @@ The encrypted message part contains:
     TRzalg==
     =f96/
     -----END PGP PRIVATE KEY BLOCK-----
-
-Example Setup Message User Interaction
-++++++++++++++++++++++++++++++++++++++
-
-.. todo::
-
-   TODO
-
-.. this code decrypts the example Autocrypt Setup Message
-
-::
-
-    This is the Setup Code to decrypt your Autocrypt Setup Message:
-
-    1742-0185-6197-
-    1303-7016-8412-
-    3581-4441-0597
