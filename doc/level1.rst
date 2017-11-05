@@ -948,13 +948,13 @@ Example Setup Message
 
     To set up your new device for Autocrypt, please follow the instuctions that should be presented by your new device.
 
-    You can keep this message and use it as a backup for your secret key. If you want to do this, you should write down the password and store it securely.
+    You can keep this message and use it as a backup for your secret key. If you want to do this, you should write down the Setup Code and store it securely.
     --Y6fyGi9SoGeH8WwRaEdC6bbBcYOedDzrQ
     Content-Type: application/autocrypt-setup
-    Content-Disposition: attachment; filename="autocrypt-key-backup.html"
+    Content-Disposition: attachment; filename="autocrypt-setup-message.html"
 
     <html><body>
-    <p>This is the Autocrypt setup file used to transfer settings and keys between clients. You can decrypt it using the password presented on your old device, and then import the contained key into your keyring.</p>
+    <p>This is the Autocrypt setup file used to transfer settings and keys between clients. You can decrypt it using the Setup Code presented on your old device, and then import the contained key into your keyring.</p>
     <pre>
     -----BEGIN PGP MESSAGE-----
     Passphrase-Format: numeric9x4
