@@ -74,7 +74,10 @@ needs to be able to:
 - Control the contents of outgoing e-mail including the ability to set
   custom e-mail headers;
 
-- Read the whole, raw e-mail including message headers; and,
+- Send e-mail on its own (required by the :ref:`Autocrypt Setup
+  Message <setup-message>`);
+
+- Read whole, raw e-mails including message headers; and,
 
 - Optionally, scan the user's mailbox for mail with
   specific headers.
@@ -133,7 +136,7 @@ attributes:
    "Transferable Public Key"<4880#section-11.1>`) derived
    from the secret key.
  * ``prefer_encrypt``: The user's encryption 
-   preferences for this account.  This is either ``mutual`` or ``nopreference``.
+   preference for this account.  This is either ``mutual`` or ``nopreference``.
    This SHOULD default to ``nopreference``.
 
 If Autocrypt is enabled for a given account, the MUA SHOULD allow the
@@ -148,9 +151,9 @@ How this information is managed and used is discussed in :ref:`own-state-managem
 Peer State Management
 ---------------------
 
-An Autocrypt MUA updates each communication peer's state using the
-e-mails received from that peer.  Specifically, Autocrypt updates the
-state using the ``Autocrypt`` e-mail header.
+An Autocrypt MUA updates the state it holds for each communication
+peer using the e-mails received from that peer.  Specifically,
+Autocrypt updates the state using the ``Autocrypt`` e-mail header.
 
 .. _autocrypt-header:
 
