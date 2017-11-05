@@ -636,7 +636,7 @@ client for each e-mail account.
 Sometimes a user may be able to send and receive emails with multiple
 distinct e-mail addresses ("aliases") via a single account.  When
 using such an account SHOULD use the same ``own_state.secret_key`` and
-``own_state.public_key`` for all aliases.  The Autocrypt Setup Message
+``own_state.public_key`` for all aliases.  The :ref:`Autocrypt Setup Message <setup-message>`
 is not designed to handle multiple keys for a single account.  In
 addition, synchronization issues arise if new keys for aliases are
 created on different devices.
