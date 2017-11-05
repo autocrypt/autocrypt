@@ -879,8 +879,8 @@ each account they control.  For level 1, we expect most MUAs to have
 Autocrypt disabled by default.
 
 
-Helping Users getting Started
-+++++++++++++++++++++++++++++
+Helping Users get Started
++++++++++++++++++++++++++
 
 This section provides recommendations for MUA
 implementations to help users start Autocrypt immediately
