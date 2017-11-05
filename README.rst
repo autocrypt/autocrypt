@@ -18,3 +18,5 @@ Implementation development repositories
 
 For implementation development repos, see http://autocrypt.org/en/latest/dev-status.html
 
+
+Copyright 2016, 2017, the Autocrypt team, CC0 license.
