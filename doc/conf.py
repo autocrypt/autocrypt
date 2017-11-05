@@ -286,7 +286,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'autocrypt-web.tex', u'Autocrypt Website', u'autocrypt team', 'manual'),
+#    (master_doc, 'autocrypt-web.tex', u'Autocrypt Website', u'autocrypt team', 'manual'),
     ('level1', 'autocrypt-spec-{}.tex'.format(specversion),
      u'Autocrypt Specification', u'autocrypt team',
      'howto', False),
