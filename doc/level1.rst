@@ -96,19 +96,19 @@ Autocrypt Internal State
 An Autocrypt MUA needs to associate information with the accounts it
 controls and the peers it communicates with.
 
-.. _peer-state:
+.. _peer-data:
 
 Communication Peers
 ~~~~~~~~~~~~~~~~~~~
 
-The state for each peer is tracked by e-mail address.
+The data for each peer is tracked by e-mail address.
 
-Conceptually, we represent this state as a table named
-``peer_state`` indexed by the peer's :doc:`canonicalized
-e-mail address <address-canonicalization>`.
+Conceptually, we represent this as a table named ``peer_data`` indexed
+by the peer's :doc:`canonicalized e-mail address
+<address-canonicalization>`.
 
 For each e-mail address ``A``, an MUA MUST store the following
-attributes as ``peer_state[A]``:
+attributes as ``peer_data[A]``:
 
 * ``last_seen``: UTC timestamp of the most recent effective date of
   all processed messages for this peer.
@@ -119,7 +119,7 @@ attributes as ``peer_state[A]``:
 * ``state``: a quad-state: ``nopreference``, ``mutual``, ``reset``, or
   ``gossip``.
 
-How this information is managed and used is covered in :ref:`peer-state-management`.
+How this information is managed and used is covered in :ref:`peer-data-management`.
 
 .. _own-state:
 
@@ -146,12 +146,12 @@ how this might look.
 
 How this information is managed and used is covered in :ref:`own-state-management`.
 
-.. _peer-state-management:
+.. _peer-data-management:
 
-Peer State Management
+Peer Data Management
 ---------------------
 
-Autocrypt MUAs update state about their communications peers based
+Autocrypt MUAs update data about their communications peers based
 on information gathered from received e-mail headers.
 
 .. _autocrypt-header:
@@ -243,7 +243,7 @@ minimal Level 1 MUA will only include these two attributes.  If
 have a ``prefer-encrypt`` attribute set to ``mutual``.
 
 The MUA MUST NOT include more than one valid Level 1 ``Autocrypt``
-header (see :ref:`update-peer-state`).
+header (see :ref:`update-peer-data`).
 
 If the ``From`` address changes during message composition (E.g. if
 the user selects a different outbound identity), the Autocrypt-capable
@@ -260,29 +260,29 @@ the following sections for header format definitions and parsing.
 
 ..  _autocryptheaderformat:
 
-Internal state storage
+Internal data storage
 ++++++++++++++++++++++
 
-See :ref:`peer-state` for a definition of the structure of
+See :ref:`peer-data` for a definition of the structure of
 information stored about the MUA's communications peers.
 
-Autocrypt MUAs keep state about their peers, to be able to handle
+Autocrypt MUAs keep data about their peers, to be able to handle
 several nuanced situations that have caused trouble/annoyance in the
-past.  This state is updated even when the peer sends mail without an
+past.  This data is updated even when the peer sends mail without an
 ``Autocrypt`` header.
 
 For example, if a remote peer disables Autocrypt or drops back to
 using a non-Autocrypt MUA only we must be able to disable sending
 encrypted mails to this peer automatically.
 
-In addition to the per-peer state described in :ref:`peer-state`,
+In addition to the per-peer data described in :ref:`peer-data`,
 MUAs MAY also store other information gathered for heuristic
 purposes, or for other cryptographic schemes (see
 :doc:`optional-state` for some example ideas).
 
-However, in order to support future syncing of Autocrypt state between
+However, in order to support future syncing of Autocrypt data between
 MUAs, it is critical that Autocrypt-capable MUAs maintain the
-state specified here, regardless of what additional state they track.
+data specified here, regardless of what additional data they track.
 
 .. note::
 
@@ -294,10 +294,10 @@ state specified here, regardless of what additional state they track.
     a :rfc:`User ID <4880#section-5.11>` which matches the message's
     ``From`` address.
 
-``peer_state[A].state`` semantics
+``peer_data[A].state`` semantics
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The ``state`` variable of a particular peer's ``peer_state`` data is
+The ``state`` variable of a particular peer's ``peer_data`` is
 selected from a set range of values:
 
   - ``nopreference`` means the peer has not opted into mutual
@@ -317,15 +317,15 @@ The rough descriptions outlined above are not normative -- they're
 intended to motivate the specific rules for updating and using the
 ``state`` described over the next few sections.
 
-.. _update-peer-state:
+.. _update-peer-data:
 
-Updating Autocrypt Peer State
-+++++++++++++++++++++++++++++
+Updating Autocrypt Peer Data
+++++++++++++++++++++++++++++
 
-Incoming messages may be processed to update Autocrypt peer state by a
+Incoming messages may be processed to update Autocrypt peer data by a
 MUA at receive or display time.
 
-Messages SHOULD be ignored and the peer state SHOULD NOT be updated in
+Messages SHOULD be ignored and the peer data SHOULD NOT be updated in
 the following cases:
 
   - The content-type is ``multipart/report``. It can be assumed to be
@@ -343,7 +343,7 @@ headers, rather than just the first one. If there is more than one
 valid header, this SHOULD be treated as an error, and all ``Autocrypt``
 headers discarded as invalid.
 
-Updating the Autocrypt state for the sending peer depends on:
+Updating the Autocrypt peer data for the sending peer depends on:
 
 - the ``effective date`` of the message.  We define it as the sending
   time of the message as indicated by its ``Date`` header, or the time
@@ -357,7 +357,7 @@ value no changes are required and the update process terminates.
 
 If the Autocrypt header is unavailable, and the effective
 message date is more recent than the current value of ``last_seen``,
-update the state as follows:
+update the data as follows:
 
 - set ``last_seen`` to the effective message date
 - set ``state`` to ``reset``
@@ -366,14 +366,14 @@ If the Autocrypt header is unavailable, no further changes
 are required and the update process terminates.
 
 At this point, the message in processing contains the most recent
-Autocrypt header. Update the state as follows:
+Autocrypt header. Update the data as follows:
 
 - set ``public_key`` to the corresponding ``keydata`` value of the Autocrypt header
 - set ``last_seen_autocrypt`` to the effective message date
 
 If the effective date of the message is more recent than or equal to
 the current ``last_seen`` value, it is also the most recent message
-overall. Additionally update the state as follows:
+overall. Additionally update the data as follows:
 
 - set ``last_seen`` to the effective message date
 - set ``state`` to ``mutual`` if the Autocrypt header contained a
@@ -425,10 +425,10 @@ Recommendations for single-recipient messages
 
 The Autocrypt recommendation for a message composed to a single
 recipient with e-mail address ``A`` depends primarily on the value
-stored in :ref:`peer_state[A] <peer-state>`. It is derived
+stored in :ref:`peer_data[A] <peer-data>`. It is derived
 by the following algorithm:
 
-1. If there is no peer state, the recommendation is ``disable``.
+1. If there is no peer data, the recommendation is ``disable``.
 2. If there is no ``public_key``, the recommendation is ``disable``.
 3. If the ``public_key`` is known for some reason to be unusable for
    encryption (e.g. it is otherwise known to be revoked or expired),
@@ -475,7 +475,7 @@ Cleartext replies to encrypted mail
 
 In the common use case, a reply to an encrypted message will also be
 encrypted. Due to Autocrypt's opportunistic approach to key discovery,
-however, it is possible that the ``peer_state`` for one of
+however, it is possible that the ``peer_data`` for one of
 the recipients may be missing, or that it is present, but the
 ``keydata`` is missing, which means the reply can only be sent in the
 clear.
@@ -549,20 +549,20 @@ with more than one recipient. These headers MUST be placed in the root
 MIME part of the encrypted message payload. The encrypted payload in
 this case contains one Autocrypt-Gossip header for each recipient,
 which MUST include ``addr`` and ``keydata`` attributes with the
-relevant data from the sender's Autocrypt :ref:`peer state
-<peer-state>` about the recipient. It SHOULD NOT contain a
+relevant data from the sender's Autocrypt :ref:`peer data
+<peer-data>` about the recipient. It SHOULD NOT contain a
 ``prefer-encrypt`` attribute.
 
 To avoid leaking metadata about a third party in the clear, an
 ``Autocrypt-Gossip`` header SHOULD NOT be added outside an encrypted
 MIME part.
 
-Updating Autocrypt Peer State from Key Gossip
+Updating Autocrypt Peer Data from Key Gossip
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 An incoming message may contain one or more Autocrypt-Gossip headers
 in the encrypted payload. Each of these headers may update the
-Autocrypt peer state of the recipient indicated by its ``addr`` value,
+Autocrypt peer data of the recipient indicated by its ``addr`` value,
 in the following way:
 
 1. If the ``addr`` value does not match any recipient in the mail's
@@ -624,7 +624,7 @@ An MUA that is capable of connecting to multiple e-mail accounts
 SHOULD have a separate and distinct Autocrypt ``own_state`` for each
 e-mail account it has access to.
 
-However, a multi-account MUA MAY maintain a single ``peer_state``
+However, a multi-account MUA MAY maintain a single ``peer_data``
 table that merges information from e-mail received across all accounts
 for the sake of implementation simplicity.  While this results in some
 linkability between accounts (the effect of mails sent to one account
