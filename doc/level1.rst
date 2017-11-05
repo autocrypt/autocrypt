@@ -851,7 +851,7 @@ import it to enable Autocrypt.  If the user agrees to do so:
    key material as its own Autocrypt (``own_state`` as
    discussed in :ref:`own-state`).
 
-See :ref:`setup-key-example`.
+See :ref:`setup-message-example`.
 
 
 User Interface
@@ -978,7 +978,23 @@ Example when MUAs conflict
 
    TODO
 
-.. _setup-key-example:
+Example Setup Message User Interaction
+++++++++++++++++++++++++++++++++++++++
+
+The Setup Code shown in this example can be used with
+:ref:`setup-message-example` below.
+
+::
+
+    You'll need to use this Setup Code in your other e-mail program to
+    use the Autocrypt Setup Message:
+
+        1742-0185-6197-
+        1303-7016-8412-
+        3581-4441-0597
+
+
+.. _setup-message-example:
 
 Example Setup Message
 +++++++++++++++++++++
@@ -995,17 +1011,28 @@ Example Setup Message
     --Y6fyGi9SoGeH8WwRaEdC6bbBcYOedDzrQ
     Content-Type: text/plain
 
-    This message contains all information to transfer your Autocrypt settings along with your secret key securely from your original device.
+    This message contains all information to transfer your Autocrypt
+    settings along with your secret key securely from your original
+    device.
 
-    To set up your new device for Autocrypt, please follow the instuctions that should be presented by your new device.
+    To set up your new device for Autocrypt, please follow the
+    instuctions that should be presented by your new device.
 
-    You can keep this message and use it as a backup for your secret key. If you want to do this, you should write down the Setup Code and store it securely.
+    You can keep this message and use it as a backup for your secret
+    key. If you want to do this, you should write down the Setup Code
+    and store it securely.
     --Y6fyGi9SoGeH8WwRaEdC6bbBcYOedDzrQ
     Content-Type: application/autocrypt-setup
     Content-Disposition: attachment; filename="autocrypt-setup-message.html"
 
     <html><body>
-    <p>This is the Autocrypt setup file used to transfer settings and keys between clients. You can decrypt it using the Setup Code presented on your old device, and then import the contained key into your keyring.</p>
+    <p>
+    This is the Autocrypt setup file used to transfer settings and
+    keys between clients. You can decrypt it using the Setup Code
+    presented on your old device, and then import the contained key
+    into your keyring.
+    </p>
+
     <pre>
     -----BEGIN PGP MESSAGE-----
     Passphrase-Format: numeric9x4
@@ -1222,20 +1249,3 @@ The encrypted message part contains:
     TRzalg==
     =f96/
     -----END PGP PRIVATE KEY BLOCK-----
-
-Example Setup Message User Interaction
-++++++++++++++++++++++++++++++++++++++
-
-.. todo::
-
-   TODO
-
-.. this code decrypts the example Autocrypt Setup Message
-
-::
-
-    This is the Setup Code to decrypt your Autocrypt Setup Message:
-
-    1742-0185-6197-
-    1303-7016-8412-
-    3581-4441-0597
