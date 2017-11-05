@@ -647,39 +647,17 @@ the aliases, or MAY allow the user to configure
 likely complicate the UI.
 
 
-Onboarding
-++++++++++
-
-.. todo::
-
-   todo
-
 Avoiding MUA Conflicts
-~~~~~~~~~~~~~~~~~~~~~~~~~
+++++++++++++++++++++++
 
 If more than one Autocrypt-enabled MUA generates a key and then
-distributes it to communication peers, encrypted mail sent to the user
-is only readable by the MUA that sent the last message. This can lead
-to behavior that is unpredictable and confusing for the user.
+distributes it to communication peers, encrypted messages sent
+to the user is only readable by the MUA that sent the last message.
+This can lead to behavior that is unpredictable and confusing for
+the user.
 
-As a simple measure of mitigation, Level 1 MUAs SHOULD check before
-key generation whether there is evidence in the user's mailbox of
-other active Autocrypt MUAs. To do this, they SHOULD scan the
-user's Sent folder for mail that contains Autocrypt headers. If such
-mail exists, the MUA SHOULD warn the user and abort key generation,
-unless explicitly instructed to proceed regardless (see
-:ref:`client-conflict-example`).
-
-In cases where an Autocrypt-capable MUA is unable to identify the
-user's Sent folder, or is unable to access any pre-existing message
-archive (e.g. a POP-only MUA), the MUA MUST warn the user that
-Autocrypt should be enabled on **only one** MUA before enabling
-Autocrypt on the given account.
-
-To solve this problem in a better way, bi-directional communication
-between the user's different MUAs is required. This is possible
-e.g. via access to a shared IMAP mailbox. However, this is out of
-scope for Level 1.
+See section :ref:`getting_started` for guidance on how to detect and
+avoid such a situation.
 
 
 .. _`setup-message`:
@@ -892,6 +870,7 @@ Level 1 MUAs MUST allow the user to disable Autocrypt completely for
 each account they control.  For level 1, we expect most MUAs to have
 Autocrypt disabled by default.
 
+.. _getting_started:
 
 Helping Users get Started
 +++++++++++++++++++++++++
@@ -969,14 +948,6 @@ Example Autocrypt headers
     This is an example e-mail with Autocrypt header and RSA 3072 key
     as defined in Level 1.
 
-.. _client-conflict-example:
-
-Example when MUAs conflict
-+++++++++++++++++++++++++++++
-
-.. todo::
-
-   TODO
 
 Example Setup Message User Interaction
 ++++++++++++++++++++++++++++++++++++++
