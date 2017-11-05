@@ -5,24 +5,20 @@ Autocrypt makes it easy for people to encrypt email.  This document
 specifies the requirements for Autocrypt Level 1 capable mail apps.
 
 The design of Autocrypt Level 1 is driven by usability concerns, and
-the realities of incremental deployment.  First, an Autocrypt-capable
-client can coexist with transitional mail clients.  That is, if
-someone uses an Autocrypt-capable mail client on her Desktop, she can
-continue to use a traditional mail client on her phone; she doesn't
-need to also use an Autocrypt capable client on phone.  (In fact, only
-a single Level 1 capable mail client can be used per mail account.)
-Second, Autocrypt tries to avoid annoyances like mails that are
-unexpectedly unreadable while also allowing a sender to explicitly
-enable encryption even if the message might not be readable on all of
-a recipient's devices.
+the realities of incremental deployment.  First, a user can mix
+Autocrypt-capable clients and transitional mail clients.  That is, if
+someone uses an Autocrypt-capable mail client on her Desktop and her
+Laptop, she can continue to use a traditional mail client on her
+phone.  But, for Level 1, synchronization of multiple Autocrypt
+clients accessing a single mail account is limited.  We intend to
+improve this support in :doc:`Level 2<next-steps>`.  Second, Autocrypt
+tries to avoid annoyances like mails that are unexpectedly unreadable
+while also allowing a sender to explicitly enable encryption even if
+the message might not be readable on all of a recipient's devices.
 
 These design decisions mean that most mail will remain unencrypted.
 But, this approach simplifies implementations, which quickens the
-initial deployment, and facilitates encryption of sensitive
-information.  We intend to add support for multiple Autocrypt-capable
-clients per mail account as part of :doc:`Level 2
-support<next-steps>`, which will enable significantly more mail to be
-opportunistically encrypted.
+initial deployment, and eases encryption of sensitive information.
 
 To simplify the exposition, this text is written as if a mail app or
 Mail User Agent (MUA) only accesses a single e-mail account.
