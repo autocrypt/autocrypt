@@ -18,7 +18,7 @@ multi-device synchronization (and other features) as part of Level
 for developers to adopt it so we can drive efforts from real-life
 experiences as soon as possible.
 
-Throughout this document, we refer to a mail app or :term:`Mail User Agent (MUA)`
+Throughout this document, we refer to a mail app or Mail User Agent (:term:`MUA`)
 as though it were only capable of controlling a single e-mail account
 (see :ref:`multiaccounts` for more detail).
 
