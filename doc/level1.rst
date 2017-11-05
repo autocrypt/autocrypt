@@ -79,7 +79,7 @@ has credentials and capabilities to perform these network services:
   entire message being received, including both message headers and
   message body.
 
-- Optionally, a way to scan the user's Sent folder for mail with
+- Optionally, a way to scan the user's mailbox for mail with
   specific headers.
 
 If a particular e-mail account does not expose one of the required
