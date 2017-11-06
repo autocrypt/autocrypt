@@ -556,9 +556,9 @@ with more than one recipient. These headers MUST be placed in the root
 MIME part of the encrypted message payload. The encrypted payload in
 this case contains one Autocrypt-Gossip header for each recipient,
 which MUST include ``addr`` and ``keydata`` attributes with the
-corresponding values for the recipient identified by ``addr`` as
-stored in ``peers[addr]``.  It SHOULD NOT contain a ``prefer-encrypt``
-attribute.
+corresponding values for the recipient identified by ``gossip-addr``
+as stored in ``peers[gossip-addr]``.  It SHOULD NOT contain a
+``prefer-encrypt`` attribute.
 
 To avoid leaking metadata about a third party in the clear, an
 ``Autocrypt-Gossip`` header SHOULD NOT be added outside an encrypted
@@ -569,20 +569,21 @@ Updating Autocrypt Peer State from Key Gossip
 
 An incoming message may contain one or more Autocrypt-Gossip headers
 in the encrypted payload. Each of these headers may update the
-Autocrypt peer state of the recipient indicated by its ``addr`` value
-in the following way:
+Autocrypt peer state of the gossiped recipient identified by its
+``addr`` value in the following way:
 
 1. If the ``addr`` value does not match any recipient in the mail's
    ``To`` or ``Cc`` header, the header MUST be ignored.
 
-2. If the existing ``last_seen_autocrypt`` value is older than the
-   effective message date and the existing ``state`` is ``gossip``, or
-   the ``last_seen_autocrypt`` value is null:
+2. If ``peers[gossip-addr].last_seen_autocrypt`` is older than the
+   effective message date and ``peers[gossip-addr].state`` is
+   ``gossip``, or the ``peers[gossip-addr].last_seen_autocrypt`` value
+   is null, then update ``peers[gossip-addr]`` as follows:
 
-    - set ``keydata`` to the corresponding value of the
-      ``Autocrypt-Gossip`` header
-    - set ``last_seen`` to the effective message date
-    - set ``state`` to ``gossip``
+    - Set ``keydata`` to the corresponding value in the
+      ``Autocrypt-Gossip`` header;
+    - Set ``last_seen`` to the effective message date; and,
+    - Set ``state`` to ``gossip``.
 
 
 .. _account-management:
