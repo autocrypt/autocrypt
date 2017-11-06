@@ -474,31 +474,6 @@ should not disable encryption without communicating this to the user.
 A graceful way to handle this situation is to save the enabled state,
 and only prompt the user about the issue when they send the mail.
 
-Cleartext replies to encrypted mail
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-In the common use case, a reply to an encrypted message will also be
-encrypted. Due to Autocrypt's opportunistic approach to key discovery,
-however, it is possible that the ``peers`` entry for one of the
-recipients may be missing, or that it is present, but the ``keydata``
-is missing, which means the reply can only be sent in the clear.
-
-To avoid leaking cleartext from the original encrypted message in this
-case, the MUA MAY prepare the cleartext reply without including any
-of the typically quoted and attributed text from the previous message.
-Additionally, the MUA MAY include brief text in the message body along the
-lines of::
-
-  The message this is a reply to was sent encrypted, but this reply is
-  unencrypted because I don't yet know how to encrypt to
-  ``bob@example.com``.  If ``bob@example.com`` would reply here, my
-  future messages in this thread will be encrypted.
-
-The above recommendations are only "MAY" and not "SHOULD" or "MUST"
-because we want to accommodate a user-friendly Level 1 MUA that stays
-silent and does not impede the user's ability to reply.  Opportunistic
-encryption means we can't guarantee encryption in every case.
-
 Mail Encryption
 +++++++++++++++
 
@@ -528,6 +503,29 @@ partially composed messages to their e-mail provider (e.g., in the
 "Drafts" folder). If there is a chance that a message could be
 encrypted, the MUA SHOULD encrypt the draft only to itself before storing
 it remotely. The MUA SHOULD NOT sign drafts.
+
+
+Cleartext replies to encrypted mail
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In the common case, a reply to an encrypted message will also be
+encrypted. Due to Autocrypt's opportunistic approach to key discovery,
+however, it is possible that keys for some of the recipients may not
+be available, and, as such, a reply can only be sent in the clear.
+
+To avoid leaking cleartext from the original encrypted message in this
+case, the MUA MAY prepare the cleartext reply without including any of
+the typically quoted and attributed text from the previous message.
+Additionally, the MUA MAY include some text in the message body
+describing why the usual quoted text is missing.  An example of such
+copy can be found in :ref:`_example-cant-encrypt-reply`.
+
+The above recommendations are only "MAY" and not "SHOULD" or "MUST"
+because we want to accommodate a user-friendly Level 1 MUA that stays
+silent and does not impede the user's ability to reply.  Opportunistic
+encryption means we can't guarantee encryption in every case.
+
+.. _key-gossip:
 
 Key Gossip
 ++++++++++
@@ -943,6 +941,19 @@ Example Autocrypt headers
 
     This is an example e-mail with Autocrypt header and RSA 3072 key
     as defined in Level 1.
+
+.. _example-cant-encrypt-reply:
+
+Example Copy when a Reply can't be Encrypted
+++++++++++++++++++++++++++++++++++++++++++++
+
+::
+
+    The message this is a reply to was sent encrypted, but this reply is
+    unencrypted because I don't yet know how to encrypt to
+    ``bob@example.com``.  If ``bob@example.com`` would reply here, my
+    future messages in this thread will be encrypted.
+
 
 
 Example User Interaction for Setup Message Creation
