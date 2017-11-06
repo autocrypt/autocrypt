@@ -128,9 +128,11 @@ Accounts controlled by the MUA
 
 A Level 1 MUA maintains an internal structure ``accounts`` indexed by
 the account's :doc:`canonicalized e-mail address
-<address-canonicalization>` (``addr``).  For each account on which
-Autocrypt is enabled, ``accounts[addr]`` has the following attributes:
+<address-canonicalization>` (``addr``).  For each account controlled
+by the MUA, ``accounts[addr]`` has the following attributes:
 
+ * ``enabled``: a boolean value, indicating whether Autocrypt is
+   enabled for this account.
  * ``secret_key``: The RSA secret key material used for
    the account (see :ref:`secretkeys`).
  * ``public_key``: The OpenPGP transferable public key (:rfc:`OpenPGP
@@ -140,7 +142,7 @@ Autocrypt is enabled, ``accounts[addr]`` has the following attributes:
    preference for this account.  This is either ``mutual`` or ``nopreference``.
    This SHOULD default to ``nopreference``.
 
-If Autocrypt is enabled for a given account, the MUA SHOULD allow the
+If ``accounts[addr].enabled`` is ``true``, the MUA SHOULD allow the
 user to switch the setting for ``accounts[addr].prefer_encrypt``.
 This choice might be hidden in something like a "preferences pane".
 See :ref:`preference-ui` for a specific example of how this could
@@ -234,10 +236,12 @@ Header injection in outbound mail
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 During message composition, if the ``From:`` header of the outgoing
-e-mail (the ``from-addr``) matches an address for which the
-Autocrypt-capable MUA has secret key material
-(``accounts[from-addr].secret_key``), the MUA SHOULD include an Autocrypt
-header. This header MUST contain the corresponding public key material
+e-mail (the ``from-addr``) matches an address for which
+``accounts[from-addr].enabled`` is ``true`` and the Autocrypt-capable
+MUA has secret key material (``accounts[from-addr].secret_key``), the
+MUA SHOULD include an Autocrypt header.
+
+This header MUST contain the corresponding public key material
 (``accounts[from-addr].public_key``) as the ``keydata`` attribute, and
 ``from-addr`` as the ``addr`` attribute.  The most minimal Level 1
 compliant MUA will only include these two attributes.  If
@@ -867,8 +871,9 @@ Account Preferences
 +++++++++++++++++++
 
 Level 1 MUAs MUST allow the user to disable Autocrypt completely for
-each account they control.  For level 1, we expect most MUAs to have
-Autocrypt disabled by default.
+each account they control (that is, to set ``accounts[addr].enabled``
+to ``false``).  For level 1, we expect most MUAs to have Autocrypt
+disabled by default.
 
 .. _getting_started:
 
