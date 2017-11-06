@@ -444,18 +444,19 @@ Otherwise, the ``public_key`` is used, with the following preliminary
 recommendation:
 - If ``autocrypt_timestamp`` is more than a month older than
   ``last_seen``, the preliminary recommendation is ``discourage``.
-- If both ``peers[to-addr].prefer_encrypt`` and
-   ``accounts[from-addr].prefer_encrypt`` are ``mutual``, then the
-   preliminary recommendation is ``encrypt``.
 - Otherwise, the preliminary recommendation is ``available``.
 
-Then, the second phase computes the actual recommendation:
+The second phase turns on encryption by setting the recommendation
+to ``encrypt`` in two scenarios:
 
 - If the preliminary recommendation is either ``available`` or
   ``discourage``, and the message is composed as a reply to an
-  encrypted message, the recommendation is set to ``encrypt``.
-- Otherwise, the recommendation is set to the preliminary
-  recommendation.
+  encrypted message
+- If the preliminary recommendation is ``available`` and
+  both ``peers[to-addr].prefer_encrypt`` and
+   ``accounts[from-addr].prefer_encrypt`` are ``mutual``
+
+Otherwise, the recommendation is set to the preliminary recommendation.
 
 Recommendations for messages to multiple addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
