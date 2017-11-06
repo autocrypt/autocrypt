@@ -393,7 +393,13 @@ The Autocrypt recommendation depends on the recipient
 addresses of the draft message.  When the user changes the
 recipients, the Autocrypt recommendation may change.
 
-Autocrypt can produce four possible recommendations:
+The output of the Autocrypt recommendation algorithm has two elements:
+
+ * ``ui-recommendation``: a single state recommending the state of the
+   encryption user interface, described below.
+ * ``public_keys``: a set of keys to encrypt to (which may be empty).
+
+``ui-recommendation`` can take four possible values:
 
  * ``disable``: Disable or hide any UI that would allow the user to
    choose to encrypt the message.
@@ -416,72 +422,94 @@ Recommendations for single-recipient messages
 
 The Autocrypt recommendation for a message composed to a single
 recipient with the e-mail address ``to-addr`` depends primarily on the
-value stored in :ref:`peers[to-addr] <peers>`. It is derived using a
-two-phase algorithm.  The first phase computes the preliminary
-recommendation:
+value stored in :ref:`peers[to-addr] <peers>`.
 
-The preliminary recommendation is ``disable`` if there is no
-``peers[to-addr]``.
+``public_keys`` starts as the empty set.
 
-``public_key`` is set to ``peers[to-addr].public_key``.  If
-``public_key`` is revoked, expired, or otherwise known to be unusable
-for encryption, it is set to null.
+Determine if encryption is possible
+___________________________________
 
-``gossip_key`` is set to ``peers[to-addr].gossip_key``.  If
-``gossip_key`` is revoked, expired, or otherwise known to be unusable
-for encryption, it is set to null.
+If there is no ``peers[to-addr]``, then set ``ui-recommendation`` to
+``disable``, and terminate.
 
-If both ``public_key`` and ``gossip_key`` are null, the preliminary
-recommendation is ``disable``.
+For the purposes of the rest of this recommendation, if either
+``public_key`` or ``gossip_key`` is revoked, expired, or otherwise
+known to be unusable for encryption, then treat that key as though it
+were ``null`` (not present).
 
-Otherwise, if either ``public_key`` is null, or
-``autocrypt_timestamp`` is more than a month older than
-``gossip_key_timestamp``, the ``gossip_key`` is used with a
-preliminary recommendation of ``discourage``.
+If both ``public_key`` and ``gossip_key`` are ``null``, then set
+``ui-recommendation`` to ``disable`` and terminate.
+
+Otherwise, we derive the recommendation using a two-phase algorithm.
+The first phase computes the ``preliminary-recommendation``.
+
+Preliminary Recommendation
+__________________________
+
+If either ``public_key`` is ``null``, or ``autocrypt_timestamp`` is
+more than a month older than ``gossip_key_timestamp``, put
+``gossip_key`` into ``public_keys`` and set
+``preliminary-recommendation`` to ``discourage`` and skip to the
+:ref:`final-recommendation-phase`.
+
+Otherwise, put ``public_key`` into ``public_keys``.
+
+If ``autocrypt_timestamp`` is more than a month older than
+``last_seen``, set ``preliminary-recommendation`` to ``discourage``.
+
+Otherwise, set ``preliminary-recommendation`` to ``available``.
+
+.. _final-recommendation-phase:
 
 
-Otherwise, the ``public_key`` is used, with the following preliminary
-recommendation:
-- If ``autocrypt_timestamp`` is more than a month older than
-  ``last_seen``, the preliminary recommendation is ``discourage``.
-- Otherwise, the preliminary recommendation is ``available``.
+Deciding to Encrypt by Default
+______________________________
 
-The second phase turns on encryption by setting the recommendation
-to ``encrypt`` in two scenarios:
+The final phase turns on encryption by setting ``ui-recommendation`` to
+``encrypt`` in two scenarios:
 
-- If the preliminary recommendation is either ``available`` or
+- If ``preliminary-recommendation`` is either ``available`` or
   ``discourage``, and the message is composed as a reply to an
-  encrypted message
-- If the preliminary recommendation is ``available`` and
-  both ``peers[to-addr].prefer_encrypt`` and
-   ``accounts[from-addr].prefer_encrypt`` are ``mutual``
+  encrypted message, or
+- If the ``preliminary-recommendation`` is ``available`` and both
+  ``peers[to-addr].prefer_encrypt`` and
+  ``accounts[from-addr].prefer_encrypt`` are ``mutual``.
 
-Otherwise, the recommendation is set to the preliminary recommendation.
+Otherwise, the ``ui-recommendation`` is set to
+``preliminary-recommendation``.
 
 Recommendations for messages to multiple addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-For level 1 MUAs, the Autocrypt recommendation for a message
-composed to multiple recipients is derived from the recommendations
-for each recipient individually:
+For level 1 MUAs, the Autocrypt recommendation for a message composed
+to multiple recipients, we derive the message's ``ui-recommendation``
+for the message from the recommendations for each recipient
+individually.
 
-1. If any recipient has a recommendation of ``disable``, then the
-   message recommendation is ``disable``.
+1. If any recipient has a ``ui-recommendation`` of ``disable``, then
+   the message's ``ui-recommendation`` is ``disable``.
 2. If the message being composed is a reply to an encrypted message,
-   or if every recipient has a recommendation of ``encrypt``, then the
-   message recommendation is ``encrypt``.
-3. If any recipient has a recommendation of ``discourage``, then the
-   message recommendation is ``discourage``.
+   or if every recipient has a ``ui-recommendation`` of ``encrypt``,
+   then the message ``ui-recommendation`` is ``encrypt``.
+3. If any recipient has a ``ui-recommendation`` of ``discourage``,
+   then the message ``ui-recommendation`` is ``discourage``.
 
-Otherwise, the message recommendation is ``available``.
+Otherwise, the message ``ui-recommendation`` is ``available``.
+
+If the message ``ui-recommendation`` is ``disable``, then set
+``public_keys`` to the empty set.
+
+Otherise, set ``public_keys`` to the union of the individual
+recipients' ``public_keys`` recommendations.
 
 While composing a message, a situation might occur where the
-recommendation is ``available``, the user has explicitly enabled
-encryption, and then modifies the list of recipients in a way that
-changes the recommendation to ``disable``. When this happens, the MUA
-should not disable encryption without communicating this to the user.
-A graceful way to handle this situation is to save the enabled state,
-and only prompt the user about the issue when they send the mail.
+``ui-recommendation`` is ``available``, the user has explicitly
+enabled encryption, and then modifies the list of recipients in a way
+that changes the ``ui-recommendation`` to ``disable``. When this
+happens, the MUA should not disable encryption without communicating
+this to the user.  A graceful way to handle this situation is to save
+the enabled state, and only prompt the user about the issue when they
+send the mail.
 
 Mail Encryption
 +++++++++++++++
