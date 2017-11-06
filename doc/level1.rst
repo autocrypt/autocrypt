@@ -432,30 +432,46 @@ Recommendations for single-recipient messages
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The Autocrypt recommendation for a message composed to a single
-recipient with the e-mail address ``to-addr`` depends primarily on
-the value stored in :ref:`peers[to-addr] <peers>`. It is derived by the
-following algorithm:
+recipient with the e-mail address ``to-addr`` depends primarily on the
+value stored in :ref:`peers[to-addr] <peers>`. It is derived using a
+two-phase algorithm.  The first phase computes the preliminary
+recommendation:
 
-The recommendation is ``disable`` if there is no ``peers[to-addr]``,
-or both ``public_key`` and ``gossip_key`` are null, or otherwise known
-to be unusable for encryption, e.g. revoked or expired.
+The preliminary recommendation is ``disable`` if there is no
+``peers[to-addr]``.
+
+``public_key`` is set to ``peers[to-addr].public_key``.  If
+``public_key`` is revoked, expired, or otherwise known to be unusable
+for encryption, e.g., it is revoked or expired, it is set to null.
+
+``gossip_key`` is set to ``peers[to-addr].gossip_key``.  If
+``gossip_key`` is revoked, expired, or otherwise known to be unusable
+for encryption, e.g., it is revoked or expired, it is set to null.
+
+The preliminary recommendation is ``disable``, if both ``public_key``
+and ``gossip_key`` are null.
 
 Otherwise, if either ``public_key`` is null, or
 ``public_key_timestamp`` is more than a month older than
 ``gossip_key_timestamp``, the ``gossip_key`` is used with a
-recommendation of ``discourage``.
+preliminary recommendation of ``discourage``.
 
-Otherwise, the ``public_key`` is used, with recommendation as follows:
+
+Otherwise, the ``public_key`` is used, with the following preliminary
+recommendation:
 - If both ``prefer_encrypt`` and ``accounts[to-addr].prefer_encrypt``
-   are ``mutual``, then the recommendation is ``encrypt``.
+   are ``mutual``, then the preliminary recommendation is ``encrypt``.
 - If ``public_key_timestamp`` is more than a month older than
-  ``last_seen``, the recommendation is ``discourage``.
-- Otherwise, the recommendation is ``available``.
+  ``last_seen``, the preliminary recommendation is ``discourage``.
+- Otherwise, the preliminary recommendation is ``available``.
 
-After all of this, if the recommendation ends up as either
-``available`` or ``discourage``, and the message is composed as a
-reply to an encrypted message, the recommendation is upgraded to
-``encrypt``.
+Then, the second phase computes the actual recommendation:
+
+- If the preliminary recommendation is either ``available`` or
+  ``discourage``, and the message is composed as a reply to an
+  encrypted message, the recommendation is set to ``encrypt``.
+- Otherwise, the recommendation is set to the preliminary
+  recommendation.
 
 Recommendations for messages to multiple addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
