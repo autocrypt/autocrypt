@@ -107,13 +107,26 @@ following attributes with ``peers[addr]``:
 
 * ``last_seen``: The UTC timestamp of the most recent effective date
   (:ref:`definition <effective_date>`) of all messages that the MUA has
-  processed for this peer.
-* ``last_seen_autocrypt``: The UTC timestamp of the most recent effective
-  date of all messages with a valid Autocrypt header that the MUA has
-  processed for this peer.
-* ``public_key``: The public key of the peer.
-* ``state``: A quad-state: ``nopreference``, ``mutual``, ``reset``, or
-  ``gossip``.
+  processed from this peer.
+* ``autocrypt_timestamp``: The UTC timestamp of the most recent
+  effective date of all messages containing a valid ``Autocrypt`` header
+  that the MUA has processed from this peer.
+* ``public_key``: The value of the ``keydata`` attribute derived from
+  the most recent ``Autocrypt`` header received from the peer.
+* ``prefer_encrypt``: The ``prefer-encrypt`` value (either
+  ``nopreference`` or ``mutual``) derived from most recent ``Autocrypt``
+  header received from the peer.
+
+Autocrypt-capable MUAs that implement :ref:`Gossip <gossip>` should
+also associate the following additional attributes with
+``peers[addr]``:
+
+* ``gossip_timestamp``: the UTC timestamp of the most recent effective
+  date of all messages containing a valid ``Autocrypt-Gossip`` header
+  about the peer.
+* ``gossip_key``: the value of the ``keydata`` attribute derived from
+  the most recent message containing a valid ``Autocrypt-Gossip``
+  header about the peer.
 
 How this information is managed and used is discussed in :ref:`peer-management`.
 
@@ -298,29 +311,6 @@ state specified here, regardless of what additional state they track.
     a :rfc:`User ID <4880#section-5.11>` that matches the message's
     ``From`` address.
 
-``peers[addr].state`` semantics
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The value of the ``state`` attribute can be either:
-
-  - ``nopreference`` means the peer has not opted into mutual
-    encryption.  The MUA may or may not know a key for such a peer.
-  - ``mutual`` means we know a key for the peer, and the peer has
-    expressed agreement to encrypt by default if all parties involved
-    also agree.
-  - ``reset`` means we used to know a key for a peer, and it is still
-    available in ``keydata``, but we have more recently seen an
-    e-mail message from the peer from a non-Autocrypt-enabled MUA,
-    which suggests that encrypted mail is more likely to be unreadable
-    for them on this MUA.
-  - ``gossip`` means we have never seen a key from this peer directly,
-    but we've learned about a possible key for this peer from a third
-    party.
-
-The rough descriptions outlined above are not normative -- they're
-intended to motivate the specific rules for updating and using the
-``state`` described over the next few sections.
-
 .. _update-peers:
 
 Updating Autocrypt Peer State
@@ -359,34 +349,27 @@ Updating ``peers[from-addr]`` depends on:
 - the ``keydata`` and ``prefer-encrypt`` attributes of the single valid
   ``Autocrypt`` header (see above), if available.
 
-If the effective message date is older than the ``last_seen_autocrypt``
-value, then no changes are required, and the update process terminates.
+The update process proceeds as follows:
 
-If the Autocrypt header is unavailable, and the effective message date
-is more recent than the current value of
-``peers[from-addr].last_seen``, then ``peers[from-addr]`` should
-be updated as follows:
+1. If the message's effective date is older than the
+   ``peers[from-addr].autocrypt_timestamp`` value, then no changes are
+   required, and the update process terminates.
 
-- set ``last_seen`` to the effective message date
-- set ``state`` to ``reset``
+2. If the message's effective date is more recent than
+   ``peers[from-addr].last_seen`` then set
+   ``peers[from-addr].last_seen`` to the message's effective date.
 
-If the Autocrypt header is unavailable, no further changes
-are required and the update process terminates.
+3. If the ``Autocrypt`` header is unavailable, no further changes are
+   required and the update process terminates.
 
-At this point, the message being processed contains the most recent
-Autocrypt header, and ``peers[from-addr]`` should be updated as
-follows:
+4. Set ``peers[from-addr].autocrypt_timestamp`` to the message's
+   effective date.
 
-- set ``public_key`` to the corresponding ``keydata`` value of the Autocrypt header
-- set ``last_seen_autocrypt`` to the effective message date
+5. Set ``peers[from-addr].public_key`` to the corresponding
+   ``keydata`` value of the ``Autocrypt`` header.
 
-If the effective date of the message is more recent than or equal to
-the current ``last_seen`` value, it is also the most recent message
-overall. Additionally, update ``peers[from-addr]`` as follows:
-
-- set ``last_seen`` to the effective message date
-- set ``state`` to ``mutual`` if the Autocrypt header contained a
-  ``prefer-encrypt=mutual`` attribute, or ``nopreference`` otherwise
+6. Set ``peers[from-addr].prefer_encrypt`` to the corresponding
+   ``prefer-encrypt`` value of the ``Autocrypt`` header.
 
 .. _recommendation:
 
@@ -585,23 +568,24 @@ MIME part.
 Updating Autocrypt Peer State from Key Gossip
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-An incoming message may contain one or more Autocrypt-Gossip headers
-in the encrypted payload. Each of these headers may update the
+An incoming message may contain one or more ``Autocrypt-Gossip``
+headers in the encrypted payload. Each of these headers may update the
 Autocrypt peer state of the gossiped recipient identified by its
-``addr`` value in the following way:
+``addr`` value (referred to here as ``gossip-addr``) in the following
+way:
 
-1. If the ``addr`` value does not match any recipient in the mail's
-   ``To`` or ``Cc`` header, the header MUST be ignored.
+1. If ``gossip-addr`` does not match any recipient in the mail's
+   ``To`` or ``Cc`` header, the update process terminates (i.e.,
+   header is ignored).
 
-2. If ``peers[gossip-addr].last_seen_autocrypt`` is older than the
-   effective message date and ``peers[gossip-addr].state`` is
-   ``gossip``, or the ``peers[gossip-addr].last_seen_autocrypt`` value
-   is null, then update ``peers[gossip-addr]`` as follows:
+2. If ``peers[gossip-addr].gossip_timestamp`` is more recent than the
+   message's effective date, then the update process terminates.
 
-    - Set ``keydata`` to the corresponding value in the
-      ``Autocrypt-Gossip`` header;
-    - Set ``last_seen`` to the effective message date; and,
-    - Set ``state`` to ``gossip``.
+3. Set ``peers[gossip-addr].gossip_timestamp`` to the message's
+   effective date.
+
+4. Set ``peers[gossip-addr].gossip_key`` to the value of the
+   ``keydata`` attribute.
 
 
 .. _account-management:
