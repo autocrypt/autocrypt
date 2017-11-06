@@ -397,7 +397,7 @@ The output of the Autocrypt recommendation algorithm has two elements:
 
  * ``ui-recommendation``: a single state recommending the state of the
    encryption user interface, described below.
- * ``public_keys``: a set of keys to encrypt to (which may be empty).
+ * ``target-keys``: a map of recipient addresses to public keys.
 
 ``ui-recommendation`` can take four possible values:
 
@@ -424,8 +424,6 @@ The Autocrypt recommendation for a message composed to a single
 recipient with the e-mail address ``to-addr`` depends primarily on the
 value stored in :ref:`peers[to-addr] <peers>`.
 
-``public_keys`` starts as the empty set.
-
 Determine if encryption is possible
 ___________________________________
 
@@ -447,12 +445,12 @@ Preliminary Recommendation
 __________________________
 
 If either ``public_key`` is ``null``, or ``autocrypt_timestamp`` is
-more than a month older than ``gossip_key_timestamp``, put
-``gossip_key`` into ``public_keys`` and set
+more than a month older than ``gossip_key_timestamp``, set
+``target-keys[to-addr]`` to ``gossip_key`` and set
 ``preliminary-recommendation`` to ``discourage`` and skip to the
 :ref:`final-recommendation-phase`.
 
-Otherwise, put ``public_key`` into ``public_keys``.
+Otherwise, set ``target-keys[to-addr]`` to ``public_key``.
 
 If ``autocrypt_timestamp`` is more than a month older than
 ``last_seen``, set ``preliminary-recommendation`` to ``discourage``.
@@ -482,9 +480,14 @@ Recommendations for messages to multiple addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 For level 1 MUAs, the Autocrypt recommendation for a message composed
-to multiple recipients, we derive the message's ``ui-recommendation``
-for the message from the recommendations for each recipient
-individually.
+to multiple recipients, we derive the message's recommendation from
+the recommendations for each recipient individually.
+
+The aggregate ``target-keys`` for the message is the merge of all
+recipient ``target-keys``.
+
+The aggregate ``ui-recommendation`` for the message is derived as
+follows:
 
 1. If any recipient has a ``ui-recommendation`` of ``disable``, then
    the message's ``ui-recommendation`` is ``disable``.
@@ -495,12 +498,6 @@ individually.
    then the message ``ui-recommendation`` is ``discourage``.
 
 Otherwise, the message ``ui-recommendation`` is ``available``.
-
-If the message ``ui-recommendation`` is ``disable``, then set
-``public_keys`` to the empty set.
-
-Otherise, set ``public_keys`` to the union of the individual
-recipients' ``public_keys`` recommendations.
 
 While composing a message, a situation might occur where the
 ``ui-recommendation`` is ``available``, the user has explicitly
