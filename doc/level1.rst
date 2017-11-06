@@ -436,22 +436,26 @@ recipient with the e-mail address ``to-addr`` depends primarily on
 the value stored in :ref:`peers[to-addr] <peers>`. It is derived by the
 following algorithm:
 
-1. If there is no entry in ``peers`` for ``to-addr``, the
-   recommendation is ``disable``.
-2. If there is no ``public_key``, the recommendation is ``disable``.
-3. If the ``public_key`` is known for some reason to be unusable for
-   encryption (e.g., it is otherwise known to be revoked or expired),
-   then the recommendation is ``disable``.
-4. If the message is composed as a reply to an encrypted message, then
-   the recommendation is ``encrypt``.
-5. If both ``state`` is ``mutual`` and
-   ``accounts[to-addr].prefer_encrypt`` is ``mutual``, then the
-   recommendation is ``encrypt``.
-6. If ``state`` is ``gossip``, then the recommendation is ``discourage``.
-7. If ``state`` is ``reset`` and the ``last_seen_autocrypt`` is more
-   than one month ago, then the recommendation is ``discourage``.
+The recommendation is ``disable`` if there is no ``peers[to-addr]``,
+or both ``public_key`` and ``gossip_key`` are null, or otherwise known
+to be unusable for encryption, e.g. revoked or expired.
 
-Otherwise, the recommendation is ``available``.
+Otherwise, if either ``public_key`` is null, or
+``public_key_timestamp`` is more than a month older than
+``gossip_key_timestamp``, the ``gossip_key`` is used with a
+recommendation of ``discourage``.
+
+Otherwise, the ``public_key`` is used, with recommendation as follows:
+- If both ``prefer_encrypt`` and ``accounts[to-addr].prefer_encrypt``
+   are ``mutual``, then the recommendation is ``encrypt``.
+- If ``public_key_timestamp`` is more than a month older than
+  ``last_seen``, the recommendation is ``discourage``.
+- Otherwise, the recommendation is ``available``.
+
+After all of this, if the recommendation ends up as either
+``available`` or ``discourage``, and the message is composed as a
+reply to an encrypted message, the recommendation is upgraded to
+``encrypt``.
 
 Recommendations for messages to multiple addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
