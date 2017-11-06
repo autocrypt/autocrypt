@@ -522,7 +522,7 @@ case, the MUA MAY prepare the cleartext reply without including any of
 the typically quoted and attributed text from the previous message.
 Additionally, the MUA MAY include some text in the message body
 describing why the usual quoted text is missing.  An example of such
-copy can be found in :ref:`_example-cant-encrypt-reply`.
+copy can be found in :ref:`example-cant-encrypt-reply`.
 
 The above recommendations are only "MAY" and not "SHOULD" or "MUST"
 because we want to accommodate a user-friendly Level 1 MUA that stays
