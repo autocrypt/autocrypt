@@ -1,4 +1,4 @@
-.. image:: ./images/autocrypt_logo.png 
+.. image:: ./images/autocrypt_logo.png
 
 .. image:: ./images/autocrypt_title.png
 
@@ -9,3 +9,5 @@
 .. image:: ./images/get_it_now.png
 
 .. image:: ./images/title_image.png
+
+.. image:: ./images/autocrypt-slogan.png
