@@ -327,10 +327,10 @@ Updating Autocrypt Peer State
 +++++++++++++++++++++++++++++
 
 Incoming messages may be processed to update the ``peers`` entry for
-the sender identified by ``sender-addr``, by an MUA at receive or
-display time.
+the sender identified by ``from-addr`` as extracted from the ``From``
+header, by an MUA at receive or display time.
 
-Messages SHOULD be ignored, and ``peers[sender-addr]`` SHOULD NOT be
+Messages SHOULD be ignored, and ``peers[from-addr]`` SHOULD NOT be
 updated in the following cases:
 
   - The content-type is ``multipart/report``. In this case, it can be assumed
@@ -348,7 +348,7 @@ headers, rather than just the first one. If there is more than one
 valid header, this SHOULD be treated as an error, and all ``Autocrypt``
 headers discarded as invalid.
 
-Updating ``peers[sender-addr]`` depends on:
+Updating ``peers[from-addr]`` depends on:
 
 .. _effective_date:
 
@@ -364,7 +364,7 @@ value, then no changes are required, and the update process terminates.
 
 If the Autocrypt header is unavailable, and the effective message date
 is more recent than the current value of
-``peers[sender-addr].last_seen``, then ``peers[sender-addr]`` should
+``peers[from-addr].last_seen``, then ``peers[from-addr]`` should
 be updated as follows:
 
 - set ``last_seen`` to the effective message date
@@ -374,7 +374,7 @@ If the Autocrypt header is unavailable, no further changes
 are required and the update process terminates.
 
 At this point, the message being processed contains the most recent
-Autocrypt header, and ``peers[sender-addr]`` should be updated as
+Autocrypt header, and ``peers[from-addr]`` should be updated as
 follows:
 
 - set ``public_key`` to the corresponding ``keydata`` value of the Autocrypt header
@@ -382,7 +382,7 @@ follows:
 
 If the effective date of the message is more recent than or equal to
 the current ``last_seen`` value, it is also the most recent message
-overall. Additionally, update ``peers[sender-addr]`` as follows:
+overall. Additionally, update ``peers[from-addr]`` as follows:
 
 - set ``last_seen`` to the effective message date
 - set ``state`` to ``mutual`` if the Autocrypt header contained a
