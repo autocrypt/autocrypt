@@ -198,8 +198,8 @@ To introduce incompatible changes, future versions of Autocrypt may
 send multiple Autocrypt headers, and hide the incompatible headers
 from Level 1 MUAs by using critical attributes.  According to the
 above rules, such headers will be judged invalid, and discarded by
-level 1 clients.  Such an update to the specification will also have
-to describe how clients deal with multiple valid headers.
+level 1 MUAs.  Such an update to the specification will also have
+to describe how an updated MUA will deal with multiple valid headers.
 
 
 OpenPGP Based key data
@@ -636,7 +636,7 @@ implementation simplicity.  While this results in some linkability
 between accounts (the effect of mails sent to one account can be
 observed by activity on the other account), it provides a more uniform
 and predictable user experience.  Any linkability concerns introduced by
-Autocrypt can be mitigated by using a different client for each e-mail
+Autocrypt can be mitigated by using a different MUA for each e-mail
 account.
 
 Sometimes a user may be able to send and receive emails with multiple
