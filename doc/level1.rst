@@ -435,14 +435,14 @@ If both ``public_key`` and ``gossip_key`` are null, the preliminary
 recommendation is ``disable``.
 
 Otherwise, if either ``public_key`` is null, or
-``public_key_timestamp`` is more than a month older than
+``autocrypt_timestamp`` is more than a month older than
 ``gossip_key_timestamp``, the ``gossip_key`` is used with a
 preliminary recommendation of ``discourage``.
 
 
 Otherwise, the ``public_key`` is used, with the following preliminary
 recommendation:
-- If ``public_key_timestamp`` is more than a month older than
+- If ``autocrypt_timestamp`` is more than a month older than
   ``last_seen``, the preliminary recommendation is ``discourage``.
 - If both ``peers[to-addr].prefer_encrypt`` and
    ``accounts[from-addr].prefer_encrypt`` are ``mutual``, then the
