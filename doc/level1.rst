@@ -425,14 +425,14 @@ The preliminary recommendation is ``disable`` if there is no
 
 ``public_key`` is set to ``peers[to-addr].public_key``.  If
 ``public_key`` is revoked, expired, or otherwise known to be unusable
-for encryption, e.g., it is revoked or expired, it is set to null.
+for encryption, it is set to null.
 
 ``gossip_key`` is set to ``peers[to-addr].gossip_key``.  If
 ``gossip_key`` is revoked, expired, or otherwise known to be unusable
-for encryption, e.g., it is revoked or expired, it is set to null.
+for encryption, it is set to null.
 
-The preliminary recommendation is ``disable``, if both ``public_key``
-and ``gossip_key`` are null.
+If both ``public_key`` and ``gossip_key`` are null, the preliminary
+recommendation is ``disable``.
 
 Otherwise, if either ``public_key`` is null, or
 ``public_key_timestamp`` is more than a month older than
@@ -442,10 +442,11 @@ preliminary recommendation of ``discourage``.
 
 Otherwise, the ``public_key`` is used, with the following preliminary
 recommendation:
-- If both ``prefer_encrypt`` and ``accounts[to-addr].prefer_encrypt``
-   are ``mutual``, then the preliminary recommendation is ``encrypt``.
 - If ``public_key_timestamp`` is more than a month older than
   ``last_seen``, the preliminary recommendation is ``discourage``.
+- If both ``peers[to-addr].prefer_encrypt`` and
+   ``accounts[from-addr].prefer_encrypt`` are ``mutual``, then the
+   preliminary recommendation is ``encrypt``.
 - Otherwise, the preliminary recommendation is ``available``.
 
 Then, the second phase computes the actual recommendation:
