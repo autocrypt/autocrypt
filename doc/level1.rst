@@ -236,7 +236,7 @@ Header injection in outbound mail
 During message composition, if the ``From:`` header of the outgoing
 e-mail (the ``from-addr``) matches an address for which the
 Autocrypt-capable MUA has secret key material
-(``accounts[from-addr].secret_key``), it SHOULD include an Autocrypt
+(``accounts[from-addr].secret_key``), the MUA SHOULD include an Autocrypt
 header. This header MUST contain the corresponding public key material
 (``accounts[from-addr].public_key``) as the ``keydata`` attribute, and
 ``from-addr`` as the ``addr`` attribute.  The most minimal Level 1
@@ -330,8 +330,8 @@ Incoming messages may be processed to update the ``peers`` entry for
 the sender identified by ``from-addr`` as extracted from the ``From``
 header, by an MUA at receive or display time.
 
-Messages SHOULD be ignored, and ``peers[from-addr]`` SHOULD NOT be
-updated in the following cases:
+Messages SHOULD be ignored (i.e., ``peers[from-addr]`` SHOULD NOT be
+updated) in the following cases:
 
   - The content-type is ``multipart/report``. In this case, it can be assumed
     the message was auto-generated. This avoids triggering a ``reset``
@@ -825,9 +825,9 @@ import it to enable Autocrypt.  If the user agrees to do so:
    decryption. See :doc:`bad-import` for more explanation and an
    example.
 
- * If it decrypts, then the MUA SHOULD set
-   ``accounts[addr].secret_key`` to the secret key material (as
-   discussed in :ref:`accounts`).
+ * If it decrypts, then the MUA SHOULD update ``accounts[addr]``
+   according to the contents of the decrypted message, as discussed in
+   :ref:`accounts`.
 
 See :ref:`setup-message-example`.
 
