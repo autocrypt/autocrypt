@@ -18,10 +18,6 @@ multi-device synchronization (and other features) as part of Level
 for developers to adopt it so we can drive efforts from real-life
 experiences as soon as possible.
 
-Throughout this document, we refer to a mail app or Mail User Agent (:term:`MUA`)
-as though it were only capable of controlling a single e-mail account
-(see :ref:`multiaccounts` for more detail).
-
 .. only:: builder_html
 
    .. contents::
@@ -588,8 +584,8 @@ Autocrypt peer state of the gossiped recipient identified by its
 
 .. _account-management:
 
-Own State Management
---------------------
+Managing accounts controlled by the MUA
+---------------------------------------
 
 See :ref:`accounts` for a definition of the structure of
 information stored about the MUA's own e-mail accounts.
