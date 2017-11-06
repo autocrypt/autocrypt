@@ -10,4 +10,3 @@
 
 .. image:: ./images/title_image.png
 
-.. image:: ./images/autocrypt-slogan.png

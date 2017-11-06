@@ -300,7 +300,7 @@ latex_elements = {
 latex_documents = [
 #    (master_doc, 'autocrypt-web.tex', u'Autocrypt Website', u'autocrypt team', 'manual'),
     ('level1', 'autocrypt-spec-{}.tex'.format(specversion),
-     u'Autocrypt Specification', u'Autocrypt team, licensed CC0',
+     u'Autocrypt Level 1 Specification', u'Autocrypt team, licensed CC0',
      'howto', False),
 ]
 
@@ -321,6 +321,7 @@ latex_show_pagerefs = True
 # If true, show URL addresses after external links.
 #
 latex_show_urls = 'footnote'
+# latex_show_urls = True
 
 # Documents to append as an appendix to all manuals.
 #

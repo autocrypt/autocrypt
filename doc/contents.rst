@@ -44,7 +44,6 @@ and contributors, MUA developers and privacy enthusiasts.
 .. toctree::
    :hidden:
 
-   index
    features
    contact
    examples
