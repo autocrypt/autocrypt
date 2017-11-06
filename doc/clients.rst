@@ -1,32 +1,46 @@
-Supported Clients
-=================
+Mail apps which support Autocrypt
+================================================
 
-autocrypt is not a messenger on its own, but rather an encryption
-protocol. This means you can communicate securely with everyone else
-who has an autocrypt-enabled client, and find one which fits to your
-device.
+**Last update: Nov 5th 2017**
+
+The following Autocrypt-enabled mail apps are available
+and/or under development:
 
 DeltaChat
 ---------
 
-DeltaChat_ is an autocrypt-enabled chat client for Android. You can
-download it via F-Droid_.
+DeltaChat_ is an Autocrypt-enabled chat client for Android that uses
+E-Mail for messaging, offering a modern "Messenger" interface.
+You can download it or install it via F-Droid_ today.
 
 .. _DeltaChat: https://delta.chat
 .. _F-Droid: https://f-droid.org
 
-Enigmail
---------
+Enigmail (development version)
+------------------------------
 
 Enigmail_ is a plugin for Thunderbird_. For decades, it has been the
-first choice to use PGP encryption with E-Mail. It now supports
-autocrypt too as an easy way to encrypt seamlessly.
+first choice to use PGP encryption with E-Mail.  Enigmail has integrated
+Autocrypt support in `Enigmail nightly development branches`_ and
+aims to reach Autocrypt Level 1 compliance soon.
 
 .. _Enigmail: https://enigmail.net
 .. _Thunderbird: https://www.mozilla.org/en-US/thunderbird/
+.. _`Enigmail nightly development branches`: https://sourceforge.net/p/enigmail/source/ci/master/tree/
 
-K-9 Mail
--------
+K-9 Mail (development version)
+------------------------------
 
-K-9 Mail is for Android what Thunderbird is for Desktop PCs. It uses
-autocrypt by default. Get it here: https://k9mail.github.io/download.html
+`K-9 Mail`_ is for Android what Thunderbird is for Desktop PCs. It integrates
+Autocrypt by default in beta branches and aims to reach
+Autocrypt Level 1 compliance soon.
+
+.. _`K-9 Mail`: https://k9mail.github.io/
+
+Mailpile (release candidate)
+------------------------------
+
+Mailpile_ is a new Mail app which runs on Windows, Linux and Mac. It offers
+a modern web interface and has Autocrypt support.
+
+.. _mailpile: https://mailpile.is
