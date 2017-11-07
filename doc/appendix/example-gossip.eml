@@ -2,7 +2,7 @@ Delivered-To: <bob@autocrypt.example>
 From: Alice <alice@autocrypt.example>
 To: Bob <bob@autocrypt.example>, Carol <carol@autocrypt.example>
 Subject: an Autocrypt Gossip header example
-Autocrypt: addr=alice@autocrypt.example; keydata=
+Autocrypt: addr=alice@autocrypt.example; prefer-encrypt=mutual; keydata=
  mQGNBFn+zzUBDADBo2D+WUbm3lN1lXtQTxLhxVADIIMLK1dFUgu5w1KAMrW0x9x27cRNxzVrTfiv
  2FiwThUHZmJBFai8HtsMvn/svrCPeGPvkjTDMCWZaEEc5/g51Uyszjf6fUsGXsC9tUcva6pGHaTe
  8Iwpz5stKjRKI3U/mPdQpXmaurwzEdvlNWNi9Ao2rwWV+BK3J/98gBRFT8W6gv+T/YGXVrqXMoMM
