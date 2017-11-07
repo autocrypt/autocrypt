@@ -275,7 +275,7 @@ latex_elements = {
 
      # Additional stuff for the LaTeX preamble.
      #
-     # 'preamble': '',
+     'preamble': '\\newcommand{\\autocryptrelease}{'+specversion+'}',
 
      # Latex figure (float) alignment
      #

@@ -1,3 +1,8 @@
+.. raw:: latex
+
+   \pagestyle{plain}
+   \cfoot{Autocrypt Specification \autocryptrelease}
+
 Autocrypt Level 1: Enabling encryption, avoiding annoyances
 ===========================================================
 
