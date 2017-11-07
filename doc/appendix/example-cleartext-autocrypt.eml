@@ -1,7 +1,7 @@
 Delivered-To: <bob@autocrypt.example>
 From: Alice <alice@autocrypt.example>
 To: Bob <bob@autocrypt.example>
-Subject: an Autocrypt header exapmple using RSA 3072 key
+Subject: an Autocrypt header example using RSA 3072 key
 Autocrypt: addr=alice@autocrypt.example; keydata=
  mQGNBFn+L+YBDAC3jsOXmFKwKfUh/WxaOErSMMdL1NJzzFCDf4oo0XD5b4ldfVGP09PsNXg5bzUW
  NP1eGiINWCnQlPYmdFR+mCn/mvG50tCiZ0ij4qiFqTv4easAgKNn0dCvqoLY0tpsMLo2Kv9lM9m5
