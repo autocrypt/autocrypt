@@ -995,7 +995,10 @@ Appendix
 Example Autocrypt headers
 +++++++++++++++++++++++++
 
-.. literalinclude:: appendix/example-cleartext-autocrypt.eml
+Alice sends Bob a simple, unencrypted e-mail message that lets Bob
+write back encrypted if Bob is using an Autocrypt-enabled MUA:
+
+.. literalinclude:: appendix/example-simple-autocrypt.eml
     :language: none
 
 
@@ -1004,13 +1007,16 @@ Example Autocrypt headers
 Example Autocrypt Gossip headers
 ++++++++++++++++++++++++++++++++
 
-Alice sends an e-mail to Bob and Carol with Autocrypt Gossip headers.
+After having received messages with Autocrypt headers from both Bob
+and Carol, Alice sends an e-mail to the two of them, with Autocrypt
+Gossip headers.
 
 .. literalinclude:: appendix/example-gossip.eml
     :language: none
 
 Since Alice encrypts messages to herself, the above message can be
-decrypted by the private key from the :ref:`setup-message-example`
+decrypted by her private key as well (see the
+:ref:`setup-message-example` for access to her private key)
 
 When decrypted, the encrypted part contains:
 
@@ -1030,6 +1036,7 @@ Example Copy when a Reply can't be Encrypted
     future messages in this thread will be encrypted.
 
 
+.. _example-setup-code:
 
 Example User Interaction for Setup Message Creation
 +++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1075,10 +1082,15 @@ can display a message like the example below:
 Example Setup Message
 +++++++++++++++++++++
 
+Alice's MUA sends her a Setup Message after showing her a Setup Code
+(the code used here is the one from :ref:`example-setup-code`).  The
+generated message looks like this:
+
 .. literalinclude:: appendix/example-setup-message.eml
     :language: none
 
-The encrypted message part contains:
+When decrypted with the Setup Code, the encrypted blob at the end
+contains:
 
 .. literalinclude:: appendix/example-setup-message-cleartext.key
     :language: none
