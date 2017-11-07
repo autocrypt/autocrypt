@@ -106,16 +106,17 @@ For the peer with the address ``addr``, an MUA MUST associate the
 following attributes with ``peers[addr]``:
 
 * ``last_seen``: The UTC timestamp of the most recent effective date
-  (:ref:`definition <effective_date>`) of all messages that the MUA has
-  processed from this peer.
+  (:ref:`definition <effective_date>`) of all messages that the MUA
+  has processed from this peer.
 * ``autocrypt_timestamp``: The UTC timestamp of the most recent
-  effective date of all messages containing a valid ``Autocrypt`` header
-  that the MUA has processed from this peer.
+  effective date (the "youngest") of all messages containing a valid
+  ``Autocrypt`` header that the MUA has processed from this peer.
 * ``public_key``: The value of the ``keydata`` attribute derived from
-  the most recent ``Autocrypt`` header received from the peer.
+  the youngest ``Autocrypt`` header that has ever been seen from the
+  peer.
 * ``prefer_encrypt``: The ``prefer-encrypt`` value (either
-  ``nopreference`` or ``mutual``) derived from most recent ``Autocrypt``
-  header received from the peer.
+  ``nopreference`` or ``mutual``) derived from the youngest
+  ``Autocrypt`` header ever seen from the peer.
 
 Autocrypt-capable MUAs that implement :ref:`Gossip <gossip>` should
 also associate the following additional attributes with
