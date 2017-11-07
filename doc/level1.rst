@@ -1060,5 +1060,5 @@ Example Setup Message
 
 The encrypted message part contains:
 
-.. literalinclude:: appendix/example-setup-message-content.key
+.. literalinclude:: appendix/example-setup-message-cleartext.key
     :language: none
