@@ -402,7 +402,8 @@ The output of the Autocrypt recommendation algorithm has two elements:
 ``ui-recommendation`` can take four possible values:
 
  * ``disable``: Disable or hide any UI that would allow the user to
-   choose to encrypt the message.
+   choose to encrypt the message.  This happens iff encryption is not
+   immediately possible.
 
  * ``discourage``: Enable UI that would allow the user to choose to
    encrypt the message, but do not default to encryption. If the user
@@ -491,8 +492,7 @@ follows:
 
 1. If any recipient has a ``ui-recommendation`` of ``disable``, then
    the message's ``ui-recommendation`` is ``disable``.
-2. If the message being composed is a reply to an encrypted message,
-   or if every recipient has a ``ui-recommendation`` of ``encrypt``,
+2. If every recipient has a ``ui-recommendation`` of ``encrypt``,
    then the message ``ui-recommendation`` is ``encrypt``.
 3. If any recipient has a ``ui-recommendation`` of ``discourage``,
    then the message ``ui-recommendation`` is ``discourage``.
