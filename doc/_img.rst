@@ -10,3 +10,5 @@
 
 .. image:: ./images/title_image.png
 
+.. image:: ./images/aclogo.png
+
