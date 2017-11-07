@@ -1028,7 +1028,7 @@ When decrypted, the encrypted part contains:
 Example Copy when a Reply can't be Encrypted
 ++++++++++++++++++++++++++++++++++++++++++++
 
-::
+.. code-block:: none
 
     The message this is a reply to was sent encrypted, but this reply is
     unencrypted because I don't yet know how to encrypt to
@@ -1044,7 +1044,7 @@ Example User Interaction for Setup Message Creation
 The Setup Code shown in this example can be used with
 :ref:`setup-message-example` below.
 
-::
+.. code-block:: none
 
     You'll need to use this Setup Code in your other e-mail program to
     use the Autocrypt Setup Message:
@@ -1060,7 +1060,7 @@ Example User Interaction for Setup Message Receipt
 To initiate the import of the Autocrypt Setup Message, the MUA
 can display a message like the example below:
 
-::
+.. code-block:: none
 
     We detected a message created by one of your other email
     applications that contains the setup information for
