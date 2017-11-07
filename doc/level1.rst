@@ -446,14 +446,14 @@ Preliminary Recommendation
 __________________________
 
 If either ``public_key`` is ``null``, or ``autocrypt_timestamp`` is
-more than a month older than ``gossip_key_timestamp``, set
+more than 35 days older than ``gossip_key_timestamp``, set
 ``target-keys[to-addr]`` to ``gossip_key`` and set
 ``preliminary-recommendation`` to ``discourage`` and skip to the
 :ref:`final-recommendation-phase`.
 
 Otherwise, set ``target-keys[to-addr]`` to ``public_key``.
 
-If ``autocrypt_timestamp`` is more than a month older than
+If ``autocrypt_timestamp`` is more than 35 days older than
 ``last_seen``, set ``preliminary-recommendation`` to ``discourage``.
 
 Otherwise, set ``preliminary-recommendation`` to ``available``.

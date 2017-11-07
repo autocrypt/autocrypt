@@ -203,3 +203,19 @@ Use of a memory-hard KDF like scrypt or argon2 would be desirable in the future.
 However, at the point of this writing this is not specified in OpenPGP. It is a
 bigger concern to preserve compatibility and avoid friction with presently
 deployed OpenPGP software.
+
+Where does the "35 days" limit come from?
+-----------------------------------------
+
+The recommendation algorithm uses a duration gap of 35 days to make a
+decision in a few places.  This is an arbitrary value, which seemed
+plausible to most people who worked on the specification, based on the
+idea that for people who you want to communicate with regularly, it's
+not uncommon that the user has exchanged e-mails at least once a
+month.  It's intended to be slightly more than monthly, so that people
+who have scheduled e-mail exchanges (e.g. "please check in on the 1st
+of the month") will stay current.
+
+Future revisions to the recommendation algorithm may change this
+cutoff.  If you have evidence that there are algorithms that provide
+better results, :ref:`please share them <contact channels>`!
