@@ -164,26 +164,34 @@ The ``Autocrypt`` header has the following format::
 
     Autocrypt: addr=a@b.example.org; [prefer-encrypt=mutual;] keydata=BASE64
 
-The ``addr`` attribute is mandatory, and contains the single recipient
-address this header is valid for.  If this address differs from
-the one in the ``From`` header, the entire ``Autocrypt`` header MUST be treated
-as invalid.
+There are three defined attributes:
+
+ * The ``addr`` attribute is mandatory, and contains the single
+   recipient address this header is valid for.  If this address
+   differs from the one in the ``From`` header, the entire
+   ``Autocrypt`` header MUST be treated as invalid.
+
+   :rfc:`The Internet Message Format <5322#section-3.6.2>` documents
+   three types of originator fields: ``From``, ``Sender``, and
+   ``Reply-To``.  Autocrypt is concerned only with the ``From`` field,
+   and ignores the other originator fields.
 
 .. _prefer-encrypt:
 
-The ``prefer-encrypt`` attribute is optional and can only occur with
-the value ``mutual``.  Its presence in the ``Autocrypt`` header
-indicates an agreement to enable encryption by default with other peers who have
-the same preference.  An Autocrypt Level 1 MUA that sees the
-attribute with any other value (or that does not see the attribute at
-all) should interpret the value as ``nopreference``.
+ * The ``prefer-encrypt`` attribute is optional and can only occur
+   with the value ``mutual``.  Its presence in the ``Autocrypt``
+   header indicates an agreement to enable encryption by default with
+   other peers who have the same preference.  An Autocrypt Level 1 MUA
+   that sees the attribute with any other value (or that does not see
+   the attribute at all) should interpret the value as
+   ``nopreference``.
 
-The ``keydata`` attribute is mandatory, and contains the key data for
-the specified ``addr`` recipient address.  The value of the
-``keydata`` attribute is a Base64 representation of the binary
-:rfc:`OpenPGP "Transferable Public Key"<4880#section-11.1>`. For ease
-of parsing, the ``keydata`` attribute MUST be the last attribute in
-this header.
+ * The ``keydata`` attribute is mandatory, and contains the key data
+   for the specified ``addr`` recipient address.  The value of the
+   ``keydata`` attribute is a Base64 representation of the binary
+   :rfc:`OpenPGP "Transferable Public Key"<4880#section-11.1>`. For
+   ease of parsing, the ``keydata`` attribute MUST be the last
+   attribute in this header.
 
 Additional attributes are possible before the ``keydata``
 attribute.  If an attribute name starts with an underscore (``_``), it
