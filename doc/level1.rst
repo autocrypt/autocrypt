@@ -118,7 +118,7 @@ following attributes with ``peers[addr]``:
   ``nopreference`` or ``mutual``) derived from the youngest
   ``Autocrypt`` header ever seen from the peer.
 
-Autocrypt-capable MUAs that implement :ref:`Gossip <gossip>` should
+Autocrypt-capable MUAs that implement :ref:`Gossip <key-gossip>` should
 also associate the following additional attributes with
 ``peers[addr]``:
 
