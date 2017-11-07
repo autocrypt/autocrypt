@@ -608,6 +608,7 @@ The ``Autocrypt-Gossip`` header has the format as the ``Autocrypt``
 header (see `autocryptheaderformat`_). Its ``addr`` attribute
 indicates the recipient address this header is valid for as usual, but
 may relate to any recipient in the ``To`` or ``Cc`` header.
+See example in :ref:`autocrypt-gossip-example`
 
 Key Gossip Injection in Outbound Mail
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -995,6 +996,25 @@ Example Autocrypt headers
 +++++++++++++++++++++++++
 
 .. literalinclude:: appendix/example-cleartext-autocrypt.eml
+    :language: none
+
+
+.. _autocrypt-gossip-example:
+
+Example Autocrypt Gossip headers
+++++++++++++++++++++++++++++++++
+
+Alice sends an e-mail to Bob and Carol with Autocrypt Gossip headers.
+
+.. literalinclude:: appendix/example-gossip.eml
+    :language: none
+
+Since Alice encrypts messages to herself, the above message can be
+decrypted by the private key from the :ref:`setup-message-example`
+
+When decrypted, the encrypted part contains:
+
+.. literalinclude:: appendix/example-gossip-cleartext.eml
     :language: none
 
 .. _example-cant-encrypt-reply:
