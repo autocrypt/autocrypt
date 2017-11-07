@@ -281,6 +281,9 @@ latex_elements = {
      #
      # 'figure_align': 'htbp',
      'sphinxsetup': 'verbatimhintsturnover=true',
+
+     # the generated index was useless, hide it:
+     'printindex': '',
 }
 
 # Grouping the document tree into LaTeX files. List of tuples
