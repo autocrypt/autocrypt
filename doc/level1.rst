@@ -106,14 +106,28 @@ For the peer with the address ``addr``, an MUA MUST associate the
 following attributes with ``peers[addr]``:
 
 * ``last_seen``: The UTC timestamp of the most recent effective date
-  (:ref:`definition <effective_date>`) of all messages that the MUA has
-  processed for this peer.
-* ``last_seen_autocrypt``: The UTC timestamp of the most recent effective
-  date of all messages with a valid Autocrypt header that the MUA has
-  processed for this peer.
-* ``public_key``: The public key of the peer.
-* ``state``: A quad-state: ``nopreference``, ``mutual``, ``reset``, or
-  ``gossip``.
+  (:ref:`definition <effective_date>`) of all messages that the MUA
+  has processed from this peer.
+* ``autocrypt_timestamp``: The UTC timestamp of the most recent
+  effective date (the "youngest") of all messages containing a valid
+  ``Autocrypt`` header that the MUA has processed from this peer.
+* ``public_key``: The value of the ``keydata`` attribute derived from
+  the youngest ``Autocrypt`` header that has ever been seen from the
+  peer.
+* ``prefer_encrypt``: The ``prefer-encrypt`` value (either
+  ``nopreference`` or ``mutual``) derived from the youngest
+  ``Autocrypt`` header ever seen from the peer.
+
+Autocrypt-capable MUAs that implement :ref:`Gossip <gossip>` should
+also associate the following additional attributes with
+``peers[addr]``:
+
+* ``gossip_timestamp``: the UTC timestamp of the most recent effective
+  date of all messages containing a valid ``Autocrypt-Gossip`` header
+  about the peer.
+* ``gossip_key``: the value of the ``keydata`` attribute derived from
+  the most recent message containing a valid ``Autocrypt-Gossip``
+  header about the peer.
 
 How this information is managed and used is discussed in :ref:`peer-management`.
 
@@ -306,29 +320,6 @@ state specified here, regardless of what additional state they track.
     a :rfc:`User ID <4880#section-5.11>` that matches the message's
     ``From`` address.
 
-``peers[addr].state`` semantics
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The value of the ``state`` attribute can be either:
-
-  - ``nopreference`` means the peer has not opted into mutual
-    encryption.  The MUA may or may not know a key for such a peer.
-  - ``mutual`` means we know a key for the peer, and the peer has
-    expressed agreement to encrypt by default if all parties involved
-    also agree.
-  - ``reset`` means we used to know a key for a peer, and it is still
-    available in ``keydata``, but we have more recently seen an
-    e-mail message from the peer from a non-Autocrypt-enabled MUA,
-    which suggests that encrypted mail is more likely to be unreadable
-    for them on this MUA.
-  - ``gossip`` means we have never seen a key from this peer directly,
-    but we've learned about a possible key for this peer from a third
-    party.
-
-The rough descriptions outlined above are not normative -- they're
-intended to motivate the specific rules for updating and using the
-``state`` described over the next few sections.
-
 .. _update-peers:
 
 Updating Autocrypt Peer State
@@ -378,34 +369,27 @@ Updating ``peers[from-addr]`` depends on:
 - the ``keydata`` and ``prefer-encrypt`` attributes of the single valid
   ``Autocrypt`` header (see above), if available.
 
-If the effective message date is older than the ``last_seen_autocrypt``
-value, then no changes are required, and the update process terminates.
+The update process proceeds as follows:
 
-If the Autocrypt header is unavailable, and the effective message date
-is more recent than the current value of
-``peers[from-addr].last_seen``, then ``peers[from-addr]`` should
-be updated as follows:
+1. If the message's effective date is older than the
+   ``peers[from-addr].autocrypt_timestamp`` value, then no changes are
+   required, and the update process terminates.
 
-- set ``last_seen`` to the effective message date
-- set ``state`` to ``reset``
+2. If the message's effective date is more recent than
+   ``peers[from-addr].last_seen`` then set
+   ``peers[from-addr].last_seen`` to the message's effective date.
 
-If the Autocrypt header is unavailable, no further changes
-are required and the update process terminates.
+3. If the ``Autocrypt`` header is unavailable, no further changes are
+   required and the update process terminates.
 
-At this point, the message being processed contains the most recent
-Autocrypt header, and ``peers[from-addr]`` should be updated as
-follows:
+4. Set ``peers[from-addr].autocrypt_timestamp`` to the message's
+   effective date.
 
-- set ``public_key`` to the corresponding ``keydata`` value of the Autocrypt header
-- set ``last_seen_autocrypt`` to the effective message date
+5. Set ``peers[from-addr].public_key`` to the corresponding
+   ``keydata`` value of the ``Autocrypt`` header.
 
-If the effective date of the message is more recent than or equal to
-the current ``last_seen`` value, it is also the most recent message
-overall. Additionally, update ``peers[from-addr]`` as follows:
-
-- set ``last_seen`` to the effective message date
-- set ``state`` to ``mutual`` if the Autocrypt header contained a
-  ``prefer-encrypt=mutual`` attribute, or ``nopreference`` otherwise
+6. Set ``peers[from-addr].prefer_encrypt`` to the corresponding
+   ``prefer-encrypt`` value of the ``Autocrypt`` header.
 
 .. _recommendation:
 
@@ -429,10 +413,17 @@ The Autocrypt recommendation depends on the recipient
 addresses of the draft message.  When the user changes the
 recipients, the Autocrypt recommendation may change.
 
-Autocrypt can produce four possible recommendations:
+The output of the Autocrypt recommendation algorithm has two elements:
+
+ * ``ui-recommendation``: a single state recommending the state of the
+   encryption user interface, described below.
+ * ``target-keys``: a map of recipient addresses to public keys.
+
+``ui-recommendation`` can take four possible values:
 
  * ``disable``: Disable or hide any UI that would allow the user to
-   choose to encrypt the message.
+   choose to encrypt the message.  This happens iff encryption is not
+   immediately possible.
 
  * ``discourage``: Enable UI that would allow the user to choose to
    encrypt the message, but do not default to encryption. If the user
@@ -451,51 +442,91 @@ Recommendations for single-recipient messages
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The Autocrypt recommendation for a message composed to a single
-recipient with the e-mail address ``to-addr`` depends primarily on
-the value stored in :ref:`peers[to-addr] <peers>`. It is derived by the
-following algorithm:
+recipient with the e-mail address ``to-addr`` depends primarily on the
+value stored in :ref:`peers[to-addr] <peers>`.
 
-1. If there is no entry in ``peers`` for ``to-addr``, the
-   recommendation is ``disable``.
-2. If there is no ``public_key``, the recommendation is ``disable``.
-3. If the ``public_key`` is known for some reason to be unusable for
-   encryption (e.g., it is otherwise known to be revoked or expired),
-   then the recommendation is ``disable``.
-4. If the message is composed as a reply to an encrypted message, then
-   the recommendation is ``encrypt``.
-5. If both ``state`` is ``mutual`` and
-   ``accounts[to-addr].prefer_encrypt`` is ``mutual``, then the
-   recommendation is ``encrypt``.
-6. If ``state`` is ``gossip``, then the recommendation is ``discourage``.
-7. If ``state`` is ``reset`` and the ``last_seen_autocrypt`` is more
-   than one month ago, then the recommendation is ``discourage``.
+Determine if encryption is possible
+___________________________________
 
-Otherwise, the recommendation is ``available``.
+If there is no ``peers[to-addr]``, then set ``ui-recommendation`` to
+``disable``, and terminate.
+
+For the purposes of the rest of this recommendation, if either
+``public_key`` or ``gossip_key`` is revoked, expired, or otherwise
+known to be unusable for encryption, then treat that key as though it
+were ``null`` (not present).
+
+If both ``public_key`` and ``gossip_key`` are ``null``, then set
+``ui-recommendation`` to ``disable`` and terminate.
+
+Otherwise, we derive the recommendation using a two-phase algorithm.
+The first phase computes the ``preliminary-recommendation``.
+
+Preliminary Recommendation
+__________________________
+
+If either ``public_key`` is ``null``, or ``autocrypt_timestamp`` is
+more than 35 days older than ``gossip_key_timestamp``, set
+``target-keys[to-addr]`` to ``gossip_key`` and set
+``preliminary-recommendation`` to ``discourage`` and skip to the
+:ref:`final-recommendation-phase`.
+
+Otherwise, set ``target-keys[to-addr]`` to ``public_key``.
+
+If ``autocrypt_timestamp`` is more than 35 days older than
+``last_seen``, set ``preliminary-recommendation`` to ``discourage``.
+
+Otherwise, set ``preliminary-recommendation`` to ``available``.
+
+.. _final-recommendation-phase:
+
+
+Deciding to Encrypt by Default
+______________________________
+
+The final phase turns on encryption by setting ``ui-recommendation`` to
+``encrypt`` in two scenarios:
+
+- If ``preliminary-recommendation`` is either ``available`` or
+  ``discourage``, and the message is composed as a reply to an
+  encrypted message, or
+- If the ``preliminary-recommendation`` is ``available`` and both
+  ``peers[to-addr].prefer_encrypt`` and
+  ``accounts[from-addr].prefer_encrypt`` are ``mutual``.
+
+Otherwise, the ``ui-recommendation`` is set to
+``preliminary-recommendation``.
 
 Recommendations for messages to multiple addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-For level 1 MUAs, the Autocrypt recommendation for a message
-composed to multiple recipients is derived from the recommendations
-for each recipient individually:
+For level 1 MUAs, the Autocrypt recommendation for a message composed
+to multiple recipients, we derive the message's recommendation from
+the recommendations for each recipient individually.
 
-1. If any recipient has a recommendation of ``disable``, then the
-   message recommendation is ``disable``.
-2. If the message being composed is a reply to an encrypted message,
-   or if every recipient has a recommendation of ``encrypt``, then the
-   message recommendation is ``encrypt``.
-3. If any recipient has a recommendation of ``discourage``, then the
-   message recommendation is ``discourage``.
+The aggregate ``target-keys`` for the message is the merge of all
+recipient ``target-keys``.
 
-Otherwise, the message recommendation is ``available``.
+The aggregate ``ui-recommendation`` for the message is derived as
+follows:
+
+1. If any recipient has a ``ui-recommendation`` of ``disable``, then
+   the message's ``ui-recommendation`` is ``disable``.
+2. If every recipient has a ``ui-recommendation`` of ``encrypt``,
+   then the message ``ui-recommendation`` is ``encrypt``.
+3. If any recipient has a ``ui-recommendation`` of ``discourage``,
+   then the message ``ui-recommendation`` is ``discourage``.
+
+Otherwise, the message ``ui-recommendation`` is ``available``.
 
 While composing a message, a situation might occur where the
-recommendation is ``available``, the user has explicitly enabled
-encryption, and then modifies the list of recipients in a way that
-changes the recommendation to ``disable``. When this happens, the MUA
-should not disable encryption without communicating this to the user.
-A graceful way to handle this situation is to save the enabled state,
-and only prompt the user about the issue when they send the mail.
+``ui-recommendation`` is ``available``, the user has explicitly
+enabled encryption, and then modifies the list of recipients in a way
+that changes the ``ui-recommendation`` to ``disable``. When this
+happens, the MUA should not disable encryption without communicating
+this to the user.  A graceful way to handle this situation is to save
+the enabled state, and only prompt the user about the issue when they
+send the mail.
 
 Mail Encryption
 +++++++++++++++
@@ -584,23 +615,24 @@ MIME part.
 Updating Autocrypt Peer State from Key Gossip
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-An incoming message may contain one or more Autocrypt-Gossip headers
-in the encrypted payload. Each of these headers may update the
+An incoming message may contain one or more ``Autocrypt-Gossip``
+headers in the encrypted payload. Each of these headers may update the
 Autocrypt peer state of the gossiped recipient identified by its
-``addr`` value in the following way:
+``addr`` value (referred to here as ``gossip-addr``) in the following
+way:
 
-1. If the ``addr`` value does not match any recipient in the mail's
-   ``To`` or ``Cc`` header, the header MUST be ignored.
+1. If ``gossip-addr`` does not match any recipient in the mail's
+   ``To`` or ``Cc`` header, the update process terminates (i.e.,
+   header is ignored).
 
-2. If ``peers[gossip-addr].last_seen_autocrypt`` is older than the
-   effective message date and ``peers[gossip-addr].state`` is
-   ``gossip``, or the ``peers[gossip-addr].last_seen_autocrypt`` value
-   is null, then update ``peers[gossip-addr]`` as follows:
+2. If ``peers[gossip-addr].gossip_timestamp`` is more recent than the
+   message's effective date, then the update process terminates.
 
-    - Set ``keydata`` to the corresponding value in the
-      ``Autocrypt-Gossip`` header;
-    - Set ``last_seen`` to the effective message date; and,
-    - Set ``state`` to ``gossip``.
+3. Set ``peers[gossip-addr].gossip_timestamp`` to the message's
+   effective date.
+
+4. Set ``peers[gossip-addr].gossip_key`` to the value of the
+   ``keydata`` attribute.
 
 
 .. _account-management:
