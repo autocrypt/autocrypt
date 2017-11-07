@@ -817,12 +817,20 @@ a different Autocrypt-capable MUA in the future.
 Setup Message Import
 ~~~~~~~~~~~~~~~~~~~~
 
-An Autocrypt-capable MUA SHOULD support the ability to wait for and
-import an Autocrypt Setup Message when the user has not yet configured
-Autocrypt.  This could happen either when a user of an unconfigured
-Autocrypt MUA decides to enable Autocrypt, or the MUA could
-proactively scan the MUA's mailbox for a message that matches these
-characteristics, and it could alert the MUA if it discovers one.
+An Autocrypt-capable MUA SHOULD support the ability to find and import
+an Autocrypt Setup Message when the user has not yet configured
+Autocrypt.  An MUA could look for such a message in several ways,
+including:
+
+ * If the user decides to enable Autocrypt for an account, and
+   indicates to the MUA that an older MUA has already enabled
+   Autocrypt on that account, the new MUA could ask the user to
+   generate an Autocrypt Setup Message from the old MUA, and then wait
+   (e.g., via :rfc:`IMAP IDLE <2177>`) for such a message to arrive.
+
+ * The MUA could proactively scan the account's mailbox for a message
+   that matches these characteristics, and it could alert the user if
+   it discovers one.
 
 If the MUA finds an Autocrypt Setup Message, it should offer to
 import it to enable Autocrypt.  If the user agrees to do so:
