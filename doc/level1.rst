@@ -31,6 +31,12 @@ experiences as soon as possible.
 
    .. contents::
 
+.. raw:: latex
+
+   \newpage
+   \sphinxtableofcontents
+   \newpage
+
 Overview
 --------
 

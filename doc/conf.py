@@ -282,6 +282,9 @@ latex_elements = {
      # 'figure_align': 'htbp',
      'sphinxsetup': 'verbatimhintsturnover=true',
 
+     # we will include the table of contents explicitly
+     'tableofcontents': '',
+
      # the generated index was useless, hide it:
      'printindex': '',
 }
