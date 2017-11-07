@@ -53,7 +53,7 @@ causes a *reset*:
      user-agent of the message
 
  - OPTIONAL in the case of a **reset** AND ``counting_since`` is more
-   than a month older than ``message_date``:
+   than 35 days older than ``message_date``:
 
    - set ``autocrypt_peer_state[A].counting_since`` to ``last_seen``
    - set ``autocrypt_peer_state[A].count_have_ach`` to zero
