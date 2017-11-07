@@ -364,6 +364,17 @@ Updating ``peers[from-addr]`` depends on:
   time of the message as indicated by its ``Date`` header, or the time
   of receipt if that date is in the future or unavailable.
 
+  .. note::
+
+     A message without a ``Date`` header, or with a ``Date`` that
+     seems to be in the far future can cause problems for MUAs that
+     encounter the message repeatedly (e.g. re-delivery, subsequent
+     scans, etc). An MUA MAY decide to ignore such a message entirely
+     for the purposes of Autocrypt processing.  If an MUA is capable
+     of associating information with a recieved message, it could
+     instead save the ``effective date`` of such a message the first
+     time it sees it to avoid accidental re-processing.
+
 - the ``keydata`` and ``prefer-encrypt`` attributes of the single valid
   ``Autocrypt`` header (see above), if available.
 
