@@ -338,6 +338,8 @@ updated) in the following cases:
 
   - There is more than one address in the ``From`` header.
 
+.. _spam-filters:
+
   - The MUA believes the message to be spam. If the user marks the
     message as not being spam the message MAY then be processed for
     ``Autocrypt`` headers.
