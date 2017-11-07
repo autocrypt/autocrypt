@@ -608,6 +608,7 @@ The ``Autocrypt-Gossip`` header has the format as the ``Autocrypt``
 header (see `autocryptheaderformat`_). Its ``addr`` attribute
 indicates the recipient address this header is valid for as usual, but
 may relate to any recipient in the ``To`` or ``Cc`` header.
+See example in :ref:`autocrypt-gossip-example`
 
 Key Gossip Injection in Outbound Mail
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -999,18 +1000,39 @@ Example Autocrypt headers
     Delivered-To: <bob@autocrypt.example>
     From: Alice <alice@autocrypt.example>
     To: Bob <bob@autocrypt.example>
-    Subject: an Autocrypt header exapmple using RSA 3072 key
+    Subject: an Autocrypt header example using RSA 3072 key
     Autocrypt: addr=alice@autocrypt.example; keydata=
-     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
+    mQGNBFn+zzUBDADBo2D+WUbm3lN1lXtQTxLhxVADIIMLK1dFUgu5w1KAMrW0x9x27cRNxzVrTfiv
+    2FiwThUHZmJBFai8HtsMvn/svrCPeGPvkjTDMCWZaEEc5/g51Uyszjf6fUsGXsC9tUcva6pGHaTe
+    8Iwpz5stKjRKI3U/mPdQpXmaurwzEdvlNWNi9Ao2rwWV+BK3J/98gBRFT8W6gv+T/YGXVrqXMoMM
+    KLTFze2uyO0ExJkhI64upJzD0HUbGjElYdeSWz7lYhQ2y5cmnWPfrnOxiOCVyKrgBulksda5SIjE
+    qCJCVYprX/Wvh5feRXYftWVQUMeo6moNOhTM9X+zQJPWWuWivOJpamIuUCziEycX8RtRo0yAOPwc
+    /vIppoxAMusQCVn15YwVECngzXUi3EB72wXJ4411VfzPCSlgVNZV7Yqx1lW4PMRcFB2oblO25rk3
+    GDlmqEVcG1Hh4FtEBkmwVjiv4duN0E33r2Yf8OsFAkKnRCRllYn8409DaJGou41hEV+LAsUAEQEA
+    AbQyYTFlYmQ2OGQtOGM3Ny00NWI4LWIwMzMtOGNhYzNmN2QyMDZkQGF1dG9jcnlwdC5vcmeJAc4E
+    EwEIADgWIQTmBGjORNd8P86f0HJx28Vlf95lpwUCWf7PNQIbAwULCQgHAgYVCAkKCwIEFgIDAQIe
+    AQIXgAAKCRBx28Vlf95lp3C/C/9tthB5Q6oyyjERPZmRY3V8n60wd0h35uLqQfcb51UYKZ3j+61n
+    ckz2iB9LrRxY9Q31WozMqza+Jze4/g/VYHLlS7Zg0M3pLKzbSEyDvZVT523BVFsCQwjkq679JGZ/
+    xPzJOPab1udXFsKPEfNvzKgK+x0a4Q8b03SemL5mmGPBrnuCza/nFhevUrQbbtuUzhBnMFBsPKvz
+    WUTKHEgIDLqz+8auPOQZSbF2D/1BEvtbobdgQi+YJLaj77/pURR1kp7su51IffTs0qgMMJh8jwQY
+    lMQMhozy43eqT1y9QE+DH9RBAYpcRCmTcBE5Z8apnWpH/axfCDjboWwD62gN0dawc7WEQ+rdgu8W
+    Tocoo4A6iyCk6Xs59mOGE0gsCdZvzKruJOYqvERzeDibDc3hXDjOE82okBjQhsOVCK3a7uyAIZnc
+    z9Kovi0CkQ9d3EuG8297HSf1/PupsiFgHBsJzmZ549+ZHLXlZ5ss4aj9Hpe7bCk8oUUL+A61+nNY
+    VsVDSO25AY0EWf7PNQEMANI3/DkEjghl0SgsbzqHaUAohh+GSMXUD7dQn28ZGxR/2Y5wu7O5MdkP
+    MKIrsyQowSeGn18rnM1PxnRGOrX+QnVZTdk73VeMID6nM1TTfv5gmkjcb6NphGPeOTZyJIbjgQxE
+    z2LUbhFLseRS/6COF5q6Tj+TJFSPbDs5kVm8LqAra2vdvdpxV69WP2FfzwHIKTzxEwnDKc3rp7yE
+    I52qz8xMTCO+IkBIc9rwdj7TqJxMOTZQdfpY/ltiGwg3lCGYaHuejJzDQlU/X6OCEq/WT7/UVqNw
+    ZkrsT4uG9BFGW+WOXuOpgA4v0YQ62XQAotVNXUY10XFrSb6DTr6vYjd0Lk/z7icAX5uzjlfJN3TV
+    qJxS0pDWtfYD52B936+mizGR+97uyqEBVNQKww1pvKdZDruiR43O0k63TMO/4cAhXfw7q91/RMGg
+    TJX2UC/BGMiePziboP+GHX87hRmAvFCRjQc0KFyxJGbNKID3Kn/RhUrePCAVWI34lSQ0Do5qLlRn
+    9QARAQABiQG2BBgBCAAgFiEE5gRozkTXfD/On9BycdvFZX/eZacFAln+zzUCGwwACgkQcdvFZX/e
+    ZaeaIwv/WR2LYKlPXe/1sMKfh+iSYeJjvqx15i4OaLumont+btZmpyYDU8sOaMB12oBgQ3sNYaQp
+    fkTk/QNw3lbuiROPJeANQzC7Ckj3SDBFoMXyqxmnzhH0P1qvT90VOB061P1aHg7usuU4+MuvLKrg
+    vaLtzK4xuiHIzpkTCvtcyNmiS5Qi2guPV32UQ6HccSIEaZO5w+z6a/V0JZ19lVwOnOatUp4DsDHo
+    4KfcUKpNUKoUGgkOhLP7DmsqdlnQoKCw4PxnSsg7H5imHKF1Xo/8nh0G5Wl5kpJendiI1ZGy/yES
+    jN9i1kKSqL4X+R4PkT9foAootoK3TrLbcyHuxFj5umcUuqqGfsvjhgC/ZIyvvoRf4X0Bnn1h9hpo
+    6ZvBoPDM5lJxtUL64Zx5HXLd6CQXGfZfZVeM+ODqQyITGQT+p7uMDiZF42DKiTyJjJHABgiV+J16
+    IM4woaGfCwAU+0Vg+JDuf7Ec8iKx5UNDI18PJTTzGVp65Gvz2Mq/CHT/peFNHNqW
     Date: Sat, 17 Dec 2016 10:07:48 +0100
     Message-ID: <rsa-3072@autocrypt.example>
     MIME-Version: 1.0
@@ -1031,6 +1053,260 @@ Example Copy when a Reply can't be Encrypted
     ``bob@example.com``.  If ``bob@example.com`` would reply here, my
     future messages in this thread will be encrypted.
 
+
+.. _autocrypt-gossip-example:
+
+Example Autocrypt Gossip headers
+++++++++++++++++++++++++++++++++++
+
+Alice send an e-mail to Bob and Carol with Autocrypt Gossip headers.
+
+::
+
+    Delivered-To: <bob@autocrypt.example>
+    From: Alice <alice@autocrypt.example>
+    To: Bob <bob@autocrypt.example>, Carol <carol@autocrypt.example>
+    Subject: an Autocrypt Gossip header example
+    Autocrypt: addr=alice@autocrypt.example; keydata=
+     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
+    Date: Sat, 17 Dec 2016 10:07:48 +0100
+    Message-ID: <gossip-example@autocrypt.example>
+    MIME-Version: 1.0
+    Content-Type: multipart/encrypted;
+     protocol="application/pgp-encrypted";
+     boundary="PLdq3hBodDceBdiavo4rbQeh0u8JfdUHL"
+
+    This is an OpenPGP/MIME encrypted message (RFC 4880 and 3156)
+    --PLdq3hBodDceBdiavo4rbQeh0u8JfdUHL
+    Content-Type: application/pgp-encrypted
+    Content-Description: PGP/MIME version identification
+
+    Version: 1
+
+    --PLdq3hBodDceBdiavo4rbQeh0u8JfdUHL
+    Content-Type: application/octet-stream; name="encrypted.asc"
+    Content-Description: OpenPGP encrypted message
+    Content-Disposition: inline; filename="encrypted.asc"
+
+    -----BEGIN PGP MESSAGE-----
+
+    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
+    OOc1xLdO
+    =ZSB8
+    -----END PGP MESSAGE-----
+
+    --PLdq3hBodDceBdiavo4rbQeh0u8JfdUHL--
+
+
+Bob private key can be obtained from the :ref:`setup-message-example`
+The encrypted part contains::
+
+    Autocrypt-Gossip: addr=bob@autocrypt.example; keydata=
+     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
+     HEKkjHSpQxkfEPkseZjo0OgIENa4tSxr5g==
+    Autocrypt-Gossip: addr=carol@autocrypt.example; keydata=
+     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
+     n6e7H32J44kfrrbK0yZTN7pf+q70gt9VV6gC
+    Content-Type: text/plain
+
+    Hi Bob, hi Carol,
+
+    This is an example message with Autocrypt Gossip headers.
+
+    Regards,
+    Alice
 
 
 Example User Interaction for Setup Message Creation
