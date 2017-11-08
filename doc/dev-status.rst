@@ -30,6 +30,8 @@ Last updated: ``2017-11-03``
 |                                      |        |        |        |        |              |        |        |        |          |
 |`mailpile`_                           |        |        |        |        |              |        |        |        |          |
 +--------------------------------------+--------+--------+--------+--------+--------------+--------+--------+--------+----------+
+|`gmime`_                              |master  |N/A     |N/A     |n       |N/A           |N/A     |n       |n       |y         |
++--------------------------------------+--------+--------+--------+--------+--------------+--------+--------+--------+----------+
 
 Logos are copyright their respective owners.
 
@@ -48,6 +50,7 @@ Legend:
 .. _py-autocrypt: https://py-autocrypt.readthedocs.io/
 .. _notmuch: https://notmuchmail.org/
 .. _mailpile: https://www.mailpile.is/
+.. _gmime: https://github.com/jstedfast/gmime/
 
 For developers
 --------------
