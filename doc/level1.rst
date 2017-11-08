@@ -417,10 +417,10 @@ Autocrypt recommendation.
 
 An Autocrypt-capable MUA may have other means for making this
 decision outside of Autocrypt. However, ignoring the recommendation
-algorithm may lead to unexpected unreadable mail which leads to
-user frustration.  In particular, encrypting by default may lead
-to users disabling encryption support and thus lowering the
-the overall amount of encrypted e-mail.
+algorithm may lead to an increase in unexpected unreadable mail which
+frustrates users.  In particular, simply encrypting when technically possible
+may lead to users disabling encryption support and thus lowering the overall
+amount of encrypted e-mail.
 
 The Autocrypt recommendation depends on the recipient
 addresses of the draft message.  When the user changes the
