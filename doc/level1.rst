@@ -608,6 +608,7 @@ The ``Autocrypt-Gossip`` header has the format as the ``Autocrypt``
 header (see `autocryptheaderformat`_). Its ``addr`` attribute
 indicates the recipient address this header is valid for as usual, but
 may relate to any recipient in the ``To`` or ``Cc`` header.
+See example in :ref:`autocrypt-gossip-example`
 
 Key Gossip Injection in Outbound Mail
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -994,7 +995,32 @@ Appendix
 Example Autocrypt headers
 +++++++++++++++++++++++++
 
-.. literalinclude:: appendix/example-cleartext-autocrypt.eml
+Alice sends Bob a simple, unencrypted e-mail message that lets Bob
+write back encrypted if Bob is using an Autocrypt-enabled MUA:
+
+.. literalinclude:: appendix/example-simple-autocrypt.eml
+    :language: none
+
+
+.. _autocrypt-gossip-example:
+
+Example Autocrypt Gossip headers
+++++++++++++++++++++++++++++++++
+
+After having received messages with Autocrypt headers from both Bob
+and Carol, Alice sends an e-mail to the two of them, with Autocrypt
+Gossip headers.
+
+.. literalinclude:: appendix/example-gossip.eml
+    :language: none
+
+Since Alice encrypts messages to herself, the above message can be
+decrypted by her private key as well (see the
+:ref:`setup-message-example` for access to her private key)
+
+When decrypted, the encrypted part contains:
+
+.. literalinclude:: appendix/example-gossip-cleartext.eml
     :language: none
 
 .. _example-cant-encrypt-reply:
@@ -1002,7 +1028,7 @@ Example Autocrypt headers
 Example Copy when a Reply can't be Encrypted
 ++++++++++++++++++++++++++++++++++++++++++++
 
-::
+.. code-block:: none
 
     The message this is a reply to was sent encrypted, but this reply is
     unencrypted because I don't yet know how to encrypt to
@@ -1010,6 +1036,7 @@ Example Copy when a Reply can't be Encrypted
     future messages in this thread will be encrypted.
 
 
+.. _example-setup-code:
 
 Example User Interaction for Setup Message Creation
 +++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1017,7 +1044,7 @@ Example User Interaction for Setup Message Creation
 The Setup Code shown in this example can be used with
 :ref:`setup-message-example` below.
 
-::
+.. code-block:: none
 
     You'll need to use this Setup Code in your other e-mail program to
     use the Autocrypt Setup Message:
@@ -1033,7 +1060,7 @@ Example User Interaction for Setup Message Receipt
 To initiate the import of the Autocrypt Setup Message, the MUA
 can display a message like the example below:
 
-::
+.. code-block:: none
 
     We detected a message created by one of your other email
     applications that contains the setup information for
@@ -1055,10 +1082,15 @@ can display a message like the example below:
 Example Setup Message
 +++++++++++++++++++++
 
+Alice's MUA sends her a Setup Message after showing her a Setup Code
+(the code used here is the one from :ref:`example-setup-code`).  The
+generated message looks like this:
+
 .. literalinclude:: appendix/example-setup-message.eml
     :language: none
 
-The encrypted message part contains:
+When decrypted with the Setup Code, the encrypted blob at the end
+contains:
 
-.. literalinclude:: appendix/example-setup-message-content.key
+.. literalinclude:: appendix/example-setup-message-cleartext.key
     :language: none
