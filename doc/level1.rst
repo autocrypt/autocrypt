@@ -412,15 +412,15 @@ Provide a recommendation for message encryption
 On message composition, an Autocrypt-capable MUA
 can decide whether to try to encrypt the new e-mail
 message.  Autocrypt provides a recommendation for the MUA.
+All Autocrypt-capable MUAs should be able to calculate the same
+Autocrypt recommendation.
 
-Any Autocrypt-capable MUA may have other means for making this
-decision outside of Autocrypt (see :doc:`other-crypto-interop`).
-Autocrypt provides a recommendation, but there is no
-requirement for Autocrypt-capable MUAs to follow this
-recommendation.
-
-That said, all Autocrypt-capable MUAs should be able to calculate
-the same Autocrypt recommendation.
+An Autocrypt-capable MUA may have other means for making this
+decision outside of Autocrypt. However, ignoring the recommendation
+algorithm may lead to an increase in unexpected unreadable mail which
+frustrates users.  In particular, simply encrypting when technically possible
+may lead to users disabling encryption support and thus lowering the overall
+amount of encrypted e-mail.
 
 The Autocrypt recommendation depends on the recipient
 addresses of the draft message.  When the user changes the
