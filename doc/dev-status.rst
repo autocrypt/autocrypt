@@ -42,9 +42,9 @@ Legend:
 .. [1] require passphrase
 .. [2] always send
 
-.. _delta.chat: https://delta.chat
+.. _delta.chat: https://delta.chat/
 .. _K-9 Mail: https://k9mail.github.io/
-.. _Enigmail: https://www.enigmail.net
+.. _Enigmail: https://www.enigmail.net/
 .. _py-autocrypt: https://py-autocrypt.readthedocs.io/
 .. _notmuch: https://notmuchmail.org/
 .. _mailpile: https://www.mailpile.is/
