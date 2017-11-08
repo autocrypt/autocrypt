@@ -19,10 +19,11 @@ You can download it or install it via F-Droid_ today.
 Enigmail (development version)
 ------------------------------
 
-Enigmail_ is a plugin for Thunderbird_. For decades, it has been the
-first choice to use PGP encryption with E-Mail.  Enigmail has integrated
-Autocrypt support in `Enigmail nightly development branches`_ and
-aims to reach Autocrypt Level 1 compliance soon.
+Enigmail_ is a plugin for Thunderbird_. For years, it has been the
+first choice to use OpenPGP encryption with E-Mail. Enigmail has 
+integrated Autocrypt support in `Enigmail nightly development 
+branches`_ and aims to reach Autocrypt Level 1 compliance with the
+next major release scheduled for Q1/2018.
 
 .. _Enigmail: https://enigmail.net
 .. _Thunderbird: https://www.mozilla.org/en-US/thunderbird/
