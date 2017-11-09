@@ -413,18 +413,34 @@ On message composition, an Autocrypt-capable MUA
 can decide whether to try to encrypt the new e-mail
 message.  Autocrypt provides a recommendation for the MUA.
 
-Any Autocrypt-capable MUA may have other means for making this
-decision outside of Autocrypt (see :doc:`other-crypto-interop`).
-Autocrypt provides a recommendation, but there is no
-requirement for Autocrypt-capable MUAs to follow this
-recommendation.
+All Autocrypt-capable MUAs should be able to calculate the same
+Autocrypt recommendation.
 
-That said, all Autocrypt-capable MUAs should be able to calculate
-the same Autocrypt recommendation.
+This recommendation algorithm provides sensible guidance that avoids
+many common problems, and Autocrypt-capable MUAs SHOULD follow the
+recommendation.  An implementation that deviates from the
+recommendation should do so on the basis of specific external evidence
+or knowledge, while carefully considering the impact of any variation,
+including:
 
-The Autocrypt recommendation depends on the recipient
-addresses of the draft message.  When the user changes the
-recipients, the Autocrypt recommendation may change.
+ * does it increase the chance of producing unexpectedly unreadable
+   mail (for either the sender or the recipient)?
+ * does it leak previously encrypted content in the clear?
+ * does it force the user to confront a choice they do not have the
+   information or knowledge to make safely?
+
+If an implementation deviates from the Autocrypt recommendation in a
+meaningful and useful way, the implementer should describe the
+variation publicly so it can be considered for future revisions of
+this specification.
+
+Recommendation structure
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+The Autocrypt recommendation depends on the recipient addresses of the
+draft message, and on whether or not the message is a reply to an
+encrypted message.  When the user changes the recipients during
+composition, the Autocrypt recommendation may change.
 
 The output of the Autocrypt recommendation algorithm has two elements:
 
