@@ -31,13 +31,15 @@ future specifications. We share and support :rfc:`the new perspective
 stated in RFC7435 ("Opportunistic Security: Some Protection Most of the
 Time") <7435#section-1.2>`.
 
-For ease of implementation and deployment, Level 1 focuses on the use
-of Autocrypt on a single device. It also defines an initial mechanism for
-sharing secret keys between mail apps of a single user. We aim to improve the
-usability of secret key sharing in subsequent Autocrypt specifications.
+For ease of implementation and deployment, Level 1 focuses on the use of
+Autocrypt on a single device. Users get basic support for transfering
+secret keys between Autocrypt-capable mail apps.  They need to enter a
+long number for securing the transfer, technically realized through
+sending and receiving an e-mail message. We aim to improve the usability
+around secret key sharing in subsequent Autocrypt specifications.
 
 We designed Level 1 to be relatively easy for developers to adopt. There is
-detailed guidance on the protocol, internal state and usability issues.
+detailed guidance on protocol, internal state and usability issues.
 We have a good track record of supporting new implementers. Please
 don't hesitate to ask back and send comments.
 
