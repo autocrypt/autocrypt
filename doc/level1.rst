@@ -8,16 +8,15 @@ Autocrypt Level 1: Enabling encryption, avoiding annoyances
 
 Autocrypt aims to incrementally replace cleartext e-mail with end-to-end
 encrypted e-mail. The Level 1 specification makes it easy for users to
-encrypt by adding neccessary cryptographic information to e-mail messages.
-There are no changes required from e-mail providers and there are no
-dependencies on key servers. The spec describes the basic capabilities
-required for a mail app to be Autocrypt-capable at Level 1, allowing it
-to exchange end-to-end encrypted e-mails with other Autocrypt-capable
-mail apps.
+encrypt.  There are no changes required from e-mail providers and there
+are no dependencies on key servers. The spec describes the basic
+capabilities required for a mail app to be Autocrypt-capable at Level 1,
+allowing it to exchange end-to-end encrypted e-mails with other
+Autocrypt-capable mail apps.
 
 This specification is the result of maybe 2000 hours of talking and
 coding iterations during 2017. Around 20 people and many more users and
-trainers participated in Autocrypt sessions.  The majority of these
+trainers participated in Autocrypt sessions. The majority of these
 participants have engaged with the e-mail encryption space for a
 long time. There was overwhelming agreement that fresh approaches focusing
 on usability concerns are needed.
@@ -25,8 +24,8 @@ on usability concerns are needed.
 Autocrypt aims to sustainably grow the overall percentage of end-to-end
 encrypted messages relayed via the e-email provider network. This
 differs from the focus on maximizing the security of an individual mail
-communication.  Another major difference in approach is that Autocrypt Level 1
-only defends against passive data collection.  Protection against active
+communication. Another major difference in approach is that Autocrypt Level 1
+only defends against passive data collection. Protection against active
 adversaries (those which modify messages in transit) is the aim of
 future specifications. We share and support :rfc:`the new perspective
 stated in RFC7435 ("Opportunistic Security: Some Protection Most of the
@@ -39,7 +38,7 @@ usability of secret key sharing in subsequent Autocrypt specifications.
 
 We designed Level 1 to be relatively easy for developers to adopt. There is
 detailed guidance on the protocol, internal state and usability issues.
-We have a good track record of supporting new implementers.  Please
+We have a good track record of supporting new implementers. Please
 don't hesitate to ask back and send comments.
 
 .. only:: builder_html
