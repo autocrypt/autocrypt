@@ -1062,8 +1062,8 @@ The Setup Code shown in this example can be used with
 
 .. code-block:: none
 
-    You'll need to use this Setup Code in your other e-mail program to
-    use the Autocrypt Setup Message:
+    You'll need to use this Setup Code in your other e-mail app to use
+    the Autocrypt Setup Message:
 
         1742-0185-6197-
         1303-7016-8412-
@@ -1078,13 +1078,13 @@ can display a message like the example below:
 
 .. code-block:: none
 
-    We detected a message created by one of your other email
-    applications that contains the setup information for
-    Autocrypt. By importing these settings, you can apply
-    the same settings in (your application).
+    ExampleMail has detected an Autocrypt Setup Message created by one
+    of the other apps you use to access "alice@autocrypt.example".  By
+    importing the settings from this message, you can start using
+    Autocrypt here in ExampleMail too!
 
-    Please enter the Setup Code displayed by your other email
-    application to proceed:
+    Please enter the Setup Code displayed by your other e-mail app to
+    proceed:
 
                      17__ - ____ - ____ -
                      ____ - ____ - ____ -
