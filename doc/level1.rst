@@ -8,7 +8,7 @@ Autocrypt Level 1: Enabling encryption, avoiding annoyances
 
 Autocrypt aims to incrementally replace cleartext e-mail with end-to-end
 encrypted e-mail. The Level 1 specification makes it easy for users to
-encrypt.  There are no changes required from e-mail providers and there
+encrypt. There are no changes required from e-mail providers and there
 are no dependencies on key servers. The spec describes the basic
 capabilities required for a mail app to be Autocrypt-capable at Level 1,
 allowing it to exchange end-to-end encrypted e-mails with other
@@ -33,7 +33,7 @@ Time") <7435#section-1.2>`.
 
 For ease of implementation and deployment, Level 1 focuses on the use of
 Autocrypt on a single device. Users get basic support for transfering
-secret keys between Autocrypt-capable mail apps.  They need to enter a
+secret keys between Autocrypt-capable mail apps. They need to enter a
 long number for securing the transfer, technically realized through
 sending and receiving an e-mail message. We aim to improve the usability
 around secret key sharing in subsequent Autocrypt specifications.
