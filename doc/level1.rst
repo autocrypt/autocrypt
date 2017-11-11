@@ -6,9 +6,6 @@
 Autocrypt Level 1: Enabling encryption, avoiding annoyances
 ===========================================================
 
-Introduction and general design decisions
------------------------------------------
-
 This specification is the result of maybe 2000 hours of talking, testing and
 coding iterations during 2017. Around 20 developers and many more users and
 trainers participated overall in Autocrypt sessions. The majority of these
@@ -20,11 +17,12 @@ Autocrypt aims to incrementally replace cleartext e-mail with end-to-end
 encrypted e-mail. It aims to sustainably grow the overall percentage of
 end-to-end encrypted messages relayed via the e-mail provider network.
 This differs from the traditional focus on maximizing the security of an
-individual mail communication. **Sometimes Autocrypt even recommends to
+individual mail communication. **Sometimes Autocrypt recommends to
 send cleartext mail even though encryption would be technically
 possible.** This is because of well-known annoyances around "i can't
-read your encrypted mail" situations. Autocrypt is opportunistic
-and tries to stay out of the way of users.
+read your encrypted mail" situations. Autocrypt operates opportunistically
+and tries to stay out of the way of users who want to, first of all,
+communicate.
 
 Another difference to traditional approaches is that Autocrypt Level 1
 only defends against passive data collection. Protection against active
