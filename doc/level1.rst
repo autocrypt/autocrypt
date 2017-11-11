@@ -536,8 +536,9 @@ the recommendations for each recipient individually.
 The aggregate ``target-keys`` for the message is the merge of all
 recipient ``target-keys``.
 
-The aggregate ``ui-recommendation`` for the message is derived as
-follows:
+The aggregate ``ui-recommendation`` for the message is derived in the
+following way (the earliest matching rule encountered below takes
+precedence over later rules):
 
 1. If any recipient has a ``ui-recommendation`` of ``disable``, then
    the message's ``ui-recommendation`` is ``disable``.
