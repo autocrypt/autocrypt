@@ -285,12 +285,12 @@ If the ``From`` address changes during message composition (e.g., if
 the user selects a different outbound identity), then the MUA MUST
 change the ``Autocrypt`` header accordingly.
 
-An MUA SHOULD send out the same ``keydata`` value in all messages from
-a given outbound identity, irrespective of the message's recipients.
-If a new OpenPGP certificate is generated (e.g., if the user has a new
-key, or updates some OpenPGP metadata), then all subsequent outbound
-Autocrypt headers SHOULD use the new certificate for the ``keydata``
-attribute.
+An MUA SHOULD send out the same ``Autocrypt:`` header in all messages
+from a given outbound identity.  An MUA SHOULD NOT vary the header
+based on the message's recipients. If (for whatever reason) the MUA
+needs to update (or discovers an update of) the user's ``keydata`` at
+some point, the MUA SHOULD send the updated ``keydata`` in all
+subsequent ``Autocrypt`` headers.
 
 See :ref:`example-headers` for examples of outbound headers and
 the following sections for header format definitions and parsing.
