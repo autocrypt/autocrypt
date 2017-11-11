@@ -39,7 +39,7 @@ sending and receiving an e-mail message. We aim to improve the usability
 around secret key sharing in subsequent Autocrypt specifications.
 
 We designed Level 1 to be relatively easy for developers to adopt. There is
-detailed guidance on protocol, internal state and usability issues.
+detailed guidance on protocol, internal states and user interface concerns.
 We have a good track record of supporting new implementers. Please
 don't hesitate to ask back and send comments.
 
