@@ -275,7 +275,10 @@ latex_elements = {
 
      # Additional stuff for the LaTeX preamble.
      #
-     'preamble': '\\newcommand{\\autocryptrelease}{'+specversion+'}',
+     'preamble': '''
+\\newcommand{\\autocryptrelease}{'+specversion+'}
+\\setcounter{secnumdepth}{3}
+''',
 
      # Latex figure (float) alignment
      #
