@@ -646,27 +646,26 @@ headers for each recipient . This does not include BCC
 recipients, which by definition must not be revealed to other
 recipients.
 
+An Autocrypt MUA MAY include ``Autocrypt-Gossip`` headers in messages
+with more than one recipient. The header has the same format as
+the ``Autocrypt`` header (see `autocryptheaderformat`_ and see example
+for a gossip header in :ref:`autocrypt-gossip-example`).
 
 .. _`gossip-injection`:
 
 Key Gossip Injection in Outbound Mail
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-An Autocrypt MUA MAY include ``Autocrypt-Gossip`` headers in messages
-with more than one recipient.  The header has the same format as
-the ``Autocrypt`` header (see `autocryptheaderformat`_ and see example
-for a gossip header in :ref:`autocrypt-gossip-example`).
-
-``Autocrypt-Gossip`` headers MUST be placed in the root
+Any ``Autocrypt-Gossip`` headers MUST be placed in the root
 MIME part of the encrypted message payload. The encrypted payload in
 this case contains one ``Autocrypt-Gossip`` header for each recipient,
 each of which MUST contain the ``addr``, ``keydata`` and the
 gossip-header specific ``origin-timestamp`` attributes.
 
 The values for ``keydata`` and ``origin-timestamp`` are computed
-following the logic of the `preliminary-recommendation`_ algorithm.
-This ensures that a MUA gossips the same public key for a recipient
-which it uses to encrypt to that recipient.  The values for
+using the same key selection logic as the `preliminary-recommendation`_
+algorithm.  This ensures that a MUA gossips the same public key for a
+recipient that it uses to encrypt to that recipient. The values for
 ``keydata`` and ``origin-timestamp`` are thus computed as follows:
 
 - If ``peer-state[gossip-addr]`` contains ``null`` in its
@@ -676,7 +675,7 @@ which it uses to encrypt to that recipient.  The values for
   to ``gossip_timestamp``.
 
 - Otherwise, set ``keydata`` to ``public_key`` and
-  ``gossip_timestamp``to ``autocrypt_timestamp``.
+  set ``gossip_timestamp`` to ``autocrypt_timestamp``.
 
 To avoid leaking metadata about a third party in the clear, an
 ``Autocrypt-Gossip`` header SHOULD NOT be added outside an encrypted
@@ -688,26 +687,26 @@ Updating Autocrypt Peer State from Key Gossip
 An incoming message may contain one or more ``Autocrypt-Gossip``
 headers in the encrypted payload. Each of these headers MUST
 contain the ``keydata``, ``addr`` and ``origin-timestamp`` attributes
-as specified in `Key Gossip Injection <gossip-injection>`_.
+as specified in `gossip-injection`_.
 
-Update the Autocrypt peer state for the recipient identified
-by its ``addr`` value (referred to here as ``gossip-addr``) in the
-following way:
+Update the Autocrypt gossip state for the recipient identified
+by the ``addr`` value (referenced as ``gossip-addr`` below) if
+and only if all of the following conditions are true:
 
-1. If ``gossip-addr`` does not match any recipient in the mail's
-   ``To`` or ``Cc`` header, the update process terminates (i.e.,
-   header is ignored).
+- ``gossip-addr`` matches a recipient in the mail's ``To`` or ``Cc``
+  header,
 
-2. If ``origin-timestamp`` is more recent that the current date
-   then the update process terminates.
+- ``origin-timestamp`` is less recent that the current date,
 
-3. If ``peers[gossip-addr].gossip_timestamp`` is more recent than
-   ``origin-timestamp`` then the update process terminates.
+- ``peers[gossip-addr].gossip_timestamp`` is not set or is less
+   recent than ``origin-timestamp``.
 
-4. Set ``peers[gossip-addr].gossip_key`` to the value of the
-   ``keydata`` attribute. Set ``peers[gossip-addr].gossip_timestamp``
-   to the value of the ``origin-timestamp`` attribute.
+If any condition is not met, terminate updating the Autocrypt peer state.
 
+If all conditions are true, set ``peers[gossip-addr].gossip_key``
+to the value of the ``keydata`` attribute and set
+``peers[gossip-addr].gossip_timestamp`` to the value
+of the ``origin-timestamp`` attribute.
 
 .. _account-management:
 
