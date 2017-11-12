@@ -6,51 +6,43 @@
 Autocrypt Level 1: Enabling encryption, avoiding annoyances
 ===========================================================
 
-This specification is the result of maybe 2000 hours of talking, testing and
-coding iterations during 2017. Around 20 developers and many more users and
-trainers participated overall in Autocrypt sessions. The majority of these
-participants have engaged with the e-mail encryption space for a
-long time. There was overwhelming agreement that fresh approaches are needed
-and particularly ones that address usability concerns.
+Autocrypt aims to incrementally and carefully replace cleartext e-mail
+with end-to-end encrypted e-mail. This differs from the traditional focus
+on maximizing the security of an individual mail communication.
+**Sometimes Autocrypt recommends to send cleartext mail even though
+encryption would seem technically possible.** This is because we want to
+avoid unreadable mail for users. Users may mix both Autocrypt-capable
+and traditional mail apps and they may loose devices or otherwise loose
+the ability to decrypt in unrecoverable ways.  Reverting to cleartext
+when we suspect such situations is a key part of our aim to stay out of
+the way of users.
 
-Autocrypt aims to incrementally replace cleartext e-mail with end-to-end
-encrypted e-mail. It aims to sustainably grow the overall percentage of
-end-to-end encrypted messages relayed via the e-mail provider network.
-This differs from the traditional focus on maximizing the security of an
-individual mail communication. **Sometimes Autocrypt recommends to
-send cleartext mail even though encryption would be technically
-possible.** This is because of well-known annoyances around "i can't
-read your encrypted mail" situations. Autocrypt operates opportunistically
-and tries to stay out of the way of users who want to, first of all,
-communicate.
+Another major difference in approach is that Autocrypt Level 1 only
+defends against passive data collection attacks. We share and support
+:rfc:`the new perspective stated in RFC7435 ("Opportunistic Security: Some
+Protection Most of the Time") <7435#section-1.2>`. Protection against
+active adversaries (those which modify messages in transit) is the aim
+of future specifications.
 
-Another difference to traditional approaches is that Autocrypt Level 1
-only defends against passive data collection. Protection against active
-adversaries (those which modify messages in transit) is the aim of
-future specifications. We share and support :rfc:`the new perspective
-stated in RFC7435 ("Opportunistic Security: Some Protection Most of the
-Time") <7435#section-1.2>`.
+**Level 1 makes it easy for users to encrypt, based on an automatic and
+decentralized key distribution mechanism. There are no dependencies on
+key servers and it is meant to work with existing e-mail providers.**
+Level 1 focuses on the use of Autocrypt on a single device. Users get
+rudimentary support on using Autocrypt on more than one device or mail app.
+This is internally realized through sending and receiving an Autocrypt
+Setup Message, secured by manually entering a long number. Improving
+usability for maintaining synchronized Autocrypt state on multiple
+devices is the aim of future specification efforts.
 
-The Level 1 specification makes it easy for users to encrypt. There are
-no changes required from e-mail providers and there are no dependencies
-on key servers. The spec describes the basic capabilities required for a
-mail app to be Autocrypt-capable at Level 1, allowing it to exchange
-end-to-end encrypted e-mails with other Autocrypt-capable mail apps. For
-those familiar with existing e-mail specs, we use the term "mail app"
-and "MUA" interchangeably throughout the doc.
-
-For ease of implementation and deployment, Level 1 focuses on the use of
-Autocrypt on a single device. However, users get support for transfering
-Autocrypt secret keys to other devices. They need to enter a
-long number for securing the transfer which is technically realized
-through sending and receiving an e-mail message. We aim to improve
-usability around keeping synchronized Autocrypt state on multiple
-devices in subsequent Autocrypt specifications.
-
-We designed Level 1 to be relatively easy for developers to adopt. There is
-detailed guidance on protocol, internal state and user interface concerns.
-We have a good track record of supporting new implementers. Please
-don't hesitate to ask back or send comments.
+**Last but not least, Level 1 is meant to be relatively easy for
+developers to adopt.** It describes the basic capabilities required for
+a mail app to be Autocrypt-capable at Level 1, allowing it to exchange
+end-to-end encrypted e-mails with other Autocrypt-capable mail apps. The
+spec contains detailed guidance on protocol, internal state and user
+interface concerns. We have a good track record of supporting new
+implementers. Please don't hesitate to ask back or bring up issues or
+pull requests. Autocrypt is a living specification and we envision both
+bugfix and backward-compatible feature releases.
 
 .. only:: builder_html
 
