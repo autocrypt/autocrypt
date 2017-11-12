@@ -12,7 +12,7 @@ of maximizing the security of individual mail communications.
 **Sometimes Autocrypt recommends to send cleartext mail even though
 encryption appears technically possible.** This is because we want to
 avoid unreadable mail for users. Users may mix both Autocrypt-capable
-and traditional mail apps and they may loose devices or otherwise loose
+and traditional mail apps and they may lose devices or in other ways
 the ability to decrypt in unrecoverable ways. Reverting to cleartext
 when we suspect such situations is a key part of our aim to stay out of
 the way of users.
