@@ -656,11 +656,13 @@ for a gossip header in :ref:`autocrypt-gossip-example`).
 Key Gossip Injection in Outbound Mail
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Any ``Autocrypt-Gossip`` headers MUST be placed in the root
+A MUA MAY include ``Autocrypt-Gossip`` headers in messages
+with more than one recipient. These headers MUST be placed in the root
 MIME part of the encrypted message payload. The encrypted payload in
 this case contains one ``Autocrypt-Gossip`` header for each recipient,
 each of which MUST contain the ``addr``, ``keydata`` and the
-gossip-header specific ``origin-timestamp`` attributes.
+gossip-header specific ``origin-timestamp`` attributes. It SHOULD
+NOT contain the ``prefer-encrypt`` attribute.
 
 A MUA MUST gossip the same public key for a recipient that
 it uses to encrypt to that recipient. The values for ``keydata`` and
