@@ -40,9 +40,10 @@ a mail app to be Autocrypt-capable at Level 1, allowing it to exchange
 end-to-end encrypted e-mails with other Autocrypt-capable mail apps. The
 spec contains detailed guidance on protocol, internal state and user
 interface concerns. We have a good track record of supporting new
-implementers. Please don't hesitate to ask back or bring up issues or
-pull requests. Autocrypt is a living specification and we envision both
-bugfix and backward-compatible feature releases.
+implementers. Please don't hesitate to `contact the group
+<https://autocrypt.org/en/latest/contact.html>`_ or bring up issues or
+pull requests. Autocrypt is a living specification and we envision
+both bugfix and backward-compatible feature releases.
 
 .. only:: builder_html
 
