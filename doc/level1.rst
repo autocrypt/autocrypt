@@ -7,13 +7,13 @@ Autocrypt Level 1: Enabling encryption, avoiding annoyances
 ===========================================================
 
 Autocrypt aims to incrementally and carefully replace cleartext e-mail
-with end-to-end encrypted e-mail. This differs from the traditional focus
-on maximizing the security of an individual mail communication.
+with end-to-end encrypted e-mail. This differs from the traditional approach
+of maximizing the security of individual mail communications.
 **Sometimes Autocrypt recommends to send cleartext mail even though
-encryption would seem technically possible.** This is because we want to
+encryption appears technically possible.** This is because we want to
 avoid unreadable mail for users. Users may mix both Autocrypt-capable
 and traditional mail apps and they may loose devices or otherwise loose
-the ability to decrypt in unrecoverable ways.  Reverting to cleartext
+the ability to decrypt in unrecoverable ways. Reverting to cleartext
 when we suspect such situations is a key part of our aim to stay out of
 the way of users.
 
