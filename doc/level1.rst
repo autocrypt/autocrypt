@@ -662,11 +662,10 @@ this case contains one ``Autocrypt-Gossip`` header for each recipient,
 each of which MUST contain the ``addr``, ``keydata`` and the
 gossip-header specific ``origin-timestamp`` attributes.
 
-The values for ``keydata`` and ``origin-timestamp`` are computed
-using the same key selection logic as the `preliminary-recommendation`_
-algorithm.  This ensures that a MUA gossips the same public key for a
-recipient that it uses to encrypt to that recipient. The values for
-``keydata`` and ``origin-timestamp`` are thus computed as follows:
+A MUA MUST gossip the same public key for a recipient that
+it uses to encrypt to that recipient. The values for ``keydata`` and
+``origin-timestamp`` are thus computed mirroring the key selection
+logic used in `preliminary-recommendation`_:
 
 - If ``peer-state[gossip-addr]`` contains ``null`` in its
   ``public_key`` attribute, or its ``autocrypt_timestamp`` is
@@ -699,7 +698,7 @@ and only if all of the following conditions are true:
 - ``origin-timestamp`` is less recent that the current date,
 
 - ``peers[gossip-addr].gossip_timestamp`` is not set or is less
-   recent than ``origin-timestamp``.
+  recent than ``origin-timestamp``.
 
 If any condition is not met, terminate updating the Autocrypt peer state.
 
