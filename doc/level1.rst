@@ -81,7 +81,14 @@ this information to determine whether encryption is possible and makes
 a :ref:`recommendation <recommendation>` about whether encryption
 should be enabled for a given set of recipients.
 
-Autocrypt aggressively distributes keys, but conservatively recommends
+This specification also introduces the :ref:`Autocrypt Setup Message
+<setup-message>` as a way to transfer secret key material and related
+settings to other e-mail programs controlled by the same user.  This
+spec also provides guidance on how and when to :ref:`generate
+<setup-message-creation>`, :ref:`look for <getting-started>`, and
+:ref:`import <setup-message-import>` these messages.
+
+Autocrypt aggressively distributes public keys, but conservatively recommends
 encryption to avoid disruption to established email workflows.
 Specifically, Autocrypt only recommends that an email be encrypted if
 encryption is possible, and:
@@ -758,7 +765,7 @@ is only readable by the MUA that sent the last message. This can lead
 to behavior that is unpredictable and confusing for the user.
 
 
-See section :ref:`getting_started` for guidance on how to detect and
+See section :ref:`getting-started` for guidance on how to detect and
 avoid such a situation.
 
 
@@ -869,6 +876,8 @@ If those digits are included in the headers, they may also
 be used in the descriptive text that is part of the Setup Message, to
 distinguish different messages.
 
+.. _setup-message-creation:
+
 Setup Message Creation
 ~~~~~~~~~~~~~~~~~~~~~~
 
@@ -898,6 +907,7 @@ A Level 1 MUA MUST be able to create an Autocrypt Setup Message, to
 preserve users' ability to recover from disaster, and to choose to use
 a different Autocrypt-capable MUA in the future.
 
+.. _setup-message-import:
 
 Setup Message Import
 ~~~~~~~~~~~~~~~~~~~~
@@ -981,7 +991,7 @@ each account they control (that is, to set ``accounts[addr].enabled``
 to ``false``).  For level 1, we expect most MUAs to have Autocrypt
 disabled by default.
 
-.. _getting_started:
+.. _getting-started:
 
 Helping Users get Started
 +++++++++++++++++++++++++
