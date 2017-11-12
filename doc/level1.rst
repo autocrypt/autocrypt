@@ -646,10 +646,11 @@ headers for each recipient . This does not include BCC
 recipients, which by definition must not be revealed to other
 recipients.
 
-An Autocrypt MUA MAY include ``Autocrypt-Gossip`` headers in messages
-with more than one recipient. The header has the same format as
-the ``Autocrypt`` header (see `autocryptheaderformat`_ and see example
-for a gossip header in :ref:`autocrypt-gossip-example`).
+The ``Autocrypt-Gossip`` header has the same format as the ``Autocrypt``
+header (see `autocryptheaderformat`_). Its ``addr`` attribute
+indicates the recipient address this header is valid for as usual, but
+may relate to any recipient in the ``To`` or ``Cc`` header.
+See example in :ref:`autocrypt-gossip-example`.
 
 .. _`gossip-injection`:
 
