@@ -525,8 +525,7 @@ The first phase computes the ``preliminary-recommendation``.
 Preliminary Recommendation
 __________________________
 
-If either ``public_key`` is ``null``, or ``autocrypt_timestamp`` is
-more than 35 days older than ``gossip_key_timestamp``, set
+If ``public_key`` is ``null``, then set
 ``target-keys[to-addr]`` to ``gossip_key`` and set
 ``preliminary-recommendation`` to ``discourage`` and skip to the
 :ref:`final-recommendation-phase`.
