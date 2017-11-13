@@ -938,12 +938,12 @@ import it to enable Autocrypt.  If the user agrees to do so:
    If there is no ``Passphrase-Format`` header, or the value is unknown,
    then the MUA MUST provide a plain UTF-8 string text entry.
 
- * The MUA should try decrypting the message with the supplied
-   Setup Code.  The Code serves both for decryption as well as
+ * The MUA should try decrypting the message with the supplied Setup
+   Code.  The Code serves both for decryption as well as
    authenticating the message.  Extra care needs to be taken with some
    PGP implementations that the Setup Code is actually used for
-   decryption. See :doc:`bad-import` for more explanation and an
-   example.
+   decryption. For example, `this is difficult to do correctly with
+   GnuPG <https://dev.gnupg.org/T3277>`_.
 
  * If it decrypts, then the MUA SHOULD update ``accounts[addr]``
    according to the contents of the decrypted message, as discussed in
