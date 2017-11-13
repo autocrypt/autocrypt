@@ -1060,15 +1060,29 @@ address as an index key).
 
 Canonicalizing the domain part (the part after the ``@``): A MUA SHOULD canonicalize the domain part using :rfc:`IDNA2008 Punycode conversion to ASCII <5891#section-4.4>`.
 
-Canonicalizing the local part (the part before the ``@``): Autocrypt-capable MUAs SHOULD canonicalize the local part of an e-mail address by making it all lower-case.
-SMTP specifications say this part is domain-specific, and
-byte-for-byte arbitrarily sensitive. In practice, nearly every e-mail
-domain treats the local part of the address as a case-insensitive
-string.  That is, while it is permitted by the standards,
-``John@example.org`` is very unlikely to deliver to a different
-mailbox than ``john@example.org``.
+Canonicalizing the local part (the part before the ``@``):
+Autocrypt-capable MUAs that encounter a peer's e-mail address where
+the local part appears to be valid UTF-8 SHOULD canonicalize the local
+part by making it all lower-case using the "empty" locale (see `W3C's
+discussion on Case folding
+<https://www.w3.org/International/wiki/Case_folding>`_ for more
+details).
 
-Other canonicalization efforts are considered for later specification versions.
+:rfc:`SMTP specifications <5321#section-2.3.11>`_ say the local part
+is technically domain-specific, and byte-for-byte arbitrarily
+sensitive. In practice, nearly every e-mail domain treats the local
+part of the address as a case-insensitive string.  That is, while it
+is permitted by the standards, ``John@example.org`` is very unlikely
+to deliver to a different mailbox than ``john@example.org``.
+
+An Autocrypt-capable MUA that is configured to use an account that has
+an e-mail address whose local part is not a valid UTF-8 string, or who
+cannot receive mail at the canonicalized form of their associated
+address SHOULD NOT enable Autocrypt on that e-mail account without an
+additional warning to the user.
+
+Other canonicalization efforts are considered for later specification
+versions.
 
 .. _example-headers:
 
