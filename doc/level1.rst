@@ -520,6 +520,8 @@ If both ``public_key`` and ``gossip_key`` are ``null``, then set
 Otherwise, we derive the recommendation using a two-phase algorithm.
 The first phase computes the ``preliminary-recommendation``.
 
+.. _`preliminary recommendation`:
+
 Preliminary Recommendation
 __________________________
 
@@ -663,10 +665,17 @@ An Autocrypt MUA MAY include ``Autocrypt-Gossip`` headers in messages
 with more than one recipient. These headers MUST be placed in the root
 MIME part of the encrypted message payload. The encrypted payload in
 this case contains one Autocrypt-Gossip header for each recipient,
-which MUST include ``addr`` and ``keydata`` attributes with the
-corresponding values for the recipient identified by ``gossip-addr``
-as stored in ``peers[gossip-addr]``.  It SHOULD NOT contain a
-``prefer-encrypt`` attribute.
+each of which:
+
+- MUST include an ``addr`` attribute that matches one of the
+  recipients in the ``To`` or ``Cc`` headers.
+
+- MUST include the ``keydata`` attribute which MUST contain the
+  same public key which is used to encrypt the mail to the recipient
+  referenced by ``addr``. See also :ref:`preliminary recommendation`
+  for how this key is selected.
+
+- SHOULD NOT include a ``prefer-encrypt`` attribute.
 
 To avoid leaking metadata about a third party in the clear, an
 ``Autocrypt-Gossip`` header SHOULD NOT be added outside an encrypted
