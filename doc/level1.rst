@@ -140,7 +140,7 @@ Communication Peers
 Each communication peer is identified by an e-mail address.  Autocrypt
 associates state with each peer.  Conceptually, we represent this
 state as a table named ``peers``, which is indexed by the peer's
-:doc:`canonicalized e-mail address <address-canonicalization>`, .
+:ref:`canonicalized e-mail address <address-canonicalization>`, .
 
 For the peer with the address ``addr``, an MUA MUST associate the
 following attributes with ``peers[addr]``:
@@ -177,7 +177,7 @@ Accounts controlled by the MUA
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A Level 1 MUA maintains an internal structure ``accounts`` indexed by
-the account's :doc:`canonicalized e-mail address
+the account's :ref:`canonicalized e-mail address
 <address-canonicalization>` (``addr``).  For each account controlled
 by the MUA, ``accounts[addr]`` has the following attributes:
 
@@ -1047,6 +1047,28 @@ Earlier choices are better than later ones.
 
 Appendix
 --------
+
+.. _`address-canonicalization`:
+
+E-mail Address Canonicalization
++++++++++++++++++++++++++++++++
+
+To keep consistent state refering to different but practically equivalent
+writings of an e-mail address, a MUA SHOULD canonicalize e-mail
+addresses when comparing them (for example for using an e-mail
+address as an index key).
+
+Canonicalizing the domain part (the part after the ``@``): A MUA SHOULD canonicalize the domain part using :rfc:`IDNA2008 Punycode conversion to ASCII <5891#section-4.4>`.
+
+Canonicalizing the local part (the part before the ``@``): Autocrypt-capable MUAs SHOULD canonicalize the local part of an e-mail address by making it all lower-case.
+SMTP specifications say this part is domain-specific, and
+byte-for-byte arbitrarily sensitive. In practice, nearly every e-mail
+domain treats the local part of the address as a case-insensitive
+string.  That is, while it is permitted by the standards,
+``John@example.org`` is very unlikely to deliver to a different
+mailbox than ``john@example.org``.
+
+Other canonicalization efforts are considered for later specification versions.
 
 .. _example-headers:
 
