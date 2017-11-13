@@ -51,7 +51,6 @@ and contributors, MUA developers and privacy enthusiasts.
    level1
    glossary
    dev-status
-   address-canonicalization
    ecosystem-dangers
    other-crypto-interop
    faq
