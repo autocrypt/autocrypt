@@ -735,7 +735,7 @@ Secret key protection at rest
 
 The MUA MAY protect the secret key with a password, But it SHOULD NOT
 require the user to enter it each time they send or receive a mail.
-All encrypted outgoing messages MUST be signed. If the user has to
+All encrypted outgoing messages MUST be signed, so if the user has to
 enter the password for both reading and sending mail, this introduces
 too much friction to become part of a routine daily workflow.
 
