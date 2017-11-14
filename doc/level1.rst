@@ -740,8 +740,9 @@ encrypted outgoing messages MUST be signed, so if the user has to
 enter the password for both reading and sending mail, this introduces
 too much friction to become part of a routine daily workflow.
 
-Protection of the user's keys at rest and other files is achieved more
-easily and securely with full-disk encryption.
+Protection of the user's keys (and other sensitive data) at rest is
+achieved more easily and securely with filesystem-based encryption and
+other forms of access control.
 
 
 .. _multiaccounts:
