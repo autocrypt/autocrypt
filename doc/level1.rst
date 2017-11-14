@@ -733,9 +733,10 @@ The secret key material should be protected from access by other
 applications or co-tenants of the device at least as well as the
 passwords the MUA retains for the user's IMAP or SMTP accounts.
 
-The MUA MAY protect the secret key with a password, but it SHOULD NOT
-require the user to enter it each time they send or receive a mail.
-All encrypted outgoing messages MUST be signed, so if the user has to
+The MUA MAY protect the secret key (and other sensitive data it has
+access to) with a password, but it SHOULD NOT require the user to
+enter the password each time they send or receive a mail.  All
+encrypted outgoing messages MUST be signed, so if the user has to
 enter the password for both reading and sending mail, this introduces
 too much friction to become part of a routine daily workflow.
 
