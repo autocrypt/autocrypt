@@ -60,4 +60,3 @@ and contributors, MUA developers and privacy enthusiasts.
    cleanup
    peering
    optional-state
-   bad-import
