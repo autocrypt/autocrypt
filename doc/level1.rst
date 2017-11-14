@@ -726,12 +726,12 @@ keys instead.  The MUA MUST be capable of assembling these keys into
 an OpenPGP certificate (:rfc:`RFC 4880 "Transferable Public
 Key"<4880#section-11.1>`) that indicates these capabilities.
 
+Secret key protection at rest
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 The secret key material should be protected from access by other
 applications or co-tenants of the device at least as well as the
 passwords the MUA retains for the user's IMAP or SMTP accounts.
-
-Secret key protection at rest
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The MUA MAY protect the secret key with a password, but it SHOULD NOT
 require the user to enter it each time they send or receive a mail.
