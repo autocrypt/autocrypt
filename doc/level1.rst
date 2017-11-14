@@ -1068,7 +1068,7 @@ discussion on Case folding
 <https://www.w3.org/International/wiki/Case_folding>`_ for more
 details).
 
-:rfc:`SMTP specifications <5321#section-2.3.11>`_ say the local part
+:rfc:`SMTP specifications <5321#section-2.3.11>` say the local part
 is technically domain-specific, and byte-for-byte arbitrarily
 sensitive. In practice, nearly every e-mail domain treats the local
 part of the address as a case-insensitive string.  That is, while it
