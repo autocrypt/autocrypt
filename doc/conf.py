@@ -137,8 +137,8 @@ html_theme = 'alabaster'
 # documentation.
 #
 html_theme_options = {
-        'logo':'../images/autocrypt_logo.png'
-        }
+  'logo':'../images/autocrypt_logo.png'
+}
 
 # Add any paths that contain custom themes here, relative to this directory.
 # html_theme_path = []

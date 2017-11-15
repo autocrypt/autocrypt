@@ -1,27 +1,30 @@
 
 <!-- <h3><a href="{{ pathto('contents') }}">{{ _('Table Of Contents') }}</a></h3> -->
 
-<ul>
-  <li><a href="{{ pathto('index') }}" class="sidemenu">Home</a></li>
-  <li><a href="{{ pathto('install') }}" class="sidemenu">Install</a></li>
-  <li><a href="{{ pathto('news') }}" class="sidemenu">News</a></li>
-</ul>
-<br />
-<div style="border:1px solid #1b64b8; padding:0.5em">
-  Get involved:
-  <ul>
-    <li><a href="{{ pathto('contact') }}" class="sidemenu">Contact and Events</a></li>
-    <li><a href="{{ pathto('details') }}" class="sidemenu">What is autocrypt?</a></li>
-    <li><strong><a href="{{ pathto('level1') }}" class="sidemenu">Level 1 spec</a> 
-    <a href="{{ pathto('autocrypt-spec-1.0.0rc1.pdf', 1) }}">[PDF]</a>
-    </strong></li>
-  </ul>
-  <ul>
-    <li><a href="{{ pathto('examples') }}" class="sidemenu">Example mail flows</a></li>
-    <li><a href="{{ pathto('features') }}" class="sidemenu">Features</a></li>
-    <li><a href="{{ pathto('faq') }}" class="sidemenu">FAQ</a></li>
-    <li><a href="{{ pathto('dev-status') }}" class="sidemenu">Development Repos</a></li>
-    <li><a href="{{ pathto('contents') }}" class="sidemenu">All Docs</a></li>
-  </ul>
+<div class="sidebar">
+  <div class="mainnav">
+    <ul>
+      <li><a href="{{ pathto('index') }}" class="sidemenu">Home</a></li>
+      <li><a href="{{ pathto('install') }}" class="sidemenu">Install</a></li>
+      <li><a href="{{ pathto('news') }}" class="sidemenu">News</a></li>
+    </ul>
+  </div>
+  <div class="subnav">
+    <div>
+      Get involved:
+    </div>
+    <ul>
+      <li><a href="{{ pathto('contact') }}">Contact and Events</a></li>
+      <li><a href="{{ pathto('details') }}">What is autocrypt?</a></li>
+      <li>
+        <a href="{{ pathto('level1') }}">Level 1 spec</a>
+        <a href="{{ pathto('autocrypt-spec-1.0.0rc1.pdf', 1) }}">[PDF]</a>
+      </li>
+      <li><a href="{{ pathto('examples') }}">Example mail flows</a></li>
+      <li><a href="{{ pathto('features') }}">Features</a></li>
+      <li><a href="{{ pathto('faq') }}">FAQ</a></li>
+      <li><a href="{{ pathto('dev-status') }}">Development Repos</a></li>
+      <li><a href="{{ pathto('contents') }}">All Docs</a></li>
+    </ul>
+  </div>
 </div>
-<br />

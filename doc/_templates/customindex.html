@@ -4,45 +4,51 @@
 {%- endblock -%}
 {% block body %}
 <div class="article">
-    <img src="_images/autocrypt_title.png"/>
-    <h3>Convenient End-to-End Encryption for E-Mail</h3>
-    <p> 
-    <!-- <img src="_images/autocrypt-slogan.png"> -->
-    <table>
-        <tr>
-            <td>
-                <img src="_images/email_logo.png" alt="e-mail Logo" width=30% align="left" style="padding:3em; padding-bottom:0">
-            </td>
-            <td>
-                <img src="_images/encrypted_logo.png" alt="Encryption Logo" width=30% style="padding:3em; padding-bottom:0">
-            </td>
-        </tr>
-    </table>
-    <table>
-        <tr>
-            <td style="padding-right:1em">
-                <h3>Decentralized</h3>
-                <p>Autocrypt-capable mail apps work with any e-mail provider. 
-                You and your friends can use your existing e-mail addresses.
-                </p></td>
-            <td style="padding-left:1em">
-                <h3 align="center">Open Standard</h3>
-                <p>Autocrypt is an Open Standard. It makes it easy for you 
-                to send and receive private messages.
-                </p>
-            </td>
-        </tr>
-        <tr>
-        </tr>
-    </table>
+  <div class="body-header">
+    <img src="_images/autocrypt_title.png" />
+    <div class="body-header-fill">
+      <h1>Convenient End-to-End Encryption for E-Mail</h1>
+    </div>
+  </div>
+  <div class="body-masthead">
+    <div class="body-masthead-box">
+      <div class="body-masthead-box-img">
+        <img src="_images/email_logo.png" alt="e-mail Logo">
+      </div>
+      <div class="body-masthead-copy">
+        <h2>Decentralized</h2>
+        <p>
+          Autocrypt-capable mail apps work with any e-mail provider.
+          You and your friends can use your existing e-mail addresses.
+        </p>
+      </div>
+    </div>
+
+    <div class="body-masthead-box">
+      <div class="body-masthead-box-img">
+        <img src="_images/encrypted_logo.png" alt="Encryption Logo">
+      </div>
+      <div class="body-masthead-copy">
+        <h2>Open Standard</h2>
+        <p>
+          Autocrypt is an Open Standard. It makes it easy for you to send and receive private messages.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div>
     <h2>Our Mission</h2>
-End-to-End Encrypted e-mail has been around for decades, but has failed to see wide adoption outside of specialist communities.  Autocrypt aims to provide encryption convenient enough for much wider adoption. Through strengthening the e-mail ecosystem step-by-step, we want to increase user autonomy and privacy for everyone.</p>
     <p>
-    The Autocrypt effort is driven by a diverse group of mail app developers, hackers and researchers who are willing to take fresh approaches, learn from past mistakes, and collectively aim to increase the overall End-to-End encryption of e-mail in the net.</p>
-<!-- say something about open standards and open source here or rather in the "try/get it now" app page? -->
-<br>
-
-<a href="{{ pathto('install') }}" class="installbutton"><img src="_images/get_it_now.png" alt="Get it now!" align="center" width=300px></a>
-
+      End-to-End Encrypted e-mail has been around for decades, but has failed to see wide adoption outside of specialist communities.  Autocrypt aims to provide encryption convenient enough for much wider adoption. Through strengthening the e-mail ecosystem step-by-step, we want to increase user autonomy and privacy for everyone.
+    </p>
+    <p>
+      The Autocrypt effort is driven by a diverse group of mail app developers, hackers and researchers who are willing to take fresh approaches, learn from past mistakes, and collectively aim to increase the overall End-to-End encryption of e-mail in the net.
+    </p>
+    <!-- say something about open standards and open source here or rather in the "try/get it now" app page? -->
+  </div>
+  <a href="{{ pathto('install') }}" class="installbutton">
+    <img src="_images/get_it_now.png" alt="Get it now!" align="center" width=300px />
+  </a>
 </div>
+
 {% endblock %}
