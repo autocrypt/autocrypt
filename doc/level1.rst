@@ -588,6 +588,8 @@ this to the user.  A graceful way to handle this situation is to save
 the enabled state, and only prompt the user about the issue when they
 send the mail.
 
+.. _mail-encryption:
+
 Mail Encryption
 +++++++++++++++
 
@@ -725,19 +727,35 @@ keys instead.  The MUA MUST be capable of assembling these keys into
 an OpenPGP certificate (:rfc:`RFC 4880 "Transferable Public
 Key"<4880#section-11.1>`) that indicates these capabilities.
 
+Secret key protection at rest
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 The secret key material should be protected from access by other
 applications or co-tenants of the device at least as well as the
 passwords the MUA retains for the user's IMAP or SMTP accounts.
 
-Secret key protection at rest
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The MUA MAY protect the secret key (and other sensitive data it has
+access to) with a password, but it SHOULD NOT require the user to
+enter the password each time they send or receive a mail. Since
+Autocrypt-enabled MUAs :ref:`sign all encrypted outgoing
+messages<mail-encryption>`, it could happen that the user has to enter
+the password very often, both for reading and sending mail. This
+introduces too much friction to become part of a routine daily
+workflow.
 
-The MUA SHOULD NOT protect the secret key with a password. All
-encrypted outgoing messages MUST be signed, which would require the
-user to enter the password for both reading and sending mail. This
-introduces too much friction to become part of a routine daily workflow.
-Protection of the user's keys at rest and other files is achieved more
-easily and securely with full-disk encryption.
+Note that password protection of the secret key carries with it a risk
+that the user might forget their password, which might result in
+catastrophic data loss.  Unlike IMAP or SMTP credentials (which can be
+reset by the server operator given some sort of out-of-band
+confirmation), there is no recovery workflow possible for the loss of
+a password protecting a secret key.  An MUA that chooses to offer
+password protection of the secret key (or other sensitive data) SHOULD
+support usable and secure backup/recovery workflows for the protected
+material.
+
+Protection of the user's keys (and other sensitive data) at rest is
+achieved more easily and securely with filesystem-based encryption and
+other forms of access control.
 
 
 .. _multiaccounts:
@@ -1067,7 +1085,7 @@ discussion on Case folding
 <https://www.w3.org/International/wiki/Case_folding>`_ for more
 details).
 
-:rfc:`SMTP specifications <5321#section-2.3.11>`_ say the local part
+:rfc:`SMTP specifications <5321#section-2.3.11>` say the local part
 is technically domain-specific, and byte-for-byte arbitrarily
 sensitive. In practice, nearly every e-mail domain treats the local
 part of the address as a case-insensitive string.  That is, while it
