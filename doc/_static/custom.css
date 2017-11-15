@@ -1,5 +1,9 @@
-body {
+html, body {
   width: 100%;
+  min-height: 100%;
+}
+
+body {
   padding: 0 !important;
   font-family: Verdana, Arial, Helvetica, sans-serif !important;
   font-size: 15px;
