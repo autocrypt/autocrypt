@@ -168,6 +168,10 @@ also associate the following additional attributes with
 * ``gossip_key``: the value of the ``keydata`` attribute derived from
   the most recent message containing a valid ``Autocrypt-Gossip``
   header about the peer.
+* ``gossip_fresh``: A boolean which is true if the most
+  recent message containing a valid ``Autocrypt-Gossip`` header
+  also contained a ``fresh=yes`` setting.
+
 
 How this information is managed and used is discussed in :ref:`peer-management`.
 
@@ -525,8 +529,8 @@ The first phase computes the ``preliminary-recommendation``.
 Preliminary Recommendation
 __________________________
 
-If either ``public_key`` is ``null``, or ``autocrypt_timestamp`` is
-more than 35 days older than ``gossip_timestamp``, set
+If either ``public_key`` is ``null``, or ``gossip_fresh`` is True
+and ``autocrypt_timestamp`` is more than 35 days older than ``gossip_timestamp``, set
 ``target-keys[to-addr]`` to ``gossip_key`` and set
 ``preliminary-recommendation`` to ``discourage`` and skip to the
 :ref:`final-recommendation-phase`.
@@ -658,6 +662,8 @@ The ``Autocrypt-Gossip`` header has the format as the ``Autocrypt``
 header (see `autocryptheaderformat`_). Its ``addr`` attribute
 indicates the recipient address this header is valid for as usual, but
 may relate to any recipient in the ``To`` or ``Cc`` header.
+The optional ``fresh`` attribute contains "yes" or "no" (the default)
+which indicates whether the key is fresh.
 See example in :ref:`autocrypt-gossip-example`
 
 Key Gossip Injection in Outbound Mail
@@ -676,6 +682,13 @@ each of which:
   same public key which is used to encrypt the mail to the recipient
   referenced by ``addr``. See also :ref:`preliminary recommendation`
   for how this key is selected.
+
+- MAY include a ``fresh=yes`` setting if the keydata is fresh.
+  It is considered fresh if ``keydata`` was received through a direct
+  mail from the ``addr`` recipient within the last 35 days. It is also
+  considered fresh if ``keydata`` was in turn gossiped to us less than
+  a day ago with a ``fresh=yes`` setting. In all other case it
+  is not considered fresh and no setting is neccessary.
 
 - SHOULD NOT include a ``prefer-encrypt`` attribute.
 
@@ -699,10 +712,14 @@ way:
 2. If ``peers[gossip-addr].gossip_timestamp`` is more recent than the
    message's effective date, then the update process terminates.
 
-3. Set ``peers[gossip-addr].gossip_timestamp`` to the message's
+3. If the header contains a ``fresh=yes`` setting, then set
+   ``peers[gossip-addr].gossip_fresh`` to True, otherwise
+   set it to False.
+
+4. Set ``peers[gossip-addr].gossip_timestamp`` to the message's
    effective date.
 
-4. Set ``peers[gossip-addr].gossip_key`` to the value of the
+5. Set ``peers[gossip-addr].gossip_key`` to the value of the
    ``keydata`` attribute.
 
 
