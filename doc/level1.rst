@@ -740,6 +740,16 @@ encrypted outgoing messages MUST be signed, so if the user has to
 enter the password for both reading and sending mail, this introduces
 too much friction to become part of a routine daily workflow.
 
+Note that password protection of the secret key carries with it a risk
+that the user might forget their password, which might result in
+catastrophic data loss.  Unlike IMAP or SMTP credentials (which can be
+reset by the server operator given some sort of out-of-band
+confirmation), there is no recovery workflow possible for the loss of
+a password protecting a secret key.  An MUA that chooses to offer
+password protection of the secret key (or other sensitive data) SHOULD
+support usable and secure backup/recovery workflows for the protected
+material.
+
 Protection of the user's keys (and other sensitive data) at rest is
 achieved more easily and securely with filesystem-based encryption and
 other forms of access control.
