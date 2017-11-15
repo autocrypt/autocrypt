@@ -83,6 +83,11 @@ div.body a:hover, div.sphinxsidebar a:hover {
   text-decoration: none;
 }
 
+div.sphinxsidebar a[href="#"] {
+  color: #000 !important;
+  font-weight: bold;
+}
+
 /* -- Index -- */
 
 .body-header {
@@ -106,7 +111,7 @@ div.body a:hover, div.sphinxsidebar a:hover {
 }
 
 .body-header h1 {
-  color: #005FA9 !important;
+  /* color: #005FA9 !important; */
   font-size: 1.6em !important;
   font-weight: 400 !important;
 }
@@ -145,9 +150,9 @@ div.body a:hover, div.sphinxsidebar a:hover {
 div.body-masthead-copy h2 {
   text-align: center;
   font-size: 1.4em;
-  font-weight: 400;
+  font-weight: 400 !important;
   margin-top: 1.2em !important;
-  color: #005FA9 !important;
+  /*color: #005FA9 !important;*/
 }
 
 /* -- Body -- */
@@ -207,11 +212,15 @@ h1, h2, h3, h4, h5, h6 {
   font-family: Verdana, Arial, Helvetica, sans-serif !important;
   line-height: 1.5em;
   color: #000 !important;
-  font-weight: normal !important;
+  font-weight: bold !important;
   margin: 1.5em 0 0 0 !important;
 }
 h1:first-child, h2:first-child, h3:first-child, h4:first-child {
   margin-top: 0 !important;
+}
+
+h1 a.toc-backref, h2 a.toc-backref, h3 a.toc-backref, h4 a.toc-backref, h5 a.toc-backref, h6 a.toc-backref {
+  color: #000 !important;
 }
 
 div.body p {
