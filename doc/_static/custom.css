@@ -304,9 +304,18 @@ div.body a.primary-action {
     #1b64b8 66%,
     #5782cb 66%,
     #5782cb 100%
-  )
+  );
 }
 
+div.body a.primary-action:hover {
+  background-image: linear-gradient(
+    74deg,
+    #007eab 0px,
+    #007eab 66%,
+    #3497bc 66%,
+    #3497bc 100%
+  );
+}
 
 /* -- Mobile -- */
 
