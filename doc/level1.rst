@@ -740,8 +740,9 @@ access to) with a password, but it SHOULD NOT require the user to
 enter the password each time they send or receive a mail. Since
 Autocrypt-enabled MUAs :ref:`sign all encrypted outgoing
 messages<mail-encryption>`, it could happen that the user has to enter
-the password for both reading and sending mail. This introduces too
-much friction to become part of a routine daily workflow.
+the password very often, both for reading and sending mail. This
+introduces too much friction to become part of a routine daily
+workflow.
 
 Note that password protection of the secret key carries with it a risk
 that the user might forget their password, which might result in
