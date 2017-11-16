@@ -344,7 +344,8 @@ encrypted mails to this peer automatically.
 In addition to the per-peer state described in :ref:`peers`,
 MUAs MAY also store other information gathered for heuristic
 purposes, or for other cryptographic schemes (see
-:doc:`optional-state` for some example ideas).
+`the Autocrypt website <https://autocrypt.org/en/latest/optional-state.html>`_
+for some example ideas).
 
 However, in order to support future synchronization of Autocrypt state
 between MUAs, it is critical that Autocrypt-capable MUAs maintain the
@@ -487,8 +488,8 @@ The output of the Autocrypt recommendation algorithm has two elements:
    encrypt the message, but do not default to encryption. If the user
    manually enables encryption, the MUA SHOULD warn that the recipient
    may not be able to read the message. This warning message MAY be
-   supplemented using optional counters and user-agent state as
-   suggested in :doc:`optional-state`.
+   supplemented using `optional counters and user-agent state
+   <https://autocrypt.org/en/latest/optional-state.html>`_.
 
  * ``available``: Enable UI that would allow the user to choose to
    encrypt the message, but do not default to encryption.
