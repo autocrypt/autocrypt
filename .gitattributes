@@ -1,1 +1,1 @@
-gitcrypt/credentials.txt filter=git-crypt diff=git-crypt
+.credentials/bot-imap.gitcrypt filter=git-crypt diff=git-crypt
