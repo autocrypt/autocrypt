@@ -35,7 +35,7 @@ script:
 deploy:
   provider: script
   skip_cleanup: true
-  script: scripts/deploy.sh
+  script: .scripts/deploy.sh
   on:
     all_branches: true
 
