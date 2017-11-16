@@ -37,27 +37,24 @@ Managing additional state
 
 When processing a message from the peer:
 
- - OPTIONAL: If ``counting_since`` is unset, set it to the current time.
-   Otherwise, if ``message_date`` is greater than ``counting_since``:
+ - If ``counting_since`` is unset, set it to the current time.
+   Otherwise, if ``effective_date`` is greater than ``counting_since``:
 
-   - If ``pah`` is ``null``, increment ``count_no_ac``.
-   - If ``pah`` is not ``null`` increment ``count_have_ac``.
+   - If no ``Autocrypt`` header is available, increment ``count_no_ac``.
+   - If an ``Autocrypt`` header is available, increment ``count_have_ac``.
 
 
-After message processng, in the case where the message processed
-causes a *reset*:
+When processing a message without an autocrypt header from a peer who
+has send an header in the past and thus has a ``autocrypt_timestamp``:
 
- - OPTIONAL in the case of a **reset**:
+ - set ``bad_user_agent`` to the apparent user-agent of the message
 
-   - set ``autocrypt_peer_state[A].bad_user_agent`` to the apparent
-     user-agent of the message
+ - If ``counting_since`` is older than ``autocrypt_timestamp`` and more
+   than 35 days older than ``effective_date``:
 
- - OPTIONAL in the case of a **reset** AND ``counting_since`` is more
-   than 35 days older than ``message_date``:
-
-   - set ``autocrypt_peer_state[A].counting_since`` to ``last_seen``
-   - set ``autocrypt_peer_state[A].count_have_ach`` to zero
-   - set ``autocrypt_peer_state[A].count_no_ach`` to one
+   - set ``counting_since`` to ``last_seen``
+   - set ``count_have_ach`` to zero
+   - set ``count_no_ach`` to one
 
 
 Using additional state
