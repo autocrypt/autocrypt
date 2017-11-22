@@ -4,7 +4,7 @@
 
 .. image:: ./images/autocrypt_title.png
 
-.. image:: ./images/encrypted_logo.png
+.. image:: ./images/open_standard.png
 
 .. image:: ./images/email_logo.png
 

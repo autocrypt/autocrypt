@@ -145,11 +145,19 @@ div.sphinxsidebar a[href="#"] {
 
 .body-masthead-box-img {
   text-align: center;
-}
-
-.body-masthead-box-img img {
   height: 100px;
 }
+
+.body-masthead-box-img2 img {
+    margin-top: 15px;
+}
+
+
+/*
+.body-masthead-box-img img {
+  height: 300px;
+}
+*/
 
 div.body-masthead-copy h2 {
   text-align: center;
