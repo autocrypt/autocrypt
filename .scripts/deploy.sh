@@ -4,10 +4,10 @@ set -u
 set -x
 
 #Only attempt to deploy if we know the ssh key secrets, username and server
-test $encrypted_ee89c1e228aa_key
-test $encrypted_ee89c1e228aa_iv
-test $DEPLOY_USER
-test $DEPLOY_SERVER
+if test -z ${encrypted_ee89c1e228aa_key:+decryp_key} ; then exit 0; fi
+if test -z ${encrypted_ee89c1e228aa_iv:+decrypt_iv} ; then exit 0; fi
+if test -z ${DEPLOY_USER:+username} ; then exit 0; fi
+if test -z ${DEPLOY_SERVER:+server} ; then exit 0; fi
 
 # Prepare the ssh homedir.
 #
