@@ -6,6 +6,7 @@ python:
 
 env:
   - DEPLOY_USER=autocrypt DEPLOY_SERVER="autocrypt.org"
+  - DEPLOY_USER=autocrypt DEPLOY_SERVER="78.47.150.134"
 
 addons:
   apt:
