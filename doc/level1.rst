@@ -845,6 +845,13 @@ both programmatically and manually.
   allows implementations to optionally add another human-readable
   explanation.
 
+- The second MIME part's ``Content-Disposition`` SHOULD be
+  ``attachment`` to make it easy for the user to download it as a
+  separate file. If the second MIME part contains HTML, the
+  ``filename=`` MIME parameter should end with ``.html`` to make such
+  a file more likely to display as intended if the user tries to open
+  it.
+
 - The encrypted payload MUST begin with an ASCII-armored :rfc:`RFC
   4880 Transferable Secret Key<4880#section-11.2>`. All trailing data
   after the ASCII-armor ending delimiter MUST be stripped before
