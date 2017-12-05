@@ -834,10 +834,11 @@ both programmatically and manually.
   the purpose of the message (e.g. ``text/plain`` or ``text/html`` or
   ``multipart/alternative``).
 
-- The second mime part of the message MUST have the content-type
-  ``application/autocrypt-setup``. It consists of the user's
-  ASCII-armored secret key, encrypted in an ASCII-armored :rfc:`RFC
-  4880 Symmetrically Encrypted Data Packet<4880#section-5.7>`
+- The second mime part of the message MUST have Content-Type
+  ``application/autocrypt-setup``, and SHOULD have Content-Disposition
+  of ``attachment``. Its content consists of the user's ASCII-armored
+  secret key, encrypted in an ASCII-armored :rfc:`RFC 4880
+  Symmetrically Encrypted Data Packet<4880#section-5.7>`
 
 - There MAY be text above or below the ASCII-armored encrypted data in
   the second MIME part, which MUST be ignored while processing. This
