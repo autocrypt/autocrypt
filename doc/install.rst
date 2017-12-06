@@ -1,7 +1,7 @@
 Mail apps which support Autocrypt
 ================================================
 
-**Last update: Nov 5th 2017**
+**Last update: Dec 6th 2017**
 
 The following Autocrypt-enabled mail apps are available
 and/or under development:
@@ -20,14 +20,13 @@ Enigmail (development version)
 ------------------------------
 
 Enigmail_ is a plugin for Thunderbird_. For years, it has been the
-first choice to use OpenPGP encryption with E-Mail. Enigmail has 
-integrated Autocrypt support in `Enigmail nightly development 
-branches`_ and aims to reach Autocrypt Level 1 compliance with the
-next major release scheduled for Q1/2018.
+first choice to use OpenPGP encryption with E-Mail. Enigmail aims to reach
+Autocrypt Level 1 compliance with the next major release scheduled for Q1/2018.
+You can test it via `Nightly Build`_ today.
 
 .. _Enigmail: https://enigmail.net
 .. _Thunderbird: https://www.mozilla.org/en-US/thunderbird/
-.. _`Enigmail nightly development branches`: https://sourceforge.net/p/enigmail/source/ci/master/tree/
+.. _`Nightly Build`: install-autocrypt-enigmail.html
 
 K-9 Mail (development version)
 ------------------------------
