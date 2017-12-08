@@ -41,7 +41,6 @@ Content-Type: multipart/encrypted;
  protocol="application/pgp-encrypted";
  boundary="PLdq3hBodDceBdiavo4rbQeh0u8JfdUHL"
 
-This is an OpenPGP/MIME encrypted message (RFC 4880 and 3156)
 --PLdq3hBodDceBdiavo4rbQeh0u8JfdUHL
 Content-Type: application/pgp-encrypted
 Content-Description: PGP/MIME version identification
