@@ -44,7 +44,6 @@ and contributors, MUA developers and privacy enthusiasts.
 .. toctree::
    :hidden:
 
-   index
    features
    contact
    examples
@@ -60,3 +59,4 @@ and contributors, MUA developers and privacy enthusiasts.
    cleanup
    peering
    optional-state
+   _img

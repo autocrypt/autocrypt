@@ -136,7 +136,9 @@ html_theme = 'alabaster'
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
-# html_theme_options = {}
+html_theme_options = {
+  'logo':'../images/autocrypt_logo.png'
+}
 
 # Add any paths that contain custom themes here, relative to this directory.
 # html_theme_path = []
@@ -204,7 +206,7 @@ html_sidebars = {
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
 #
-# html_additional_pages = {}
+html_additional_pages = { 'index':'customindex.html' }
 
 # If false, no module index is generated.
 #
@@ -298,14 +300,14 @@ latex_elements = {
 latex_documents = [
 #    (master_doc, 'autocrypt-web.tex', u'Autocrypt Website', u'autocrypt team', 'manual'),
     ('level1', 'autocrypt-spec-{}.tex'.format(specversion),
-     u'Autocrypt Specification', u'Autocrypt team, licensed CC0',
+     u'Autocrypt Level 1 Specification', u'Autocrypt team, licensed CC0',
      'howto', False),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
 # the title page.
 #
-# latex_logo = None
+latex_logo = 'images/aclogo.png'
 
 # For "manual" documents, if this is true, then toplevel headings are parts,
 # not chapters.
@@ -319,6 +321,7 @@ latex_show_pagerefs = True
 # If true, show URL addresses after external links.
 #
 latex_show_urls = 'footnote'
+# latex_show_urls = True
 
 # Documents to append as an appendix to all manuals.
 #
@@ -371,3 +374,6 @@ epub_exclude_files = ['search.html']
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'https://docs.python.org/': None}
+
+def setup(app):
+        app.add_stylesheet('custom.css')
