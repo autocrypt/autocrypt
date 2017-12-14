@@ -1,24 +1,20 @@
 
-Channels and Contact possibilities
-==================================
+Contacts and Events
+===================
 
 .. _`contact channels`:
 
 Channels
 --------
 
-If you want to help, including offering constructive criticism,
-you may:
+If you want to talk with us you may:
 
 - join the `Autocrypt mailing list`_
 
-- join chats at **#autocrypt on freenode or matrix.org**.
+- collaborate through our `github Autocrypt repo`_
 
-- **Tuesdays** are "Autocrypt tuesday" where Autocrypt involved folks agreed
-  to try to be present, merge PRs and discuss any related topic.
-
-- collaborate through PRs, issues and edits on our
-  `github Autocrypt repo`_
+- join chats at **#autocrypt on freenode** or through `matrix mirror
+  <https://riot.im/app/#/room/#autocrypt:matrix.org>`_.
 
 
 .. _`Autocrypt mailing list`: https://lists.mayfirst.org/mailman/listinfo/autocrypt
@@ -52,9 +48,24 @@ and the ACLU_.
 Upcoming events
 ---------------
 
-- November 2017: Level 1 release party in Berlin?
+- December 27-30th 2017, Leipzig: 34th Chaos Communication Congress.
+  Several Autocrypters will be present.  Look out for self-organized
+  Autocrypt and/or Delta.Chat sessions.
 
-- December 27-30th 2017: Chaos Communication Congress, Leipzig?
+- January 10-12th 2018: RealWorldCrypto, Zuerich. A few Autocrypters
+  might go, maybe also try to give a Lightning talk, certainly have
+  side-discussions like last year.
+
+- January 17th 2018, Lausanne, Switzerland: a day of discussions and
+  interchange with researchers from EPFL and the NEXTLEAP EU project
+  on out-of-band verification and key gossip, also in relation
+  to Autocrypt.
+
+- March 2018: Internet Freedom Festival, Valencia. We proposed
+  two usability sessions and several Autocrypt-related folks
+  aim to appear in Valencia. It's unclear at this point if we
+  go for a pre- or post-gathering like we did in 2017.
+
 
 .. _`33c3`: https://events.ccc.de/congress/2016/wiki/Main_Page
 
@@ -66,6 +77,8 @@ Upcoming events
 
 Past events
 -------------
+
+- November 4-8th 2017: Level 1 closure meeting in Freiburg, Germany.
 
 - September 18-24th 2017: get-together in Freiburg im Breisgau, Germany
 
