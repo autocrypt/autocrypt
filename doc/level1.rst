@@ -827,7 +827,8 @@ both programmatically and manually.
 
 - Both the To and From headers MUST be the address of the user account.
 
-- The Autocrypt Setup Message MUST contain an ``Autocrypt-Setup-Message: v1`` header.
+- The Autocrypt Setup Message MUST contain an
+  ``Autocrypt-Setup-Message: v1`` header.
 
 - The Autocrypt Setup Message MUST have a ``multipart/mixed`` structure,
   and it MUST have as first part a human-readable description about
@@ -955,7 +956,20 @@ including:
    that matches these characteristics, and it could alert the user if
    it discovers one.
 
-If the MUA finds an Autocrypt Setup Message, it should offer to
+When looking for an Autocrypt Setup Message, the MUA may encounter
+messages that look similar to what it expects, but are not
+well-formed.  If the MUA discovers an e-mail message that has the
+``Autocrypt-Setup-Message`` header but its value is not ``v1``, the
+MUA SHOULD ignore this message entirely.
+
+When looking for an Autocrypt Setup Message, if the MUA discovers a
+message with the ``Autocrypt-Setup-Message: v1`` header with ``To:``
+and ``From:`` headers matching an account controlled by the MUA, but
+the message's metadata and structure is not as expected, the MUA
+SHOULD alert the user that a malformed Setup Message has been found,
+and it SHOULD NOT offer to import the message.
+
+If the MUA finds a good Autocrypt Setup Message, it should offer to
 import it to enable Autocrypt.  If the user agrees to do so:
 
  * The MUA prompts the user for their corresponding Setup Code.
