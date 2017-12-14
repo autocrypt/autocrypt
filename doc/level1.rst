@@ -838,8 +838,13 @@ both programmatically and manually.
 - The second mime part of the message MUST have Content-Type
   ``application/autocrypt-setup``, and SHOULD have Content-Disposition
   of ``attachment``. Its content consists of the user's ASCII-armored
-  secret key, encrypted in an ASCII-armored :rfc:`RFC 4880
-  Symmetrically Encrypted Data Packet<4880#section-5.7>`
+  secret key, encrypted within an ASCII-armored OpenPGP
+  symmetrically-encrypted message.  Specifically, this means a block
+  delimited with ``-----BEGIN PGP MESSAGE-----`` and ``-----END PGP
+  MESSAGE-----``, which contains two OpenPGP packets: a
+  :rfc:`Symmetric-Key Encrypted Session Key<4880#section-5.3>`
+  followed by a :rfc:`Symmetrically Encrypted Integrity Protected Data
+  Packet<4880#section-5.13>`.
 
 - There MAY be text above or below the ASCII-armored encrypted data in
   the second MIME part, which MUST be ignored while processing. This
