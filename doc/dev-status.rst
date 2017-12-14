@@ -35,11 +35,11 @@ Last updated: ``2017-12-14``
 
 Logos are copyright their respective owners.
 
+Legend:
+
 .. todo::
 
-    TODO @hpk42
-
-Legend:
+    describe the headers of each of the columns in the above table @hpk42
 
 .. [1] require passphrase
 .. [2] always send
