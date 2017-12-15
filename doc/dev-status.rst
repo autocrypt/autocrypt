@@ -4,8 +4,8 @@ Autocrypt-capable MUAs level 1 implementation status
 Last updated: ``2017-12-14``
 
 +--------------------------------------+--------+--------+--------+--------+--------------+--------+--------+--------+----------+
-|MUA/feature                           |header  |keygen  |peer    |header  |recommend     |encrypt |setup   |setup   |uid       |
-|                                      |parsing |        |state   |inject  |during compose|        |message |process |decorative|
+|MUA/project                           |header  |keygen  |peer    |header  |recommend     |encrypt |setup   |setup   |uid       |
+|                                      |parsing |        |state   |inject  |              |        |message |process |decorative|
 |                                      |        |        |        |        |              |        |        |        |          |
 +======================================+========+========+========+========+==============+========+========+========+==========+
 |.. image:: images/logos/deltachat.png |✔       |✔       |✔       |✔       |✔             |✔       |started |started |✔         |
@@ -37,9 +37,27 @@ Logos are copyright their respective owners.
 
 Legend:
 
-.. todo::
+- ``MUA/project``: denotes a mail app, library or tool.
 
-    describe the headers of each of the columns in the above table @hpk42
+- ``header parsing``: compliant parsing of the Autocrypt header
+
+- ``keygen``: secret key generation follows Autocrypt UI guidance
+
+- ``peerstate``: state is kept according to spec
+
+- ``header inject``: proper creation of outgoing Autocrypt header
+
+- ``recommend``: implements Autocrypt recommendation
+
+- ``encrypt``: encrypts outgoing messages properly
+
+- ``setup message``: proper generation and processing of Autocrypt Setup Message
+
+- ``setup process``: follows guidance with respect to Autocrypt account setup
+
+- ``uid decorative``: UID in key data is only used for decorative
+  purposes, and in particular not for looking up keys for an e-mail address.
+
 
 .. [1] require passphrase
 .. [2] always send
