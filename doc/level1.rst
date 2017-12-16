@@ -812,7 +812,10 @@ can generate an Autocrypt Setup Message, and send it to itself.  A
 not-yet-configured Autocrypt MUA (a new MUA in a multi-device
 case, or recovering from device failure or loss) can import the
 Autocrypt Setup Message and recover the ability to read existing
-messages.
+messages. If the Autocrypt MUA is already configured (MUA has secret key
+material in ``accounts[addr].secret_key``) then the UI MUST display a
+warning to the user and ask them to confirm that importing the Autocrypt
+Setup Message will overwrite the existing key.
 
 An Autocrypt Setup Message is protected with a :ref:`Setup Code
 <setup-code>`.
