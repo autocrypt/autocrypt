@@ -948,7 +948,8 @@ Setup Message Import
 
 An Autocrypt-capable MUA SHOULD support the ability to find and import
 an Autocrypt Setup Message when the user has not yet configured
-Autocrypt.  An MUA could look for such a message in several ways,
+Autocrypt (that is, when ``accounts[addr].secret_key`` is unset).  An
+MUA in this state could look for such a message in several ways,
 including:
 
  * If the user decides to enable Autocrypt for an account, and
@@ -1036,7 +1037,7 @@ Account Preferences
 Level 1 MUAs MUST allow the user to disable Autocrypt completely for
 each account they control (that is, to set ``accounts[addr].enabled``
 to ``false``).  For level 1, we expect most MUAs to have Autocrypt
-disabled by default.
+disabled by default. See :ref:`enabling-disabling` for more details.
 
 .. _getting-started:
 
@@ -1082,6 +1083,44 @@ Earlier choices are better than later ones.
    background. Set your ``accounts[addr].prefer_encrypt`` to
    ``nopreference`` and start sending Autocrypt headers.
 
+.. _enabling-disabling:
+
+Disabling Autocrypt
++++++++++++++++++++
+
+Once Autocrypt is enabled for a given account
+(``accounts[addr].enabled`` is set to ``true``), the user might choose
+to disable it.  By default, disabling should only set
+``accounts[addr].enabled`` to ``false``, and it SHOULD NOT destroy
+``accounts[addr].secret_key``.  This preserves the user's ability to
+read old encrypted e-mails, as well as being able to read encrypted
+e-mails that arrive after the user has disabled Autocrypt.
+
+The act of re-enabling Autocrypt after it was disabled SHOULD leave
+``accounts[addr].secret_key`` and ``accounts[addr].public_key``
+intact, so that the user continues using the same key.
+
+Destroying Secret Key Material
+++++++++++++++++++++++++++++++
+
+When disabling Autocrypt for an account, a Level 1 MUA MAY offer the
+user an opportunity to also destroy the secret key material for that
+account.  Since Autocrypt clients generally do not discuss secret keys
+with users, a MUA offering this choice should use a phrase like
+"destroy access to encrypted messages", rather than referring to
+"keys" or "key material".
+
+A MUA that allows the user this opportunity SHOULD clearly indicate to
+the user that the destruction of this secret key material will leave
+them unable to read any new messages that arrive encrypted.  A MUA
+that only retains the encrypted form of archived messages SHOULD also
+indicate to the user that previously-received encrypted messages will
+become unreadable as well.  Note that for some users, this is a
+desirable feature: "destroy all messages" is an appropriate action to
+take in some circumstances.
+
+If the user selects this option, the MUA MUST clear both
+``accounts[addr].secret_key`` and ``accounts[addr].public_key``.
 
 Appendix
 --------
