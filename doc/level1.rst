@@ -1122,6 +1122,12 @@ take in some circumstances.
 If the user selects this option, the MUA MUST clear both
 ``accounts[addr].secret_key`` and ``accounts[addr].public_key``.
 
+After this key destruction has happened, the MUA is in a configuration
+where it could restart a :ref:`search for an Autocrypt Setup
+Message<setup-message-import>`.  For Level 1 MUAs, this is the
+simplest path for synchronizing secret keys between two MUAs that have
+mistakenly both enabled Autocrypt independently.
+
 Appendix
 --------
 
