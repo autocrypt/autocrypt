@@ -1,4 +1,4 @@
-Introducing Autocrypt: Encrypted E-Mail for Humans
+Project Background
 ==================================================
 
 **If users ask how they can secure their e-mail the answer
