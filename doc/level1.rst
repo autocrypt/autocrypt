@@ -1036,7 +1036,7 @@ encrypt.
 Account Preferences
 +++++++++++++++++++
 
-Level 1 MUAs MUST allow the user to disable Autocrypt completely for
+Level 1 MUAs SHOULD allow the user to disable Autocrypt completely for
 each account they control (that is, to set ``accounts[addr].enabled``
 to ``false``).  For level 1, we expect most MUAs to have Autocrypt
 disabled by default.
