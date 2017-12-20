@@ -3,7 +3,6 @@ Background
 
 .. contents::
 
-
 Motivation
 ----------
 
@@ -61,7 +60,7 @@ where we meet next <contact>`.
 See :doc:`contents` for an index of all docs and discussion results so far.
 
 
-Design Differences to previous approaches
+Design Differences To Previous Approaches
 -----------------------------------------
 
 End-to-end encrypted e-mail has been around for decades, but has failed
