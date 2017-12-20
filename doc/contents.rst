@@ -9,9 +9,9 @@ and contributors, MUA developers and privacy enthusiasts.
      introduction to why Autocrypt exists and why it is trying
      to achieve more e-mail encryption.
 
-:doc:`principles`
-     discusses how the Autocrypt efforts is different from past
-     e2e encryption efforts.
+:doc:`background`
+     discusses the motiviation, technical, social and design
+     approaches of Autocrypt.
 
 :doc:`examples`
      Example data flows and MUA state transitions.  This may be the
@@ -44,7 +44,6 @@ and contributors, MUA developers and privacy enthusiasts.
 .. toctree::
    :hidden:
 
-   principles
    background
    contact
    examples
