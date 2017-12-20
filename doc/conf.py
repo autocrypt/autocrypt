@@ -377,3 +377,13 @@ intersphinx_mapping = {'https://docs.python.org/': None}
 
 def setup(app):
         app.add_stylesheet('custom.css')
+        staging = True
+        try:
+            import git
+            with git.Repo(search_parent_directories=True) as repo:
+                if str(repo.active_branch) == 'master':
+                    staging = False
+        except:
+            pass
+        if staging:
+            app.add_stylesheet('staging.css')
