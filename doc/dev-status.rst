@@ -91,31 +91,9 @@ Source code:
 
 - Delta-Chat: TODO
 
-Autocrypt bot
+Testing Autocrypt
 +++++++++++++++
 
-Implemented using `py-autocrypt`_.
-
-Responder
-~~~~~~~~~~
-
-We deploy a preliminary auto-responder which accepts and sends mails
-with Autocrypt headers.  Just sent a mail to ``bot at autocrypt dot
-org`` and wait for the reply and look at the headers.  As of Janury
-2017, the Bot does not implement the full level-1 protocol.
-
-Bot Dovecot IMAP
-~~~~~~~~~~~~~~~~
-
-You can login to IMAP/Dovecot (port 993, TLS mandatory) with the
-username "bot" and the password as stored in ``gitcrypt/credentials.txt``.
-Ask on IRC or the mailing list and provide your gpg public key for access to
-the password credentials using `git-crypt <https://www.agwa.name/projects/git-crypt/>`_.
-
-ssh access to bot account
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-You can ssh to the bot account: ``ssh -l bot mail.autocrypt.org``,
-ECDSA key fingerprint is ``SHA256:4RWh81zOd/Pgq3mHhKpyLdVZJfOpq+DgqKheUIhJgWQ``.
-Ask on IRC to get your SSH key added (anyone already with access
-to the bot@autocrypt.org account can add it to ``.ssh/authorized_keys``).
+There is an Autocrypt Bot which accepts and sends mails with Autocrypt
+headers. Just write an E-Mail to bot@autocrypt.org. You can read more
+Details :ref:`here<bot>`.
