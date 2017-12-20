@@ -9,7 +9,7 @@ and contributors, MUA developers and privacy enthusiasts.
      introduction to why Autocrypt exists and why it is trying
      to achieve more e-mail encryption.
 
-:doc:`features`
+:doc:`principles`
      discusses how the Autocrypt efforts is different from past
      e2e encryption efforts.
 
@@ -44,7 +44,8 @@ and contributors, MUA developers and privacy enthusiasts.
 .. toctree::
    :hidden:
 
-   features
+   principles
+   background
    contact
    examples
    level1

@@ -1,4 +1,4 @@
-Project Background
+Background and Motivation
 ==================================================
 
 **If users ask how they can secure their e-mail the answer
