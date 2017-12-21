@@ -36,6 +36,9 @@ and contributors, MUA developers and privacy enthusiasts.
 
 :doc:`glossary`
 
+:doc:`bot`
+     Description of the Autocrypt bot.
+
 
 .. toctree::
    :hidden:
@@ -60,3 +63,4 @@ and contributors, MUA developers and privacy enthusiasts.
    install
    install-autocrypt-enigmail
    news
+   bot
