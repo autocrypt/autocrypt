@@ -5,10 +5,6 @@ Current docs (work-in-progress)
 The following in-progress documents are written for early adopters
 and contributors, MUA developers and privacy enthusiasts.
 
-:doc:`index`
-     introduction to why Autocrypt exists and why it is trying
-     to achieve more e-mail encryption.
-
 :doc:`background`
      discusses the motiviation, technical, social and design
      approaches of Autocrypt.
