@@ -16,7 +16,7 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
+import os
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
@@ -378,6 +378,11 @@ intersphinx_mapping = {'https://docs.python.org/': None}
 def setup(app):
         app.add_stylesheet('custom.css')
         staging = True
+        try:
+            if os.env['TRAVIS_REPO_SLUG'] == 'autocrypt/autocrypt' and os.env['TRAVIS_BRANCH'] == 'master':
+                staging = False
+        except:
+            pass
         try:
             import git
             with git.Repo(search_parent_directories=True) as repo:
