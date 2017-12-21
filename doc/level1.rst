@@ -417,7 +417,7 @@ Updating ``peers[from-addr]`` depends on:
      encounter the message repeatedly (e.g. re-delivery, subsequent
      scans, etc). An MUA MAY decide to ignore such a message entirely
      for the purposes of Autocrypt processing.  If an MUA is capable
-     of associating information with a recieved message, it could
+     of associating information with a received message, it could
      instead save the ``effective date`` of such a message the first
      time it sees it to avoid accidental re-processing.
 
@@ -896,7 +896,7 @@ An Autocrypt Level 1 MUA MUST generate a Setup Code as UTF-8 string
 of 36 numeric characters, divided into nine blocks of four, separated
 by dashes. The dashes are part of the secret code and there are no
 spaces. This format holds about 119 bits of entropy. It is designed to
-be unambiguous, pronounceable, script-independent (chinese, cyrillic
+be unambiguous, pronounceable, script-independent (Chinese, Cyrillic
 etc.), easily input on a mobile device and split into blocks that are
 easily kept in short term memory. For instance::
 
@@ -1057,7 +1057,7 @@ If the Autocrypt recommendation is either ``available`` or
 to allow the user to make a different decision.
 
 If the Autocrypt recommendation is ``discourage``, then the MUA SHOULD
-expose the UI in an unactive state.  But if the user chooses to
+expose the UI in an inactive state.  But if the user chooses to
 activate it (e.g., clicking on the checkbox), then the UI should
 display a warning to the user and ask them to confirm the choice to
 encrypt.
@@ -1165,7 +1165,7 @@ Appendix
 E-mail Address Canonicalization
 +++++++++++++++++++++++++++++++
 
-To keep consistent state refering to different but practically equivalent
+To keep consistent state referring to different but practically equivalent
 writings of an e-mail address, a MUA SHOULD canonicalize e-mail
 addresses when comparing them (for example for using an e-mail
 address as an index key).
