@@ -999,6 +999,22 @@ import it to enable Autocrypt.  If the user agrees to do so:
 
 See :ref:`setup-message-example`.
 
+Since Level 1 only recommends looking for a Setup Message when
+``accounts[addr].secret_key`` is unset, some Level 1 MUAs might not
+look for or handle Setup Messages for an already-configured account at
+all.  If two such MUAs share an account, and both MUAs have somehow
+enabled Autocrypt on it independently without discovery of a Setup
+Message, they will have different secret keys.  This situation is bad
+because it may lead to intermittently unreadable mail on either or
+both MUAs.
+
+These simple implementations can both keep Autocrypt enabled and avoid
+new unreadable mail if the user manually synchronizes secret keys.  To
+do this, the user must first :ref:`destroy their local secret
+key<destroy-secret-key>` on one MUA.  Afterwards, that MUA can begin
+looking for a Setup Message again.  A more sophisticated
+implementation may offer a more user-friendly way to detect this
+situation and resolve it.
 
 User Interface
 --------------
@@ -1099,6 +1115,8 @@ e-mails that arrive after the user has disabled Autocrypt.
 The act of re-enabling Autocrypt after it was disabled SHOULD leave
 ``accounts[addr].secret_key`` and ``accounts[addr].public_key``
 intact, so that the user continues using the same key.
+
+.. _`destroy-secret-key`:
 
 Destroying Secret Key Material
 ++++++++++++++++++++++++++++++
