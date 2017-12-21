@@ -19,3 +19,5 @@ indent_style = tab
 
 [*.html]
 indent_size = 2
+[*.css]
+indent_size = 2
