@@ -64,3 +64,4 @@ and contributors, MUA developers and privacy enthusiasts.
    install-autocrypt-enigmail
    news
    bot
+   press-team
