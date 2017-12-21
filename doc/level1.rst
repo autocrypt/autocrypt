@@ -101,15 +101,15 @@ spec also provides guidance on how and when to :ref:`generate
 :ref:`import <setup-message-import>` these messages.
 
 Autocrypt aggressively distributes public keys, but conservatively recommends
-encryption to avoid disruption to established email workflows.
-Specifically, Autocrypt only recommends that an email be encrypted if
+encryption to avoid disruption to established e-mail workflows.
+Specifically, Autocrypt only recommends that an e-mail be encrypted if
 encryption is possible, and:
 
 1) The sender specifically requests encryption during message
    composition;
-2) The email is in reply to an encrypted message; or,
+2) The e-mail is in reply to an encrypted message; or,
 3) The sender and the recipients have explicitly stated that they
-   :ref:`prefer <prefer-encrypt>` encrypted email.
+   :ref:`prefer <prefer-encrypt>` encrypted e-mail.
 
 
 Requirements on MUA/E-mail Provider interactions
@@ -601,17 +601,17 @@ this to the user.  A graceful way to handle this situation is to save
 the enabled state, and only prompt the user about the issue when they
 send the mail.
 
-.. _mail-encryption:
+.. _message-encryption:
 
-Mail Encryption
-+++++++++++++++
+Message Encryption
+++++++++++++++++++
 
 .. note::
 
    An e-mail that is said to be "encrypted" here will be both signed
    and encrypted in the cryptographic sense.
 
-An outgoing e-mail will be sent encrypted in either of two cases:
+An outgoing e-mail message will be sent encrypted in either of two cases:
 
 - the Autocrypt recommendation for the list of recipients is
   ``encrypt``, and not explicitly overridden by the user, or
@@ -634,8 +634,8 @@ encrypted, the MUA SHOULD encrypt the draft only to itself before storing
 it remotely. The MUA SHOULD NOT sign drafts.
 
 
-Cleartext replies to encrypted mail
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Cleartext replies to encrypted messages
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In the common case, a reply to an encrypted message will also be
 encrypted. Due to Autocrypt's opportunistic approach to key discovery,
@@ -672,8 +672,8 @@ attribute indicates the recipient address this header is valid for as
 usual, but may relate to any recipient in the ``To`` or ``Cc`` header.
 See example in :ref:`autocrypt-gossip-example`
 
-Key Gossip Injection in Outbound Mail
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Key Gossip Injection in Outbound Messages
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 An Autocrypt MUA MAY include ``Autocrypt-Gossip`` headers in messages
 with more than one recipient. These headers MUST be placed in the root
@@ -756,7 +756,7 @@ The MUA MAY protect the secret key (and other sensitive data it has
 access to) with a password, but it SHOULD NOT require the user to
 enter the password each time they send or receive a mail. Since
 Autocrypt-enabled MUAs :ref:`sign all encrypted outgoing
-messages<mail-encryption>`, it could happen that the user has to enter
+messages<message-encryption>`, it could happen that the user has to enter
 the password very often, both for reading and sending mail. This
 introduces too much friction to become part of a routine daily
 workflow.
@@ -794,7 +794,7 @@ and predictable user experience.  Any linkability concerns introduced by
 Autocrypt can be mitigated by using a different MUA for each e-mail
 account.
 
-Sometimes a user may be able to send and receive emails with multiple
+Sometimes a user may be able to send and receive e-mails with multiple
 distinct e-mail addresses ("aliases") via a single account.  For the
 purposes of Autocrypt, the MUA SHOULD treat each specific alias as a
 distinct account.
