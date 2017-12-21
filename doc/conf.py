@@ -17,7 +17,7 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
-# import sys
+import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
 # -- General configuration ------------------------------------------------
@@ -379,7 +379,7 @@ def setup(app):
         app.add_stylesheet('custom.css')
         staging = True
         try:
-            if os.env['TRAVIS_REPO_SLUG'] == 'autocrypt/autocrypt' and os.env['TRAVIS_BRANCH'] == 'master':
+            if os.environ['TRAVIS_REPO_SLUG'] == 'autocrypt/autocrypt' and os.environ['TRAVIS_BRANCH'] == 'master':
                 staging = False
         except:
             pass
@@ -391,6 +391,4 @@ def setup(app):
         except:
             pass
         if staging:
-            # this is not working! see https://github.com/autocrypt/autocrypt/issues/295
-            # app.add_stylesheet('staging.css')
-            pass
+            app.add_stylesheet('staging.css')
