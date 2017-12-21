@@ -8,8 +8,4 @@
 
 .. image:: ./images/email_logo.png
 
-.. image:: ./images/get_it_now.png
-
-.. image:: ./images/title_image.png
-
 .. image:: ./images/aclogo.png
