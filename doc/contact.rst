@@ -16,6 +16,7 @@ If you want to talk with us you may:
 - join chats at **#autocrypt on freenode** or through `matrix mirror
   <https://riot.im/app/#/room/#autocrypt:matrix.org>`_.
 
+- for media and press related questions please mail press at autocrypt org.
 
 .. _`Autocrypt mailing list`: https://lists.mayfirst.org/mailman/listinfo/autocrypt
 
