@@ -60,3 +60,7 @@ and contributors, MUA developers and privacy enthusiasts.
    peering
    optional-state
    _img
+   blog/blog-example
+   install
+   install-autocrypt-enigmail
+   news
