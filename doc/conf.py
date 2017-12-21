@@ -391,4 +391,6 @@ def setup(app):
         except:
             pass
         if staging:
-            app.add_stylesheet('staging.css')
+            # this is not working! see https://github.com/autocrypt/autocrypt/issues/295
+            # app.add_stylesheet('staging.css')
+            pass
