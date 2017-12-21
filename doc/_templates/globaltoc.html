@@ -14,7 +14,9 @@
       <li><a href="{{ pathto('contact') }}">Contact and Events</a></li>
       <li>
         <a href="{{ pathto('level1') }}">Level 1 Spec</a>
-        <a href="{{ pathto('autocrypt-spec-1.0.0rc1.pdf', 1) }}">[PDF]</a>
+        </!-- slightly hacky way to get a reference to the root's generated PDF.
+              Is there a better way? -->
+        <a href="{{ pathto('./', 1) }}autocrypt-spec-{{release}}.pdf">[PDF]</a>
       </li>
       <li><a href="{{ pathto('dev-status') }}">Implementation Status</a></li>
       <li><a href="{{ pathto('examples') }}">Example Mail Flows</a></li>
