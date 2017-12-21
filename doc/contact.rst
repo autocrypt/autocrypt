@@ -25,7 +25,7 @@ If you want to talk with us you may:
 See :doc:`dev-status` for links to ongoing development.
 Currently involved are developers from `K9/Android`_,
 `OpenKeyChain/Android`_, `Enigmail`_, `Mailpile`_, `Bitmask/LEAP`_ as
-well as people from the `nextleap`_, `enzevalos`_ and panoramix_ research projects
+well as people from the `NEXTLEAP`_, `enzevalos`_ and panoramix_ research projects
 and the ACLU_.
 
 
@@ -34,7 +34,7 @@ and the ACLU_.
 .. _`Enigmail`: https://enigmail.net/
 .. _`Mailpile`: https://mailpile.is/
 .. _`Bitmask/LEAP`: https://leap.se/en/docs/client
-.. _`nextleap`: https://nextleap.eu
+.. _`NEXTLEAP`: https://nextleap.eu
 .. _`enzevalos`: https://www.inf.fu-berlin.de/groups/ag-si/enzevalos.html
 .. _`panoramix`: https://panoramix-project.eu/
 .. _`OpenKeyChain/Android`: https://www.openkeychain.org/
@@ -56,16 +56,16 @@ Upcoming events
 
 .. _`Delta Chat session`: https://events.ccc.de/congress/2017/wiki/index.php/Session:Delta_Chat
 
-- January 10-12th 2018: RealWorldCrypto, Zuerich. A few Autocrypters
+- January 10-12th 2018: `RealWorldCrypto 2018`_, Zürich. A few Autocrypters
   might go, maybe also try to give a Lightning talk, certainly have
   side-discussions like last year.
 
 - January 17th 2018, Lausanne, Switzerland: a day of discussions and
-  interchange with researchers from EPFL and the NEXTLEAP EU project
+  interchange with researchers from `EPFL`_ and the `NEXTLEAP`_ EU project
   on out-of-band verification and key gossip, also in relation
   to Autocrypt.
 
-- March 2018: Internet Freedom Festival, Valencia. We proposed
+- March 2018: `Internet Freedom Festival`_, Valencia. We proposed
   two usability sessions and several Autocrypt-related folks
   aim to appear in Valencia. It's unclear at this point if we
   go for a pre- or post-gathering like we did in 2017.
@@ -75,9 +75,13 @@ Upcoming events
 
 .. _`We Fix the Net`: https://events.ccc.de/congress/2016/wiki/Session:We_Fix_the_Net
 
-.. _`RealWorldCrypto 2017`: http://www.realworldcrypto.com/rwc2017
+.. _`RealWorldCrypto 2017`: https://rwc.iacr.org/2017/
 
 .. _`Internet Freedom Festival`: https://internetfreedomfestival.org/
+
+.. _`RealWorldCrypto 2018`: https://rwc.iacr.org/2018/
+
+.. _`EPFL`: https://epfl.ch/
 
 Past events
 -------------
@@ -86,7 +90,10 @@ Past events
 
 - September 18-24th 2017: get-together in Freiburg im Breisgau, Germany
 
-- August 4-8th 2017: something during the dutch hacker camp SHA2017?
+- August 4-8th 2017: during the dutch hacker camp SHA2017, `Mailpile
+  published a new release candidate
+  <https://www.mailpile.is/blog/2017-08-13_SHA2017.html>`_ and talked
+  up Autocrypt.
 
 - June 9-12th 2017: `Autocrypt Level 1 hackathon / gathering
   <https://lists.mayfirst.org/pipermail/autocrypt/2017-May/000093.html>`_ in
