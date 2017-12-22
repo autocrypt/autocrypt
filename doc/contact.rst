@@ -9,7 +9,9 @@ Channels
 
 If you want to talk with us you may:
 
-- join the `Autocrypt mailing list`_
+- join the `Autocrypt mailing list`_ for community discussions
+
+- for press-related inquiries contact the :doc:`Autocrypt press team <press-team>`
 
 - collaborate through our `github Autocrypt repo`_
 
