@@ -4,17 +4,20 @@ Autocrypt press team
 If you have any press-related inquiries please send e-mail to
 the `press-team <mailto:press-team@autocrypt.org>`_, The press team
 strives to answer within two workdays on press-related inquiries,
-and often will get back faster.
+and often will get back faster (we have a knack for e-mail).
 
 This document describes our practises how we handle and account for
 press communications.
 
-Initial team members
+Current team members
 --------------------
+
+- dkg
 
 - Holger Krekel / hpk42
 
 - Vincent Breitmoser / valodim
+
 
 Accountability of press-team
 -----------------------------------------------------------
@@ -23,6 +26,7 @@ The press-team is accountable in that anyone can ask how media reporting
 came about and how and who, if anyone, was involved from the press-team.
 Note that often journalists do not ask back before they publish
 articles, or do not even contact a project before reporting.
+
 
 If you want to be on the team
 -----------------------------
