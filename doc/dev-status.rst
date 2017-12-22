@@ -89,7 +89,7 @@ Source code:
 
 - `Go Autocrypt <https://github.com/autocrypt/go-autocrypt>`_
 
-- Delta-Chat: TODO
+- `Delta.Chat code <https://github.com/deltachat/>`_
 
 Testing Autocrypt
 +++++++++++++++++
