@@ -1,67 +1,64 @@
-Autocrypt Press Team Policy
-===========================
+Autocrypt Press Team
+====================
 
-The Autocrypt Press Team handles mail sent to press@autocrypt.org,
-which we expect to be press inquiries. This document tries to describe
-how we handle mail to and from this alias.
+The Autocrypt Press Team handles mail sent to press-team@autocrypt.org,
+which we expect to be about press-related inquiries. This document
+describes our practises how we handle and account for
+press communications.
 
-Don't hide who is responsible for press@autocrypt.org
+Current members
+---------------
+
+- Holger Krekel / hpk42
+
+- Vincent Breitmoser / valodim
+
+
+
+Quick response times
+--------------------
+
+The press team strives to answer within two workdays on inquiries,
+and often will get back faster.
+
+Who is responsible for press-team@autocrypt.org
 -----------------------------------------------------
 
-Everyone in the project (including anyone lurking) should know who is on
-the press team.  This doesn't have to be published in some formal place
-(though it could be), but if anyone wants to know it shouldn't be a
-secret.  We don't need anyone's legal names, but if you participate in
-Autocrypt under some nick, you should be OK with people knowing that
-that nick is part of the press team.
+Press team members don't need to formally publish their nicks
+or names (though they can), but they are not considered a secret.
+Providing legal names is not required. Nicks are sufficient.
 
-Always reply from your own specific e-mail address
---------------------------------------------------
-
-When replying to an e-mail that was sent to press@autocrypt.org, members
-of the press team should reply from their own address, so everyone can
-tell who is having the conversation.
-
-Don't send new mail from the alias
-----------------------------------
-
-This alias is for inbound contacts, and shouldn't be used to send
-new messages that aren't a reply.
-
-Always Cc press@autocrypt.org when replying
--------------------------------------------
-
-To ensure that active participants can know what's been answered and
-what's going on, everyone who responds to mail that was sent to
-press@autocrypt.org should respond with press@autocrypt.org in Cc.
-
-Maintain an archive of messages sent to press@autocrypt.org
+Accountability of press-team
 -----------------------------------------------------------
 
-Messages sent to press@autocrypt.org should be stored in a read-only
-mailbox that is accessible to the current "press team", in addition to
-being forwarded to the recipients.  Messages should be deleted from the
-archive after 6 months.
+The press-team is accountable in the sense that anyone can ask
+how media reporting came about and how and who, if anyone, was involved
+from the press-team.  Note that often journalists do not ask back before
+they publish articles, or do not even contact a project.
 
-Someone should reply within a day
----------------------------------
-
-If this is going to be a useful address for press inquiries, we also
-need to try to have *someone* answer legitimate messages within 24 hours.
-
-.. todo::
-
-   How do we guarantee this? suggestions welcome.
-
-Ask if you want to be on the team
+If you want to be on the team
 ---------------------------------
 
 If you want to help take responsibility for the press team, ask the
-existing press team.  Anyone on the existing press team should be able
-to add you to it if you're an active member of the project.
+existing press team.  Anyone on the existing press team may
+add you if you're an active member of the project.
 
-Propose fixes to this policy
-----------------------------
+Usage of press Always reply from your own specific e-mail address
+--------------------------------------------------
 
-If something is wrong with this policy, propose a fix the way you'd
-propose a fix to the Autocrypt spec.
+When replying to an e-mail that was sent to the press-team, members
+of the press team reply from their personal e-mail address, so everyone can
+tell who is replying to and having the conversation.  They will typically
+Cc the press-team at least on the initial reply so that the others know the
+communication is handled. If a conversation moved off to phone-calls,
+interviews, or private e-mail, press members typically send a brief
+summary note to the other team members.  Note that the press-team alias
+e-mail address is only for inbound contacts, and shouldn't be used to
+send new messages that aren't a reply.
+
+
+Changing practises
+------------------
+
+If you feel this press team document needs updates,
+please send PRs with a short rationale.
