@@ -12,6 +12,8 @@ press communications.
 Current team members
 --------------------
 
+- compl4xx
+
 - dkg
 
 - Holger Krekel / hpk42
