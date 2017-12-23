@@ -22,10 +22,12 @@ Current team members
 Accountability of press-team
 -----------------------------------------------------------
 
-The press-team is accountable in that anyone can ask how media reporting
-came about and how and who, if anyone, was involved from the press-team.
-Note that often journalists do not ask back before they publish
-articles, or do not even contact a project before reporting.
+If the press-team becomes aware of reporting, it will usually send
+a link of press articles to the community mailing list.  The press-team is
+accountable in that anyone can ask how media reporting came about and
+how and who, if anyone, was involved from the press-team.  Note that
+often journalists do not ask back before they publish articles, or do
+not even contact a project before reporting.
 
 
 If you want to be on the team
