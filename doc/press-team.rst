@@ -18,7 +18,10 @@ Current team members
 
 - Holger Krekel / hpk42
 
+- r10s
+
 - Vincent Breitmoser / valodim
+
 
 
 Accountability of press-team
