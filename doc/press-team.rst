@@ -23,16 +23,19 @@ Current team members
 - Vincent Breitmoser / valodim
 
 
-
-Accountability of press-team
------------------------------------------------------------
+Community interactions and responsibility
+-----------------------------------------
 
 If the press-team becomes aware of reporting, it will usually send
-a link of press articles to the community mailing list.  The press-team is
-accountable in that anyone can ask how media reporting came about and
-how and who, if anyone, was involved from the press-team.  Note that
-often journalists do not ask back before they publish articles, or do
-not even contact a project before reporting.
+a link of press articles to the community mailing list.  Anyone
+can ask how media reporting came about and how and who, if anyone, was
+involved from the press-team.  Note that often journalists do not ask
+back before they publish articles, or do not even contact a project
+before reporting.
+
+Press-team members remind each other when press-team internal
+discussions leak into community matters that are better discussed
+through issues or the mailing list.
 
 
 If you want to be on the team
