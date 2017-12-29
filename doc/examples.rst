@@ -103,7 +103,7 @@ For example, consider this mail flow::
 
 Alice and Carol have now all encryption keys but Bob only has Alice's
 because he never saw a mail from Carol.  Alice can now send an encrypted
-mail to Bob and Carol but Bub will not be able to respond encrypted
+mail to Bob and Carol but Bob will not be able to respond encrypted
 before his MUA has seen a mail from Carol.  This is fine because Autocrypt
 is about **opportunistic** encryption, i.e. encrypt if possible and
 otherwise don't get in the way of users.
