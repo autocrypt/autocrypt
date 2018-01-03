@@ -34,7 +34,7 @@ back before they publish articles, or do not even contact a project
 before reporting.
 
 Press-team members remind each other when press-team internal
-discussions leak into community matters that are better discussed
+discussions touch community matters that are better discussed
 through issues or the mailing list.
 
 
