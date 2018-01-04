@@ -22,6 +22,8 @@ Last updated: ``2017-12-14``
 +--------------------------------------+--------+--------+--------+--------+--------------+--------+--------+--------+----------+
 |`py-autocrypt`_                       |✔       |✔       |✔       |✔       |✘             |✘       |✘       |✘       |✔         |
 +--------------------------------------+--------+--------+--------+--------+--------------+--------+--------+--------+----------+
+|`pyac`_                               |✔       |✔       |✔       |✔       |✘             |✔       |✔       |✔       |✔         |
++--------------------------------------+--------+--------+--------+--------+--------------+--------+--------+--------+----------+
 |.. image:: images/logos/notmuch.png   |branch  |✘       |✘       |✘       |✘             |✘       |✘       |✘       |✔         |
 |                                      |        |        |        |        |              |        |        |        |          |
 |`notmuch`_                            |        |        |        |        |              |        |        |        |          |
@@ -66,6 +68,7 @@ Legend:
 .. _K-9 Mail: https://k9mail.github.io/
 .. _Enigmail: https://www.enigmail.net/
 .. _py-autocrypt: https://py-autocrypt.readthedocs.io/
+.. _pyac: https://pyac.readthedocs.io/
 .. _notmuch: https://notmuchmail.org/
 .. _mailpile: https://www.mailpile.is/
 .. _gmime: https://github.com/jstedfast/gmime/
