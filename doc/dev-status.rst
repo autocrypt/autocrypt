@@ -79,19 +79,21 @@ Source code:
 
 - K9: TODO
 
+- `Delta.Chat code <https://github.com/deltachat/>`_
+
 - Mailpile: TODO
 
 - Notmuch/Alot: TODO
 
 - `py-autocrypt (uses gpg) <https://github.com/hpk42/py-autocrypt>`_
 
-- `pyac code (uses pgpy) <https://github.com/juga0/pyac>`
+- `pyac <https://github.com/juga0/pyac>`_ (uses `PGPy
+  <https://pgpy.readthedocs.io>`_)
 
 - `Bitmask/LEAP refactorings <https://0xacab.org/leap/bitmask-dev/merge_requests/55/diffs>`_
 
 - `Go Autocrypt <https://github.com/autocrypt/go-autocrypt>`_
 
-- `Delta.Chat code <https://github.com/deltachat/>`_
 
 Testing Autocrypt
 +++++++++++++++++
