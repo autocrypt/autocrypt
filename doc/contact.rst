@@ -27,7 +27,7 @@ If you want to talk with us you may:
 See :doc:`dev-status` for links to ongoing development.
 Currently involved are developers from `K9/Android`_,
 `OpenKeyChain/Android`_, `Enigmail`_, `Delta.chat`_, `Mailpile`_, `Bitmask/LEAP`_,
-`py-autocrypt`_, and `notmuch`_, as
+`py-autocrypt`_, `pyac`_ and `notmuch`_, as
 well as people from the `NEXTLEAP`_, `enzevalos`_ and panoramix_ research projects
 and the ACLU_.
 
@@ -38,6 +38,7 @@ and the ACLU_.
 .. _`notmuch`: https://notmuchmail.org/
 .. _`Enigmail`: https://enigmail.net/
 .. _`py-autocrypt`: https://py-autocrypt.readthedocs.io/
+.. _`pyac`: https://pyac.readthedocs.io/
 .. _`Mailpile`: https://mailpile.is/
 .. _`Bitmask/LEAP`: https://leap.se/en/docs/client
 .. _`NEXTLEAP`: https://nextleap.eu
