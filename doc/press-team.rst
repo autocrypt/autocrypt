@@ -9,8 +9,8 @@ and often will get back faster (we have a knack for e-mail).
 This document describes our practises how we handle and account for
 press communications.
 
-Current team members
---------------------
+Current press-team members
+--------------------------
 
 - compl4xx
 
