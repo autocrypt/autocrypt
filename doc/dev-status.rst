@@ -75,21 +75,25 @@ For developers
 
 Source code:
 
-- `py-autocrypt code <https://github.com/autocrypt/py-autocrypt>`_
-
 - `Enigmail code <https://sourceforge.net/p/enigmail/source/ci/master/tree/>`_
 
 - K9: TODO
+
+- `Delta.Chat code <https://github.com/deltachat/>`_
 
 - Mailpile: TODO
 
 - Notmuch/Alot: TODO
 
+- `py-autocrypt (uses gpg) <https://github.com/hpk42/py-autocrypt>`_
+
+- `pyac <https://github.com/juga0/pyac>`_ (uses `PGPy
+  <https://pgpy.readthedocs.io>`_)
+
 - `Bitmask/LEAP refactorings <https://0xacab.org/leap/bitmask-dev/merge_requests/55/diffs>`_
 
 - `Go Autocrypt <https://github.com/autocrypt/go-autocrypt>`_
 
-- `Delta.Chat code <https://github.com/deltachat/>`_
 
 Testing Autocrypt
 +++++++++++++++++
