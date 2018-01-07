@@ -55,14 +55,6 @@ and the ACLU_.
 Upcoming events
 ---------------
 
-- December 27-30th 2017, Leipzig: 34th Chaos Communication Congress.
-  Several Autocrypters will be present. Join them in the
-  `Autocrypt self-organized session`_ and at the `Delta Chat session`_!
-
-.. _`Autocrypt self-organized session`: https://events.ccc.de/congress/2017/wiki/index.php/Session:Autocrypt
-
-.. _`Delta Chat session`: https://events.ccc.de/congress/2017/wiki/index.php/Session:Delta_Chat
-
 - January 10-12th 2018: `RealWorldCrypto 2018`_, Zürich. A few Autocrypters
   might go, maybe also try to give a Lightning talk, certainly have
   side-discussions like last year.
@@ -92,6 +84,9 @@ Upcoming events
 
 Past events
 -------------
+
+- December 27-30th 2017, Leipzig: 34th Chaos Communication Congress. We held a
+  self-organized session, where we presented Autocrypt and collected feedback.
 
 - November 4-8th 2017: Level 1 closure meeting in Freiburg, Germany.
 
