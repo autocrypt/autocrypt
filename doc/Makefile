@@ -48,6 +48,7 @@ help:
 	@echo "  doctest    to run all doctests embedded in the documentation (if enabled)"
 	@echo "  coverage   to run coverage check of the documentation (if enabled)"
 	@echo "  dummy      to check syntax errors of document sources"
+	@echo "  favicon    to generate a multi-resolution favicon.ico from autocrypt_logo_alone_orig.png"
 
 #
 # Pattern rule for converting SVG to PDF
@@ -238,3 +239,13 @@ dummy:
 	$(SPHINXBUILD) -b dummy $(ALLSPHINXOPTS) $(BUILDDIR)/dummy
 	@echo
 	@echo "Build finished. Dummy builder generates no files."
+
+.PHONY: favicon
+favicon: html
+	convert images/autocrypt_logo_alone_orig.png -resize 256x256 -transparent white /tmp/favicon-256.png
+	convert /tmp/favicon-256.png -resize 16x16 /tmp/favicon-16.png
+	convert /tmp/favicon-256.png -resize 32x32 /tmp/favicon-32.png
+	convert /tmp/favicon-256.png -resize 64x64 /tmp/favicon-64.png
+	convert /tmp/favicon-256.png -resize 128x128 /tmp/favicon-128.png
+	convert /tmp/favicon-16.png /tmp/favicon-32.png /tmp/favicon-64.png /tmp/favicon-128.png /tmp/favicon-256.png -colors 256 $(BUILDDIR)/html/favicon.ico
+	rm -f /tmp/favicon-16.png /tmp/favicon-32.png /tmp/favicon-64.png /tmp/favicon-128.png /tmp/favicon-256.png
