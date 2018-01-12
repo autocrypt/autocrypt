@@ -15,6 +15,7 @@ addons:
     - texlive-latex-extra
     - latexmk
     - inkscape
+    - imagemagick
 
 install:
   - pip install sphinx
