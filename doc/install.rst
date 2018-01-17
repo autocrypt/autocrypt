@@ -1,7 +1,7 @@
 Mail apps which support Autocrypt
 ================================================
 
-**Last update: Dec 6th 2017**
+**Last update: Jan 17th 2018**
 
 The following Autocrypt-enabled mail apps are available
 and/or under development:
@@ -26,16 +26,16 @@ You can test it via `Nightly Build`_ today.
 
 .. _Enigmail: https://enigmail.net
 .. _Thunderbird: https://www.mozilla.org/en-US/thunderbird/
-.. _`Nightly Build`: install-autocrypt-enigmail.html
+.. _`Nightly Build`: install-autocrypt-enigmail.rst
 
-K-9 Mail (development version)
+K-9 Mail
 ------------------------------
 
 `K-9 Mail`_ is for Android what Thunderbird is for Desktop PCs. It integrates
-Autocrypt by default in beta branches and aims to reach
-Autocrypt Level 1 compliance soon.
+Autocrypt by default `since version 5.400`_
 
 .. _`K-9 Mail`: https://k9mail.github.io/
+.. _`since version 5.400`: https://github.com/k9mail/k-9/releases/tag/5.400
 
 Mailpile (release candidate)
 ------------------------------
