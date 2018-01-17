@@ -90,7 +90,7 @@ Source code:
 
 - `muacrypt (uses gpg) <https://github.com/hpk42/muacrypt>`_
 
-- `pyac <https://github.com/juga0/pyac>`_ (uses `PGPy
+- `pyac code <https://github.com/juga0/pyac>`_ (uses `PGPy
   <https://pgpy.readthedocs.io>`_)
 
 - `Bitmask/LEAP refactorings <https://0xacab.org/leap/bitmask-dev/merge_requests/55/diffs>`_
