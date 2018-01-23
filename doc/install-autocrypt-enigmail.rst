@@ -1,7 +1,7 @@
 Autocrypt for Enigmail Nightly Build
 ================================================
 
-**Last update: Dec 6th 2017**
+**Last update: Jan 23rd 2018**
 
 Enigmail has integrated Autocrypt support in `Enigmail nightly development 
 branches`_ and aims to reach Autocrypt Level 1 compliance with the
