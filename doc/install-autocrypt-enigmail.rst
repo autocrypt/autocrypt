@@ -16,7 +16,7 @@ You can test Autocrypt in Enigmail already today:
 
 - The following setup may require a restart of Thunderbird
 
-- Then, navigate to "Edit / Preferences / Advanced / Config Editor", read the warning and 
-  scroll down to "extensions.enigmail.autocryptMode": Double-click the entry and enter a `1`
+Autocrypt is part of the default configuration. You can configure and
+disable it at: Account Manager > OpenPGP Security.
 
 .. _`Enigmail nightly development branches`: https://sourceforge.net/p/enigmail/source/ci/master/tree/
