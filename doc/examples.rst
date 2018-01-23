@@ -52,7 +52,7 @@ Consider a blank state and a first outgoing message from Alice to Bob::
 Upon sending this mail, Alice's MUA will add a header which contains her
 encryption key::
 
-    Autocrypt: addr=alice@a.example; type=1; prefer-encrypt=mutual; keydata=...
+    Autocrypt: addr=alice@a.example; prefer-encrypt=mutual; keydata=...
 
 Bob's MUA will scan the incoming mail, find Alice's key and store it
 associated to the ``alice@a.example`` address taken from the
@@ -61,7 +61,7 @@ find the key and signal to Bob that the mail will be encrypted and
 after finalization of the mail encrypt it.  Moreover, Bob's MUA will
 add its own encryption info::
 
-    Autocrypt: addr=bob@b.example; type=1; prefer-encrypt=mutual; keydata=...
+    Autocrypt: addr=bob@b.example; prefer-encrypt=mutual; keydata=...
 
 When Alice's MUA now scans the incoming mail from Bob it will store
 Bob's key and the fact that Bob sent an encrypted mail.  Subsequently
