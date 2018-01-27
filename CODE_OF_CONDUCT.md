@@ -19,9 +19,9 @@ Examples of behavior that contributes to creating a positive environment include
 * Showing empathy towards community members and newcomers
 * Helping and mediating in cases of upsets or conflict
 
-Examples of unacceptable behavior include:
+Please think twice, before you do something like this, as it may hurt people:
 
-* The use of sexualized language or imagery and unwelcome sexual attention or advances
+* Using sexualized language or imagery and unwelcome sexual attention or advances
 * Trolling, insulting/derogatory comments, and personal or political attacks
 * Public or private harassment
 * Publishing others' private information, such as a physical or electronic
@@ -57,7 +57,9 @@ reported by contacting select project maintainers, currently azul@autocrypt.org
 and compl4xx@autocrypt.org -- they are also often on the IRC #autocrypt channel
 on freenode. They will review reports and involve other maintainers as appropriate,
 resulting in a response that is deemed neccessary and appropriate to the circumstances.
-Maintainers are obligated to maintain confidentiality with regard to the reporter of an incident.
+Maintainers are obligated to maintain confidentiality with regard to the reporter
+of an incident. They should as well believe a reporter, and respect their experience
+and perspective.
 
 Project maintainers who do not follow the Code of Conduct in good faith
 may face temporary or permanent repercussions as determined by other
