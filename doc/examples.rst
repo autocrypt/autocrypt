@@ -11,19 +11,7 @@ choice of encryption or cleartext, defaulting to what the other side
 has specified in their header.
 
 These examples try to walk a new reader through the basic flow.
-
-.. note::
-
-   Autocrypt key discovery is safe only against passive
-   eavesdroppers. It is trivial for providers to perform active
-   downgrade or man-in-the-middle attacks on Autocrypt's key
-   discovery.  Users may, however, detect such tampering if they
-   verify their keys out-of-band at some later point in time.  We hope
-   this possibility will keep most providers honest or at least
-   prevent them from performing active attacks on a massive scale.
-
-Please also see https://github.com/autocrypt/autocrypt/tree/master/src/tests/data
-for specific examples of Autocrypt messages.
+For example headers, see also :ref:`Level1 spec header examples <example-headers>`.
 
 .. contents::
 
@@ -64,7 +52,7 @@ Consider a blank state and a first outgoing message from Alice to Bob::
 Upon sending this mail, Alice's MUA will add a header which contains her
 encryption key::
 
-    Autocrypt: addr=alice@a.example; type=1; prefer-encrypt=mutual; keydata=...
+    Autocrypt: addr=alice@a.example; prefer-encrypt=mutual; keydata=...
 
 Bob's MUA will scan the incoming mail, find Alice's key and store it
 associated to the ``alice@a.example`` address taken from the
@@ -73,7 +61,7 @@ find the key and signal to Bob that the mail will be encrypted and
 after finalization of the mail encrypt it.  Moreover, Bob's MUA will
 add its own encryption info::
 
-    Autocrypt: addr=bob@b.example; type=1; prefer-encrypt=mutual; keydata=...
+    Autocrypt: addr=bob@b.example; prefer-encrypt=mutual; keydata=...
 
 When Alice's MUA now scans the incoming mail from Bob it will store
 Bob's key and the fact that Bob sent an encrypted mail.  Subsequently
