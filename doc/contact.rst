@@ -55,19 +55,10 @@ and the ACLU_.
 Upcoming events
 ---------------
 
-- January 10-12th 2018: `RealWorldCrypto 2018`_, Zürich. A few Autocrypters
-  might go, maybe also try to give a Lightning talk, certainly have
-  side-discussions like last year.
-
-- January 17th 2018, Lausanne, Switzerland: a day of discussions and
-  interchange with researchers from `EPFL`_ and the `NEXTLEAP`_ EU project
-  on out-of-band verification and key gossip, also in relation
-  to Autocrypt.
-
-- March 2018: `Internet Freedom Festival`_, Valencia. We proposed
-  two usability sessions and several Autocrypt-related folks
-  aim to appear in Valencia. It's unclear at this point if we
-  go for a pre- or post-gathering like we did in 2017.
+- March 2018: `Internet Freedom Festival`_, Valencia.  There
+  is going to be an `Autocrypt Intro + Demonstration session
+  <https://platform.internetfreedomfestival.org/en/IFF2018/public/schedule/custom/238>`_
+  on thursday, March 8th.
 
 
 .. _`33c3`: https://events.ccc.de/congress/2016/wiki/Main_Page
@@ -84,6 +75,11 @@ Upcoming events
 
 Past events
 -------------
+
+- January 16/17th 2018, Lausanne, Switzerland: two days of discussions and
+  interchange with researchers from `EPFL`_ and the `NEXTLEAP`_ EU project
+  on out-of-band verification and key gossip, also in relation
+  to active attacks with Autocrypt.
 
 - December 27-30th 2017, Leipzig: 34th Chaos Communication Congress. We held a
   self-organized session, where we presented Autocrypt and collected feedback.
