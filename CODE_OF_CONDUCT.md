@@ -8,7 +8,7 @@ community a pleasurable, harassment-free experience.
 
 ## Our Standards
 
-Examples of behavior that we think contributes to creating a positive environment include:
+Examples of behavior that contribute to creating a positive environment include:
 
 * Using welcoming and inclusive language
 * Being respectful of differing viewpoints and experiences
@@ -39,7 +39,7 @@ Each maintainer is asked to take responsibility and appropriate, careful action
 in response to witnessed instances of questionable behavior.
 Project maintainers have the right and responsibility to remove, edit, or
 reject comments, commits, code, wiki edits, issues, and other contributions
-that violate "Our Standards" above. 
+that are not aligned to this Code of Conduct.
 They may also ban temporarily or permanently a contributor for 
 other behaviors that they deem inappropriate, threatening, offensive, or harmful.
 
