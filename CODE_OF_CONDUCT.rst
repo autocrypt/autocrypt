@@ -1,12 +1,13 @@
-# Autocrypt Community Code of Conduct
-
-## Our Pledge
+Autocrypt Community Code of Conduct
+===================================
 
 In the interest of fostering an open and welcoming environment, we as
 contributors and maintainers strive to making participation in the Autocrypt
-community a pleasurable, harassment-free experience. 
+community a pleasurable, harassment-free experience.
 
-## Our Standards
+
+Our Standards
+-------------
 
 Examples of behavior that contribute to creating a positive environment include:
 
@@ -27,23 +28,26 @@ Examples of behavior which we ask everybody to avoid include:
   professional setting
 
 We recognize that sometimes people may have a bad day, or be unaware of
-the impact of their behaviour. When that happens, you may carefully remind 
+the impact of their behaviour. When that happens, you may carefully remind
 them in public or private, whatever is more appropriate. Assume good faith;
 it's more likely that participants are unaware than that they intentionally
 try to denigrade others or the quality of the discussion.
 
-## Maintainers and Responsibilities
+
+Maintainers and Responsibilities
+--------------------------------
 
 Project maintainers are those with commit rights to the Autocrypt specification.
-Each maintainer is asked to take responsibility and appropriate, careful action 
+Each maintainer is asked to take responsibility and appropriate, careful action
 in response to witnessed instances of questionable behavior.
 Project maintainers have the right and responsibility to remove, edit, or
 reject comments, commits, code, wiki edits, issues, and other contributions
 that are not aligned to this Code of Conduct.
-They may also ban temporarily or permanently a contributor for 
+They may also ban temporarily or permanently a contributor for
 other behaviors that they deem inappropriate, threatening, offensive, or harmful.
 
-## Scope
+Scope
+-----
 
 This Code of Conduct applies both within project communication channels and
 gatherings as well as in public spaces
@@ -52,7 +56,8 @@ representing a project or community include using an official project e-mail
 address, posting via an official social media account, or acting as an
 representative at an online or offline event.
 
-## Reporting and Responses
+Reporting and Responses
+-----------------------
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
 reported by contacting select project maintainers, currently azul@autocrypt.org
@@ -62,7 +67,9 @@ resulting in a response that is deemed neccessary and appropriate to the circums
 Maintainers are obligated to maintain confidentiality with regard to the reporter of an incident. Maintainers are themselves not exempt from being reported about and may face
 temporary or permanent repercussions as determined by other maintainers.
 
-## Attribution
+
+Attribution
+-----------
 
 This Code of Conduct is adapted from the [Contributor Covenant][homepage], version 1.4,
 available at [http://contributor-covenant.org/version/1/4][version]

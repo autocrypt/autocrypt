@@ -45,6 +45,7 @@ and contributors, MUA developers and privacy enthusiasts.
 
    background
    contact
+   code_of_conduct
    examples
    level1
    glossary
