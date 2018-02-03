@@ -93,12 +93,12 @@ this information to determine whether encryption is possible and makes
 a :ref:`recommendation <recommendation>` about whether encryption
 should be enabled for a given set of recipients.
 
-This specification also introduces the :ref:`Autocrypt Setup Message
-<setup-message>` as a way to transfer secret key material and related
-settings to other e-mail programs controlled by the same user.  This
-spec also provides guidance on how and when to :ref:`generate
-<setup-message-creation>`, :ref:`look for <getting-started>`, and
-:ref:`import <setup-message-import>` these messages.
+This specification also introduces the :ref:`setup-message` as a way
+to transfer secret key material and related settings to other e-mail
+programs controlled by the same user.  This spec also provides
+guidance on how and when to :ref:`generate <setup-message-creation>`,
+:ref:`look for <getting-started>`, and :ref:`import
+<setup-message-import>` these messages.
 
 Autocrypt aggressively distributes public keys, but conservatively recommends
 encryption to avoid disruption to established e-mail workflows.
