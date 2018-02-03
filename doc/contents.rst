@@ -65,3 +65,4 @@ and contributors, MUA developers and privacy enthusiasts.
    news
    bot
    press-team
+   mail-providers

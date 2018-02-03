@@ -99,6 +99,7 @@ encryption is possible, and:
 3) The sender and the recipients have explicitly stated that they
    :ref:`prefer <prefer-encrypt>` encrypted email.
 
+.. _provider-requirements:
 
 Requirements on MUA/E-mail Provider interactions
 ++++++++++++++++++++++++++++++++++++++++++++++++
@@ -110,8 +111,7 @@ needs to be able to:
 - Control the contents of outgoing e-mail including the ability to set
   custom e-mail headers;
 
-- Send e-mail on its own (required by the :ref:`Autocrypt Setup
-  Message <setup-message>`);
+- Send e-mail on its own (required by the :ref:`setup-message`);
 
 - Read whole, raw e-mails including message headers; and,
 
