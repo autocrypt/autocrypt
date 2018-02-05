@@ -2,7 +2,7 @@ Autocrypt Community Code of Conduct
 ===================================
 
 In the interest of fostering an open and welcoming environment, we as
-contributors and maintainers strive to making participation in the Autocrypt
+contributors and maintainers strive to make participation in the Autocrypt
 community a pleasurable, harassment-free experience.
 
 
@@ -27,11 +27,11 @@ Examples of behavior which we ask everybody to avoid include:
 * Other behaviour which could reasonably be considered inappropriate in a
   professional setting
 
-We recognize that sometimes people may have a bad day, or be unaware of
+We recognize that sometimes people may have a bad day, or may be unaware of
 the impact of their behaviour. When that happens, you may carefully remind
 them in public or private, whatever is more appropriate. Assume good faith;
-it's more likely that participants are unaware than that they intentionally
-try to denigrade others or the quality of the discussion.
+it's more likely that participants are unaware than that they are intentionally
+trying to denigrate others or reduce the quality of discussion.
 
 
 Maintainers and Responsibilities
@@ -61,7 +61,7 @@ Reporting and Responses
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
 reported by contacting select project maintainers, currently azul@autocrypt.org
-and compl4xx@autocrypt.org -- they are also often on the IRC #autocrypt channel
+and compl4xx@autocrypt.org -- they are also often on the IRC `#autocrypt` channel
 on freenode. They will review reports and involve other maintainers as appropriate,
 resulting in a response that is deemed neccessary and appropriate to the circumstances.
 Maintainers are obligated to maintain confidentiality with regard to the reporter of an incident. Maintainers are themselves not exempt from being reported about and may face
