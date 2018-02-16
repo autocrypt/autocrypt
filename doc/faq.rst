@@ -131,6 +131,20 @@ For encrypted mailing lists like `schleuder
 Help welcome.
 
 
+How can I participate in Autocrypt?
+-----------------------------------
+
+First of all it would be nice if you join the discussion on IRC.
+Autocrypt lives in #autocrypt on irc.freenode.net, if you have ideas,
+discuss them there first.
+
+Apart from that, anyone can open a pull request to the spec or to the
+website. Feel free to share your thoughts and skills!
+
+There are sub-teams in autocrypt, such as the press team, the CoC
+team, or the GitHub organization. To become a part and contribute
+to them, just ask on IRC. If people trust you, you will be admitted.
+
 Why do you require MUAs to detect if another is using Autocrypt already?
 ------------------------------------------------------------------------
 
