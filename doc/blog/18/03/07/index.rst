@@ -47,55 +47,40 @@ hackers, and researchers met to fix encrypted email. They were willing
 to take fresh approaches, learn from past mistakes, and collectively 
 aim to increase the overall encryption of email in the Internet. After
 a few short months, they produced a 12 page specification for mail 
-applications called Autocrypt. 
+applications called Autocrypt. This specification builds upon the existing (and broken) Internet email
+infrastructure, and does not involve any new companies, tools, or servers.
+A primary goal of Autocrypt is to protect first against passive data-collecting
+adversaries, focusing on fixing this broken piece of the Internet. RFC7435
+A New Perspective is an influential document that motivated this focus.  In
+other words, Autocrypt first aims to provide convenient encryption that is
+neither perfect nor as secure as traditional e-mail encryption, but is
+convenient enough for much wider adoption. 
 
-By creating a specification which co-evolved with diverse
-implementations, the Autocrypt effort leverages the practises that
-brought us the open internet that still exists against the odds.
-Autocrypt goes beyond IETF or W3C practises by working from a strong
-"usability first" perspective and specifying not only wire-formats but
-also user experiences and internal application state. Autocrypt first aims
-to provide convenient encryption that is neither perfect nor as secure
-as traditional e-mail encryption, but is convenient enough for much
-wider adoption. 
-
-Autocrypt is decentralized in that it does not require a key server or special
-support from e-mail servers. It rather transmits cryptographic information
-along normal e-mail messages and lets applicationss automatically process and
-interpret this information in order to offer a uniform user experience.  It
-automates key management and key distribution, and adds necessary encryption
-information, such as a public OpenPGP key, to unencrypted email to allow
-encrypting subsequent messages.  By default, key management is not visible to
-users. You can encrypt group conversations by sending the keys of everyone to
-everyone.  And you can setup another device for the same key by sending an
-email with the private key to yourself. 
+Autocrypt goes beyond IETF or W3C practises by working from a strong "usability
+first" perspective and specifying not only wire-formats but also user
+experiences and internal application state. Autocrypt is decentralized in that
+it does not require a key server or special support from e-mail servers. It
+rather transmits cryptographic information along normal e-mail messages and
+lets applicationss automatically process and interpret this information in
+order to offer a uniform user experience.  It automates key management and key
+distribution, and adds necessary encryption information, such as a public
+OpenPGP key, to unencrypted email to allow encrypting subsequent messages.  By
+default, key management is not visible to users, but users can setup other
+devices as well as encrypted group e-mails. Despite Autocrypt's efforts to make
+encryption easy, there will always be cleartext emails in the same system as
+encrypted emails, if the other party does not have Autocrypt. With Autocrypt,
+end-to-end encryption is opportunistic while still prioritizing usability. 
 
 Autocrypt has released its first specification, code-named "Level 1", on
-December 21st 2017.  Early 2018, the Enigmail Thunderbird extension,
+December 21st 2017. Early 2018, the Enigmail Mozilla Thunderbird extension,
 and K-9 Mail on Android released support for Autocrypt. Moreover, DeltaChat is
 a new application that uses the e-mail server network but offers a
 Telegram-style chat interface. It fully implements the Autocrypt specification
 and allows users to send end-to-end encrypted messages between the messenging
-interface and traditional e-mail clients.
-
-Autocrypt takes a unique approach by focusing on mail application
-implementation. Several mail application developers have worked closely
-together to ensure their implementations of the specification are compatible.
-Autocrypt is a specification intended to keep different email applications
-interoperable, encrypted, and easy to use. 
-
-Keeping decentralized systems federated and interoperable, and specifications
-are the fundamental piece of this effort. All partners have to come to an
-agreement how to treat each other, in essence, a social contract.
-Specifications ensure that everyone's rights are secured; if they aren't,
-interoperability will break. Email is simply this: a network of consenting
-partners. For example, Gmail is a provider which reads mail and advertises to
-users, but anyone can write to Gmail users from a more privacy-respecting email
-provider. Autocrypt follows this approach, enabling users of Autocrypt to still
-reach anyone using basic unencrypted email. There will always be cleartext
-emails in the same system as encrypted emails. Encryption shouldn't get into
-the way of its users; and if we don't want to break existing workflows, we have
-to take care of backwards compatibility and legacy support.
+interface and traditional e-mail clients. Several mail application developers
+have worked closely together to ensure their implementations of the
+specification are compatible.  Autocrypt is a specification intended to keep
+different email applications interoperable, encrypted, and easy to use. 
 
 The Benefits of Email
 ------------------------
