@@ -103,16 +103,16 @@ That's why we trust on first use, and distribute public keys in the header of th
 
 Technically, Autocrypt is not much more than a set of some reasonable configuration decisions. But together, the decisions made by Autocrypt can streamline the complex PGP system to be usable for encrypted communication, between everyone. What encrypted communication needs is simple, measured steps of improvement. That's the only way to bring people together while maintaining the original intent of the architecture.
 
+Next steps for the Autocrypt effort include helping new implementors to add
+Autocrypt Level 1 support, researching protection against active attacks
+from providers, and discussing new specifications after the first round
+of implementations is complete and received user feedback.
+
 Strengthening E-Mail strengthens the Open Internet
 --------------------------------------------------
 
 It's worthwhile to strengthen the massively federated and diverse E-Mail
 ecosytem because it provides a better way forward for the Open Internet.
-Next steps for Autocrypt include helping new implementors to add
-Autocrypt Level 1 support, researching protection against active attacks
-from providers, and discussing new specifications after the first round
-of implementations is complete and received user feedback.
-
 If the highly proprietary and tracked phone number system becomes the
 dominant system for network identification, it will make it easier for
 repressive regimes and rising authoriarianisms to target citizens.
