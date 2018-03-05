@@ -135,7 +135,7 @@ but also with new apps and efforts. The autonomy to run own
 interoperable E-Mail servers is a fundamental benefit for organizations
 and people around the world.  Who would bet that Whatsapp and Telegram
 will still be there and going strong in 10 years from now? They didn't
-exist 10 years ago which admittedly feels like centuries. Maybe the
-federated and diverse E-Mail system evolves a bit like limetrees: even if
-taking a lot of damage and several parts of it dying, they survive, strive
+exist 10 years ago which admittedly feels like centuries in the internet.
+Maybe the federated and diverse E-Mail system evolves a bit like limetrees:
+even if taking a lot of damage and several parts of it dying, they survive, strive
 and some get up to 2000 years old.
