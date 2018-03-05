@@ -1,50 +1,43 @@
 How to Fix E-mail: making communication encrypted and decentralized with Autocrypt
 ==================================================================================
 
-`Email has been declared dead many times but refuses to die. The Autocrypt effort is a new effort towards usable end-to-end email encryption. It is part of a diverse set of efforts to re-invigorate the email ecosystem which remains a crucial cornerstone of an Open Internet.`
+`Email has been declared dead many times but refuses to die. There is a new effort towards making encrypted end-to-end email communication as automatic as possible. It is part of a diverse set of efforts to re-invigorate the email ecosystem which remains a crucial cornerstone of a functioning, open Internet.`
 
-The E-Mail server network forms the largest open, socially federated
-messaging system in human history. Federated E-Mail servers relay messages
-for around 3 Billion users, based on open protocols and on the freedom to
-operate and integrate your own server. It anchors the web with two-factor 
-authentication and account recovery, and remains to be the common way of 
-providing identity in the web.
+The e-mail server network forms the largest open, socially federated
+messaging system in human history. Federated e-mail servers relay messages
+for around 3 billion users, based on open protocols and on the freedom to
+operate and integrate your own server. Despite not changing much from it's
+original specification over 50 years ago, it remains the largest open federated
+identity system by anchoring the web with two-factor authentication and account
+recovery.
 
-It has problems though: emails continue to relay sensitive information 
-between people and organisations, unencrypted and vulnerable. Even five 
-years after Snowden, there is no easy and free way to write securely. 
-Even though there have been massive improvements in transport encryption
-via TLS, the mail servers remain a big attack surface for malicious hackers 
-and surveillance.
+Emails continue to relay sensitive information between people and
+organisations, unencrypted and vulnerable. Even five years after Snowden, most
+email is send without end-to-end encryption. Even though there have been
+massive improvements in transport encryption via TLS, the mail servers remain
+a big attack surface for malicious hackers and surveillance.
 
-Developers have attempted to bridge this gap by inventing a wide variety 
-of protocols, tools, and applications for communicating that are easier 
-to use. Messaging applications are arguably the most influential of these
-innovations. WhatsApp, Facebook messenger, and WeChat together top over 
-3.5 billion active users worldwide. Signal is growing in popularity, and
-recently collaborated with WhatsApp to provide end-to-end encryption for
-free to all WhatsApp users. 
+To try to bridge this gap, WhatsApp and other centralized messenging platforms
+have claimed to provide usable end-to-end encryption. However, WhatsApp and
+other massively used messengers (3.5 billion users between Facebook
+messenger, WhatsApp, and WeChat alone) are hidden behind proprietary source
+code, encryption techniques, and algorithms that are impossible to
+independently verify. Furthermore, these centralized messengers have been
+censored and blocked in some countries, having raised serious concerns
+regarding human rights and freedom of expression. It is a socially dangerous
+development if fundamental human communication are controlled and exploited by
+a few commercial entities.
 
-The centralized ownership of messaging platforms gives usability and 
-further functionality improvements over Email, but at a price. As of now,
-all massively used messengers are hidden behind proprietary source code, 
-encryption techniques, and algorithms that are impossible to independently 
-verify. Furthermore, these centralized messengers have been censored and 
-blocked in some countries, having raised serious concerns regarding human 
-rights and freedom of expression. 
-
-End-to-end encrypted email, on the other hand, is resilient to such 
-attacks, due to its decentralized nature. It's federated, not dependent 
-on a single company, and relies on open standards. Encrypted email, then,
-is independently verifiable and secure. Attempts have been made to make 
-encrypted email via PGP the de facto standard for secure communication. 
-However, PGP has failed to see wide adoption outside of specialist 
-communities, in large part because of difficulties with user experience.
-In short, we already have communication that is decentralized and 
-encrypted, just no one is using it. A lesson to take from the failed 
-project of widespread encrypted email is that even a perfectly secure 
-technology can't protect anyone if it doesn't have users. This leaves
-email in a fragile position despite its widespread usage.
+End-to-end encrypted email, on the other hand, is resilient to such attacks
+such as spying and censorship, due to its decentralized nature. It's federated,
+not dependent on a single company, and relies on open standards. Attempts have been made to
+make the PGP de facto standard for secure communication.  However, PGP has
+failed to see wide adoption outside of specialist communities, in large part
+because of difficulties with user experience. In PGP, we already have
+end-to-end encrypted email that is decentralized, just no one is using it.
+A lesson to take from the failed project of widespread encrypted email is that
+even a perfectly secure technology can't protect anyone if it doesn't have
+users. This leaves email in a fragile position despite its widespread usage.
 
 The Social Approach
 --------------------
@@ -56,27 +49,53 @@ aim to increase the overall encryption of email in the Internet. After
 a few short months, they produced a 12 page specification for mail 
 applications called Autocrypt. 
 
-The basic concept of Autocrypt is fairly easy. In short: Autocrypt
-uses regular email messages between people to piggyback necessary
-information to allow encrypting subsequent messages; it adds a new
-Autocrypt email header for transferring public OpenPGP keys and 
-driving encryption behavior. By default, key management is not visible
-to users. You can encrypt group conversations by sending the keys of 
-everyone to everyone. And you can setup another device for the same 
-key by sending an email with the private key to yourself. That's the
-technical side of the coin, but the social approach is equally important.
+By creating a specification which co-evolved with diverse
+implementations, the Autocrypt effort leverages the practises that
+brought us the open internet that still exists against the odds.
+Autocrypt goes beyond IETF or W3C practises by working from a strong
+"usability first" perspective and specifying not only wire-formats but
+also user experiences and internal application state. Autocrypt first aims
+to provide convenient encryption that is neither perfect nor as secure
+as traditional e-mail encryption, but is convenient enough for much
+wider adoption. 
 
-Autocrypt has released its first specification, code-named "Level 1", 
-on December 21st 2017.  Early 2018, the Enigmail Thunderbird extension,
-and K-9 Mail on Android released support for Autocrypt. Moreover, with 
-DeltaChat a new app is evolving that uses the e-mail server network but 
-offers a Telegram-style chat interface. It fully implements the Autocrypt
-specification and allows to send end-to-end encrypted messages between
-a Telegram-like messenger app and traditional e-mail clients.
+Autocrypt is decentralized in that it does not require a key server or special
+support from e-mail servers. It rather transmits cryptographic information
+along normal e-mail messages and lets applicationss automatically process and
+interpret this information in order to offer a uniform user experience.  It
+automates key management and key distribution, and adds necessary encryption
+information, such as a public OpenPGP key, to unencrypted email to allow
+encrypting subsequent messages.  By default, key management is not visible to
+users. You can encrypt group conversations by sending the keys of everyone to
+everyone.  And you can setup another device for the same key by sending an
+email with the private key to yourself. 
 
-Autocrypt takes a unique approach to this problem by focusing on mail application implementation. Several mail application developers have worked closely together to ensure their implementations of the specification are compatible. To use Autocrypt, users don't require the email provider to do anything. It automates key management and key distribution, and adds necessary encryption information, such as a public OpenPGP key, to unencrypted email to allow encrypting subsequent messages. Autocrypt is a specification intended to keep different email applications interoperable, encrypted, and easy to use. 
+Autocrypt has released its first specification, code-named "Level 1", on
+December 21st 2017.  Early 2018, the Enigmail Thunderbird extension,
+and K-9 Mail on Android released support for Autocrypt. Moreover, DeltaChat is
+a new application that uses the e-mail server network but offers a
+Telegram-style chat interface. It fully implements the Autocrypt specification
+and allows users to send end-to-end encrypted messages between the messenging
+interface and traditional e-mail clients.
 
-Keeping decentralized systems federated and interoperable, and specifications are the fundamental piece of this effort. All partners have to come to an agreement how to treat each other, in essence, a social contract. Specifications ensure that everyone's rights are secured; if they aren't, interoperability will break. Email is simply this: a network of consenting partners. For example, Gmail is a provider which reads mail and advertises to users, but anyone can write to Gmail users from a more privacy-respecting email provider. Autocrypt follows this approach, enabling users of Autocrypt to still reach anyone using basic unencrypted email. There will always be cleartext emails in the same system as encrypted emails. Encryption shouldn't get into the way of its users; and if we don't want to break existing workflows, we have to take care of backwards compatibility and legacy support.
+Autocrypt takes a unique approach by focusing on mail application
+implementation. Several mail application developers have worked closely
+together to ensure their implementations of the specification are compatible.
+Autocrypt is a specification intended to keep different email applications
+interoperable, encrypted, and easy to use. 
+
+Keeping decentralized systems federated and interoperable, and specifications
+are the fundamental piece of this effort. All partners have to come to an
+agreement how to treat each other, in essence, a social contract.
+Specifications ensure that everyone's rights are secured; if they aren't,
+interoperability will break. Email is simply this: a network of consenting
+partners. For example, Gmail is a provider which reads mail and advertises to
+users, but anyone can write to Gmail users from a more privacy-respecting email
+provider. Autocrypt follows this approach, enabling users of Autocrypt to still
+reach anyone using basic unencrypted email. There will always be cleartext
+emails in the same system as encrypted emails. Encryption shouldn't get into
+the way of its users; and if we don't want to break existing workflows, we have
+to take care of backwards compatibility and legacy support.
 
 The Benefits of Email
 ------------------------
