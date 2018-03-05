@@ -11,6 +11,25 @@ The Social Approach
 
 In December 2016, a diverse group of mail application developers, hackers, and researchers met to fix encrypted email. They were willing to take fresh approaches, learn from past mistakes, and collectively aim to increase the overall encryption of email in the Internet. After a few short months, they produced a 12 page specification for mail applications called Autocrypt. This specification builds upon the existing (and broken) Internet email infrastructure, and does not involve any new companies, tools, or servers. A primary goal of Autocrypt is to protect first against passive data-collecting adversaries, focusing on fixing this broken piece of the Internet. RFC7435 A New Perspective is an influential document that motivated this focus.
 
+The basic concept of Autocrypt is fairly easy. In short: Autocrypt
+uses regular email messages between people to piggyback necessary
+information to allow encrypting subsequent messages; it adds a new
+Autocrypt email header for transferring public OpenPGP keys and 
+driving encryption behavior. By default, key management is not visible
+to users. You can encrypt group conversations by sending the keys of 
+everyone to everyone. And you can setup another device for the same 
+key by sending an email with the private key to yourself. That's the
+technical side of the coin, but the social approach is equally important.
+
+The state of encrypted email is quite bad, but the federated email
+system is actually quite healthy. Intercompability is almost
+universal, and the system has coped with the few incremental changes
+to the email system quite well. That's a strength of the email
+standards, and a healthy offering of email services. The state of
+encrypted email is not bad because the email system would not work
+- it is totally fine, and moves slowly enough to stay resilient.
+Instead, it is a problem of user-facing mail applications.
+
 Autocrypt takes a unique approach to this problem by focusing on mail application implementation. Several mail application developers have worked closely together to ensure their implementations of the specification are compatible. To use Autocrypt, users don't require the email provider to do anything. It automates key management and key distribution, and adds necessary encryption information, such as a public OpenPGP key, to unencrypted email to allow encrypting subsequent messages. Autocrypt is a specification intended to keep different email applications interoperable, encrypted, and easy to use. 
 
 Keeping decentralized systems federated and interoperable, and specifications are the fundamental piece of this effort. All partners have to come to an agreement how to treat each other, in essence, a social contract. Specifications ensure that everyone's rights are secured; if they aren't, interoperability will break. Email is simply this: a network of consenting partners. For example, Gmail is a provider which reads mail and advertises to users, but anyone can write to Gmail users from a more privacy-respecting email provider. Autocrypt follows this approach, enabling users of Autocrypt to still reach anyone using basic unencrypted email. There will always be cleartext emails in the same system as encrypted emails. Encryption shouldn't get into the way of its users; and if we don't want to break existing workflows, we have to take care of backwards compatibility and legacy support.
