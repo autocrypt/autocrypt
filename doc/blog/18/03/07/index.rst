@@ -82,15 +82,13 @@ have worked closely together to ensure their implementations of the
 specification are mutually compatible. Autocrypt is a specification intended to keep
 different email applications interoperable, encrypted, and easy to use. 
 
-The Benefits of Email
-------------------------
+Next steps for Autocrypt include helping new implementors add
+Autocrypt Level 1 support, researching protection against active attacks
+from providers, and discussing new specifications after the first round
+of implementations is complete and user feedback is received.
 
-Most messengers are not only centralized systems, they also use a phone number to identify users. Managing people's identity over a phone number is ethically questionable, as it can lead to human rights violations, censorship, and unwarranted tracking. Email as an identity provider is better for a variety of reasons. It's an open standard, which means that everyone can provide email, and doesn't have to trust one of the few monopolistic telephone providers. Also, creating an email account is free, while mobile phone numbers can be unattainably expensive in some parts of the world.
-
-In decentralized systems, such as email, users are free to choose and switch providers and platforms (e.g., Thunderbird to Outlook, or Gmail to ProtonMail). You can leave a central hub and move to another, and still be able to communicate with the same people. If an adversarial government or ISP wanted to block Autocrypt, it would require the censor to block all encrypted email, including those that government and business rely on, thus resulting in a much higher political and economic cost for the censoring party. In those cases, decentralized systems -- such as email --  are more resilient by design and still operate as intended -- fault tolerant and interoperable. This is why we should not just give up on email, but instead make a concerted effort to improve its broken parts.
-
-How to Make Encryption Easy Enough for Everyone
----------------------------------------------
+Making E-Mail Encryption Usable
+-------------------------------
 
 There are reasons why encryption has not been widely adopted yet, despite the threats to everyone's privacy. For many users, it has never been convenient enough to encrypt emails. PGP is a very complex tool, which can be used for various purposes. Encrypted communication is just one of them, while software signing, document signature validity, and online authentication are others.
 
@@ -101,23 +99,34 @@ Because of these issues, one thing was clear: Users should not have to know that
 Another point where this is important is key discovery. Keys should be hidden from users, but there should still be a decentralized way to distribute keys. Identity is an important part of user autonomy and should not be left to a centralized key server. On the other hand, to remain plain and simple, we can't rely on other channels for verification. If users had to do an out-of-band verification with everyone they want to write to, encryption would not be convenient anymore.
 That's why we trust on first use and distribute public keys in the email header. It is hidden, but decentralized, and leaves the users in control of their keys, without them necessarily knowing it. And if they want to do an out-of-band verification with their associates, there will always be user-friendly options, e.g. with a QR code comparison.
 
-Technically, Autocrypt is not much more than a set of some reasonable configuration decisions. But together, the decisions made by Autocrypt can streamline the complex PGP system to be usable for encrypted communication between everyone. What encrypted communication needs is simple, measured steps of improvement. That's the only way to bring people together while maintaining the original intent of the architecture. 
+Technically, Autocrypt is not much more than a set of some reasonable configuration decisions. But together, the decisions made by Autocrypt can streamline the complex PGP system to be usable for encrypted communication, between everyone. What encrypted communication needs is simple, measured steps of improvement. That's the only way to bring people together while maintaining the original intent of the architecture.
 
-The Internet: A Little Less Broken
------------------------------------
+Strengthening E-Mail strengthens the Open Internet
+--------------------------------------------------
 
-Technology takes a stance on societal problems. There is no neutral technology, as there is no neutral engineer. This places a lot of responsibility on engineers. While we are using and creating technology, remember that many problems will not be solved by technical means. Often, problems will require a social approach, with the internet organizations, committees, consortiums, task forces, and groups like Autocrypt that try hard to make the current Internet a little less broken. 
+It's worthwhile to strengthen the massively federated and diverse e-mail
+ecosytem because it provides a better way forward for the Open Internet.
+Most messengers are not only centralized systems, but also use a phone number to identify users. Managing people's identity over a phone number is ethically questionable, as it can lead to human rights violations, censorship, and unwarranted tracking. Email as an identity provider is better for a variety of reasons. Email is an open standard, which means that everyone can provide email, and don't have to trust one of the few monopolistic telephone providers.  It is also free to create an email, while mobile phone numbers can be unattainably expensive in some parts of the world.
 
-What humans need, and how we can achieve it, is not up to technology - it is up to us. We will not find out through scientific discovery, but through communication and discussion. When the spaces are controlled and monitored, a chilling effect leads to the absence of the critical questions required in a functional society. Encryption can create space for this by providing the same privacy and security on the Internet that people have in real life. Decentralization also helps here - if there is no centralized control, censorship and surveillance don't threaten to silence the critics. In the best case, email would be a communication system that is both encrypted and decentralized.
+If the highly proprietary and tracked phone number system becomes the
+dominant system for network identification, it will make it easier for
+repressive regimes and rising authoriarianisms to target civilians.
+You can choose your e-mail provider from a very diverse set of
+commercial and not-for-profit organizations, but you can only choose your
+mobile phone network from state-vetted providers. As you move from
+cell-tower to cell-tower your location is tracked in a fine-grained
+manner. 
 
-All in all: we want to build technology which actually improves society, which contributes to a decentralized and free Internet. We can't do it alone. But fortunately there are others out there who empower humans in the same way: Mastodon is a decentralized social network, which focuses on meaningful and empathetic discussions. Matrix is building a decentralized and secure messenger network. ownCloud is a decentralized, open source file sharing cloud, capable of replacing Google Drive and Google Docs. There are thousands more projects like these.
+BY contrast, E-mail providers are an important barrier to aggressive
+state tracking and surveillance. Providers often operate outside of an individual's
+jurisdiction, rendering one safer from immediate tracking and surveillance. Decentralized systems such as email leaves users free to move between providers (Gmail to Proton Mail) and applications (e.g., Thunderbird to Outlook). You can leave a central hub and move to another, and still be able to communicate with the same people. Moreover, as businesses and organizations continue to depend on e-mail for professional communications, it's difficult to block or censor e-mail without damage to companies and governments themselves, leaving higher political and economic costs. Decentralized systems such as e-mail are then more resilient by design, and still operating as intended -- fault tolerant and interoperable. This is why we should not just give up on email, but instead make a concerted effort to improve it’s broken parts.
 
-Right now, we want to help implementors of mail applications to add Autocrypt support.
-In the next steps, we want to find solutions on how to protect users against active adversaries.
-We also want to play with new approaches for opportunistically encrypted mailing lists.
-Together with the mail application developers, the Autocrypt specification will be further improved.
-It is a social effort to keep up interoperability.
-We are awaiting new testers to come see the current state of the Autocrypt clients, find bugs, and give feedback on the user experience and development. 
-
-
-
+Let's enrich the e-mail ecosystem, not only with usable PGP encryption,
+but also with new apps and efforts. The autonomy to run standalone and
+interoperable e-mail servers is a fundamental benefit for organizations
+and people around the world.  Who would bet that Whatsapp and Telegram
+will still be there and going strong in 10 years from now? They didn't
+exist 10 years ago, which admittedly feels like centuries for the Internet.
+Maybe the federated and diverse e-mail system evolves a bit like limetrees:
+even if it takes a lot of damage and several parts of it die, they survive, strive,
+and some survive for millenias.
