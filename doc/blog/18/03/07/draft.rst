@@ -1,9 +1,54 @@
 
-Autocrypt: how Decentralization and Free Software can improve Encrypted Communication
-=====================================================================================
+Autocrypt: improving decentralized infrastructures for better communications
+============================================================================
+
+`E-Mail has been declared dead many times but refuses to die.
+The Autocrypt effort is a new effort towards usable end-to-end e-mail
+encryption. It is part of a diverse set of efforts to re-invigorate the
+e-mail ecosystem which remains a crucial cornerstone of an Open
+Internet.`
+
+The E-Mail server network forms the largest open, socially federated
+messaging system in human history. Federated E-Mail servers relay messages
+for around 3 Billion users, based on open protocols and on the freedom to
+operate and integrate your own server.
+
+It's true that the mobile phone provider network is also federated and
+even larger than the e-mail server network but it is highly proprietary,
+tracked and phone numbers are tied to state identity, severely
+endagering people who are living in repressive contexts today.
+
+It's also true that Whatsapp and other centralized messenging platforms
+have provided usable end-to-end encryption but they work best for
+private chatting and less for topical organizing activities.  Maybe more
+importantly, we consider it a socially dangerous development if fundamental
+human communication needs depend on, are controled and exploited by a few
+commercial entities.
+
+Autocrypt has released its first specification, code-named
+"Level 1", on December 21st 2017.  Early 2018, the Enigmail Thunderbird extension,
+and K-9 Mail on Android released support for Autocrypt. Moreover, with DeltaChat
+a new app is evolving that uses the e-mail server network but offers
+a Telegram-style chat interface. It fully implements the Autocrypt
+specification and allows to send end-to-end encrypted messages between
+a Telegram-Clone and traditional e-mail clients.
+
+By creating a specification which co-evolved with diverse
+implementations, the Autocrypt effort leverages the practises that
+brought us the open internet that still exists against the odds.
+Autocrypt goes beyond IETF or W3C practises by working from a strong
+"usability first" perspective and specifying not only wire-formats but
+user experiences and internal application state.  Autocrypt first aims
+to provide convenient encryption that is neither perfect nor as secure
+as traditional e-mail encryption, but is convenient enough for much
+wider adoption. Autocrypt is decentralized in that it does not require
+a key server or special support from e-mail servers. It rather transmits
+cryptographic information along normal e-mail messages and lets apps
+automatically process and interpret this information in order to
+offer a uniform user experience across different apps.
 
 `Since Snowden made us aware of every day mass surveillance, there is
-still too much unencrypted communication. How can we build encrypted 
+still too much unencrypted communication. How can we build encrypted
 communication for humans?`
 
 Communication is an ecosystem. Different species coexist peacefully
