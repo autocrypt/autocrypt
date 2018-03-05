@@ -82,12 +82,10 @@ have worked closely together to ensure their implementations of the
 specification are compatible.  Autocrypt is a specification intended to keep
 different email applications interoperable, encrypted, and easy to use. 
 
-The Benefits of Email
-------------------------
-
-Most messengers are not only centralized systems, they also use a phone number to identify users. Managing people's identity over a phone number is ethically questionable, as it can lead to human rights violations, censorship, and unwarranted tracking. Email as an identity provider is better for a variety of reasons. Email is an open standard, which means that everyone can provide email, and doesn't have to trust one of the few monopolistic telephone providers.  It is also free to create an email, while mobile phone numbers can be unattainably expensive in some parts of the world.
-
-In decentralized systems such as email, users are free to move between providers and platforms (e.g., Thunderbird to Outlook, or Gmail to ProtonMail). You can leave a central hub and move to another, and still be able to communicate with the same people. If an adversarial government or ISP wanted to block Autocrypt, it would require that the censor block all encrypted email, including those that government and business rely on, and so would result in a much higher political and economic cost for the censor. Decentralized systems such as email are then more resilient by design, and still operating as intended -- fault tolerant and interoperable. This is why we should not just give up on email, but instead make a concerted effort to improve it’s broken parts.
+Next steps for Autocrypt include helping new implementors add
+Autocrypt Level 1 support, researching protection against active attacks
+from providers, and discussing new specifications after the first round
+of implementations is complete and user feedback is received.
 
 Making E-Mail Encryption Usable
 -------------------------------
@@ -103,39 +101,32 @@ That's why we trust on first use, and distribute public keys in the header of th
 
 Technically, Autocrypt is not much more than a set of some reasonable configuration decisions. But together, the decisions made by Autocrypt can streamline the complex PGP system to be usable for encrypted communication, between everyone. What encrypted communication needs is simple, measured steps of improvement. That's the only way to bring people together while maintaining the original intent of the architecture.
 
-Next steps for the Autocrypt effort include helping new implementors to add
-Autocrypt Level 1 support, researching protection against active attacks
-from providers, and discussing new specifications after the first round
-of implementations is complete and received user feedback.
-
 Strengthening E-Mail strengthens the Open Internet
 --------------------------------------------------
 
-It's worthwhile to strengthen the massively federated and diverse E-Mail
+It's worthwhile to strengthen the massively federated and diverse e-mail
 ecosytem because it provides a better way forward for the Open Internet.
+Most messengers are not only centralized systems, but also use a phone number to identify users. Managing people's identity over a phone number is ethically questionable, as it can lead to human rights violations, censorship, and unwarranted tracking. Email as an identity provider is better for a variety of reasons. Email is an open standard, which means that everyone can provide email, and don't have to trust one of the few monopolistic telephone providers.  It is also free to create an email, while mobile phone numbers can be unattainably expensive in some parts of the world.
+
 If the highly proprietary and tracked phone number system becomes the
 dominant system for network identification, it will make it easier for
-repressive regimes and rising authoriarianisms to target citizens.
+repressive regimes and rising authoriarianisms to target civilians.
 You can choose your e-mail provider from a very diverse set of
-commercial and not-for-profit organizations but you can only choose your
+commercial and not-for-profit organizations, but you can only choose your
 mobile phone network from state-vetted providers. As you move from
 cell-tower to cell-tower your location is tracked in a fine-grained
-manner.
+manner. 
 
-By contrast, E-Mail providers are an important barrier to aggressive
-state tracking and surveillance. Providers often operate outside the
-jurisdiction of where one lives, rendering one safer from immediate
-tracking and surveillance. Moreover, as businesses and organizations
-continue to depend on E-Mail for professional communications it's
-difficult to block or censor E-Mail without damage to companies and
-governments themselves.
+BY contrast, E-mail providers are an important barrier to aggressive
+state tracking and surveillance. Providers often operate outside of an individual's
+jurisdiction, rendering one safer from immediate tracking and surveillance. Decentralized systems such as email leaves users free to move between providers (Gmail to Proton Mail) and applications (e.g., Thunderbird to Outlook). You can leave a central hub and move to another, and still be able to communicate with the same people. Moreover, as businesses and organizations continue to depend on e-mail for professional communications, it's difficult to block or censor e-mail without damage to companies and governments themselves, leaving higher political and economic costs. Decentralized systems such as e-mail are then more resilient by design, and still operating as intended -- fault tolerant and interoperable. This is why we should not just give up on email, but instead make a concerted effort to improve it’s broken parts.
 
-Let's enrich the E-Mail ecosystem not only with usable PGP encryption
-but also with new apps and efforts. The autonomy to run own
-interoperable E-Mail servers is a fundamental benefit for organizations
+Let's enrich the e-mail ecosystem, not only with usable PGP encryption,
+but also with new apps and efforts. The autonomy to run standalone and
+interoperable e-mail servers is a fundamental benefit for organizations
 and people around the world.  Who would bet that Whatsapp and Telegram
 will still be there and going strong in 10 years from now? They didn't
-exist 10 years ago which admittedly feels like centuries in the internet.
-Maybe the federated and diverse E-Mail system evolves a bit like limetrees:
-even if taking a lot of damage and several parts of it dying, they survive, strive
-and some survived for millenias.
+exist 10 years ago, which admittedly feels like centuries for the Internet.
+Maybe the federated and diverse e-mail system evolves a bit like limetrees:
+even if it takes a lot of damage and several parts of it die, they survive, strive,
+and some survive for millenias.
