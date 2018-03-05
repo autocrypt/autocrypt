@@ -112,7 +112,10 @@ What humans need, and how we can achieve it, is not up to technology - it is up 
 
 All in all: we want to build technology which actually improves society, which contributes to a decentralized and free Internet. We can't do it alone. But fortunately there are others out there who empower humans in the same way: Mastodon is a decentralized social network, which focuses on meaningful and empathetic discussions. Matrix is building a decentralized and secure messenger network. ownCloud is a decentralized, open source file sharing cloud, capable of replacing Google Drive and Google Docs. There are thousands more projects like these.
 
-[WHEN DID AUTOCRYPT 1 GET RELEASED?] [WHEN WILL LEVEL 2 COME OUT?] We are awaiting new testers to come see the current state of the Autocrypt clients, find bugs, and give feedback on the user experience and development. 
+Right now, we want to help implementors of mail applications to add Autocrypt support.
+In the next steps, we want to find solutions on how to protect users against active adversaries, and together with the mail application developers, the Autocrypt specification will be further improved.
+It is a social effort to keep up interoperability.
+We are awaiting new testers to come see the current state of the Autocrypt clients, find bugs, and give feedback on the user experience and development. 
 
 
 
