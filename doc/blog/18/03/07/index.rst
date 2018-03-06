@@ -127,6 +127,5 @@ interoperable e-mail servers is a fundamental benefit for organizations
 and people around the world.  Who would bet that Whatsapp and Telegram
 will still be there and going strong in 10 years from now? They didn't
 exist 10 years ago, which admittedly feels like centuries for the Internet.
-Maybe the federated and diverse e-mail system evolves a bit like limetrees:
-even if it takes a lot of damage and several parts of it die, they survive, strive,
-and some survive for millenias.
+Maybe the federated and diverse e-mail system evolves a bit like a lime tree:
+even if it takes a lot of damage and several parts of it die, it can still survive for millenias.
