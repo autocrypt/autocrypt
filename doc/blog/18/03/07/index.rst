@@ -115,9 +115,9 @@ You can choose your e-mail provider from a very diverse set of
 commercial and not-for-profit organizations, but you can only choose your
 mobile phone network from state-vetted providers. As you move from
 cell-tower to cell-tower your location is tracked in a fine-grained
-manner. 
+manner.
 
-BY contrast, E-mail providers are an important barrier to aggressive
+By contrast, E-mail providers are an important barrier to aggressive
 state tracking and surveillance. Providers often operate outside of an individual's
 jurisdiction, rendering one safer from immediate tracking and surveillance. Decentralized systems such as email leaves users free to move between providers (Gmail to Proton Mail) and applications (e.g., Thunderbird to Outlook). You can leave a central hub and move to another, and still be able to communicate with the same people. Moreover, as businesses and organizations continue to depend on e-mail for professional communications, it's difficult to block or censor e-mail without damage to companies and governments themselves, leaving higher political and economic costs. Decentralized systems such as e-mail are then more resilient by design, and still operating as intended -- fault tolerant and interoperable. This is why we should not just give up on email, but instead make a concerted effort to improve it’s broken parts.
 
