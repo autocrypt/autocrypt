@@ -14,15 +14,15 @@ For users with a typical intuition of end-to-end encryption, the expected end
 points of end-to-end encrypted mailing lists will likely be the individual
 subscribers. This is very difficult to achieve on top of existing e-mail
 infrastructure, since it requires either negotiation between all endpoints, or
-use of highly experimental encryption techniques such as homomorphic or
-attribute-based encryption.
+use of experimental encryption techniques such as homomorphic or attribute-based
+encryption.
 
 A compromise solution is to encrypt from the sender only to the remailer, which
 then decrypts the message and individually encrypts to all subscribers. This
-method strictly violates end-to-end confidentiality, since the remailer can
-access to the forwarded plaintext. However, the remailer will only need to
-handle sensitive data transiently, which means messages are secure as long as
-the remailer is honest at the time of sending.
+method violates strict end-to-end confidentiality, since the remailer can access
+to the forwarded plaintext. However, the remailer will only need to handle
+sensitive data transiently, which means messages are secure as long as the
+remailer is honest at the time of sending.
 
 This document focuses on seamless support for re-encryption based end-to-end
 security in existing remailers, in keeping with the more general Autocrypt
@@ -66,7 +66,8 @@ Injecting Reamiler Autocrypt-Headers
 
 To inform subscribers of its key, the remailer injects an Autocrypt-header into
 outgoing messages. The header format is the same as usual, where the ``addr``
-attribute is the address of the list, and ``keydata`` is their Autocrypt key.
+attribute is the address of the list, and ``keydata`` is the list's Autocrypt
+key.
 
 In addition to those two attributes, the remailer SHOULD add the
 ``_list-recommendation`` attribute, and MAY add ``_list-recipients`` attribute.
@@ -76,10 +77,13 @@ used by regular mailbox addresses. Both of these attributes are non-critical
 does not handle these attributes to skip over them, falling back to the usual
 Autocrypt behavior.
 
-For example::
+Example of Autocrypt header for remailer with opt-in encryption::
+
+    Autocrypt: addr=post@list.example; _list-recommendation=available; _list-recipients=7/15; keydata=XXX
+
+Example of Autocrypt header for remailer with mandatory encrypytion::
 
     Autocrypt: addr=post@list.example; _list-recommendation=mandatory; keydata=XXX
-    Autocrypt: addr=post@list.example; _list-recommendation=available; _list-recipients=7/15; keydata=XXX
 
 The ``_list-recommendation`` attribute SHOULD be included in an Autocrypt header
 sent by a remailer. Its value may be either ``available`` or ``mandatory``. If
