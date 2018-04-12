@@ -55,6 +55,7 @@ and the ACLU_.
 Upcoming events
 ---------------
 
+- None right now, we'll update this page as new things come up :)
 
 .. _`33c3`: https://events.ccc.de/congress/2016/wiki/Main_Page
 
