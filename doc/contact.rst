@@ -55,7 +55,9 @@ and the ACLU_.
 Upcoming events
 ---------------
 
-- None right now, we'll update this page as new things come up :)
+- May 24th - 27th 2018: `European Investigative Journalism Conference
+  (Dataharvest) <https://dataharvest.eu/>`_, Mechelen (Belgium).  Vincent will
+  host a hands-on session about Autocrypt.
 
 .. _`33c3`: https://events.ccc.de/congress/2016/wiki/Main_Page
 
