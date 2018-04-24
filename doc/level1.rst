@@ -710,6 +710,8 @@ To avoid leaking metadata about a third party in the clear, an
 ``Autocrypt-Gossip`` header SHOULD NOT be added outside an encrypted
 MIME part.
 
+.. _key-gossip-update:
+
 Updating Autocrypt Peer State from Key Gossip
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -778,6 +780,26 @@ all of which have a binary value of `yes` or `no`:
 Example::
 
     Autocrypt-Draft-State: encrypt=yes; _by-choice=yes;
+
+Autocrypt Gossip headers for drafts
++++++++++++++++++++++++++++++++++++
+
+When opening a draft that indicates it should be encrypted when sent
+via the ``Autocrypt-Draft-State`` header, the resuming MUA might be
+lacking keys for recipients that were originally available when the
+draft was stored.
+
+To solve this problem, a MUA MAY make use of the `Autocrypt
+Gossip<autocryt-gossip>` mechanism to include the keys of intended
+recipients in the draft message. To do so, it simply places one
+``Autocrypt-Gossip`` header per recipient in the MIME header of the
+encrypted payload of the draft.
+
+Conversely, when opening a draft, a MUA MAY import keys from
+``Autocrypt-Gossip`` headers that are present in the MIME headers of
+the encrypted payload.  These headers should update the ``gossip_key``
+and ``gossip_timestamp`` fields of the relevant peers `as
+usual<autocryt-gossip-update>`.
 
 .. _account-management:
 
