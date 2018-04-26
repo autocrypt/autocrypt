@@ -1,7 +1,7 @@
 Mail apps which support Autocrypt
 ================================================
 
-**Last update: Dec 6th 2017**
+**Last update: Apr 26th 2018**
 
 The following Autocrypt-enabled mail apps are available
 and/or under development:
@@ -16,26 +16,24 @@ You can download it or install it via F-Droid_ today.
 .. _DeltaChat: https://delta.chat
 .. _F-Droid: https://f-droid.org
 
-Enigmail (development version)
+Enigmail
 ------------------------------
 
 Enigmail_ is a plugin for Thunderbird_. For years, it has been the
-first choice to use OpenPGP encryption with E-Mail. Enigmail aims to reach
-Autocrypt Level 1 compliance with the next major release scheduled for Q1/2018.
-You can test it via `Nightly Build`_ today.
+first choice to use OpenPGP encryption with E-Mail. Since Enigmail
+`version 2.0`_, Enigmail supports most of Autocrypt.
 
 .. _Enigmail: https://enigmail.net
 .. _Thunderbird: https://www.mozilla.org/en-US/thunderbird/
-.. _`Nightly Build`: install-autocrypt-enigmail.html
+.. _`version 2.0`: https://enigmail.net/index.php/en/home/news/63-2018-03-25-enigmail-v2-0-released
 
-K-9 Mail (development version)
+K-9 Mail
 ------------------------------
 
-`K-9 Mail`_ is for Android what Thunderbird is for Desktop PCs. It integrates
-Autocrypt by default in beta branches and aims to reach
-Autocrypt Level 1 compliance soon.
+`K-9 Mail`_ is an E-Mail App for Android. Its OpenPGP support is
+designed with Autocrypt in mind.
 
-.. _`K-9 Mail`: https://k9mail.github.io/
+.. _`K-9 Mail`: https://play.google.com/store/apps/details?id=com.fsck.k9
 
 Mailpile (release candidate)
 ------------------------------
