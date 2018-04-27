@@ -1,6 +1,29 @@
 Frequently Asked Questions about Autocrypt
 ==========================================
 
+Why is there no verification mechanism?
+---
+
+There are a couple of reasons for holding off on this for now:
+
+* Most OpenPGP implementations support verification of keys by asking
+  the user to compare fingerprints, so in practice there is already
+  a way to do this in most clients.
+* Conversely, since there is established tradition, there will likely
+  be pushback against whatever mechanism we introduce.
+* Verification requires user interaction, and introduces a lot of
+  friction. But even without verification, encrypted messages leak
+  much less information than plaintext. For that reason, getting key
+  management right is currently the more pressing issue.
+* If a user verifies a key on one device, we have no way of
+  synchronizing this to other devices. This is a difficult problem to
+  solve in e-mail, and leads to a shoddy user experience at best.
+
+That said, we do plan to introduce a simple but effective verification
+mechanism at some point. It will likely be modelled after Signal and
+WhatsApp's safety numbers, a solid workflow that many users are
+already familiar with.
+
 Why are you using headers rather than attached keys?
 ----------------------------------------------------
 
