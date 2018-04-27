@@ -1,8 +1,11 @@
-Frequently Asked Questions about Autocrypt
-==========================================
+Autocrypt
+===
+
+Frequently Asked Questions
+++++++++++++++++++++++++++
 
 Why is there no key verification mechanism?
----
+-------------------------------------------
 
 There are a couple of reasons for holding off on this for now:
 
