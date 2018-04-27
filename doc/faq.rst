@@ -1,5 +1,5 @@
 Autocrypt
-===
+=========
 
 Frequently Asked Questions
 ++++++++++++++++++++++++++
