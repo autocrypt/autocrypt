@@ -16,7 +16,7 @@ Last updated: ``2017-12-14``
 |                                      |        |        |        |        |              |        |        |        |       |          |
 |`K-9 Mail`_                           |        |        |        |        |              |        |        |        |       |          |
 +--------------------------------------+--------+--------+--------+--------+--------------+--------+--------+--------+-------+----------+
-|.. image:: images/logos/enigmail.png  |✔       |✔       |✔       |✔ [1]_  |✘             |✔       |✔       |✔       |✘      |✘         |
+|.. image:: images/logos/enigmail.png  |✔       |✔       |✔       |✔       |✘             |✔       |✔       |✔       |✘      |✘         |
 |                                      |        |        |        |        |              |        |        |        |       |          |
 |`Enigmail`_                           |        |        |        |        |              |        |        |        |       |          |
 +--------------------------------------+--------+--------+--------+--------+--------------+--------+--------+--------+-------+----------+
@@ -59,9 +59,6 @@ Legend:
 
 - ``uid decorative``: UID in key data is only used for decorative
   purposes, and in particular not for looking up keys for an e-mail address.
-
-
-.. [1] always send
 
 .. _delta.chat: https://delta.chat/
 .. _K-9 Mail: https://k9mail.github.io/
