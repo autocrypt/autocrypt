@@ -654,10 +654,10 @@ included in the encrypted payload. This does not include BCC
 recipients, which by definition must not be revealed to other
 recipients.
 
-The ``Autocrypt-Gossip`` header has the format as the ``Autocrypt``
-header (see `autocryptheaderformat`_). Its ``addr`` attribute
-indicates the recipient address this header is valid for as usual, but
-may relate to any recipient in the ``To`` or ``Cc`` header.
+The ``Autocrypt-Gossip`` header has the same format as the
+``Autocrypt`` header (see `autocryptheaderformat`_). Its ``addr``
+attribute indicates the recipient address this header is valid for as
+usual, but may relate to any recipient in the ``To`` or ``Cc`` header.
 See example in :ref:`autocrypt-gossip-example`
 
 Key Gossip Injection in Outbound Mail
