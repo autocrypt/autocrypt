@@ -55,9 +55,20 @@ and the ACLU_.
 Upcoming events
 ---------------
 
+- May 17th 2018: `Hackarnaval <https://hackarnaval.online/>`_, Paris
+  (France). Holger is going to talk about Autocrypt and NEXTLEAP's
+  research on active attacks against Autocrypt, as well as do
+  a Delta.chat session, also discussing GDPR issues with the help of Janka.
+
 - May 24th - 27th 2018: `European Investigative Journalism Conference
   (Dataharvest) <https://dataharvest.eu/>`_, Mechelen (Belgium).  Vincent will
   host a hands-on session about Autocrypt.
+
+- June 11-13th 2018: `DuD 2018 Datenschutz und Datensicherheit
+  <https://www.computas.de/konferenzen/dud_2018/DuD_2018.html>`_, Berlin (Germany).
+  Holger is going to talk about Autocrypt on the "loesungstag" as well as new
+  NEXTLEAP research to defend against active attacks, and also with Janka about
+  Delta.chat as a messenger solution which is GDPR-friendly.
 
 .. _`33c3`: https://events.ccc.de/congress/2016/wiki/Main_Page
 
