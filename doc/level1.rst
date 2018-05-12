@@ -677,9 +677,10 @@ each of which:
   referenced by ``addr``. See also :ref:`preliminary recommendation`
   for how this key is selected.
 
-- SHOULD contain only a single user id in the key material from the
-  ``keydata`` attribute, which matches the ``addr`` attribute. This
-  avoids leaking unrelated identities between recipients.
+- If a key has multiple user ids, only one SHOULD be contained in
+  ``keydata``.  If present, that user id SHOULD match the ``addr``
+  attribute.  This is only relevant for keys which came from or were
+  merged with data from external sources.
 
 - SHOULD NOT include a ``prefer-encrypt`` attribute.
 
