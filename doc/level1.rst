@@ -678,9 +678,9 @@ each of which:
   for how this key is selected.
 
 - If a key has multiple user ids, only one SHOULD be contained in
-  ``keydata``.  If present, that user id SHOULD match the ``addr``
-  attribute.  This is only relevant for keys which came from or were
-  merged with data from external sources.
+  ``keydata``.  This user id SHOULD be picked to match the ``addr``
+  attribute, if possible.  This is only relevant for keys which came
+  from or were merged with data from external sources.
 
 - SHOULD NOT include a ``prefer-encrypt`` attribute.
 
