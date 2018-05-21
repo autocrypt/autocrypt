@@ -748,17 +748,18 @@ recipients) before uploading.  It MUST encrypt in this way if the
 message is going to be sent encrypted, and SHOULD encrypt if the user
 might decide to encrypt at a later point, or otherwise keep the draft
 local only.  Drafts encrypted in this way SHOULD be stored in PGP/MIME
-format, and SHOULD NOT be signed.
+format.
+
+To allow storage of drafts independently from the user's secret key,
+encrypted drafts do not need to be signed.  Conversely, a MUA SHOULD
+ignore the signature status of encrypted drafts.
 
 Storing Draft State
 +++++++++++++++++++
 
 To store information about whether a message should be encrypted when
 sent, an `Autocrypt-Draft-State` header MAY be added to the draft when
-it is stored. If the draft is stored encrypted, this header SHOULD be
-put in the MIME header of the encrypted payload, rather than the
-message header. When loading a draft from storage, the header in the
-encrypted payload MUST be preferred to an outer one.
+it is stored.
 
 The `Autocrypt-Draft-State` header consists of a list of attributes
 with the same syntax as the :ref:`Autocrypt header<autocrypt-header>`
@@ -780,6 +781,12 @@ all of which have a binary value of `yes` or `no`:
 Example::
 
     Autocrypt-Draft-State: encrypt=yes; _by-choice=yes;
+
+.. note::
+
+    It would be desirable to store this header in the encrypted
+    payload.  This is missing here because of technical limitations in
+    some MUAs.
 
 Autocrypt Gossip headers for drafts
 +++++++++++++++++++++++++++++++++++
