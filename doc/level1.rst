@@ -59,6 +59,16 @@ both bugfix and backward-compatible feature releases.
    \sphinxtableofcontents
    \newpage
 
+Terminology
+-----------
+
+Key words to indicate requirement levels
+++++++++++++++++++++++++++++++++++++++++
+
+The definition of uppercase key words used in this document to indicate requirement
+levels (e.g. MAY, SHOULD) is stated in :rfc:`RFC 2119 "Key words for use in RFCs 
+to Indicate Requirement Levels"<2119>`.
+
 Overview
 --------
 
