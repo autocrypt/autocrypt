@@ -59,6 +59,17 @@ both bugfix and backward-compatible feature releases.
    \sphinxtableofcontents
    \newpage
 
+Terminology
+-----------
+
+Keywords to indicate requirement levels
++++++++++++++++++++++++++++++++++++++++++
+
+The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+"SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and "OPTIONAL"
+in this document are to be interpreted as described in
+:rfc:`RFC 2119 "Key words for use in RFCs to Indicate Requirement Levels"<2119>`.
+
 Overview
 --------
 
