@@ -1300,3 +1300,22 @@ contains:
 
 .. literalinclude:: appendix/example-setup-message-cleartext.key
     :language: none
+
+
+Document History
+++++++++++++++++
+
+This document is kept under `revision
+control <https://github.com/autocrypt/autocrypt>`_.  For detailed
+history, please consult the git logs.  This section provides a
+high-level overview of what changed between revisions.
+
+version 1.0.1
+   - added Terminology section
+   - added Document History section
+   - specify how to deal with using non-Autocrypt keys
+     (stripping excess user IDs)
+   - minor language, markup, and orthography cleanup
+
+version 1.0.0
+   - first complete specification
