@@ -3,8 +3,7 @@
    \pagestyle{plain}
    \cfoot{Autocrypt Specification \autocryptrelease}
 
-Autocrypt Level 1: Enabling encryption, avoiding annoyances
-===========================================================
+.. title:: Autocrypt Level 1: Enabling encryption, avoiding annoyances
 
 Autocrypt aims to incrementally and carefully replace cleartext e-mail
 with end-to-end encrypted e-mail. This differs from the traditional approach
@@ -48,6 +47,8 @@ both bugfix and backward-compatible feature releases.
 .. only:: builder_html
 
    .. contents::
+   .. sectnum::
+      :depth: 2
 
 .. only:: builder_readthedocs
 
