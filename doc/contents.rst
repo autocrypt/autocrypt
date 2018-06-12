@@ -62,7 +62,6 @@ and contributors, MUA developers and privacy enthusiasts.
    _img
    blog/blog-example
    install
-   install-autocrypt-enigmail
    news
    bot
    press-team
