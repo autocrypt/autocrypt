@@ -1,7 +1,7 @@
 Share your experiences with autocrypt!
 ======================================
 
-*A guest post by b3yond, on 05.11.2017.*
+*A guest post by b3yond, on 2017-11-05.*
 
 Many IT people are a bit afraid of writing blog posts. There are no
 clear rules on how to do it, you can't look up how the standard is,

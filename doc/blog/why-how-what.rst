@@ -1,7 +1,7 @@
 Why Autocrypt?
 ==============
 
-*by Valodim, 19.02.2017*
+*by Valodim, 2017-02-19*
 
 In the past couple of months, I had conversations about Autocrypt with many
 people, on various conferences and other occasions. In this blog post, I will
