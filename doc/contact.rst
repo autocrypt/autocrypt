@@ -85,15 +85,15 @@ Upcoming events
 Past events
 -------------
 
-- Mar 2nd 2018: `Elevate Festival <https://elevate.at>`_, Graz (Austria).
-  Xenia and Holger are going to participate in a panel
-  `"Risk a radical shift" <https://elevate.at/diskursprogramm/e18radicalshift/>`_
-  and a session `"Riot in the Matrix -- What's next?" <https://elevate.at/diskursprogramm/e18riotmatrix/>`_ involving Autocrypt and Delta.chat as topics.
-
 - March 8th 2018: `Internet Freedom Festival`_, Valencia.  There
   is going to be an `Autocrypt Intro + Demonstration session
   <https://platform.internetfreedomfestival.org/en/IFF2018/public/schedule/custom/238>`_
   on thursday, March 8th.
+
+- March 2nd 2018: `Elevate Festival <https://elevate.at>`_, Graz (Austria).
+  Xenia and Holger are going to participate in a panel
+  `"Risk a radical shift" <https://elevate.at/diskursprogramm/e18radicalshift/>`_
+  and a session `"Riot in the Matrix -- What's next?" <https://elevate.at/diskursprogramm/e18riotmatrix/>`_ involving Autocrypt and Delta.chat as topics.
 
 - January 16/17th 2018, Lausanne, Switzerland: two days of discussions and
   interchange with researchers from `EPFL`_ and the `NEXTLEAP`_ EU project
