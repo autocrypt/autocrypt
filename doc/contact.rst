@@ -55,21 +55,6 @@ and the ACLU_.
 Upcoming events
 ---------------
 
-- May 17th 2018: `Hackarnaval <https://hackarnaval.online/>`_, Paris
-  (France). Holger is going to talk about Autocrypt and NEXTLEAP's
-  research on active attacks against Autocrypt, as well as do
-  a Delta.chat session, also discussing GDPR issues with the help of Janka.
-
-- May 24th - 27th 2018: `European Investigative Journalism Conference
-  (Dataharvest) <https://dataharvest.eu/>`_, Mechelen (Belgium).  Vincent will
-  host a hands-on session about Autocrypt.
-
-- June 11-13th 2018: `DuD 2018 Datenschutz und Datensicherheit
-  <https://www.computas.de/konferenzen/dud_2018/DuD_2018.html>`_, Berlin (Germany).
-  Holger is going to talk about Autocrypt on the "loesungstag" as well as new
-  NEXTLEAP research to defend against active attacks, and also with Janka about
-  Delta.chat as a messenger solution which is GDPR-friendly.
-
 .. _`33c3`: https://events.ccc.de/congress/2016/wiki/Main_Page
 
 .. _`We Fix the Net`: https://events.ccc.de/congress/2016/wiki/Session:We_Fix_the_Net
@@ -84,6 +69,21 @@ Upcoming events
 
 Past events
 -------------
+
+- June 11-13th 2018: `DuD 2018 Datenschutz und Datensicherheit
+  <https://www.computas.de/konferenzen/dud_2018/DuD_2018.html>`_, Berlin (Germany).
+  Holger is going to talk about Autocrypt on the "loesungstag" as well as new
+  NEXTLEAP research to defend against active attacks, and also with Janka about
+  Delta.chat as a messenger solution which is GDPR-friendly.
+
+- May 24th - 27th 2018: `European Investigative Journalism Conference
+  (Dataharvest) <https://dataharvest.eu/>`_, Mechelen (Belgium).  Vincent will
+  host a hands-on session about Autocrypt.
+
+- May 17th 2018: `Hackarnaval <https://hackarnaval.online/>`_, Paris
+  (France). Holger is going to talk about Autocrypt and NEXTLEAP's
+  research on active attacks against Autocrypt, as well as do
+  a Delta.chat session, also discussing GDPR issues with the help of Janka.
 
 - March 8th 2018: `Internet Freedom Festival`_, Valencia.  There
   is going to be an `Autocrypt Intro + Demonstration session
