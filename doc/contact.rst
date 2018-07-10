@@ -55,13 +55,13 @@ and the ACLU_.
 Upcoming events
 ---------------
 
-- July 22nd 2018: `The Circle of HOPE<https://www.hope.net/>_`, the
+- July 22nd 2018: `The Circle of HOPE <https://www.hope.net/>`_, the
   latest incarnation of New York City's biannual Hackers On Planet
   Earth conference.  dkg will `present Autocrypt
-  <https://hope.net/schedule.html#-autocrypt-end-to-end-encryped-email-for-everyone->_`,
+  <https://hope.net/schedule.html#-autocrypt-end-to-end-encryped-email-for-everyone->`_,
   and then subsequently run `a workshop for people who want to get
   started using it
-  <https://www.hope.net/workshops.html#-getting-started-with-autocrypt->_`.
+  <https://www.hope.net/workshops.html#-getting-started-with-autocrypt->`_.
 
 .. _`33c3`: https://events.ccc.de/congress/2016/wiki/Main_Page
 
