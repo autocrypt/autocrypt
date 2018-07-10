@@ -55,20 +55,13 @@ and the ACLU_.
 Upcoming events
 ---------------
 
-- May 17th 2018: `Hackarnaval <https://hackarnaval.online/>`_, Paris
-  (France). Holger is going to talk about Autocrypt and NEXTLEAP's
-  research on active attacks against Autocrypt, as well as do
-  a Delta.chat session, also discussing GDPR issues with the help of Janka.
-
-- May 24th - 27th 2018: `European Investigative Journalism Conference
-  (Dataharvest) <https://dataharvest.eu/>`_, Mechelen (Belgium).  Vincent will
-  host a hands-on session about Autocrypt.
-
-- June 11-13th 2018: `DuD 2018 Datenschutz und Datensicherheit
-  <https://www.computas.de/konferenzen/dud_2018/DuD_2018.html>`_, Berlin (Germany).
-  Holger is going to talk about Autocrypt on the "loesungstag" as well as new
-  NEXTLEAP research to defend against active attacks, and also with Janka about
-  Delta.chat as a messenger solution which is GDPR-friendly.
+- July 22nd 2018: `The Circle of HOPE<https://www.hope.net/>_`, the
+  latest incarnation of New York City's biannual Hackers On Planet
+  Earth conference.  dkg will `present Autocrypt
+  <https://hope.net/schedule.html#-autocrypt-end-to-end-encryped-email-for-everyone->_`,
+  and then subsequently run `a workshop for people who want to get
+  started using it
+  <https://www.hope.net/workshops.html#-getting-started-with-autocrypt->_`.
 
 .. _`33c3`: https://events.ccc.de/congress/2016/wiki/Main_Page
 
@@ -85,15 +78,30 @@ Upcoming events
 Past events
 -------------
 
-- Mar 2nd 2018: `Elevate Festival <https://elevate.at>`_, Graz (Austria).
-  Xenia and Holger are going to participate in a panel
-  `"Risk a radical shift" <https://elevate.at/diskursprogramm/e18radicalshift/>`_
-  and a session `"Riot in the Matrix -- What's next?" <https://elevate.at/diskursprogramm/e18riotmatrix/>`_ involving Autocrypt and Delta.chat as topics.
+- June 11-13th 2018: `DuD 2018 Datenschutz und Datensicherheit
+  <https://www.computas.de/konferenzen/dud_2018/DuD_2018.html>`_, Berlin (Germany).
+  Holger is going to talk about Autocrypt on the "loesungstag" as well as new
+  NEXTLEAP research to defend against active attacks, and also with Janka about
+  Delta.chat as a messenger solution which is GDPR-friendly.
+
+- May 24th - 27th 2018: `European Investigative Journalism Conference
+  (Dataharvest) <https://dataharvest.eu/>`_, Mechelen (Belgium).  Vincent will
+  host a hands-on session about Autocrypt.
+
+- May 17th 2018: `Hackarnaval <https://hackarnaval.online/>`_, Paris
+  (France). Holger is going to talk about Autocrypt and NEXTLEAP's
+  research on active attacks against Autocrypt, as well as do
+  a Delta.chat session, also discussing GDPR issues with the help of Janka.
 
 - March 8th 2018: `Internet Freedom Festival`_, Valencia.  There
   is going to be an `Autocrypt Intro + Demonstration session
   <https://platform.internetfreedomfestival.org/en/IFF2018/public/schedule/custom/238>`_
   on thursday, March 8th.
+
+- March 2nd 2018: `Elevate Festival <https://elevate.at>`_, Graz (Austria).
+  Xenia and Holger are going to participate in a panel
+  `"Risk a radical shift" <https://elevate.at/diskursprogramm/e18radicalshift/>`_
+  and a session `"Riot in the Matrix -- What's next?" <https://elevate.at/diskursprogramm/e18riotmatrix/>`_ involving Autocrypt and Delta.chat as topics.
 
 - January 16/17th 2018, Lausanne, Switzerland: two days of discussions and
   interchange with researchers from `EPFL`_ and the `NEXTLEAP`_ EU project
