@@ -734,7 +734,7 @@ way:
 4. Set ``peers[gossip-addr].gossip_key`` to the value of the
    ``keydata`` attribute.
 
-E-Mail Drafts
+Message Drafts
 -------------
 
 During message composition, the user may want to close the dialog and
@@ -750,16 +750,17 @@ might decide to encrypt at a later point, or otherwise keep the draft
 local only.  Drafts encrypted in this way SHOULD be stored in PGP/MIME
 format.
 
-To allow storage of drafts independently from the user's secret key,
-encrypted drafts do not need to be signed.  Conversely, a MUA SHOULD
-ignore the signature status of encrypted drafts.
+A MUA SHOULD ignore the signature status of encrypted drafts, and
+conversely encrypted drafts do not need to be signed.  This allows
+storage of drafts independently from the user's secret key.
+
 
 Storing Draft State
 +++++++++++++++++++
 
 To store information about whether a message should be encrypted when
-sent, an ``Autocrypt-Draft-State`` header MAY be added to the draft when
-it is stored.
+sent, an ``Autocrypt-Draft-State`` header MAY be added to the MIME
+header of the draft message when it is stored.
 
 The ``Autocrypt-Draft-State`` header consists of a list of attributes
 with the same syntax as the :ref:`Autocrypt header<autocrypt-header>`
