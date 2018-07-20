@@ -771,10 +771,11 @@ all of which have a binary value of ``yes`` or ``no``:
 * The critical ``encrypt`` attribute specifies whether the message would
   be sent encrypted or not, at the time of saving the draft. It MUST
   be present in the header.
-* The non-critical ``_is-reply`` attribute indicates whether the message
-  is composed as a reply to an encrypted message. This affects the
-  :ref:`Autocrypt recommendation<final-recommendation-phase>`. It is
-  optional and defaults to ``no``.
+* The non-critical ``_is-reply-to-encrypted`` attribute indicates
+  whether the message is composed as a reply to an encrypted message.
+  This affects the :ref:`Autocrypt
+  recommendation<final-recommendation-phase>`. It is optional and
+  defaults to ``no``.
 * The non-critical ``_by-choice`` attribute indicates whether the value
   of the ``encrypt`` attribute was made by immediate user choice. It is
   optional and defaults to ``no``.
