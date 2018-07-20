@@ -758,25 +758,25 @@ Storing Draft State
 +++++++++++++++++++
 
 To store information about whether a message should be encrypted when
-sent, an `Autocrypt-Draft-State` header MAY be added to the draft when
+sent, an ``Autocrypt-Draft-State`` header MAY be added to the draft when
 it is stored.
 
-The `Autocrypt-Draft-State` header consists of a list of attributes
+The ``Autocrypt-Draft-State`` header consists of a list of attributes
 with the same syntax as the :ref:`Autocrypt header<autocrypt-header>`
 itself, which also supports critical and non-critical attributes
 following the same semantics.  There are three defined attributes,
-all of which have a binary value of `yes` or `no`:
+all of which have a binary value of ``yes`` or ``no``:
 
-* The critical `encrypt` attribute specifies whether the message would
+* The critical ``encrypt`` attribute specifies whether the message would
   be sent encrypted or not, at the time of saving the draft. It MUST
   be present in the header.
-* The non-critical `_is-reply` attribute indicates whether the message
+* The non-critical ``_is-reply`` attribute indicates whether the message
   is composed as a reply to an encrypted message. This affects the
   :ref:`Autocrypt recommendation<final-recommendation-phase>`. It is
-  optional and defaults to `no`.
-* The non-critical `_by-choice` attribute indicates whether the value
-  of the `encrypt` attribute was made by immediate user choice. It is
-  optional and defaults to `no`.
+  optional and defaults to ``no``.
+* The non-critical ``_by-choice`` attribute indicates whether the value
+  of the ``encrypt`` attribute was made by immediate user choice. It is
+  optional and defaults to ``no``.
 
 Example::
 
@@ -784,9 +784,11 @@ Example::
 
 .. note::
 
-    It would be desirable to store this header in the encrypted
-    payload.  This is missing here because of technical limitations in
-    some MUAs.
+    To minimize the amount of exposed metadata, it would be desirable
+    to store this header in the encrypted payload of the message,
+    rather than its outer envelope.  However, this causes technical
+    difficulties in some MUAs, which is why it is left out here to
+    optimize for interoperability.
 
 Autocrypt Gossip headers for drafts
 +++++++++++++++++++++++++++++++++++
@@ -796,17 +798,17 @@ via the ``Autocrypt-Draft-State`` header, the resuming MUA might be
 lacking keys for recipients that were originally available when the
 draft was stored.
 
-To solve this problem, a MUA MAY make use of the `Autocrypt
-Gossip<autocryt-gossip>` mechanism to include the keys of intended
-recipients in the draft message. To do so, it simply places one
-``Autocrypt-Gossip`` header per recipient in the MIME header of the
-encrypted payload of the draft.
+To solve this problem, a MUA MAY make use of the :ref:`key-gossip`
+mechanism to include the keys of intended recipients in the draft
+message. To do so, it simply places one ``Autocrypt-Gossip`` header
+per recipient in the MIME header of the encrypted payload of the
+draft.
 
 Conversely, when opening a draft, a MUA MAY import keys from
 ``Autocrypt-Gossip`` headers that are present in the MIME headers of
 the encrypted payload.  These headers should update the ``gossip_key``
 and ``gossip_timestamp`` fields of the relevant peers `as
-usual<autocryt-gossip-update>`.
+usual<key-gossip-update>`.
 
 .. _account-management:
 
