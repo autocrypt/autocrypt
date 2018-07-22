@@ -729,14 +729,14 @@ DKIM Authentication
 To combat spam, phishing, and other types of spoofed messages, many
 providers authenticate all outgoing messages by adding a DomainKeys
 Identified Mail (:rfc:`DKIM<6376>`) signature.  This signature is
-created over the body of the message, and a configurable set of its
+created over the body of the message, and a configurable subset of its
 headers. This set typically includes headers like ``From``, ``To``,
 ``Date`` and ``Subject``, but not ``Autocrypt``.
 
-Providers can't be expected to include Autocrypt in the set of signed
-headers any time soon.  To benefit from DKIM authentication
-regardless, a MUA MAY include an additional ``Autocrypt-Auth`` header
-in the body of an unencrypted message.
+Providers can't be expected to include the ``Autocrypt`` header in the
+set of signed headers any time soon.  To benefit from DKIM
+authentication regardless, a MUA MAY include an additional
+``Autocrypt-Auth`` header in the body of an unencrypted message.
 
 The ``Autocrypt-Auth`` header can only be used in messages with
 a ``multipart/*`` content-type, and MUST be placed in the MIME header
@@ -753,9 +753,9 @@ unencoded content of the ``keydata`` attribute:
 ``Autocrypt-Auth`` header for each, or none at all.
 
 While parsing an incoming unencrypted message, a MUA SHOULD consider
-``Autocrypt-Auth`` headers in the body.  If any such header exists,
-an ``Autocrypt`` header that does not have a corresponding auth header
-MUST be considered invalid.
+``Autocrypt-Auth`` headers in the first element of the body.  If any
+such header exists, an ``Autocrypt`` header that does not have
+a corresponding auth header MUST be considered invalid.
 
 With this mechanism in place, tampering with the public key material
 will invalidate either the Autocrypt header, or the DKIM-signature.
