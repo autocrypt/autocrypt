@@ -764,6 +764,9 @@ header will cause mail providers to treat the message suspiciously or
 even reject delivery, depending on the sending and receiving domain's
 DKIM and :rfc:`DMARC<7489>` policies.
 
+See :ref:`example-auth` for an example message with ``Autocrypt-Auth``
+header.
+
 .. _account-management:
 
 Managing accounts controlled by the MUA
@@ -1269,6 +1272,21 @@ When decrypted, the encrypted part contains:
 
 .. literalinclude:: appendix/example-gossip-cleartext.eml
     :language: none
+
+.. _example-auth:
+
+Example Autocrypt Auth header
++++++++++++++++++++++++++++++
+
+Bob sends Alice a simple, unencrypted e-mail message that includes an
+Autocrypt header, which is authenticated with an Autocrypt-Auth header
+in the first content part MIME header:
+
+.. literalinclude:: appendix/example-auth-autocrypt.eml
+    :language: none
+
+If this message is signed by Bob's e-mail provider using DKIM, this
+will authenticate the public key material in the Autocrypt header.
 
 .. _example-cant-encrypt-reply:
 
