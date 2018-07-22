@@ -723,6 +723,50 @@ way:
    ``keydata`` attribute.
 
 
+DKIM Authentication
++++++++++++++++++++
+
+To combat spam, phishing, and other types of spoofed messages, many
+providers authenticate all outgoing messages by adding a DomainKeys
+Identified Mail (:rfc:`DKIM<6376>`) signature.  This signature is
+created over the body of the message, and a configurable subset of its
+headers. This set typically includes headers like ``From``, ``To``,
+``Date`` and ``Subject``, but not ``Autocrypt``.
+
+Providers can't be expected to include the ``Autocrypt`` header in the
+set of signed headers any time soon.  To benefit from DKIM
+authentication regardless, a MUA MAY include an additional
+``Autocrypt-Auth`` header in the body of an unencrypted message.
+
+The ``Autocrypt-Auth`` header can only be used in messages with
+a ``multipart/*`` content-type, and MUST be placed in the MIME header
+of the first part of such a message.  For example, if the message is
+constructed as a ``multipart/mixed`` part that consists of
+a ``text/plain`` body followed by a ``application/octet-stream``
+attachment, the ``Autocrypt-Auth`` header is placed in the MIME header
+of the ``text/plain`` part.
+
+The value of this header is the base64 encoded SHA-256 sum of the
+unencoded content of the ``keydata`` attribute:
+``base64(sha256(keydata-raw))``.  If a message includes multiple
+``Autocrypt`` headers, there MUST either be a corresponding
+``Autocrypt-Auth`` header for each, or none at all.
+
+While parsing an incoming unencrypted message, a MUA SHOULD consider
+``Autocrypt-Auth`` headers in the first element of the body.  If any
+such header exists, an ``Autocrypt`` header that does not have
+a corresponding auth header MUST be considered invalid.
+
+With this mechanism in place, tampering with the public key material
+will invalidate either the Autocrypt header, or the DKIM-signature.
+Although clients don't usually verify DKIM signatures, an invalid DKIM
+header will cause mail providers to treat the message suspiciously or
+even reject delivery, depending on the sending and receiving domain's
+DKIM and :rfc:`DMARC<7489>` policies.
+
+See :ref:`example-auth` for an example message with ``Autocrypt-Auth``
+header.
+
 .. _account-management:
 
 Managing accounts controlled by the MUA
@@ -1228,6 +1272,21 @@ When decrypted, the encrypted part contains:
 
 .. literalinclude:: appendix/example-gossip-cleartext.eml
     :language: none
+
+.. _example-auth:
+
+Example Autocrypt Auth header
++++++++++++++++++++++++++++++
+
+Bob sends Alice a simple, unencrypted e-mail message that includes an
+Autocrypt header, which is authenticated with an Autocrypt-Auth header
+in the first content part MIME header:
+
+.. literalinclude:: appendix/example-auth-autocrypt.eml
+    :language: none
+
+If this message is signed by Bob's e-mail provider using DKIM, this
+will authenticate the public key material in the Autocrypt header.
 
 .. _example-cant-encrypt-reply:
 
