@@ -723,6 +723,47 @@ way:
    ``keydata`` attribute.
 
 
+DKIM Authentication
++++++++++++++++++++
+
+To combat spam, phishing, and other types of spoofed messages, many
+providers authenticate all outgoing messages by adding a DomainKeys
+Identified Mail (:rfc:`DKIM<6376>`) signature.  This signature is
+created over the body of the message, and a configurable set of its
+headers. This set typically includes headers like ``From``, ``To``,
+``Date`` and ``Subject``, but not ``Autocrypt``.
+
+Providers can't be expected to include Autocrypt in the set of signed
+headers any time soon.  To benefit from DKIM authentication
+regardless, a MUA MAY include an additional ``Autocrypt-Auth`` header
+in the body of the message.
+
+The ``Autocrypt-Auth`` header can only be used in messages with
+a ``multipart/*`` content-type, and MUST be placed in the MIME header
+of the first part of such a message.  For example, if the message is
+constructed as a ``multipart/mixed`` part that consists of
+a ``text/plain`` body followed by a ``application/octet-stream``
+attachment, the ``Autocrypt-Auth`` header is placed in the MIME header
+of the ``text/plain`` part.
+
+The value of this header is the base64 encoded SHA-256 sum of the
+unencoded content of the ``keydata`` attribute:
+``base64(sha256(keydata-raw))``.  If a message includes multiple
+``Autocrypt`` headers, there MUST either be a corresponding
+``Autocrypt-Auth`` header for each, or none at all.
+
+While parsing an incoming message, a MUA SHOULD consider
+``Autocrypt-Auth`` headers in the body.  If any such header exists,
+an ``Autocrypt`` header that does not have a corresponding auth header
+MUST be considered invalid.
+
+With this mechanism in place, tampering with the public key material
+will invalidate either the Autocrypt header, or the DKIM-signature.
+Although clients don't usually verify DKIM signatures, an invalid DKIM
+header will cause mail providers to treat the message suspiciously or
+even reject delivery, depending on the sending and receiving domain's
+DKIM and :rfc:`DMARC<7489>` policies.
+
 .. _account-management:
 
 Managing accounts controlled by the MUA
