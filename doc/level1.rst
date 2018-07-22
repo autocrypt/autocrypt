@@ -736,7 +736,7 @@ headers. This set typically includes headers like ``From``, ``To``,
 Providers can't be expected to include Autocrypt in the set of signed
 headers any time soon.  To benefit from DKIM authentication
 regardless, a MUA MAY include an additional ``Autocrypt-Auth`` header
-in the body of the message.
+in the body of an unencrypted message.
 
 The ``Autocrypt-Auth`` header can only be used in messages with
 a ``multipart/*`` content-type, and MUST be placed in the MIME header
@@ -752,7 +752,7 @@ unencoded content of the ``keydata`` attribute:
 ``Autocrypt`` headers, there MUST either be a corresponding
 ``Autocrypt-Auth`` header for each, or none at all.
 
-While parsing an incoming message, a MUA SHOULD consider
+While parsing an incoming unencrypted message, a MUA SHOULD consider
 ``Autocrypt-Auth`` headers in the body.  If any such header exists,
 an ``Autocrypt`` header that does not have a corresponding auth header
 MUST be considered invalid.
