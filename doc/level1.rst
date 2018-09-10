@@ -672,6 +672,9 @@ attribute indicates the recipient address this header is valid for as
 usual, but may relate to any recipient in the ``To`` or ``Cc`` header.
 See example in :ref:`autocrypt-gossip-example`
 
+The ``Autocrypt-Gossip`` header can also be used
+to include keys for the address specified in the ``Reply-To`` header.
+
 Key Gossip Injection in Outbound Messages
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -682,12 +685,15 @@ this case contains one Autocrypt-Gossip header for each recipient,
 each of which:
 
 - MUST include an ``addr`` attribute that matches one of the
-  recipients in the ``To`` or ``Cc`` headers.
+  recipients in the ``To``, ``Cc``, or ``Reply-To`` headers.
 
-- MUST include the ``keydata`` attribute which MUST contain the
+- MUST include the ``keydata`` attribute.
+  For ``To`` and ``Cc`` headers it MUST contain the
   same public key which is used to encrypt the mail to the recipient
   referenced by ``addr``. See also :ref:`preliminary recommendation`
   for how this key is selected.
+  For ``Reply-To`` headers it MUST contain the public key
+  which should be used to encrypt a reply.
 
 - If a key has multiple user ids, only one SHOULD be contained in
   ``keydata``.  This user id SHOULD be picked to match the ``addr``
@@ -710,8 +716,8 @@ Autocrypt peer state of the gossiped recipient identified by its
 way:
 
 1. If ``gossip-addr`` does not match any recipient in the mail's
-   ``To`` or ``Cc`` header, the update process terminates (i.e.,
-   header is ignored).
+   ``To``, ``Cc``, or ``Reply-To`` header,
+   the update process terminates (i.e., header is ignored).
 
 2. If ``peers[gossip-addr].gossip_timestamp`` is more recent than the
    message's effective date, then the update process terminates.
