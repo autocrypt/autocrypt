@@ -39,5 +39,5 @@ Message-ID: <rsa-3072@autocrypt.example>
 MIME-Version: 1.0
 Content-Type: text/plain
 
-This is an example e-mail with Autocrypt header and RSA 3072 key
-as defined in Level 1.
+This is an example e-mail with Autocrypt header and RSA 3072 key (key
+id: 71DBC5657FDE65A7) as defined in Level 1.
