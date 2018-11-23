@@ -672,29 +672,38 @@ attribute indicates the recipient address this header is valid for as
 usual, but may relate to any recipient in the ``To`` or ``Cc`` header.
 See example in :ref:`autocrypt-gossip-example`
 
+The ``Autocrypt-Gossip`` header MAY also be used
+to include keys for the address specified in the ``Reply-To`` header.
+This allows replying encrypted even if the address differs from those in
+the ``From``, ``To``, and ``Cc`` headers.
+
 Key Gossip Injection in Outbound Messages
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-An Autocrypt MUA MAY include ``Autocrypt-Gossip`` headers in messages
-with more than one recipient. These headers MUST be placed in the root
-MIME part of the encrypted message payload. The encrypted payload in
-this case contains one Autocrypt-Gossip header for each recipient,
-each of which:
+An Autocrypt MUA MAY include ``Autocrypt-Gossip`` headers in messages.
+These headers MUST be placed in the root MIME part of the encrypted message payload.
+The encrypted payload in this case contains
+one Autocrypt-Gossip header for each address.
+Each header:
 
 - MUST include an ``addr`` attribute that matches one of the
-  recipients in the ``To`` or ``Cc`` headers.
+  addresses in the ``To``, ``Cc``, or ``Reply-To`` headers.
 
-- MUST include the ``keydata`` attribute which MUST contain the
+- MUST include the ``keydata`` attribute.
+  For ``To`` and ``Cc`` headers it MUST contain the
   same public key which is used to encrypt the mail to the recipient
   referenced by ``addr``. See also :ref:`preliminary recommendation`
   for how this key is selected.
-
-- If a key has multiple user ids, only one SHOULD be contained in
-  ``keydata``.  This user id SHOULD be picked to match the ``addr``
-  attribute, if possible.  This is only relevant for keys which came
-  from or were merged with data from external sources.
+  For the address in the ``Reply-To`` headers
+  it SHOULD contain the public key
+  which the sender expects to be used for that address.
 
 - SHOULD NOT include a ``prefer-encrypt`` attribute.
+
+If a key has multiple user ids, only one SHOULD be contained in
+``keydata``.  This user id SHOULD be picked to match the ``addr``
+attribute, if possible.  This is only relevant for keys which came
+from or were merged with data from external sources.
 
 To avoid leaking metadata about a third party in the clear, an
 ``Autocrypt-Gossip`` header SHOULD NOT be added outside an encrypted
@@ -705,13 +714,13 @@ Updating Autocrypt Peer State from Key Gossip
 
 An incoming message may contain one or more ``Autocrypt-Gossip``
 headers in the encrypted payload. Each of these headers may update the
-Autocrypt peer state of the gossiped recipient identified by its
+Autocrypt peer state of the gossiped address identified by its
 ``addr`` value (referred to here as ``gossip-addr``) in the following
 way:
 
-1. If ``gossip-addr`` does not match any recipient in the mail's
-   ``To`` or ``Cc`` header, the update process terminates (i.e.,
-   header is ignored).
+1. If ``gossip-addr`` does not match any address in the mail's
+   ``To``, ``Cc``, or ``Reply-To`` header,
+   the update process terminates (i.e., header is ignored).
 
 2. If ``peers[gossip-addr].gossip_timestamp`` is more recent than the
    message's effective date, then the update process terminates.
