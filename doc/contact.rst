@@ -55,13 +55,8 @@ and the ACLU_.
 Upcoming events
 ---------------
 
-- July 22nd 2018: `The Circle of HOPE <https://www.hope.net/>`_, the
-  latest incarnation of New York City's biannual Hackers On Planet
-  Earth conference.  dkg will `present Autocrypt
-  <https://hope.net/schedule.html#-autocrypt-end-to-end-encryped-email-for-everyone->`_,
-  and then subsequently run `a workshop for people who want to get
-  started using it
-  <https://www.hope.net/workshops.html#-getting-started-with-autocrypt->`_.
+- Feb 2nd 2019, 15:20: Introductory Lightning talk at `FOSDEM
+  <https://fosdem.org>`_, Brussels, by Vincent.
 
 .. _`33c3`: https://events.ccc.de/congress/2016/wiki/Main_Page
 
@@ -77,6 +72,18 @@ Upcoming events
 
 Past events
 -------------
+
+- October 20/21, 2018: OpenPGP-Email Summit, Brussels. Several people
+  related to the Autocrypt project were there and participated in
+  sessions, we also had a productive meeting for making future plans.
+
+- July 22nd 2018: `The Circle of HOPE <https://www.hope.net/>`_, the
+  latest incarnation of New York City's biannual Hackers On Planet
+  Earth conference.  dkg will `present Autocrypt
+  <https://hope.net/schedule.html#-autocrypt-end-to-end-encryped-email-for-everyone->`_,
+  and then subsequently run `a workshop for people who want to get
+  started using it
+  <https://www.hope.net/workshops.html#-getting-started-with-autocrypt->`_.
 
 - June 11-13th 2018: `DuD 2018 Datenschutz und Datensicherheit
   <https://www.computas.de/konferenzen/dud_2018/DuD_2018.html>`_, Berlin (Germany).
