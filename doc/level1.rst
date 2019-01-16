@@ -275,6 +275,22 @@ above rules, such headers will be judged invalid, and discarded by
 level 1 MUAs.  Such an update to the specification will also have
 to describe how an updated MUA will deal with multiple valid headers.
 
+A MUA MUST NOT send an Autocrypt header above 10 KiB in size
+(including the Autocrypt: prefix and folding whitespace).
+Larger headers are likely the result of unintentionally bloated OpenPGP data.
+To ensure a consistent failure mode across clients,
+MUAs SHOULD treat such headers as invalid.
+
+.. note::
+
+  - An Autocrypt header following this specification
+    will be up to 3 KiB in size.
+    Some users might import 4096-bit RSA keys,
+    which may result in an Autocrypt header of up to 5 KiB.
+  - The 10 KiB limit was chosen to accomodate for these use cases
+    but also avoid headers being truncated or emails being rejected
+    by MTAs with a 10 KiB header size limit.
+
 
 OpenPGP Based key data
 ~~~~~~~~~~~~~~~~~~~~~~
