@@ -310,7 +310,7 @@ both signatures and encryption.
   REQUIRED support for RSA, and recommended a 3072 bit RSA key
   configuration.  Support for elliptic curve cryptography in deployed
   OpenPGP implementations improved since then, and the switch to ECC
-  was made in version 1.1 (December 2018) due to message size
+  was made in version 1.1 (January 2019) due to message size
   considerations.
 
 Header injection in outbound mail
