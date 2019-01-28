@@ -195,8 +195,8 @@ by the MUA, ``accounts[addr]`` has the following attributes:
 
  * ``enabled``: a boolean value, indicating whether Autocrypt is
    enabled for this account.
- * ``secret_key``: The RSA secret key material used for
-   the account (see :ref:`secretkeys`).
+ * ``secret_key``: The secret key material used for the account (see
+   :ref:`secretkeys`).
  * ``public_key``: The OpenPGP transferable public key (:rfc:`OpenPGP
    "Transferable Public Key"<4880#section-11.1>`) derived
    from the secret key.
@@ -297,10 +297,21 @@ concerns, the user id SHOULD NOT be an empty string.
 These packets MUST be assembled in binary format (not ASCII-armored),
 and then base64-encoded.
 
-A Level 1 MUA MUST be capable of processing and handling 2048-bit and
-3072-bit RSA public keys.  It MAY support other OpenPGP key formats
-found in an Autocrypt header (for example, by passing it agnostically
-to an OpenPGP backend for handling).
+A Level 1 MUA MUST be capable of processing and handling Ed25519
+public keys for signatures, as well as Cv25519 for encryption.  It MAY
+support other OpenPGP key formats found in an Autocrypt header (for
+example, by passing it agnostically to an OpenPGP backend for
+handling).  In particular, it SHOULD support the RSA algorithm for
+both signatures and encryption.
+
+.. note::
+
+  To optimize for compatibility, earlier versions of this document
+  REQUIRED support for RSA, and recommended a 3072 bit RSA key
+  configuration.  Support for elliptic curve cryptography in deployed
+  OpenPGP implementations improved since then, and the switch to ECC
+  was made in version 1.1 (January 2019) due to message size
+  considerations.
 
 Header injection in outbound mail
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -746,12 +757,10 @@ information stored about the MUA's own e-mail accounts.
 Secret key generation and storage
 +++++++++++++++++++++++++++++++++
 
-The MUA SHOULD generate and store two RSA 3072-bit secret keys for the
-user, one for signing and self-certification, and the other for
-decrypting.  An MUA with hardware constraints (e.g., one using an external
-crypto token) MAY choose to generate and store 2048-bit RSA secret
-keys instead.  The MUA MUST be capable of assembling these keys into
-an OpenPGP certificate (:rfc:`RFC 4880 "Transferable Public
+The MUA SHOULD generate and store a Ed25519 plus Cv25519 secret key
+for the user, the former for signing and self-certification, the
+latter for decrypting.  The MUA MUST be capable of assembling these
+keys into an OpenPGP certificate (:rfc:`RFC 4880 "Transferable Public
 Key"<4880#section-11.1>`) that indicates these capabilities.
 
 Secret key protection at rest
@@ -1318,6 +1327,10 @@ This document is kept under `revision
 control <https://github.com/autocrypt/autocrypt>`_.  For detailed
 history, please consult the git logs.  This section provides a
 high-level overview of what changed between revisions.
+
+version 1.1
+   - change required algorithms and recommendation for key generation
+     to Ed25519+Cv25519
 
 version 1.0.1
    - added Terminology section
