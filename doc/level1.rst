@@ -1405,6 +1405,8 @@ high-level overview of what changed between revisions.
 version 1.1
    - change required algorithms and recommendation for key generation
      to Ed25519+Cv25519
+   - add Autocrypt-Draft-State header to preserve encryption state of
+     drafts
 
 version 1.0.1
    - added Terminology section
