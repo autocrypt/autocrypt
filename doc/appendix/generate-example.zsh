@@ -30,15 +30,21 @@ generate-autocrypt-key() {
     })
 }
 
-encrypt-file-to() {
+encrypt-file-to encrypt-and-sign-file-to () {
     local tmp=$(mktemp -d)
     local file=$1 from=$2
     local to=( $argv[3,$] )
+    local signparam=()
+    if [[ $0 == *-sign* ]]; then
+        signparam=( --sign )
+    else
+        to+=( $from )
+    fi
     ({
         export HOME=$tmp
         gpg --no-auto-check-trustdb --import $from.pub.asc $from.sec.asc ${^to}.pub.asc
         local recips=( --recipient\ ${^to} )
-        gpg --batch --trust-model always --armor --sign --encrypt ${=recips} < $file
+        gpg --batch --trust-model always --armor $signparam --encrypt ${=recips} < $file
     } always {
         rm -r $tmp
     })
@@ -98,7 +104,7 @@ Regards,
 Alice
 EOF
 
-gossipmsgencrypted="$(encrypt-file-to example-gossip-cleartext.eml alice@autocrypt.example bob@autocrypt.example carol@autocrypt.example)"
+gossipmsgencrypted="$(encrypt-and-sign-file-to example-gossip-cleartext.eml alice@autocrypt.example bob@autocrypt.example carol@autocrypt.example)"
 
 > example-gossip.eml << EOF
 Delivered-To: <bob@autocrypt.example>
@@ -126,6 +132,56 @@ Content-Description: OpenPGP encrypted message
 Content-Disposition: inline; filename="encrypted.asc"
 
 ${gossipmsgencrypted}
+
+--PLdq3hBodDceBdiavo4rbQeh0u8JfdUHL--
+EOF
+
+
+> example-draft-cleartext.eml << EOF
+Autocrypt-Gossip: addr=bob@autocrypt.example; keydata=
+${base64keys[bob]}
+Content-Type: text/plain
+
+Hi Bob,
+
+this is a message where I'm not sure yet what to write. I'll just
+store it as a draft for now!
+
+My other Autocrypt-enabled MUA should be able to pick this message up
+and see from the Autocrypt-Draft-State header that I chose to encrypt
+here.  It will also have the key I would have used to encrypt if I had
+sent the message, from the contained Autocrypt-Gossip header.
+
+Regards,
+Alice
+EOF
+
+draftmsgencrypted="$(encrypt-file-to example-draft-cleartext.eml alice@autocrypt.example)"
+
+> example-draft.eml << EOF
+From: Alice <alice@autocrypt.example>
+To: Bob <bob@autocrypt.example>
+Subject: an example of a Draft
+Date: $(date --rfc-email)
+Message-ID: <$(uuidgen)@autocrypt.example>
+MIME-Version: 1.0
+Autocrypt-Draft-State: encrypt=yes; _by-choice=yes;
+Content-Type: multipart/encrypted;
+ protocol="application/pgp-encrypted";
+ boundary="PLdq3hBodDceBdiavo4rbQeh0u8JfdUHL"
+
+--PLdq3hBodDceBdiavo4rbQeh0u8JfdUHL
+Content-Type: application/pgp-encrypted
+Content-Description: PGP/MIME version identification
+
+Version: 1
+
+--PLdq3hBodDceBdiavo4rbQeh0u8JfdUHL
+Content-Type: application/octet-stream; name="encrypted.asc"
+Content-Description: OpenPGP encrypted message
+Content-Disposition: inline; filename="encrypted.asc"
+
+${draftmsgencrypted}
 
 --PLdq3hBodDceBdiavo4rbQeh0u8JfdUHL--
 EOF

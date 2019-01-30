@@ -754,6 +754,7 @@ A MUA SHOULD ignore the signature status of encrypted drafts, and
 conversely encrypted drafts do not need to be signed.  This allows
 storage of drafts independently from the user's secret key.
 
+.. _autocrypt-draft-state:
 
 Storing Draft State
 +++++++++++++++++++
@@ -1393,6 +1394,24 @@ contains:
 .. literalinclude:: appendix/example-setup-message-cleartext.key
     :language: none
 
+Example Stored Draft
+++++++++++++++++++++
+
+Alice composes a message to Bob, and manually chooses to encrypt in
+her MUA's UI. She does not send the message immediately, but stores it
+in a drafts folder. The message is encrypted (but not signed), and its
+encryption-related state is saved in the Autocrypt-Draft-Header (see
+:ref:`_autocrypt-draft-state`). The encrypted payload also contains
+Bob's key as an Autocrypt-Gossip header, to ensure encryption is
+possible when the message is picked up.
+
+.. literalinclude:: appendix/example-draft.eml
+    :language: none
+
+The encrypted payload contains:
+
+.. literalinclude:: appendix/example-draft-cleartext.eml
+    :language: none
 
 Document History
 ++++++++++++++++
