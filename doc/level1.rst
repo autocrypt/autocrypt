@@ -735,7 +735,7 @@ way:
    ``keydata`` attribute.
 
 Message Drafts
--------------
+--------------
 
 During message composition, the user may want to close the dialog and
 resume composition at a later point.  To preserve the session state,
@@ -783,6 +783,11 @@ all of which have a binary value of ``yes`` or ``no``:
 Example::
 
     Autocrypt-Draft-State: encrypt=yes; _by-choice=yes;
+
+The semantics of this header are defined only in the context of
+a message that is loaded as a draft. It SHOULD NOT be processed for
+messages loaded in any other context. It MUST be stripped from
+a message before it is sent.
 
 .. note::
 
