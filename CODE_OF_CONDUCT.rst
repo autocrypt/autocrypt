@@ -71,8 +71,7 @@ temporary or permanent repercussions as determined by other maintainers.
 Attribution
 -----------
 
-This Code of Conduct is adapted from the [Contributor Covenant][homepage], version 1.4,
-available at [http://contributor-covenant.org/version/1/4][version]
+This Code of Conduct is adapted from the `Contributor Covenant`_, version 1.4,
+available at http://contributor-covenant.org/version/1/4
 
-[homepage]: http://contributor-covenant.org
-[version]: http://contributor-covenant.org/version/1/4/
+.. _Contributor Covenant: http://contributor-covenant.org
