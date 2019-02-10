@@ -64,7 +64,7 @@ author = u'the Autocrypt team'
 #
 
 # the version of the Autocrypt specification
-specversion = u'1.0.1'
+specversion = u'1.1.0'
 
 # The short X.Y version.
 version = specversion
