@@ -71,11 +71,11 @@ opportunistic key management, for example:
   recipient. Autocrypt only uses one key per e-mail address, to reduce
   security concerns and implementation complexity.
 
-- Autocrypt MUAs specifies how to share the encryption setup between different
-  mail apps and this is implemented and reported to work between
-  different Autocrypt-enabled MUAs.  PEP does not offer sharing of the
+- Autocrypt specifies how MUAs share the encryption setup between different
+  mail apps. This is implemented and reported to work between different
+  Autocrypt-enabled MUAs.  PEP does not yet offer sharing of the
   encryption setup between different PEP-integrating MUAs but `is working on a
-  synchronization offering <https://pep.community/t/use-pep-with-more-than-one-devices/40/>`_.
+  synchronization feature <https://pep.community/t/use-pep-with-more-than-one-devices/40/>`_.
 
 - Autocrypt wants to avoid unreadable mails and will in some situations
   rather recommend cleartext mail even if an encryption key was seen in earlier
