@@ -24,7 +24,65 @@ There are a couple of reasons for holding off on this for now:
   best.
 
 That said, we do plan to introduce a simple but effective verification
-mechanism at some point. Stay tuned.
+mechanism at some point.
+
+The NEXTLEAP project has done some research and development in that
+direction, see `the countermitm verification protocols
+<https://countermitm.readthedocs.io/en/latest/new.html>`_ some of which
+are implemented with the Autocrypt-enabled `DeltaChat https://delta.chat`_ app.
+They support "setup contact" and "verified group join" work flows
+which try to tackle key verification without talking to users about keys.
+This has not yet been fully discussed within the Autocrypt context but
+it's an interesting approach to look at as it is implemented already
+and received a first round of thorough user-testing late 2018.
+
+How does Autocrypt differ from PEP?
+---------------------------------------------------------------
+
+Autocrypt and PEP are different approaches to opportunistic e-mail encryption.
+
+The PEP effort predates Autocrypt by a few years and involves a foundation
+and two companies which provide FOSS and paid offerings.  PEP offers the
+GPL-licensed PEP-Engine and adapters which can be integrated into MUAs
+if licensing permits.  Some specification efforts have started but
+as far as is known there are no independent implementations
+of the PEP protocols. The PEP organizations maintain own
+`software products that integrate the pEp engine <https://pep.software/>`_.
+
+Autocrypt was created in December 2016 by several independent mail app implementors
+and folks from the e2e e-mail encryption space. Afterwards, they publically
+collaborated, conducted specification sessions, early user-testings and learnt from
+each others early implementations efforts. At the end of 2017 they settled and published
+the Autocrypt Level 1 specification which was updated to version 1.1 in February 2019.
+The specification is implemented by a growing number of independent mail
+apps, allowing for cross-app end-to-end email encryption. Note that
+Autocrypt does not offer any software downloads but supports MUA implementors
+to add Autocrypt support. Autocrypt has has no formal organization, company or
+funding as of February 2019.
+
+There are also a few technical differences despite both efforts supporting
+opportunistic key management, for example:
+
+- PEP generates one key per device and encrypts to multiple keys for one
+  recipient. Autocrypt only uses one key per e-mail address, to reduce
+  security concerns and implementation complexity.
+
+- Autocrypt MUAs specifies how to share the encryption setup between different
+  mail apps and this is implemented and reported to work between
+  different Autocrypt-enabled MUAs.  PEP does not offer sharing of the
+  encryption setup between different PEP-integrating MUAs but `is working on a
+  synchronization offering <https://pep.community/t/use-pep-with-more-than-one-devices/40/>`_.
+
+- Autocrypt wants to avoid unreadable mails and will in some situations
+  rather recommend cleartext mail even if an encryption key was seen in earlier
+  messages. PEP encrypts to a recipient as soon as there are known
+  encryption keys.
+
+Lastly, Autocrypt is a specification and thus could be implemented by
+the PEP products. Several Autocrypt community members would consider
+changes to the specification if this would help PEP to adopt Autocrypt
+like several other mail apps already do.
+
 
 Why are you using headers rather than attached keys?
 ----------------------------------------------------
@@ -33,29 +91,34 @@ Attachments are visible to users of non Autocrypt-compatible MUAs,
 while headers are not.  We don't want to present distracting or
 confusing material to those users.
 
+
+
 Why are you sending keys in all the mails and not just announcing capabilities?
 -------------------------------------------------------------------------------
 
-We did this in a previous version. We decided against it because it
-requires the MUA to keep the information who announced Autocrypt and
-who they requested keys from.
+We played with capabilities in a previous design. We decided against them because
+they require the MUA to keep the information who announced Autocrypt and who
+they requested keys from and that is complicated for multi-device settings, in particular.
 
 
-Why RSA3072 and 25519 only later?
----------------------------------
+Why also RSA3072 and not only Curve 25519 keys?
+-----------------------------------------------
 
 Curve 25519 keys are shorter, cheaper to compute on, and likely to be
 at least as strong as RSA 3072 against non-quantum attackers.  You can
-even write them down as a backup code.  However, we want level 1 to be
-implementable in 2017, and more toolkits support RSA 3072 than 25519.
-Future versions are likely to encourage 25519 over RSA 3072.
-
+even write them down as a backup code.  However, the 1.0 version of
+the Level 1 spec mandated RSA 3072 keys for ecosystem reasons and only the
+more recent 1.1 version from February 2019 now mandates that the
+new default scheme for creating Autocrypt keys is Curve 25519 keys.
+Autocrypt MUAs must still support RSA keys to help with a smooth transition
+for everyone.  We are working with Autocrypt enabled mail implementations
+to help them move towards Curve keys during 2019.
 
 So you say you care about header size... but then you type out prefer-encrypt?
 ------------------------------------------------------------------------------
 
 An ECC key is roughly 500 bytes formatted in Base64 and RSA 3072 key
-is about 2350 bytes.  The Length of attribute name does not matter so
+is about 2350 bytes.  The Length of an attribute name does not matter so
 much. So we opted for readability.
 
 
@@ -112,7 +175,7 @@ Why use OpenPGP and PGP/MIME instead of some other encryption tech?
 -------------------------------------------------------------------
 
 We picked a commonly-understood and widely used decentralized mail encryption
-technology so that implementers wouldn't need to start from scratch.
+standard and technology so that implementers wouldn't need to start from scratch.
 
 Future levels of the Autocrypt specification may support different
 encryption technologies, but the main immediate goal is to get wider
