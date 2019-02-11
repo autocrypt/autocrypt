@@ -59,7 +59,10 @@ The specification is implemented by a growing number of independent mail
 apps, allowing for cross-app end-to-end email encryption. Note that
 Autocrypt does not offer any software downloads but supports MUA implementors
 to add Autocrypt support. Autocrypt has has no formal organization, company or
-funding as of February 2019.
+funding as of February 2019. Autocrypt is jointly run and cared for by independent
+actors who typically aim at reaching consensus among each other,
+and who are well-known in the OpenPGP and e-mail encryption community
+of which they are a part of.
 
 There are also a few technical differences despite both efforts supporting
 opportunistic key management, for example:
