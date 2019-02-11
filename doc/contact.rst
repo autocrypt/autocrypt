@@ -78,7 +78,8 @@ Upcoming events
 Past events
 -------------
 
-- Feb 2nd 2019, 15:20: Introductory Lightning talk at `FOSDEM
+- Feb 2nd 2019, 15:20: `Introductory Lightning talk
+  <https://fosdem.org/2019/schedule/event/autocrypt_email/>`_ at `FOSDEM
   <https://fosdem.org>`_, Brussels, by Vincent.
 
 - October 20/21, 2018: OpenPGP-Email Summit, Brussels. Several people

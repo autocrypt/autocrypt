@@ -46,7 +46,7 @@ The PEP effort predates Autocrypt by a few years and involves a foundation
 and two companies which provide FOSS and paid offerings.  PEP offers the
 GPL-licensed PEP-Engine and adapters which can be integrated into MUAs
 if licensing permits.  Some specification efforts have started but
-as far as is known there are no independent implementations
+as far as we know there are no independent implementations
 of the PEP protocols. The PEP organizations maintain own
 `software products that integrate the pEp engine <https://pep.software/>`_.
 
