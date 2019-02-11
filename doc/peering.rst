@@ -129,7 +129,7 @@ remote key updates
     tightly to IMAP, and would also limit the number of IMAP
     implementations that Autocrypt-enabled MUAs could connect to
     (METADATA is `not widely supported by today's IMAP server
-    implementations <http://www.imapwiki.org/Specs>`_).
+    implementations <https://www.imapwiki.org/Specs>`_).
 
     If we wanted Autocrypt to use METADATA where it was available on the
     server, but allow for fallback to normal folders for IMAP servers that

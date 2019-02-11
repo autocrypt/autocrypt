@@ -55,7 +55,7 @@ master_doc = 'contents'
 
 # General information about the project.
 project = u'Autocrypt'
-copyright = u'2016, 2017, 2018 the Autocrypt team, under <a href="http://creativecommons.org/publicdomain/zero/1.0/">CC0 license</a>'
+copyright = u'2016, 2017, 2018 the Autocrypt team, under <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0 license</a>'
 author = u'the Autocrypt team'
 
 # The version info for the project you're documenting, acts as replacement for
