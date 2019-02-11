@@ -69,7 +69,7 @@ Legend:
 .. _delta.chat: https://delta.chat/
 .. _K-9 Mail: https://k9mail.github.io/
 .. _Enigmail: https://www.enigmail.net/
-.. _`Balsa Branch`: https://mail.gnome.org/archives/balsa-list/2018-December/msg00020.html
+.. _`Balsa (Branch)`: https://mail.gnome.org/archives/balsa-list/2018-December/msg00020.html
 .. _muacrypt: https://muacrypt.readthedocs.io/
 .. _pyac: https://pyac.readthedocs.io/
 .. _notmuch: https://notmuchmail.org/
