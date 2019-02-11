@@ -29,8 +29,8 @@ mechanism at some point.
 The NEXTLEAP project has done some research and development in that
 direction, see `the countermitm verification protocols
 <https://countermitm.readthedocs.io/en/latest/new.html>`_ some of which
-are implemented with the Autocrypt-enabled `DeltaChat https://delta.chat`_ app.
-They support "setup contact" and "verified group join" work flows
+are implemented with the Autocrypt-enabled `DeltaChat <https://delta.chat>`_ app.
+DeltaChat supports "setup contact" and "verified group join" work flows
 which try to tackle key verification without talking to users about keys.
 This has not yet been fully discussed within the Autocrypt context but
 it's an interesting approach to look at as it is implemented already
