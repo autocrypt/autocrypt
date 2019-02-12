@@ -102,8 +102,7 @@ Why are you sending keys in all the mails and not just announcing capabilities?
 
 We played with capabilities in a previous design. We decided against them because
 they require the MUA to keep the information who announced Autocrypt and who
-they requested keys from and that is complicated for multi-device settings, in particular.
-
+they requested keys from. This is particularly complicated in multi-device settings.
 
 Why also RSA3072 and not only Curve 25519 keys?
 -----------------------------------------------
