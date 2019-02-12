@@ -20,9 +20,9 @@ Last updated: ``2019-02-10``
 |                                      |        |        |        |        |              |        |        |        |       |          |
 |`Enigmail`_                           |        |        |        |        |              |        |        |        |       |          |
 +--------------------------------------+--------+--------+--------+--------+--------------+--------+--------+--------+-------+----------+
-|.. image:: images/logos/balsa.jpg     |✔       |✔       |✔       |✔       |✔             |✔       |✘       |✘       |✘      |✔         |
+|.. image:: images/logos/balsa.jpg     |✔       |✘       |✔       |✔       |✔             |✔       |✘       |✘       |✘      |✔         |
 |                                      |        |        |        |        |              |        |        |        |       |          |
-|`Balsa (Branch)`_                     |        |        |        |        |              |        |        |        |       |          |
+|`Balsa`_                              |        |        |        |        |              |        |        |        |       |          |
 +--------------------------------------+--------+--------+--------+--------+--------------+--------+--------+--------+-------+----------+
 |.. image:: images/logos/muacrypt.png  |✔       |✔       |✔       |✔       |✔             |✔       |✘       |✔       |✔      |✔         |
 |                                      |        |        |        |        |              |        |        |        |       |          |
@@ -69,7 +69,7 @@ Legend:
 .. _delta.chat: https://delta.chat/
 .. _K-9 Mail: https://k9mail.github.io/
 .. _Enigmail: https://www.enigmail.net/
-.. _`Balsa (Branch)`: https://mail.gnome.org/archives/balsa-list/2018-December/msg00020.html
+.. _`Balsa`: https://mail.gnome.org/archives/balsa-list/2018-December/msg00020.html
 .. _muacrypt: https://muacrypt.readthedocs.io/
 .. _pyac: https://pyac.readthedocs.io/
 .. _notmuch: https://notmuchmail.org/
