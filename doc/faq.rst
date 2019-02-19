@@ -152,7 +152,7 @@ lists that rewrite ``From`` headers, these
 is fine.
 
 For encrypted mailing lists like `schleuder
-<https://schleuder.nadir.org/>`_, we haven't done a full analysis yet.
+<https://schleuder.org/>`_, we haven't done a full analysis yet.
 Help welcome.
 
 
