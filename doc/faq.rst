@@ -45,9 +45,10 @@ Autocrypt and PEP are different approaches to opportunistic e-mail encryption.
 The PEP effort predates Autocrypt by a few years and involves a foundation
 and two companies which provide FOSS and paid offerings.  PEP offers the
 GPL-licensed PEP-Engine and adapters which can be integrated into MUAs
-if licensing permits.  Some specification efforts have started but
-as far as we know there are no independent implementations
-of the PEP protocols. The PEP organizations maintain own
+if licensing permits. After Autocrypt was announced as a new e-mail
+encryption specification, PEP also started specification efforts.
+As far as we know there are no independent implementations of the PEP protocols.
+The PEP organizations maintain their own
 `software products that integrate the pEp engine <https://pep.software/>`_.
 
 Autocrypt was created in December 2016 by several independent mail app implementors
@@ -60,7 +61,7 @@ apps, allowing for cross-app end-to-end email encryption. Note that
 Autocrypt does not offer any software downloads but supports MUA implementors
 to add Autocrypt support. Autocrypt has has no formal organization, company or
 funding as of February 2019. Autocrypt is jointly run and cared for by independent
-actors who typically aim at reaching consensus among each other,
+actors who typically aim at reaching rough consensus among each other,
 and who are well-known in the OpenPGP and e-mail encryption community
 of which they are a part of.
 
@@ -82,7 +83,7 @@ opportunistic key management, for example:
   messages. PEP encrypts to a recipient as soon as there are known
   encryption keys.
 
-Lastly, Autocrypt is a specification and thus could be implemented by
+To conclude, Autocrypt is a specification and thus could be implemented by
 the PEP products. Several Autocrypt community members would consider
 changes to the specification if this would help PEP to adopt Autocrypt
 like several other mail apps already do.
