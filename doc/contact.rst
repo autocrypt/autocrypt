@@ -55,8 +55,13 @@ and the ACLU_.
 Upcoming events
 ---------------
 
-- Feb 2nd 2019, 15:20: Introductory Lightning talk at `FOSDEM
-  <https://fosdem.org>`_, Brussels, by Vincent.
+- Spring 2019 (tentative): Autocrypt/Webmail summit
+
+- GPN2019_ Karlsruhe, May 30 - June 2, 2019: prospective Autocrypt and DeltaChat sessions
+
+- October 2019: Tentative OpenPGPSummit
+
+.. _GPN2019: https://entropia.de/GPN19
 
 .. _`33c3`: https://events.ccc.de/congress/2016/wiki/Main_Page
 
@@ -72,6 +77,10 @@ Upcoming events
 
 Past events
 -------------
+
+- Feb 2nd 2019, 15:20: `Introductory Lightning talk
+  <https://fosdem.org/2019/schedule/event/autocrypt_email/>`_ at `FOSDEM
+  <https://fosdem.org>`_, Brussels, by Vincent.
 
 - October 20/21, 2018: OpenPGP-Email Summit, Brussels. Several people
   related to the Autocrypt project were there and participated in
