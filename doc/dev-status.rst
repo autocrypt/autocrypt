@@ -81,13 +81,13 @@ For developers
 
 Source code:
 
-- `Enigmail code <https://sourceforge.net/p/enigmail/source/ci/master/tree/>`_
+- `Enigmail code <https://gitlab.com/enigmail/enigmail>`_
 
-- K9: TODO
+- `K9 code <https://github.com/k9mail/k-9>`_
 
 - `Delta.Chat code <https://github.com/deltachat/>`_
 
-- Mailpile: TODO
+- `Mailpile code <https://github.com/mailpile/Mailpile>`_
 
 - Notmuch/Alot: TODO
 
