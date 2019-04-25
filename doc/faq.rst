@@ -52,7 +52,7 @@ The PEP organizations maintain their own
 `software products that integrate the pEp engine <https://pep.software/>`_.
 
 Autocrypt was created in December 2016 by several independent mail app implementors
-and folks from the e2e e-mail encryption space. Afterwards, they publically
+and folks from the e2e e-mail encryption space. Afterwards, they publicly
 collaborated, conducted specification sessions, early user-testings and learnt from
 each others early implementations efforts. At the end of 2017 they settled and published
 the Autocrypt Level 1 specification which was updated to version 1.1 in February 2019.
