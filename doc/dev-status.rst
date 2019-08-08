@@ -20,6 +20,10 @@ Last updated: ``2019-02-10``
 |                                      |        |        |        |        |              |        |        |        |       |          |
 |`Enigmail`_                           |        |        |        |        |              |        |        |        |       |          |
 +--------------------------------------+--------+--------+--------+--------+--------------+--------+--------+--------+-------+----------+
+|.. image:: images/logos/Mutt.gif      |✔       |✔       |✔       |✔       |✔             |✔       |✘       |✔       |✔      |✔         |
+|                                      |        |        |        |        |              |        |        |        |       |          |
+|`Mutt`_                               |        |        |        |        |              |        |        |        |       |          |
++--------------------------------------+--------+--------+--------+--------+--------------+--------+--------+--------+-------+----------+
 |.. image:: images/logos/balsa.jpg     |✔       |✘       |✔       |✔       |✔             |✔       |✘       |✘       |✘      |✔         |
 |                                      |        |        |        |        |              |        |        |        |       |          |
 |`Balsa`_                              |        |        |        |        |              |        |        |        |       |          |
@@ -69,6 +73,7 @@ Legend:
 .. _delta.chat: https://delta.chat/
 .. _K-9 Mail: https://k9mail.github.io/
 .. _Enigmail: https://www.enigmail.net/
+.. _Mutt: http://mutt.org/
 .. _`Balsa`: https://mail.gnome.org/archives/balsa-list/2018-December/msg00020.html
 .. _muacrypt: https://muacrypt.readthedocs.io/
 .. _pyac: https://pyac.readthedocs.io/
@@ -88,6 +93,8 @@ Source code:
 - `Delta.Chat code <https://github.com/deltachat/>`_
 
 - `Mailpile code <https://github.com/mailpile/Mailpile>`_
+
+- `Mutt code <https://gitlab.com/muttmua/mutt>`_
 
 - Notmuch/Alot: TODO
 
