@@ -87,11 +87,11 @@ which propagates their keys to every other recipient.  This way, Bob and Carol
 can immediately engage in the encrypted group conversation, even if they didn't
 know each other before.
 
-Gossip is of course less trustworthy than a 1:1 Autocrypt key exchange; an
-attacker could spread wrong keys of other people easily.  That's why
-``Autocrypt:`` headers are always prefered to the Gossip-Headers.
+Gossip is a bit less trustworthy than a 1:1 Autocrypt key exchange; an attacker
+could use it to spread wrong keys of other people. That's why ``Autocrypt:``
+headers are always preferred to the Gossip-Headers.
 
-But because Autocrypt is about **opportunistic** encryption, you still have
+Because Autocrypt is about **opportunistic** encryption, you still have
 this opportunity of propagating the keys of others to facilitate group
 communication.  Other security measures like fingerprint verification can
 follow on top.
