@@ -28,7 +28,7 @@ Establishing encryption happens as a side effect when people send each other mai
   the format in detail).
 
 - A MUA will scan incoming mails for encryption headers and associate
-  the info with a canonicalized version of the ``From:```
+  the info with a canonicalized version of the ``From:``
   address contained in the :rfc:`822` message.
 
 - A MUA will encrypt a message if it has encryption keys
