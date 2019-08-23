@@ -80,17 +80,21 @@ Consider a blank state and a first outgoing message from Alice to Bob
 and Carol.  Alice's MUA adds a header just like in the 1:1 case so
 that Bob's and Carol's MUAs will learn Alice's key.  
 
-Now so Bob and Carol can not only encrypt to her, but also to each other, Alice
-includes an extra header for each recipient, an ``Autocrypt-Gossip:`` header,
+If Bob and Carol have not exchanged E-Mails yet, they can only encrypt to her,
+but not to each other.  To enable them to answer encrypted to everyone, Alice
+includes an extra header for each recipient, the ``Autocrypt-Gossip:`` header,
 which propagates their keys to every other recipient.  This way, Bob and Carol
 can immediately engage in the encrypted group conversation, even if they didn't
 know each other before.
 
-Gossip is of course less trustworthy than a 1:1 Autocrypt key exchange; an attacker could spread wrong keys of other people easily.
-That's why ``Autocrypt:`` headers are always prefered to the Gossip-Headers.
+Gossip is of course less trustworthy than a 1:1 Autocrypt key exchange; an
+attacker could spread wrong keys of other people easily.  That's why
+``Autocrypt:`` headers are always prefered to the Gossip-Headers.
 
-But because Autocrypt is about **opportunistic** encryption, you still have this opportunity of propagating the keys of others to facilitate group communication.
-Other security measures like fingerprint verification can follow on top.
+But because Autocrypt is about **opportunistic** encryption, you still have
+this opportunity of propagating the keys of others to facilitate group
+communication.  Other security measures like fingerprint verification can
+follow on top.
 
 Losing access to decryption key
 -------------------------------
