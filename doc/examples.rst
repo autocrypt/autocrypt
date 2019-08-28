@@ -28,7 +28,7 @@ Establishing encryption happens as a side effect when people send each other mai
   the format in detail).
 
 - A MUA will scan incoming mails for encryption headers and associate
-  the info with a canonicalized version of the ``From:```
+  the info with a canonicalized version of the ``From:``
   address contained in the :rfc:`822` message.
 
 - A MUA will encrypt a message if it has encryption keys
@@ -78,24 +78,23 @@ Group mail communication (1:N)
 
 Consider a blank state and a first outgoing message from Alice to Bob
 and Carol.  Alice's MUA adds a header just like in the 1:1 case so
-that Bob's and Carol's MUAs will learn Alice's key.  After Bob and Carol
-have each replied once, all MUAs will have appropriate keys for
-encrypting the group communication.
+that Bob's and Carol's MUAs will learn Alice's key.  
 
-It is possible that an encrypted mail is replied to in cleartext (unencrypted).
-For example, consider this mail flow::
+If Bob and Carol have not exchanged E-Mails yet, they can only encrypt to her,
+but not to each other.  To enable them to answer encrypted to everyone, Alice
+includes an extra header for each recipient, the ``Autocrypt-Gossip:`` header,
+which propagates their keys to every other recipient.  This way, Bob and Carol
+can immediately engage in the encrypted group conversation, even if they didn't
+know each other before.
 
-    Alice -> Bob, Carol
-    Bob -> Alice, Carol
-    Carol -> Alice  (not to Bob!)
+Gossip is a bit less trustworthy than a 1:1 Autocrypt key exchange; an attacker
+could use it to spread wrong keys of other people. That's why ``Autocrypt:``
+headers are always preferred to the Gossip-Headers.
 
-Alice and Carol have now all encryption keys but Bob only has Alice's
-because he never saw a mail from Carol.  Alice can now send an encrypted
-mail to Bob and Carol but Bob will not be able to respond encrypted
-before his MUA has seen a mail from Carol.  This is fine because Autocrypt
-is about **opportunistic** encryption, i.e. encrypt if possible and
-otherwise don't get in the way of users.
-
+Because Autocrypt is about **opportunistic** encryption, you still have
+this opportunity of propagating the keys of others to facilitate group
+communication.  Other security measures like fingerprint verification can
+follow on top.
 
 Losing access to decryption key
 -------------------------------
