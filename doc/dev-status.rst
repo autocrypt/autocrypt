@@ -1,7 +1,7 @@
 Autocrypt-capable MUAs level 1 implementation status
 ====================================================
 
-Last updated: ``2019-02-10``
+Last updated: ``2019-09-13``
 
 +--------------------------------------+--------+--------+--------+--------+--------------+--------+--------+--------+-------+----------+
 |MUA/project                           |header  |keygen  |peer    |header  |recommend     |encrypt |setup   |setup   |gossip |uid       |
@@ -76,6 +76,7 @@ Legend:
 
 .. _delta.chat: https://delta.chat/
 .. _K-9 Mail: https://k9mail.github.io/
+.. _Autocrypt-Thunderbird: https://addons.thunderbird.net/en-US/thunderbird/addon/autocrypt/
 .. _Enigmail: https://www.enigmail.net/
 .. _Mutt: http://mutt.org/
 .. _`Balsa`: https://mail.gnome.org/archives/balsa-list/2018-December/msg00020.html
