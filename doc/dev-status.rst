@@ -95,6 +95,8 @@ Source code:
 
 - `K9 code <https://github.com/k9mail/k-9>`_
 
+- `Thunderbird-Autocrypt code <https://github.com/autocrypt-thunderbird/autocrypt-thunderbird>`_
+
 - `Delta.Chat code <https://github.com/deltachat/>`_
 
 - `Mailpile code <https://github.com/mailpile/Mailpile>`_
