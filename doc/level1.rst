@@ -650,16 +650,6 @@ When encrypting, the MUA MUST construct the encrypted message as a
 key, and encrypted to the currently known Autocrypt key of each
 recipient, as well as the sender's Autocrypt key.
 
-E-mail Drafts
-~~~~~~~~~~~~~
-
-For messages that are going to be encrypted when sent, the MUA MUST
-take care to not leak the cleartext of drafts or other
-partially composed messages to their e-mail provider (e.g., in the
-"Drafts" folder). If there is a chance that a message could be
-encrypted, the MUA SHOULD encrypt the draft only to itself before storing
-it remotely. The MUA SHOULD NOT sign drafts.
-
 
 Cleartext replies to encrypted messages
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -736,6 +726,8 @@ To avoid leaking metadata about a third party in the clear, an
 ``Autocrypt-Gossip`` header SHOULD NOT be added outside an encrypted
 MIME part.
 
+.. _key-gossip-update:
+
 Updating Autocrypt Peer State from Key Gossip
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -758,6 +750,89 @@ way:
 4. Set ``peers[gossip-addr].gossip_key`` to the value of the
    ``keydata`` attribute.
 
+Message Drafts
+--------------
+
+During message composition, the user may want to close the dialog and
+resume composition at a later point.  To preserve the session state,
+messages are typically saved as "Drafts" in a special folder.
+Messages from this folder may also be resumed from a different MUA.
+
+To prevent the cleartext of a message draft from leaking to the
+provider, the MUA can encrypt the draft message to itself (but not the
+recipients) before uploading.  It MUST encrypt in this way if the
+message is going to be sent encrypted, and SHOULD encrypt if the user
+might decide to encrypt at a later point, or otherwise keep the draft
+local only.  Drafts encrypted in this way SHOULD be stored in PGP/MIME
+format.
+
+A MUA SHOULD ignore the signature status of encrypted drafts, and
+conversely encrypted drafts do not need to be signed.  This allows
+storage of drafts independently from the user's secret key.
+
+.. _autocrypt-draft-state:
+
+Storing Draft State
++++++++++++++++++++
+
+To store information about whether a message should be encrypted when
+sent, an ``Autocrypt-Draft-State`` header MAY be added to the MIME
+header of the draft message when it is stored.
+
+The ``Autocrypt-Draft-State`` header consists of a list of attributes
+with the same syntax as the :ref:`Autocrypt header<autocrypt-header>`
+itself, which also supports critical and non-critical attributes
+following the same semantics.  There are three defined attributes,
+all of which have a binary value of ``yes`` or ``no``:
+
+* The critical ``encrypt`` attribute specifies whether the message would
+  be sent encrypted or not, at the time of saving the draft. It MUST
+  be present in the header.
+* The non-critical ``_is-reply-to-encrypted`` attribute indicates
+  whether the message is composed as a reply to an encrypted message.
+  This affects the :ref:`Autocrypt
+  recommendation<final-recommendation-phase>`. It is optional and
+  defaults to ``no``.
+* The non-critical ``_by-choice`` attribute indicates whether the value
+  of the ``encrypt`` attribute was made by immediate user choice. It is
+  optional and defaults to ``no``.
+
+Example::
+
+    Autocrypt-Draft-State: encrypt=yes; _by-choice=yes;
+
+The semantics of this header are defined only in the context of
+a message that is loaded as a draft. It SHOULD NOT be processed for
+messages loaded in any other context. It MUST be stripped from
+a message before it is sent.
+
+.. note::
+
+    To minimize the amount of exposed metadata, it would be desirable
+    to store this header in the encrypted payload of the message,
+    rather than its outer envelope.  However, this causes technical
+    difficulties in some MUAs, which is why it is left out here to
+    optimize for interoperability.
+
+Autocrypt Gossip headers for drafts
++++++++++++++++++++++++++++++++++++
+
+When opening a draft that indicates it should be encrypted when sent
+via the ``Autocrypt-Draft-State`` header, the resuming MUA might be
+lacking keys for recipients that were originally available when the
+draft was stored.
+
+To solve this problem, a MUA MAY make use of the :ref:`key-gossip`
+mechanism to include the keys of intended recipients in the draft
+message. To do so, it simply places one ``Autocrypt-Gossip`` header
+per recipient in the MIME header of the encrypted payload of the
+draft.
+
+Conversely, when opening a draft, a MUA MAY import keys from
+``Autocrypt-Gossip`` headers that are present in the MIME headers of
+the encrypted payload.  These headers should update the ``gossip_key``
+and ``gossip_timestamp`` fields of the relevant peers `as
+usual<key-gossip-update>`.
 
 .. _account-management:
 
@@ -1335,6 +1410,24 @@ contains:
 .. literalinclude:: appendix/example-setup-message-cleartext.key
     :language: none
 
+Example Stored Draft
+++++++++++++++++++++
+
+Alice composes a message to Bob, and manually chooses to encrypt in
+her MUA's UI. She does not send the message immediately, but stores it
+in a drafts folder. The message is encrypted (but not signed), and its
+encryption-related state is saved in the Autocrypt-Draft-Header (see
+:ref:`_autocrypt-draft-state`). The encrypted payload also contains
+Bob's key as an Autocrypt-Gossip header, to ensure encryption is
+possible when the message is picked up.
+
+.. literalinclude:: appendix/example-draft.eml
+    :language: none
+
+The encrypted payload contains:
+
+.. literalinclude:: appendix/example-draft-cleartext.eml
+    :language: none
 
 Document History
 ++++++++++++++++
@@ -1347,6 +1440,8 @@ high-level overview of what changed between revisions.
 version 1.1
    - change required algorithms and recommendation for key generation
      to Ed25519+Cv25519
+   - add Autocrypt-Draft-State header to preserve encryption state of
+     drafts
 
 version 1.0.1
    - added Terminology section
