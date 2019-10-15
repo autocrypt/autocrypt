@@ -893,9 +893,9 @@ both programmatically and manually.
   SHOULD have an ``Autocrypt-Prefer-Encrypt`` header that contains the
   current ``accounts[addr].prefer_encrypt`` setting.
 
-- The symmetric encryption algorithm used MUST be AES-128.
-  The passphrase MUST be the Setup Code (see below), used
-  with :rfc:`OpenPGP's salted+iterated S2K algorithm
+- The symmetric encryption algorithm used MUST be AES-128 or AES-256.
+  The passphrase MUST be the Setup Code (see below), used with
+  :rfc:`OpenPGP's salted+iterated S2K algorithm
   <4880#section-3.7.1.3>`.
 
 .. _setup-code:
