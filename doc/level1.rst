@@ -1417,7 +1417,7 @@ Alice composes a message to Bob, and manually chooses to encrypt in
 her MUA's UI. She does not send the message immediately, but stores it
 in a drafts folder. The message is encrypted (but not signed), and its
 encryption-related state is saved in the Autocrypt-Draft-Header (see
-:ref:`_autocrypt-draft-state`). The encrypted payload also contains
+:ref:`autocrypt-draft-state`). The encrypted payload also contains
 Bob's key as an Autocrypt-Gossip header, to ensure encryption is
 possible when the message is picked up.
 
