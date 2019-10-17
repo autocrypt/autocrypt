@@ -62,7 +62,6 @@ and contributors, MUA developers and privacy enthusiasts.
    _img
    blog/blog-example
    blog/why-how-what
-   install
    news
    bot
    press-team
