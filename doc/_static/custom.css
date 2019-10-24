@@ -295,6 +295,15 @@ table tbody td > img.first {
   margin-right: 5px;
 }
 
+#autocrypt-capable-muas-level-1-implementation-status th:not(:first-child) {
+  text-align: right;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+#autocrypt-capable-muas-level-1-implementation-status tbody tr:nth-child(odd) {
+  background: #f7f7f7;
+}
+
 /* -- Buttons -- */
 
 div.body a.primary-action {
