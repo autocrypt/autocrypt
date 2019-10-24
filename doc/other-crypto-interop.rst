@@ -9,7 +9,7 @@ We have concrete guidance for those MUAs that we hope is useful.
 Message encryption recommendations
 ----------------------------------
 
-An Autocrypt-capable agent that also incorporates the OpenPGP "Web of
+An Autocrypt-capable MUA that also incorporates the OpenPGP "Web of
 Trust" might already know about a non-Autocrypt public key that it
 considers to be correctly bound to the recipient e-mail address.  It
 may wish to prefer such a key, and to decide to use for a given
@@ -24,7 +24,7 @@ For current OpenPGP users
 
   * You can still create a compatible header with a tool we will
     provide. We are targeting users who have not used pgp
-    before. Nevertheless most clients will still support other key
+    before. Nevertheless most MUAs will still support other key
     formats. But they are not required to.
 
 
@@ -55,7 +55,7 @@ should my own Autocrypt keys appear in my keyring?
 can I put my regular pgp keys into Autocrypt?
 
 - MUAs should not provide UI for importing keys for Level 1
-- allowed for Level 0 to get traction early on (as replacement for keyservers)
+- allowed for Level 1 to get traction early on (as replacement for keyservers)
 
 can I use someone's pgp key that i have for encrypting mail to that person?
 

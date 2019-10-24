@@ -1,0 +1,20 @@
+Delivered-To: <bob@autocrypt.example>
+From: Alice <alice@autocrypt.example>
+To: Bob <bob@autocrypt.example>
+Subject: an Autocrypt header example using Ed25519+Cv25519 key
+Autocrypt: addr=alice@autocrypt.example; prefer-encrypt=mutual; keydata=
+ mDMEXEcE6RYJKwYBBAHaRw8BAQdArjWwk3FAqyiFbFBKT4TzXcVBqPTB3gmzlC/Ub7O1u120F2F
+ saWNlQGF1dG9jcnlwdC5leGFtcGxliJYEExYIAD4WIQTrhbtfozp14V6UTmPyMVUMT0fjjgUCXE
+ cE6QIbAwUJA8JnAAULCQgHAgYVCgkICwIEFgIDAQIeAQIXgAAKCRDyMVUMT0fjjkqLAP9frlijw
+ BJvA+HFnqCZcYIVxlyXzS5Gi5gMTpp37K73jgD/VbKYhkwk9iu689OYH4K7q7LbmdeaJ+RX88Y/
+ ad9hZwy4OARcRwTpEgorBgEEAZdVAQUBAQdAQv8GIa2rSTzgqbXCpDDYMiKRVitCsy203x3sE9+
+ eviIDAQgHiHgEGBYIACAWIQTrhbtfozp14V6UTmPyMVUMT0fjjgUCXEcE6QIbDAAKCRDyMVUMT0
+ fjjlnQAQDFHUs6TIcxrNTtEZFjUFm1M0PJ1Dng/cDW4xN80fsn0QEA22Kr7VkCjeAEC08VSTeV+
+ QFsmz55/lntWkwYWhmvOgE=
+Date: Tue, 22 Jan 2019 12:56:25 +0100
+Message-ID: <abe640bb-018d-4f9d-b4d8-1636d6164e22@autocrypt.example>
+MIME-Version: 1.0
+Content-Type: text/plain
+
+This is an example e-mail with Autocrypt header and Ed25519+Cv25519 key (key
+fingerprint: ) as defined in Level 1 revision 1.1.

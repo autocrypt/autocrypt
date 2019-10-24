@@ -1,12 +1,12 @@
 Future Enhancements to Autocrypt
 ================================
 
-Please see :doc:`level0` for information about Level 0 requirements.
+Please see :doc:`level1` for information about Level 1 requirements.
 Here, we document future improvements, which we hope will be
 incorporated in Level 1, or possibly some later Level.  This is an
 unordered list.  If you have ideas about how to address one of these
 points, feel free to jump in!  (but let's try to stay focused on
-getting Level 0 stable before we invest too much energy in these next
+getting Level 1 stable before we invest too much energy in these next
 steps)
 
 .. contents::
@@ -17,7 +17,7 @@ Expiry
 .. todo::
 
    We need documentation about sensible key expiry
-   policies. Autocrypt-capable clients that choose to have an expiry
+   policies. Autocrypt-capable MUAs that choose to have an expiry
    policy on their secret key material should use message composition
    as an opportunity to refresh their secret key material or update
    the expiration dates in their public certificate.
@@ -31,7 +31,7 @@ Please see :doc:`peering`
 .. todo::
 
    We need to specify how to sync internal Autocrypt state between
-   clients.  We want to be able to sync the state without sending sync
+   MUAs.  We want to be able to sync the state without sending sync
    data for every message processed, while we also want all synced
    peers to have the same internal state as much as possible.  We
    currently believe that syncing updates to ``pah`` and ``changed``
@@ -44,7 +44,7 @@ New Types
 .. todo::
 
    how to deal with multiple types (at least when a new type is
-   specified).  When we support types other than `p`, it's possible
+   specified).  When we support types other than `0`, it's possible
    that users will have multiple keys available, each with a different
    type.  That seems likely to introduce some awkward choices during
    message composition time, particularly for multi-recipient
@@ -67,12 +67,12 @@ Deletable ("forward secure") encrypted mail
    reason we couldn't define a mechanism for pairwise, ratcheted,
    session-key establishment for e-mail.
 
-RSA2048 to Curve 25519
+RSA3072 to Curve 25519
 ----------------------
 
 .. todo::
 
-   Document change in preference for keys from RSA 2048 to Curve 25519.
+   Document change in preference for keys from RSA 3072 to Curve 25519.
 
 
 Backups
@@ -89,8 +89,8 @@ Guidance on masking Key IDs
 ---------------------------
 
 If any recipients are in :mailheader:`Bcc:` (rather than
-:mailheader:`To:` or :mailheader:`Cc:`), and the key types used are
-all OpenPGP (``type=p``), then the agent SHOULD mask the recipient key
+:mailheader:`To:` or :mailheader:`Cc:`), and the keys used are
+all OpenPGP, then the MUA SHOULD mask the recipient key
 ID in the generated PKESK packets that correspond to the Bcc'ed
 recipents.  It does not need to mask recipient key IDs of normal
 recipients.
@@ -165,7 +165,7 @@ Heuristics for dealing with "nopreference"
 
 .. todo::
 
-   in Level 0, the Autocrypt recommendations for composing mail to a
+   in Level 1, the Autocrypt recommendations for composing mail to a
    remote peer with ``prefer-encrypted`` set to ``nopreference`` look
    very much the same as the recommendations for when
    ``prefer-encrypted`` is set to ``no``.  But different heuristics

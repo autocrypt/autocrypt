@@ -1,50 +1,122 @@
+Autocrypt-capable MUAs level 1 implementation status
+====================================================
 
-Mail Program Autocrypt Development Branches
--------------------------------------------
+Last updated: ``2019-09-13``
 
-Last updated: 17th January 2017
++--------------------------------------+--------+--------+--------+--------+--------------+--------+--------+--------+-------+----------+
+|MUA/project                           |header  |keygen  |peer    |header  |recommend     |encrypt |setup   |setup   |gossip |uid       |
+|                                      |parsing |        |state   |inject  |              |        |message |process |       |decorative|
+|                                      |        |        |        |        |              |        |        |        |       |          |
++======================================+========+========+========+========+==============+========+========+========+=======+==========+
+|.. image:: images/logos/deltachat.png |✔       |✔       |✔       |✔       |✔             |✔       |✔       |✔       |✔      |✔         |
+|                                      |        |        |        |        |              |        |        |        |       |          |
+|`delta.chat`_                         |        |        |        |        |              |        |        |        |       |          |
++--------------------------------------+--------+--------+--------+--------+--------------+--------+--------+--------+-------+----------+
+|.. image:: images/logos/k9.png        |✔       |✔       |✔       |✔       |✔             |✔       |branch  |branch  |✔      |✔         |
+|                                      |        |        |        |        |              |        |        |        |       |          |
+|`K-9 Mail`_                           |        |        |        |        |              |        |        |        |       |          |
++--------------------------------------+--------+--------+--------+--------+--------------+--------+--------+--------+-------+----------+
+|.. image:: images/logos/tb-ac.png     |✔       |✔       |✔       |✔       |✔             |✔       |✘       |✔       |✔      |✔         |
+|                                      |        |        |        |        |              |        |        |        |       |          |
+|`Autocrypt-Thunderbird`_              |        |        |        |        |              |        |        |        |       |          |
++--------------------------------------+--------+--------+--------+--------+--------------+--------+--------+--------+-------+----------+
+|.. image:: images/logos/enigmail.png  |✔       |✔       |✔       |✔       |✘             |✔       |✔       |✔       |✔      |✔         |
+|                                      |        |        |        |        |              |        |        |        |       |          |
+|`Enigmail`_                           |        |        |        |        |              |        |        |        |       |          |
++--------------------------------------+--------+--------+--------+--------+--------------+--------+--------+--------+-------+----------+
+|.. image:: images/logos/Mutt.gif      |✔       |✔       |✔       |✔       |✔             |✔       |✘       |✔       |✔      |✔         |
+|                                      |        |        |        |        |              |        |        |        |       |          |
+|`Mutt`_                               |        |        |        |        |              |        |        |        |       |          |
++--------------------------------------+--------+--------+--------+--------+--------------+--------+--------+--------+-------+----------+
+|.. image:: images/logos/balsa.jpg     |✔       |✘       |✔       |✔       |✔             |✔       |✘       |✘       |✘      |✔         |
+|                                      |        |        |        |        |              |        |        |        |       |          |
+|`Balsa`_                              |        |        |        |        |              |        |        |        |       |          |
++--------------------------------------+--------+--------+--------+--------+--------------+--------+--------+--------+-------+----------+
+|.. image:: images/logos/muacrypt.png  |✔       |✔       |✔       |✔       |✔             |✔       |✘       |✔       |✔      |✔         |
+|                                      |        |        |        |        |              |        |        |        |       |          |
+|`muacrypt`_                           |        |        |        |        |              |        |        |        |       |          |
++--------------------------------------+--------+--------+--------+--------+--------------+--------+--------+--------+-------+----------+
+|`pyac`_                               |✔       |✔       |✔       |✔       |✘             |✔       |✔       |✔       |✔      |✔         |
++--------------------------------------+--------+--------+--------+--------+--------------+--------+--------+--------+-------+----------+
+|.. image:: images/logos/notmuch.png   |branch  |✘       |✘       |✘       |✘             |✘       |✘       |✘       |✘      |✔         |
+|                                      |        |        |        |        |              |        |        |        |       |          |
+|`notmuch`_                            |        |        |        |        |              |        |        |        |       |          |
++--------------------------------------+--------+--------+--------+--------+--------------+--------+--------+--------+-------+----------+
+|.. image:: images/logos/mailpile.png  |✔       |✔       |✘       |✔       |✘             |✘       |✘       |✘       |✘      |✔         |
+|                                      |        |        |        |        |              |        |        |        |       |          |
+|`mailpile`_                           |        |        |        |        |              |        |        |        |       |          |
++--------------------------------------+--------+--------+--------+--------+--------------+--------+--------+--------+-------+----------+
+|`gmime`_                              |≥3.0.4  |N/A     |N/A     |≥3.0.4  |N/A           |N/A     |✘       |✘       |✘      |✔         |
++--------------------------------------+--------+--------+--------+--------+--------------+--------+--------+--------+-------+----------+
 
-Enigmail: `Enigmail autocrypt branch <https://sourceforge.net/p/enigmail/source/ci/master/tree/>`_
+Logos are copyright their respective owners.
 
-Android K9: `K9 autocrypt branch <https://github.com/k9mail/k-9/commits/trust-id>`_
+Legend:
 
-Mailpile: XXX to-be-filled-in
+- ``MUA/project``: denotes a mail app, library or tool.
 
-Notmuch/Alot: XXX to-be-filled-in
+- ``header parsing``: compliant parsing of the Autocrypt header
 
-Bitmask/LEAP: `ongoing refactorings <https://0xacab.org/leap/bitmask-dev/merge_requests/55/diffs>`_
+- ``keygen``: secret key generation follows Autocrypt UI guidance
 
-Python: `Python Autocrypt Bot <https://github.com/autocrypt/autocrypt>`_
+- ``peerstate``: state is kept according to spec
 
-Go: `Go Autocrypt <https://github.com/autocrypt/go-autocrypt>`_
+- ``header inject``: proper creation of outgoing Autocrypt header
 
-**Please-fill-in-your-development-branch here**
+- ``recommend``: implements Autocrypt recommendation
+
+- ``encrypt``: encrypts outgoing messages properly
+
+- ``setup message``: proper generation and processing of Autocrypt Setup Message
+
+- ``setup process``: follows guidance with respect to Autocrypt account setup
+
+- ``uid decorative``: UID in key data is only used for decorative
+  purposes, and in particular not for looking up keys for an e-mail address.
+
+.. _delta.chat: https://delta.chat/
+.. _K-9 Mail: https://k9mail.github.io/
+.. _Autocrypt-Thunderbird: https://addons.thunderbird.net/en-US/thunderbird/addon/autocrypt/
+.. _Enigmail: https://www.enigmail.net/
+.. _Mutt: http://mutt.org/
+.. _`Balsa`: https://mail.gnome.org/archives/balsa-list/2018-December/msg00020.html
+.. _muacrypt: https://muacrypt.readthedocs.io/
+.. _pyac: https://pyac.readthedocs.io/
+.. _notmuch: https://notmuchmail.org/
+.. _mailpile: https://www.mailpile.is/
+.. _gmime: https://github.com/jstedfast/gmime/
+
+For developers
+--------------
+
+Source code:
+
+- `Enigmail code <https://gitlab.com/enigmail/enigmail>`_
+
+- `K9 code <https://github.com/k9mail/k-9>`_
+
+- `Autocrypt-Thunderbird code <https://github.com/autocrypt-thunderbird/autocrypt-thunderbird>`_
+
+- `Delta.Chat code <https://github.com/deltachat/>`_
+
+- `Mailpile code <https://github.com/mailpile/Mailpile>`_
+
+- `Mutt code <https://gitlab.com/muttmua/mutt>`_
+
+- Notmuch/Alot: TODO
+
+- `muacrypt (uses gpg) <https://github.com/hpk42/muacrypt>`_
+
+- `pyac code <https://github.com/juga0/pyac>`_ (uses `PGPy
+  <https://pgpy.readthedocs.io>`_)
+
+- `Bitmask/LEAP refactorings <https://0xacab.org/leap/bitmask-dev/merge_requests/55/diffs>`_
+
+- `Go Autocrypt <https://github.com/autocrypt/go-autocrypt>`_
 
 
-Autocrypt bot
--------------
+Testing Autocrypt
++++++++++++++++++
 
-Responder
-+++++++++
-
-We deploy a preliminary auto-responder which accepts and sends mails
-with Autocrypt headers.  Just sent a mail to ``bot at autocrypt dot
-org`` and wait for the reply and look at the headers.  As of Janury
-2017, the Bot does not implement the full level-0 protocol.
-
-Bot Dovecot IMAP
-++++++++++++++++
-
-You can login to IMAP/Dovecot (port 993, TLS mandatory) with the
-username "bot" and the password as stored in ``gitcrypt/credentials.txt``.
-Ask on IRC or the mailing list and provide your gpg public key for access to
-the password credentials using `git-crypt <https://www.agwa.name/projects/git-crypt/>`_.
-
-ssh access to bot account
-+++++++++++++++++++++++++
-
-You can ssh to the bot account: ``ssh -l bot mail.autocrypt.org``,
-ECDSA key fingerprint is ``SHA256:4RWh81zOd/Pgq3mHhKpyLdVZJfOpq+DgqKheUIhJgWQ``.
-Ask on IRC to get your SSH key added (anyone already with access
-to the bot@autocrypt.org account can add it to ``.ssh/authorized_keys``).
-
+There is an Autocrypt Bot which accepts and sends mails with Autocrypt
+headers. Just write an E-Mail to bot@autocrypt.org. :doc:`Find out more about the bot...<bot>`

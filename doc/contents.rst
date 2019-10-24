@@ -5,33 +5,28 @@ Current docs (work-in-progress)
 The following in-progress documents are written for early adopters
 and contributors, MUA developers and privacy enthusiasts.
 
-:doc:`index`
-     introduction to why Autocrypt exists and why it is trying
-     to achieve more e-mail encryption.
-
-:doc:`features`
-     discusses how the Autocrypt efforts is different from past
-     e2e encryption efforts.
+:doc:`background`
+     discusses the motiviation, technical, social and design
+     approaches of Autocrypt.
 
 :doc:`examples`
      Example data flows and MUA state transitions.  This may be the
      easiest place to get started with the concrete ideas behind
      Autocrypt.
 
-:doc:`level0`
-     Minimum requirements and implementer guidance for Level 0
+:doc:`level1`
+     Minimum requirements and implementer guidance for Level 1
      Autocrypt-capable MUAs.
 
 :doc:`dev-status`
-     a first collection of current autocrypt developments (Jan 2017) with
-     various mail programs and some development resources.
+     Client implementation status.
 
 :doc:`other-crypto-interop`
      Guidance for integrating Autocrypt with other e-mail encryption
      mechanisms and UI for existing MUAs.
 
 :doc:`next-steps`
-     Future improvements for Autocrypt, beyond Level 0.
+     Future improvements for Autocrypt, beyond Level 1.
 
 :doc:`ecosystem-dangers`
      Some documented risks and dangers to the mail ecosystem,
@@ -41,25 +36,32 @@ and contributors, MUA developers and privacy enthusiasts.
 
 :doc:`glossary`
 
+:doc:`bot`
+     Description of the Autocrypt bot.
+
 
 .. toctree::
    :hidden:
 
-   index
-   features
+   background
    contact
+   code_of_conduct
    examples
-   level0
+   level1
+   glossary
    dev-status
-   address-canonicalization
    ecosystem-dangers
    other-crypto-interop
    faq
    ui-examples
-   glossary
    next-steps
    backup
    cleanup
    peering
-
-
+   optional-state
+   _img
+   blog/blog-example
+   blog/why-how-what
+   news
+   bot
+   press-team

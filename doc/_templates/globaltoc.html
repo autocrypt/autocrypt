@@ -1,11 +1,29 @@
 
-<h3><a href="{{ pathto('contents') }}">{{ _('Table Of Contents') }}</a></h3>
+<!-- <h3><a href="{{ pathto('contents') }}">{{ _('Table Of Contents') }}</a></h3> -->
 
-<ul>
-  <li><a href="{{ pathto('index') }}">Introduction</a></li>
-  <li><a href="{{ pathto('features') }}">Features</a></li>
-  <li><a href="{{ pathto('contact') }}">Contact and Events</a></li>
-  <li><a href="{{ pathto('examples') }}">Example mail flows</a></li>
-  <li><a href="{{ pathto('level0') }}">Level 0 support</a></li>
-  <li><a href="{{ pathto('contents') }}">All Docs</a></li>
-</ul>
+<div class="sidebar">
+  <div class="mainnav">
+    <ul>
+      <li><a href="{{ pathto('index') }}" class="sidemenu">Home</a></li>
+      <li><a href="{{ pathto('install') }}" class="sidemenu">Test It!</a></li>
+      <!-- <li><a href="{{ pathto('news') }}" class="sidemenu">News</a></li> -->
+    </ul>
+  </div>
+  <div class="subnav">
+    <ul>
+      <li><a href="{{ pathto('contact') }}">Contact and Events</a></li>
+      <li>
+        <a href="{{ pathto('level1') }}">Level 1 Spec</a>
+        </!-- slightly hacky way to get a reference to the root's generated PDF.
+              Is there a better way? -->
+        <a href="{{ pathto('./', 1) }}autocrypt-spec-{{release}}.pdf">[PDF]</a>
+      </li>
+      <li><a href="{{ pathto('dev-status') }}">Implementation Status</a></li>
+      <li><a href="{{ pathto('examples') }}">Example Mail Flows</a></li>
+      <li><a href="{{ pathto('background') }}">Project Background</a></li>
+      <li><a href="{{ pathto('code_of_conduct') }}">Code of Conduct</a></li>
+      <li><a href="{{ pathto('faq') }}">FAQ</a></li>
+      <li><a href="{{ pathto('contents') }}">All Docs</a></li>
+    </ul>
+  </div>
+</div>

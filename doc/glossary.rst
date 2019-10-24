@@ -1,20 +1,13 @@
 Glossary
 ========
 
-MUA
+.. glossary::
+
+   MUA
         Mail User Agent.
         Any program/client/app that handles e-mails for the end user.
 
-MUAA
-        Mail User Agent Account.
-        The data/state a mail user agent holds for a specific account.
-        When synchonizing autocrypt data, we have to synchonize MUAA data
-        (data held by different MUAs for the same account).
-        See :doc:`peering`
-
-SMA
-        Shared MUAA Messaging Archive.
-        See :doc:`peering`
-
-
-
+   public key
+        Public key is used in this spec to refer to an :rfc:`OpenPGP
+        "Transferable Public Key"<4880#section-11.1>`.  This is also
+        sometimes known as a "keyblock" or "OpenPGP certificate".

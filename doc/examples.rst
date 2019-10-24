@@ -5,25 +5,13 @@ Example Data Flows and State Transitions
 Autocrypt key discovery happens through headers of mail messages sent
 between mail apps. Similar to TLS's machine to machine handshake,
 users first need to have a cleartext mail exchange.  Subsequent mails
-from the receiving peer will may then be encrypted.  Mail apps show
+from the receiving peer may then be encrypted.  Mail apps show
 encryptability to their users at "compose-mail" time and give them a
 choice of encryption or cleartext, defaulting to what the other side
 has specified in their header.
 
 These examples try to walk a new reader through the basic flow.
-
-.. note::
-
-   Autocrypt key discovery is safe only against passive
-   eavesdroppers. It is trivial for providers to perform active
-   downgrade or man-in-the-middle attacks on Autocrypt's key
-   discovery.  Users may, however, detect such tampering if they
-   verify their keys out-of-band at some later point in time.  We hope
-   this possibility will keep most providers honest or at least
-   prevent them from performing active attacks on a massive scale.
-
-Please also see https://github.com/autocrypt/autocrypt/tree/master/src/tests/data
-for specific examples of Autocrypt messages.
+For example headers, see also :ref:`Level1 spec header examples <example-headers>`.
 
 .. contents::
 
@@ -40,7 +28,7 @@ Establishing encryption happens as a side effect when people send each other mai
   the format in detail).
 
 - A MUA will scan incoming mails for encryption headers and associate
-  the info with a canonicalized version of the ``From:```
+  the info with a canonicalized version of the ``From:``
   address contained in the :rfc:`822` message.
 
 - A MUA will encrypt a message if it has encryption keys
@@ -64,32 +52,25 @@ Consider a blank state and a first outgoing message from Alice to Bob::
 Upon sending this mail, Alice's MUA will add a header which contains her
 encryption key::
 
-    Autocrypt: to=alice@a.example; type=p; prefer-encrypted=yes; key=...
+    Autocrypt: addr=alice@a.example; prefer-encrypt=mutual; keydata=...
 
 Bob's MUA will scan the incoming mail, find Alice's key and store it
 associated to the ``alice@a.example`` address taken from the
-``to``-attribute.  When Bob now composes a mail to Alice his MUA will
+``addr``-attribute.  When Bob now composes a mail to Alice his MUA will
 find the key and signal to Bob that the mail will be encrypted and
 after finalization of the mail encrypt it.  Moreover, Bob's MUA will
 add its own encryption info::
 
-    Autocrypt: to=bob@b.example; type=p; prefer-encrypted=yes; key=...
+    Autocrypt: addr=bob@b.example; prefer-encrypt=mutual; keydata=...
 
 When Alice's MUA now scans the incoming mail from Bob it will store
 Bob's key and the fact that Bob sent an encrypted mail.  Subsequently
 both Alice and Bob will have their MUAs encrypt mails to each other.
 
-If ``prefer-encrypted`` is sent as ``yes`` the MUA MUST default to
-encrypting the next e-mail. If it is set as ``no`` the MUA MUST
-default to plaintext.  If ``prefer-encrypted`` is not sent the MUA
-should stick to what it was doing before. If the attribute has never
-been sent it's up to the MUA to decide. The safe way to go about it is
-to default to plaintext to make sure the recipient can read the
-e-mail.
+If ``prefer-encrypted`` is sent as ``mutual`` and this is also the choice set for the MUA,
+the MUA MUST default to encrypting the next e-mail.  In all other cases, the MUA MUST
+default to plaintext to make sure the recipient can read the e-mail.
 
-We encourage MUA developers to propose heuristics for handling the
-undirected case. We will document the best approaches to develop a
-shared understanding.
 
 
 Group mail communication (1:N)
@@ -97,24 +78,23 @@ Group mail communication (1:N)
 
 Consider a blank state and a first outgoing message from Alice to Bob
 and Carol.  Alice's MUA adds a header just like in the 1:1 case so
-that Bob's and Carol's MUAs will learn Alice's key.  After Bob and Carol
-have each replied once, all MUAs will have appropriate keys for
-encrypting the group communication.
+that Bob's and Carol's MUAs will learn Alice's key.  
 
-It is possible that an encrypted mail is replied to in cleartext (unencrypted).
-For example, consider this mail flow::
+If Bob and Carol have not exchanged E-Mails yet, they can only encrypt to her,
+but not to each other.  To enable them to answer encrypted to everyone, Alice
+includes an extra header for each recipient, the ``Autocrypt-Gossip:`` header,
+which propagates their keys to every other recipient.  This way, Bob and Carol
+can immediately engage in the encrypted group conversation, even if they didn't
+know each other before.
 
-    Alice -> Bob, Carol
-    Bob -> Alice, Carol
-    Carol -> Alice  (not to Bob!)
+Gossip is a bit less trustworthy than a 1:1 Autocrypt key exchange; an attacker
+could use it to spread wrong keys of other people. That's why ``Autocrypt:``
+headers are always preferred to the Gossip-Headers.
 
-Alice and Carol have now all encryption keys but Bob only has Alice's
-because he never saw a mail from Carol.  Alice can now send an encrypted
-mail to Bob and Carol but Bub will not be able to respond encrypted
-before his MUA has seen a mail from Carol.  This is fine because Autocrypt
-is about **opportunistic** encryption, i.e. encrypt if possible and
-otherwise don't get in the way of users.
-
+Because Autocrypt is about **opportunistic** encryption, you still have
+this opportunity of propagating the keys of others to facilitate group
+communication.  Other security measures like fingerprint verification can
+follow on top.
 
 Losing access to decryption key
 -------------------------------
@@ -134,7 +114,7 @@ your mail") Bob's MUA will see the new key and subsequently use it.
 
 .. todo::
 
-    Check if we can encrypt a MIME e-mail such that non-decrypt-capable clients
+    Check if we can encrypt a MIME e-mail such that non-decrypt-capable MUAs
     will show a message that helps Alice to reply in the suggested way.  We don't
     want people to read handbooks before using Autocrypt so any guidance we can
     "automatically" provide in case of errors is good.

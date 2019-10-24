@@ -1,0 +1,23 @@
+Autocrypt-Gossip: addr=bob@autocrypt.example; keydata=
+ mDMEXEcE6RYJKwYBBAHaRw8BAQdAPPy13Q7Y8w2VPRkksrijrn9o8u59ra1c2CJiHFpbM2G0FWJ
+ vYkBhdXRvY3J5cHQuZXhhbXBsZYiWBBMWCAA+FiEE8FQeqC0xAKoa3zse4w5v3UWQH4IFAlxHBO
+ kCGwMFCQPCZwAFCwkIBwIGFQoJCAsCBBYCAwECHgECF4AACgkQ4w5v3UWQH4IfwAEA3lujohz3N
+ j9afUnaGUXN7YboIzQsmpgGkN8thyb/slIBAKwdJyg1SurKqHnxy3Wl/DBzOrR12/pN7nScn0+x
+ 4sgBuDgEXEcE6RIKKwYBBAGXVQEFAQEHQJSU7QErtJOYXsIagw2qwnVbt31ooVEx8Xcb476NCbF
+ jAwEIB4h4BBgWCAAgFiEE8FQeqC0xAKoa3zse4w5v3UWQH4IFAlxHBOkCGwwACgkQ4w5v3UWQH4
+ LlHQEAlwUBfUU8ORC0RAS/dzlZSEm7+ImY12Wv8QGUCx5zPbUA/3YH84ZOAQDbmV/C+R//0WVNb
+ Gfav9X5KYmiratYR7oL
+Content-Type: text/plain
+
+Hi Bob,
+
+this is a message where I'm not sure yet what to write. I'll just
+store it as a draft for now!
+
+My other Autocrypt-enabled MUA should be able to pick this message up
+and see from the Autocrypt-Draft-State header that I chose to encrypt
+here.  It will also have the key I would have used to encrypt if I had
+sent the message, from the contained Autocrypt-Gossip header.
+
+Regards,
+Alice

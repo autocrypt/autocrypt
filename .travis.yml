@@ -1,0 +1,46 @@
+sudo: required
+language: python
+dist: trusty
+python:
+    - '3.5'
+
+env:
+  - DEPLOY_USER=autocrypt DEPLOY_SERVER="autocrypt.org"
+
+addons:
+  apt:
+    packages:
+    - texlive-latex-recommended
+    - texlive-fonts-recommended
+    - texlive-latex-extra
+    - latexmk
+    - inkscape
+    - imagemagick
+
+install:
+  - pip install sphinx
+  - pip install gitpython
+
+script:
+  - cd doc
+  - make html
+  - make latexpdf
+  - cd ..
+
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: .scripts/deploy.sh
+  on:
+    all_branches: true
+
+
+#notifications:
+#  irc:
+#    channels:
+#      - "chat.freenode.net#autocrypt"
+#    on_success: change
+#    on_failure: change
+#    skip_join: true
+#  email:
+#    - pytest-commit@python.org

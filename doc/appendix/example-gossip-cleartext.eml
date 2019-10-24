@@ -1,0 +1,29 @@
+Autocrypt-Gossip: addr=bob@autocrypt.example; keydata=
+ mDMEXEcE6RYJKwYBBAHaRw8BAQdAPPy13Q7Y8w2VPRkksrijrn9o8u59ra1c2CJiHFpbM2G0FWJ
+ vYkBhdXRvY3J5cHQuZXhhbXBsZYiWBBMWCAA+FiEE8FQeqC0xAKoa3zse4w5v3UWQH4IFAlxHBO
+ kCGwMFCQPCZwAFCwkIBwIGFQoJCAsCBBYCAwECHgECF4AACgkQ4w5v3UWQH4IfwAEA3lujohz3N
+ j9afUnaGUXN7YboIzQsmpgGkN8thyb/slIBAKwdJyg1SurKqHnxy3Wl/DBzOrR12/pN7nScn0+x
+ 4sgBuDgEXEcE6RIKKwYBBAGXVQEFAQEHQJSU7QErtJOYXsIagw2qwnVbt31ooVEx8Xcb476NCbF
+ jAwEIB4h4BBgWCAAgFiEE8FQeqC0xAKoa3zse4w5v3UWQH4IFAlxHBOkCGwwACgkQ4w5v3UWQH4
+ LlHQEAlwUBfUU8ORC0RAS/dzlZSEm7+ImY12Wv8QGUCx5zPbUA/3YH84ZOAQDbmV/C+R//0WVNb
+ Gfav9X5KYmiratYR7oL
+Autocrypt-Gossip: addr=carol@autocrypt.example; keydata=
+ mDMEXEcE6RYJKwYBBAHaRw8BAQdAKiHXLyIgys0xGLa+vS+BLtUDydKd3A1E9DpSozOBdfa0F2N
+ hcm9sQGF1dG9jcnlwdC5leGFtcGxliJYEExYIAD4WIQSt8CGd+u2e0+MFQA8EcmYYsmQnEgUCXE
+ cE6QIbAwUJA8JnAAULCQgHAgYVCgkICwIEFgIDAQIeAQIXgAAKCRAEcmYYsmQnEnQFAQDZjvUBE
+ 80VZkocXiATJ9pU2pPg77ygrcJbiIuHExcmmgEArhI+IzZWmOFQH6QVGsLYQf981GMGDCoV8MyN
+ hBHCqQ64OARcRwTpEgorBgEEAZdVAQUBAQdAHx6p0V/ki//8CqLOh0EWwqTKyFeHGY4b2c2YFV+
+ jF3YDAQgHiHgEGBYIACAWIQSt8CGd+u2e0+MFQA8EcmYYsmQnEgUCXEcE6QIbDAAKCRAEcmYYsm
+ QnEtI2AQDc+PCbtyj9BfNTtqxSD3JMTXlbHDDxuZ84+nXfEVuivQD9Hl5eunlZnm76voE9rgjPw
+ 6h3ReWkUrgbT7fX4YsHdws=
+Content-Type: text/plain
+
+Hi Bob and Carol,
+
+I wanted to introduce the two of you to each other.
+
+I hope you are both doing well!  You can now both "reply all" here,
+and the thread will remain encrypted.
+
+Regards,
+Alice

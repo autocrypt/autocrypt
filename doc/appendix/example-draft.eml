@@ -1,0 +1,47 @@
+From: Alice <alice@autocrypt.example>
+To: Bob <bob@autocrypt.example>
+Subject: an example of a Draft
+Date: Wed, 30 Jan 2019 18:48:38 +0100
+Message-ID: <1b6828d5-61d5-40b4-8b42-bc318cfd2ad9@autocrypt.example>
+MIME-Version: 1.0
+Autocrypt-Draft-State: encrypt=yes; _by-choice=yes;
+Content-Type: multipart/encrypted;
+ protocol="application/pgp-encrypted";
+ boundary="PLdq3hBodDceBdiavo4rbQeh0u8JfdUHL"
+
+--PLdq3hBodDceBdiavo4rbQeh0u8JfdUHL
+Content-Type: application/pgp-encrypted
+Content-Description: PGP/MIME version identification
+
+Version: 1
+
+--PLdq3hBodDceBdiavo4rbQeh0u8JfdUHL
+Content-Type: application/octet-stream; name="encrypted.asc"
+Content-Description: OpenPGP encrypted message
+Content-Disposition: inline; filename="encrypted.asc"
+
+-----BEGIN PGP MESSAGE-----
+
+hF4DR2b2udXyHrYSAQdAqrEPggVyWpa1o8ovaiGxNRno4EB+7XP5lkMxAEFNMhMw
+oWXMEd8zjKpQpj5sZaJrBr4bsaNxiMfR2TymbPRQi0W+1u56oadPIl0MFgAPT6QC
+0ukBOZNFzVRrUg3stbyAIV9XCNLovJZoju/byynmJlBfYyOIDxU+XTVY5yMfgZO/
+gyy86/K2KcInboE6rLGOCl4V2xCpOby1FLlIxeykRKxWNSKbkGYzwlN3zluMCm3n
++JUxX5a4kLKcXnjmEcxkKyel9JM0TPlepWko6kFCQKIlYwZ9cL+A7ANyqEG5Z0zq
+ekebjcsKcU/v8LRsxXaCQ7zI//gFVOBgP1MwoHprG2y48ZaD32BcYyRqAXgGPd8/
+2GRQrAuqM2rENDVmKNwKibmT2UpgWESaisNof7PhaBpjBIJzoZYwkaeBNvDioR7m
+ddW4FPYfhFcHOK3JF+YRC/IhWzMLqWet4N77gMSUEc5EJye1OXcGl09m6RsG0oMH
+JWuJxoLLKfG3kuzGCgeInjsPIaA5DOEMcWF9B452f/y0LpmD5w+sHksIGYiy0SpU
+s4eFUvxiAeMqp1u7NhK95Ywqlq4IzLm/F2aJ/JVaQQiK7N8aZC7IWrwscgfBRYo7
+7mW2KI5XQknwVDGLCed4zQfBGId27xDzZTQqrWxFY4aYuzCemtMmWF9acEX+mzqg
+T6IVnaScYziPbJbiFvXtb0IcpzZ/jb8Rdv0ddPNXJU8KDgwNDDgdJTRafGh599EH
+hIZNDTtLnTT9EdIbZQv3C4yHwXt94j2cEID6o8CnUaps38BKo5O5KcDgRKERf1F7
+9rlkHyxFRIxihAI8HPE3RyhmrNeyg/Bf4c0sLo4k1H6YmSdqi/JO3vVpbtHajb9P
+YaMwvHqUKjdix0ZnEhYvj8bEE6QqLyfS0jvGDETuIqi5IEjAECFEDxMW4kJb9DHW
+iV9NlMCfd1x+lr8DW2xEx/ojIB05OWaups30b32ZwzuYUcj5o6X4oUdCHy8qnk1R
+NjjFWNqoX7kH9MviFiwFPZJGUQpeCudMa3YCwrboa8vX+zezZ7hFG0HiGhjAlVIr
+IgiQMppKfbz8rsoGzBgO8WkJcpv7sSO8KqLRVH2zMSWPqLGZ7Ywmtk7mho7TpIBv
+UIunM57wgZWWSZQfd/A=
+=gXrd
+-----END PGP MESSAGE-----
+
+--PLdq3hBodDceBdiavo4rbQeh0u8JfdUHL--
