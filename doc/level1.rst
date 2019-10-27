@@ -152,7 +152,7 @@ Communication Peers
 Each communication peer is identified by an e-mail address.  Autocrypt
 associates state with each peer.  Conceptually, we represent this
 state as a table named ``peers``, which is indexed by the peer's
-:ref:`canonicalized e-mail address <address-canonicalization>`, .
+:ref:`canonicalized e-mail address <address-canonicalization>`.
 
 For the peer with the address ``addr``, an MUA MUST associate the
 following attributes with ``peers[addr]``:
