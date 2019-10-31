@@ -295,10 +295,21 @@ table tbody td > img.first {
   margin-right: 5px;
 }
 
+#autocrypt-capable-muas-level-1-implementation-status table {
+  border: none;
+}
+#autocrypt-capable-muas-level-1-implementation-status th {
+  border: none;
+}
 #autocrypt-capable-muas-level-1-implementation-status th:not(:first-child) {
-  text-align: right;
-  writing-mode: vertical-lr;
-  text-orientation: mixed;
+  height: 8em;
+  white-space: nowrap;
+}
+#autocrypt-capable-muas-level-1-implementation-status th:not(:first-child) > em {
+  transform: translate(0.2em,-0.2em) rotate(-55deg);
+  width: 2em;
+  display: inline-block;
+  font-style: normal;
 }
 #autocrypt-capable-muas-level-1-implementation-status tbody tr:nth-child(odd) {
   background: #f7f7f7;
