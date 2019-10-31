@@ -301,7 +301,8 @@ table tbody td > img.first {
 }
 #autocrypt-capable-muas-level-1-implementation-status th {
   border: none;
-  background: #ffffff;  
+  background: #ffffff;
+  vertical-align: bottom;
 }
 
 /* hacky way to get the angled headers to look right */
@@ -332,12 +333,23 @@ table tbody td > img.first {
   height: 8em;
   white-space: nowrap;
 }
+/* if (sphinx version == 1.8.5): */
 #autocrypt-capable-muas-level-1-implementation-status th:not(:first-child) > em {
   transform: translate(0.2em,-0.2em) rotate(-55deg);
   width: 2em;
   display: inline-block;
   font-style: normal;
 }
+/* else if (sphinx version == 2.2.1): */
+#autocrypt-capable-muas-level-1-implementation-status th:not(:first-child) > p {
+  transform: translate(0.2em,-0.2em) rotate(-55deg);
+  width: 2em;
+  display: inline-block;
+}
+#autocrypt-capable-muas-level-1-implementation-status th:not(:first-child) > p > em {
+  font-style: normal;
+}
+/* endif (sphinx version) */
 #autocrypt-capable-muas-level-1-implementation-status tbody tr:nth-child(odd) {
   background: #f7f7f7;
 }
