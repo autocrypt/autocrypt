@@ -567,7 +567,7 @@ __________________________
 
 If ``public_key`` is ``null``, then set
 ``target-keys[to-addr]`` to ``gossip_key`` and set
-``preliminary-recommendation`` to ``discourage`` and skip to the
+``ui-recommendation`` to ``discourage`` and skip to the
 :ref:`final-recommendation-phase`.
 
 Otherwise, set ``target-keys[to-addr]`` to ``public_key``.
