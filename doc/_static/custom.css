@@ -297,7 +297,7 @@ table tbody td > img.first {
 
 #autocrypt-capable-muas-level-1-implementation-status th:not(:first-child) {
   text-align: right;
-  writing-mode: vertical-rl;
+  writing-mode: vertical-lr;
   text-orientation: mixed;
 }
 #autocrypt-capable-muas-level-1-implementation-status tbody tr:nth-child(odd) {
