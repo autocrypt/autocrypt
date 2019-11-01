@@ -295,6 +295,68 @@ table tbody td > img.first {
   margin-right: 5px;
 }
 
+#autocrypt-capable-muas-level-1-implementation-status table {
+  border: none;
+  max-height: 50em;
+}
+#autocrypt-capable-muas-level-1-implementation-status th {
+  border: none;
+  background: #ffffff;
+  vertical-align: bottom;
+}
+
+/* hacky way to get the angled headers to look right */
+#autocrypt-capable-muas-level-1-implementation-status th:nth-child(2) { z-index: 10; }
+#autocrypt-capable-muas-level-1-implementation-status th:nth-child(3) { z-index: 9; }
+#autocrypt-capable-muas-level-1-implementation-status th:nth-child(4) { z-index: 8; }
+#autocrypt-capable-muas-level-1-implementation-status th:nth-child(5) { z-index: 7; }
+#autocrypt-capable-muas-level-1-implementation-status th:nth-child(6) { z-index: 6; }
+#autocrypt-capable-muas-level-1-implementation-status th:nth-child(7) { z-index: 5; }
+#autocrypt-capable-muas-level-1-implementation-status th:nth-child(8) { z-index: 4; }
+#autocrypt-capable-muas-level-1-implementation-status th:nth-child(9) { z-index: 3; }
+#autocrypt-capable-muas-level-1-implementation-status th:nth-child(10) { z-index: 2; }
+
+#autocrypt-capable-muas-level-1-implementation-status td:first-child {
+  position: sticky;
+  left: 0;
+  background: inherit;
+}
+#autocrypt-capable-muas-level-1-implementation-status th:first-child {
+  position: sticky;
+  left: 0;
+  top: 0;
+  z-index: 20;
+}
+#autocrypt-capable-muas-level-1-implementation-status th:not(:first-child) {
+  position: sticky;
+  top: 0;
+  height: 8em;
+  white-space: nowrap;
+}
+/* if (sphinx version == 1.8.5): */
+#autocrypt-capable-muas-level-1-implementation-status th:not(:first-child) > em {
+  transform: translate(0.2em,-0.2em) rotate(-55deg);
+  width: 2em;
+  display: inline-block;
+  font-style: normal;
+}
+/* else if (sphinx version == 2.2.1): */
+#autocrypt-capable-muas-level-1-implementation-status th:not(:first-child) > p {
+  transform: translate(0.2em,-0.2em) rotate(-55deg);
+  width: 2em;
+  display: inline-block;
+}
+#autocrypt-capable-muas-level-1-implementation-status th:not(:first-child) > p > em {
+  font-style: normal;
+}
+/* endif (sphinx version) */
+#autocrypt-capable-muas-level-1-implementation-status tbody tr:nth-child(odd) {
+  background: #f7f7f7;
+}
+#autocrypt-capable-muas-level-1-implementation-status tbody tr:nth-child(even) {
+  background: #ffffff;
+}
+
 /* -- Buttons -- */
 
 div.body a.primary-action {
