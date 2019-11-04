@@ -698,7 +698,8 @@ Key Gossip Injection in Outbound Messages
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 An Autocrypt MUA MAY include ``Autocrypt-Gossip`` headers in messages.
-These headers MUST be placed in the root MIME part of the encrypted message payload.
+These headers MUST be placed in the root MIME part of the encrypted message payload
+(as described in `Protected Headers for Cryptographic E-mail <https://datatracker.ietf.org/doc/draft-autocrypt-lamps-protected-headers/>`_).
 The encrypted payload in this case contains
 one Autocrypt-Gossip header for each address.
 Each header:
