@@ -412,9 +412,13 @@ header, by an MUA at receive or display time.
 Messages SHOULD be ignored (i.e., ``peers[from-addr]`` SHOULD NOT be
 updated) in the following cases:
 
+  - The message is explicitly marked as auto-replied with an
+    `Auto-Submitted: auto-replied` header (:rfc:`3834`).
+
   - The content-type is ``multipart/report``. In this case, it can be assumed
-    the message was auto-generated. This avoids triggering a ``reset``
-    state from received Message Disposition Notifications (:rfc:`3798`).
+    the message was auto-replied. This avoids triggering a ``reset``
+    state from received Message Disposition Notifications (:rfc:`3798`)
+    which may not have `Auto-Submitted: auto-replied` header.
 
   - There is more than one address in the ``From`` header.
 
