@@ -28,6 +28,10 @@ Last updated: ``2019-09-13``
 |                                      |        |        |      |       |           |         |        |        |        |           |
 |`Mutt`_                               |        |        |      |       |           |         |        |        |        |           |
 +--------------------------------------+--------+--------+------+-------+-----------+---------+--------+--------+--------+-----------+
+|.. image:: images/logos/neomutt.png   |✔       |✔       |✔     |✔      |✔          |✔        |✘       |✔       |✔       |✔          |
+|                                      |        |        |      |       |           |         |        |        |        |           |
+|`Neomutt`_                            |        |        |      |       |           |         |        |        |        |           |
++--------------------------------------+--------+--------+------+-------+-----------+---------+--------+--------+--------+-----------+
 |`Letterbox`_                          |✔       |✔       |✔     |✔      |✔          |✔        |✘       |✔       |✘       |✔          |
 +--------------------------------------+--------+--------+------+-------+-----------+---------+--------+--------+--------+-----------+
 |.. image:: images/logos/balsa.jpg     |✔       |✘       |✔     |✔      |✔          |✔        |✘       |✘       |✘       |✔          |
@@ -85,6 +89,7 @@ Legend:
 .. _Autocrypt-Thunderbird: https://addons.thunderbird.net/en-US/thunderbird/addon/autocrypt/
 .. _Enigmail: https://www.enigmail.net/
 .. _Mutt: http://mutt.org/
+.. _Neomutt: https://neomutt.org/
 .. _`Letterbox`: https://letterbox-app.org/
 .. _`Balsa`: https://mail.gnome.org/archives/balsa-list/2018-December/msg00020.html
 .. _muacrypt: https://muacrypt.readthedocs.io/
@@ -110,6 +115,8 @@ Source code:
 - `Mailpile code <https://github.com/mailpile/Mailpile>`_
 
 - `Mutt code <https://gitlab.com/muttmua/mutt>`_
+
+- `Neomutt code <https://github.com/neomutt/neomutt>`_
 
 - `Letterbox code <https://git.imp.fu-berlin.de/enzevalos>`_
 
