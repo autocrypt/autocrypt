@@ -1,9 +1,9 @@
 Autocrypt bot
 +++++++++++++
 
-Implemented using `py-autocrypt`_.
+Implemented using `muacrypt`_.
 
-.. _py-autocrypt: https://py-autocrypt.readthedocs.io/
+.. _muacrypt: https://muacrypt.readthedocs.io/
 
 Responder
 ~~~~~~~~~~
