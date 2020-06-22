@@ -154,7 +154,7 @@ associates state with each peer.  Conceptually, we represent this
 state as a table named ``peers``, which is indexed by the peer's
 :ref:`canonicalized e-mail address <address-canonicalization>`.
 
-For the peer with the address ``addr``, an MUA MUST associate the
+For the peer with the address ``addr``, a MUA MUST associate the
 following attributes with ``peers[addr]``:
 
 * ``last_seen``: The UTC timestamp of the most recent effective date
@@ -353,8 +353,8 @@ If the ``From`` address changes during message composition (e.g., if
 the user selects a different outbound identity), then the MUA MUST
 change the ``Autocrypt`` header accordingly.
 
-An MUA SHOULD send out the same ``Autocrypt:`` header in all messages
-from a given outbound identity.  An MUA SHOULD NOT vary the header
+A MUA SHOULD send out the same ``Autocrypt:`` header in all messages
+from a given outbound identity.  A MUA SHOULD NOT vary the header
 based on the message's recipients. If (for whatever reason) the MUA
 needs to update (or discovers an update of) the user's ``keydata`` at
 some point, the MUA SHOULD send the updated ``keydata`` in all
@@ -407,7 +407,7 @@ Updating Autocrypt Peer State
 
 Incoming messages may be processed to update the ``peers`` entry for
 the sender identified by ``from-addr`` as extracted from the ``From``
-header, by an MUA at receive or display time.
+header, by a MUA at receive or display time.
 
 Messages SHOULD be ignored (i.e., ``peers[from-addr]`` SHOULD NOT be
 updated) in the following cases:
@@ -424,7 +424,7 @@ updated) in the following cases:
     message as not being spam the message MAY then be processed for
     ``Autocrypt`` headers.
 
-When parsing an incoming message, an MUA SHOULD examine all ``Autocrypt``
+When parsing an incoming message, a MUA SHOULD examine all ``Autocrypt``
 headers, rather than just the first one. If there is more than one
 valid header, this SHOULD be treated as an error, and all ``Autocrypt``
 headers discarded as invalid.
@@ -442,8 +442,8 @@ Updating ``peers[from-addr]`` depends on:
      A message without a ``Date`` header, or with a ``Date`` that
      seems to be in the far future can cause problems for MUAs that
      encounter the message repeatedly (e.g. re-delivery, subsequent
-     scans, etc). An MUA MAY decide to ignore such a message entirely
-     for the purposes of Autocrypt processing.  If an MUA is capable
+     scans, etc). A MUA MAY decide to ignore such a message entirely
+     for the purposes of Autocrypt processing.  If a MUA is capable
      of associating information with a received message, it could
      instead save the ``effective date`` of such a message the first
      time it sees it to avoid accidental re-processing.
@@ -875,7 +875,7 @@ that the user might forget their password, which might result in
 catastrophic data loss.  Unlike IMAP or SMTP credentials (which can be
 reset by the server operator given some sort of out-of-band
 confirmation), there is no recovery workflow possible for the loss of
-a password protecting a secret key.  An MUA that chooses to offer
+a password protecting a secret key.  A MUA that chooses to offer
 password protection of the secret key (or other sensitive data) SHOULD
 support usable and secure backup/recovery workflows for the protected
 material.
@@ -890,7 +890,7 @@ other forms of access control.
 Handling Multiple Accounts and Aliases
 ++++++++++++++++++++++++++++++++++++++
 
-An MUA that is capable of connecting to multiple e-mail accounts
+A MUA that is capable of connecting to multiple e-mail accounts
 SHOULD have a separate and distinct Autocrypt ``accounts[from-addr]``
 for each e-mail account with the address ``from-addr``.
 
@@ -1152,7 +1152,7 @@ non-Autocrypt users.
 Message Composition
 +++++++++++++++++++
 
-If an MUA is willing to compose encrypted mail, it SHOULD include some
+If a MUA is willing to compose encrypted mail, it SHOULD include some
 UI mechanism at message composition time for the user to choose between
 encrypted message or cleartext.  This may be as simple as a single
 checkbox.
