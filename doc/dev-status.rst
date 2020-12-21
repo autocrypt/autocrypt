@@ -1,7 +1,7 @@
 Autocrypt-capable MUAs level 1 implementation status
 ====================================================
 
-Last updated: ``2019-09-13``
+Last updated: ``2020-12-20``
 
 +--------------------------------------+--------+--------+------+-------+-----------+---------+--------+--------+--------+-----------+
 |*MUA/project*                         |*header |*keygen*|*peer |*header|*recommend*|*encrypt*|*setup  |*setup  |*gossip*|*uid       |
@@ -58,6 +58,10 @@ Last updated: ``2019-09-13``
 |                                      |        |        |      |       |           |         |        |        |        |           |
 |`Emacs`_                              |        |        |      |       |           |         |        |        |        |           |
 +--------------------------------------+--------+--------+------+-------+-----------+---------+--------+--------+--------+-----------+
+|.. image:: images/logos/fairemail.png |✔       |✔       |✔     |✔      |✘          |✔        |✘       |✘       |✘       |✔          |
+|                                      |        |        |      |       |           |         |        |        |        |           |
+|`FairEmail`_                          |        |        |      |       |           |         |        |        |        |           |
++--------------------------------------+--------+--------+------+-------+-----------+---------+--------+--------+--------+-----------+
 
 Logos are copyright their respective owners.
 
@@ -98,6 +102,7 @@ Legend:
 .. _mailpile: https://www.mailpile.is/
 .. _gmime: https://github.com/jstedfast/gmime/
 .. _Emacs: https://melpa.org/#/autocrypt
+.. _FairEmail: https://email.faircode.eu/
 
 For developers
 --------------
@@ -130,6 +135,8 @@ Source code:
 - `Bitmask/LEAP refactorings <https://0xacab.org/leap/bitmask-dev/merge_requests/55/diffs>`_
 
 - `Go Autocrypt <https://github.com/autocrypt/go-autocrypt>`_
+
+- `FairEmail code <https://github.com/M66B/FairEmail/>`_
 
 
 Testing Autocrypt
