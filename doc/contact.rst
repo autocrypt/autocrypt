@@ -15,8 +15,8 @@ If you want to talk with us you may:
 
 - collaborate through our `github Autocrypt repo`_
 
-- join chats at **#autocrypt on freenode** or through `matrix mirror
-  <https://riot.im/app/#/room/#autocrypt:matrix.org>`_.
+- join chats at **#autocrypt on libera.chat** or through `matrix mirror
+  <https://app.element.io/app/#/room/#autocrypt:matrix.org>`_.
 
 
 .. _`Autocrypt mailing list`: https://lists.mayfirst.org/mailman/listinfo/autocrypt

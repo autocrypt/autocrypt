@@ -62,7 +62,7 @@ Reporting and Responses
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
 reported by contacting select project maintainers, currently azul@autocrypt.org
 and compl4xx@autocrypt.org -- they are also often on the IRC `#autocrypt` channel
-on freenode. They will review reports and involve other maintainers as appropriate,
+on libera.chat. They will review reports and involve other maintainers as appropriate,
 resulting in a response that is deemed necessary and appropriate to the circumstances.
 Maintainers are obligated to maintain confidentiality with regard to the reporter of an incident. Maintainers are themselves not exempt from being reported about and may face
 temporary or permanent repercussions as determined by other maintainers.
