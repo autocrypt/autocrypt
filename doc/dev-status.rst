@@ -62,6 +62,10 @@ Last updated: ``2020-12-20``
 |                                      |        |        |      |       |           |         |        |        |        |           |
 |`FairEmail`_                          |        |        |      |       |           |         |        |        |        |           |
 +--------------------------------------+--------+--------+------+-------+-----------+---------+--------+--------+--------+-----------+
+|.. image:: images/logos/lttrs.png     |✔       |✔       |✔     |✔      |✔          |✔        |✔       |✔       |✘       |✔          |
+|                                      |        |        |      |       |           |         |        |        |        |           |
+|`Ltt.rs`_                             |        |        |      |       |           |         |        |        |        |           |
++--------------------------------------+--------+--------+------+-------+-----------+---------+--------+--------+--------+-----------+
 
 Logos are copyright their respective owners.
 
@@ -103,6 +107,7 @@ Legend:
 .. _gmime: https://github.com/jstedfast/gmime/
 .. _Emacs: https://melpa.org/#/autocrypt
 .. _FairEmail: https://email.faircode.eu/
+.. _Ltt.rs: https://ltt.rs
 
 For developers
 --------------
