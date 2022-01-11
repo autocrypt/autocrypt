@@ -1,7 +1,7 @@
 Autocrypt-capable MUAs level 1 implementation status
 ====================================================
 
-Last updated: ``2020-12-20``
+Last updated: ``2022-01-11``
 
 +--------------------------------------+--------+--------+------+-------+-----------+---------+--------+--------+--------+-----------+
 |*MUA/project*                         |*header |*keygen*|*peer |*header|*recommend*|*encrypt*|*setup  |*setup  |*gossip*|*uid       |
