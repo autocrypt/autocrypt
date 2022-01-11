@@ -1217,7 +1217,8 @@ Earlier choices are better than later ones.
    specific software is installed, etc.) or if encrypted
    mails are found:
 
-   Inform the user about Autocrypt on <https://autocrypt.org/pgp-users>.
+   Inform the user about Autocrypt on
+   <https://autocrypt.org/other-crypto-interop.html#for-current-openpgp-users>.
 
 4. If no evidence for Autocrypt was found:
 
