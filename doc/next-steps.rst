@@ -65,7 +65,7 @@ Deletable ("forward secure") encrypted mail
 
    Given the Autocrypt infrastructure for key exchange, there's no
    reason we couldn't define a mechanism for pairwise, ratcheted,
-   session-key establishment for e-mail.
+   session-key establishment for e-mail. See <https://github.com/autocrypt/autocrypt/issues/444>
 
 RSA3072 to Curve 25519
 ----------------------
