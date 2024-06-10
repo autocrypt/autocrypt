@@ -99,6 +99,8 @@ todo_include_todos = True
 
 # -- Options for HTML output ----------------------------------------------
 
+html_extra_path = ["autocrypt-spec-1.0.0.pdf", "autocrypt-spec-1.0.1.pdf", "autocrypt-spec-1.1.0.pdf"]
+
 html_theme = 'alabaster'
 html_css_files = ['custom.css']
 
