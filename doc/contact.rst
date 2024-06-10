@@ -13,8 +13,6 @@ If you want to talk with us you may:
 
 - collaborate through our `github Autocrypt repo`_
 
-See :doc:`dev-status` for links to ongoing development.
-
 
 .. _`Autocrypt mailing list`: https://lists.mayfirst.org/mailman/listinfo/autocrypt
 
