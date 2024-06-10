@@ -11,7 +11,7 @@ and enjoys wide active use.
 The following was agreed during the OpenPGP Summit 2024 by rough consensus:
 
 - For 2024/2025 multiple parties in the OpenPGP space are interested
-  to evolve the Autofcrypt spec towards a Level 2 version.
+  to evolve the Autocrypt spec towards a Level 2 version.
 
 - We close all historic issues and PRs (they remain accessible in the search).
 
