@@ -237,5 +237,3 @@ def setup(app):
                     staging = False
         except:
             pass
-        if staging:
-            app.add_stylesheet('staging.css')
