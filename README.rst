@@ -2,7 +2,7 @@ Autocrypt -- E-Mail Encryption for Everyone
 ===========================================
 
 This is the source repository from which
-the https://autocrypt.org website and Autocrypt specficiations are generated.
+the https://autocrypt.org website and Autocrypt specifications are generated.
 
 The Autocrypt Level 1 spec was created in 2019
 and subsequently implemented in various MUAs
