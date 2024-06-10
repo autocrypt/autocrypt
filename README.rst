@@ -8,7 +8,7 @@ The Autocrypt Level 1 spec was created in 2019
 and subsequently implemented in various MUAs
 and enjoys wide active use.
 
-The following was agreed during the OpenPGP Summit 2024 by rough consensus:
+The following was agreed during the OpenPGP Summit in June 2024 by rough consensus:
 
 - For 2024/2025 multiple parties in the OpenPGP space are interested
   to evolve the Autocrypt spec towards a Level 2 version.
