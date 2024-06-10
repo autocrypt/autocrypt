@@ -222,18 +222,3 @@ epub_exclude_files = ['search.html']
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'https://docs.python.org/': None}
 
-
-def setup(app):
-        staging = True
-        try:
-            if os.environ['TRAVIS_REPO_SLUG'] == 'autocrypt/autocrypt' and os.environ['TRAVIS_BRANCH'] == 'master':
-                staging = False
-        except:
-            pass
-        try:
-            import git
-            with git.Repo(search_parent_directories=True) as repo:
-                if str(repo.active_branch) == 'master':
-                    staging = False
-        except:
-            pass
