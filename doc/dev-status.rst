@@ -106,15 +106,9 @@ For developers
 
 Source code:
 
-- `Enigmail code <https://gitlab.com/enigmail/enigmail>`_
-
 - `K9 code <https://github.com/k9mail/k-9>`_
 
-- `Autocrypt-Thunderbird code <https://github.com/autocrypt-thunderbird/autocrypt-thunderbird>`_
-
 - `Delta.Chat code <https://github.com/deltachat/>`_
-
-- `Mailpile code <https://github.com/mailpile/Mailpile>`_
 
 - `Mutt code <https://gitlab.com/muttmua/mutt>`_
 
@@ -124,20 +118,6 @@ Source code:
 
 - Notmuch/Alot: TODO
 
-- `muacrypt (uses gpg) <https://github.com/hpk42/muacrypt>`_
-
-- `pyac code <https://github.com/juga0/pyac>`_ (uses `PGPy
-  <https://pgpy.readthedocs.io>`_)
-
-- `Bitmask/LEAP refactorings <https://0xacab.org/leap/bitmask-dev/merge_requests/55/diffs>`_
-
-- `Go Autocrypt <https://github.com/autocrypt/go-autocrypt>`_
-
 - `FairEmail code <https://github.com/M66B/FairEmail/>`_
 
 
-Testing Autocrypt
-+++++++++++++++++
-
-There is an Autocrypt Bot which accepts and sends mails with Autocrypt
-headers. Just write an E-Mail to bot@autocrypt.org. :doc:`Find out more about the bot...<bot>`
