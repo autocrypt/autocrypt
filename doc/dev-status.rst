@@ -93,8 +93,6 @@ _ ``gossip``: sends out Autocrypt-Gossip headers
 .. _delta.chat: https://delta.chat/
 .. _thunderbird: https://www.thunderbird.net/
 .. _K-9 Mail: https://k9mail.github.io/
-.. _Autocrypt-Thunderbird: https://addons.thunderbird.net/en-US/thunderbird/addon/autocrypt/
-.. _Enigmail: https://www.enigmail.net/
 .. _Mutt: http://mutt.org/
 .. _Neomutt: https://neomutt.org/
 .. _`Letterbox`: https://letterbox-app.org/
