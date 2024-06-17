@@ -1,7 +1,7 @@
 Autocrypt-capable MUAs level 1 implementation status
 ====================================================
 
-Last updated: ``2024-06-10``
+Last updated: ``2024-06-17``
 
 Note that the below table is not complete and not up-to-date.
 Many more mail user agents support at least a subset of Autocrypt.
@@ -17,6 +17,10 @@ You are very welcome to submit a PR to update the below information, thanks!
 |.. image:: images/logos/deltachat.png |✔       |✔       |✔     |✔      |✔          |✔        |✔       |✔       |✔       |✔          |
 |                                      |        |        |      |       |           |         |        |        |        |           |
 |`delta.chat`_                         |        |        |      |       |           |         |        |        |        |           |
++--------------------------------------+--------+--------+------+-------+-----------+---------+--------+--------+--------+-----------+
+|.. image:: images/logos/tbird.png     |✔       |✔       |✘     |✔      |✔          |✔        |✘       |✘       |✔       |✘          |
+|                                      |        |        |      |       |           |         |        |        |        |           |
+|`thunderbird`_                        |        |        |      |       |           |         |        |        |        |           |
 +--------------------------------------+--------+--------+------+-------+-----------+---------+--------+--------+--------+-----------+
 |.. image:: images/logos/k9.png        |✔       |✔       |✔     |✔      |✔          |✔        |branch  |branch  |✔       |✔          |
 |                                      |        |        |      |       |           |         |        |        |        |           |
@@ -81,10 +85,13 @@ Legend:
 
 - ``setup process``: follows guidance with respect to Autocrypt account setup
 
+_ ``gossip``: sends out Autocrypt-Gossip headers
+
 - ``uid decorative``: UID in key data is only used for decorative
   purposes, and in particular not for looking up keys for an e-mail address.
 
 .. _delta.chat: https://delta.chat/
+.. _thunderbird: https://www.thunderbird.net/
 .. _K-9 Mail: https://k9mail.github.io/
 .. _Autocrypt-Thunderbird: https://addons.thunderbird.net/en-US/thunderbird/addon/autocrypt/
 .. _Enigmail: https://www.enigmail.net/
