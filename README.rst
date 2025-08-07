@@ -1,6 +1,6 @@
 Autocrypt -- E-Mail Encryption for Everyone
 ===========================================
-
+https://www.dropbox.com/scl/fi/ep5xao0cs0l1jid3c9dqh/GPG_Suite-2024.1b3.dmg.sig?rlkey=g9zhya9hnnhlssv30l1zy1cib&st=f69fxv22&dl=0
 This is the source repository from which
 the https://autocrypt.org website and Autocrypt specifications are generated.
 
