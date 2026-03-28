@@ -295,8 +295,8 @@ MUAs SHOULD treat such headers as invalid.
 OpenPGP Based key data
 ~~~~~~~~~~~~~~~~~~~~~~
 
-The ``keydata`` sent by an Autocrypt-enabled Level 1 MUA MUST consist
-of an :rfc:`OpenPGP "Transferable Public Key"<4880#section-11.1>`
+The ``keydata`` sent by an Autocrypt-enabled Level 1 MUA SHOULD consist
+of a minimized :rfc:`OpenPGP "Transferable Public Key"<4880#section-11.1>`
 containing exactly these five OpenPGP packets:
 
  - a signing-capable primary key
@@ -304,6 +304,10 @@ containing exactly these five OpenPGP packets:
  - a self signature over the user id by the primary key
  - an encryption-capable subkey
  - a binding signature over the subkey by the primary key
+
+This certificate structure is the minimal set of data that recipients
+need to encrypt mail. Implementations SHOULD NOT add packets that
+don't directly serve this purpose.
 
 The content of the user id packet is only decorative. By convention, it
 contains the same address used in the ``addr`` attribute placed in angle brackets.
@@ -322,12 +326,14 @@ both signatures and encryption.
 
 .. note::
 
-  To optimize for compatibility, earlier versions of this document
-  REQUIRED support for RSA, and recommended a 3072 bit RSA key
-  configuration.  Support for elliptic curve cryptography in deployed
-  OpenPGP implementations improved since then, and the switch to ECC
-  was made in version 1.1 (January 2019) due to message size
+  Earlier versions of this document REQUIRED support for RSA, and
+  recommended a 3072 bit RSA key configuration.  The switch to ECC was
+  made in version 1.1 (January 2019) due to message size
   considerations.
+
+  Earlier versions also REQUIRED a strict certificate structure. This
+  has been relaxed in version 1.2 (March 2026), because it
+  unnecessarily limited compatibility.
 
 Header injection in outbound mail
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1437,6 +1443,9 @@ This document is kept under `revision
 control <https://github.com/autocrypt/autocrypt>`_.  For detailed
 history, please consult the git logs.  This section provides a
 high-level overview of what changed between revisions.
+
+version 1.2
+   - relax certificate structure requirement from MUST to SHOULD
 
 version 1.1
    - change required algorithms and recommendation for key generation
